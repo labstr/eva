@@ -30,7 +30,7 @@ Agents that score well on task completion tend to score worse on conversational 
 We recommend using [uv](https://docs.astral.sh/uv/) for fast, reliable dependency management. If you don't have `uv` installed, see the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
 > [!NOTE]
-> This project requires **Python 3.11–3.13**. The repo includes a `.python-version` file so `uv` will automatically use the correct version. If you're using pip, make sure you're running a supported Python version.
+> This project requires **Python 3.11–3.13** (set via `requires-python` in `pyproject.toml`). `uv` will automatically select a compatible version. If you're using pip, make sure you're running a supported Python version.
 
 ```bash
 # Clone the repository
