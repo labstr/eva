@@ -1,4 +1,4 @@
-# A New Framework for Evaluating Voice Agents (EVA)
+# A New End-to-end Framework for <br />Evaluating Voice Agents (EVA)
 
 > *Most voice agent benchmarks evaluate either what the agent **does** or how it **sounds** — EVA evaluates both.*
 
