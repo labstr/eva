@@ -253,6 +253,7 @@ eva/
 ├── compose.yaml               # Docker Compose configuration
 ├── src/eva/
 │   ├── cli.py                 # CLI interface
+│   ├── run_benchmark.py       # Benchmark runner
 │   ├── models/                # Pydantic data models
 │   ├── orchestrator/          # Framework execution
 │   │   ├── runner.py          # Main orchestrator
@@ -277,7 +278,6 @@ eva/
 │   │   └── validation/        # Quality control metrics
 │   └── utils/                 # Utilities (LLM client, log processing)
 ├── scripts/                   # Utility scripts
-│   ├── run_benchmark.py       # Benchmark runner
 │   ├── run_text_only.py       # Text-only evaluation runner
 │   ├── docker_entrypoint.py   # Docker entry point
 │   ├── check_version_bump.py  # Version checking
