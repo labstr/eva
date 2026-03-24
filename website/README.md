@@ -56,7 +56,7 @@ src/
 │   ├── architecture/    # System architecture diagram
 │   ├── conversation/    # Interactive conversation demo
 │   ├── hero/            # Landing page hero section
-│   ├── layout/          # Navbar, Footer, Section wrapper
+│   ├── layout/          # Navbar, Section wrapper
 │   ├── leaderboard/     # Results tables, charts, and visualizations
 │   ├── limitations/     # Known limitations section
 │   ├── metrics/         # Metrics explorer and judge prompt viewer
