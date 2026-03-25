@@ -217,6 +217,7 @@ class AgenticSystem:
                     role=MessageRole.ASSISTANT,
                     content=response_content,
                     tool_calls=tool_calls_dicts if tool_calls_dicts else None,
+                    reasoning=llm_stats.get("reasoning"),
                 )
 
                 llm_call = LLMCall(
