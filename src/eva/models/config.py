@@ -39,6 +39,26 @@ def current_date_and_time():
     return f"{datetime.now(UTC):%Y-%m-%d_%H-%M-%S.%f}"
 
 
+def _model_suffix(model: Any) -> str:
+    """Build a short suffix from the model config for use in folder names."""
+    if isinstance(model, PipelineConfig):
+        parts = [
+            model.stt_params.get("alias") or model.stt_params.get("model") or model.stt or "",
+            model.llm,
+            model.tts_params.get("alias") or model.tts_params.get("model") or model.tts or "",
+        ]
+    elif isinstance(model, SpeechToSpeechConfig):
+        parts = [model.s2s_params.get("alias") or model.s2s_params.get("model") or model.s2s]
+    elif isinstance(model, AudioLLMConfig):
+        parts = [
+            model.audio_llm_params.get("alias") or model.audio_llm_params.get("model") or model.audio_llm,
+            model.tts_params.get("alias") or model.tts_params.get("model") or model.tts or "",
+        ]
+    else:
+        return ""
+    return "_".join(p for p in parts if p)
+
+
 class PipelineConfig(BaseModel):
     """Configuration for a STT + LLM + TTS pipeline."""
 
@@ -452,6 +472,13 @@ class RunConfig(BaseSettings):
             if not self.model.tts:
                 raise ValueError("EVA_MODEL__TTS is required when using EVA_MODEL__AUDIO_LLM (SpeechLM-TTS pipeline).")
             self._validate_service_params("TTS", self.model.tts, self.model.tts_params)
+
+        # Append model names to auto-generated run_id
+        if "run_id" not in self.model_fields_set:
+            suffix = _model_suffix(self.model)
+            if suffix:
+                self.run_id = f"{self.run_id}_{suffix}"
+
         return self
 
     # Providers that manage their own model/key resolution (e.g. WebSocket-based)

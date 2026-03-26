@@ -2,7 +2,6 @@
 
 import json
 import os
-from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -81,7 +80,8 @@ class TestRunConfig:
 
         assert config.dataset_path == Path("data/airline_dataset.jsonl")
         assert config.tool_mocks_path == Path("data/airline_scenarios")
-        assert datetime.strptime(config.run_id, "%Y-%m-%d_%H-%M-%S.%f")
+        # run_id = timestamp + model suffix (e.g. "2024-01-15_14-30-45.123456_nova-2_gpt-5.2_sonic")
+        assert config.run_id.endswith("nova-2_gpt-5.2_sonic")
         assert config.max_concurrent_conversations == 1
         assert config.conversation_timeout_seconds == 360
 
