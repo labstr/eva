@@ -4,7 +4,6 @@ Creates Pipecat services with proper configuration.
 """
 
 import datetime
-import os
 from typing import Any, AsyncGenerator, Optional
 
 from deepgram import LiveOptions
@@ -409,12 +408,12 @@ def create_realtime_llm_service(
             return InstrumentedRealtimeLLMService(
                 model=params.get("model"),
                 audit_log=audit_log,
-                api_key=params.get("api_key") or os.getenv("OPENAI_API_KEY"),
+                api_key=params.get["api_key"],
                 session_properties=session_properties,
             )
 
         return OpenAIRealtimeLLMService(
-            api_key=params.get("api_key"),
+            api_key=params.get["api_key"],
             session_properties=session_properties,
         )
     elif model_lower.startswith("azure") or model_lower.startswith("gpt-realtime"):
@@ -431,7 +430,7 @@ def create_realtime_llm_service(
             service = InstrumentedRealtimeLLMService(
                 model=params.get("model"),
                 audit_log=audit_log,
-                api_key=params.get("api_key"),
+                api_key=params.get["api_key"],
                 base_url=url,
                 session_properties=session_properties,
             )
@@ -439,7 +438,7 @@ def create_realtime_llm_service(
             return service
 
         return OpenAIRealtimeLLMService(
-            api_key=params.get("api_key"),
+            api_key=params.get["api_key"],
             base_url=url,
             session_properties=session_properties,
         )
@@ -447,7 +446,7 @@ def create_realtime_llm_service(
         logger.info("Using Ultravox LLM")
         return UltravoxRealtimeLLMService(
             params=OneShotInputParams(
-                api_key=params.get("api_key"),
+                api_key=params.get["api_key"],
                 system_prompt=system_prompt,
                 temperature=0.3,
                 max_duration=datetime.timedelta(minutes=6),
