@@ -134,6 +134,16 @@ def create_stt_service(
             ),
         )
 
+    elif model_lower == "cohere":
+        logger.info(f"Using Cohere STT: {params['model']}")
+        return OpenAISTTService(
+            api_key=api_key,
+            base_url=url,
+            model=params["model"],
+            language=Language.EN,
+            sample_rate=SAMPLE_RATE,
+        )
+
     elif model_lower.startswith("deepgram"):
         # Check if using Flux model
         if "flux" in model_lower:
@@ -207,7 +217,7 @@ def create_stt_service(
 
     else:
         raise ValueError(
-            f"Unknown STT model: {model}. Available: assemblyai, cartesia, deepgram, deepgram-flux, elevenlabs, nvidia, nvidia-baseten, openai"
+            f"Unknown STT model: {model}. Available: assemblyai, cartesia, cohere, deepgram, deepgram-flux, elevenlabs, nvidia, nvidia-baseten, openai"
         )
 
 
