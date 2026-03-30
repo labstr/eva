@@ -138,7 +138,9 @@ class BenchmarkRunner:
             }
 
         config_path = self.output_dir / "config.json"
-        config_path.write_text(self.config.model_dump_json(indent=2))
+        config_data = self.config.model_dump(mode="json")
+        config_data["pipeline_name"] = self.config.model.pipeline_name
+        config_path.write_text(json.dumps(config_data, indent=2))
 
         # Build output_id list for tracking (supports pass@k)
         num_trials = self.config.num_trials

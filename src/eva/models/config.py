@@ -43,24 +43,9 @@ def current_date_and_time():
     return f"{datetime.now(UTC):%Y-%m-%d_%H-%M-%S.%f}"
 
 
-def _model_suffix(model: Any) -> str:
-    """Build a short suffix from the model config for use in folder names."""
-    if isinstance(model, PipelineConfig):
-        parts = [
-            model.stt_params.get("alias") or model.stt_params.get("model") or model.stt or "",
-            model.llm,
-            model.tts_params.get("alias") or model.tts_params.get("model") or model.tts or "",
-        ]
-    elif isinstance(model, SpeechToSpeechConfig):
-        parts = [model.s2s_params.get("alias") or model.s2s_params.get("model") or model.s2s]
-    elif isinstance(model, AudioLLMConfig):
-        parts = [
-            model.audio_llm_params.get("alias") or model.audio_llm_params.get("model") or model.audio_llm,
-            model.tts_params.get("alias") or model.tts_params.get("model") or model.tts or "",
-        ]
-    else:
-        return ""
-    return "_".join(p for p in parts if p)
+def _param_alias(params: dict[str, Any]) -> str:
+    """Return the display alias from a params dict."""
+    return params.get("alias") or params.get("model") or ""
 
 
 class PipelineConfig(BaseModel):
@@ -97,6 +82,16 @@ class PipelineConfig(BaseModel):
         ),
     )
 
+    @property
+    def pipeline_name(self) -> str:
+        """Short name for use in folder names."""
+        parts = [
+            _param_alias(self.stt_params) or self.stt or "",
+            self.llm,
+            _param_alias(self.tts_params) or self.tts or "",
+        ]
+        return "_".join(p for p in parts if p)
+
     @model_validator(mode="before")
     @classmethod
     def _migrate_legacy_fields(cls, data: Any) -> Any:
@@ -121,6 +116,11 @@ class SpeechToSpeechConfig(BaseModel):
     s2s: str = Field(description="Speech-to-speech model name", examples=["gpt-realtime-mini", "gemini_live"])
     s2s_params: dict[str, Any] = Field({}, description="Additional speech-to-speech model parameters (JSON)")
 
+    @property
+    def pipeline_name(self) -> str:
+        """Short name for use in folder names."""
+        return _param_alias(self.s2s_params) or self.s2s
+
 
 class AudioLLMConfig(BaseModel):
     """Configuration for an Audio-LLM pipeline (audio in, text out, separate TTS).
@@ -141,6 +141,15 @@ class AudioLLMConfig(BaseModel):
     )
     tts: str | None = Field(None, description="TTS model", examples=["cartesia", "elevenlabs"])
     tts_params: dict[str, Any] = Field({}, description="Additional TTS model parameters (JSON)")
+
+    @property
+    def pipeline_name(self) -> str:
+        """Short name for use in folder names."""
+        parts = [
+            _param_alias(self.audio_llm_params) or self.audio_llm,
+            _param_alias(self.tts_params) or self.tts or "",
+        ]
+        return "_".join(p for p in parts if p)
 
 
 _PIPELINE_FIELDS = {
@@ -479,9 +488,7 @@ class RunConfig(BaseSettings):
 
         # Append model names to auto-generated run_id
         if "run_id" not in self.model_fields_set:
-            suffix = _model_suffix(self.model)
-            if suffix:
-                self.run_id = f"{self.run_id}_{suffix}"
+            self.run_id = f"{self.run_id}_{self.model.pipeline_name}"
 
         return self
 
