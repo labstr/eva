@@ -83,14 +83,13 @@ class PipelineConfig(BaseModel):
     )
 
     @property
-    def pipeline_name(self) -> str:
-        """Short name for use in folder names."""
-        parts = [
-            _param_alias(self.stt_params) or self.stt or "",
-            self.llm,
-            _param_alias(self.tts_params) or self.tts or "",
-        ]
-        return "_".join(p for p in parts if p)
+    def pipeline_parts(self) -> dict[str, str]:
+        """Component names for this pipeline."""
+        return {
+            "stt": _param_alias(self.stt_params) or self.stt or "",
+            "llm": self.llm,
+            "tts": _param_alias(self.tts_params) or self.tts or "",
+        }
 
     @model_validator(mode="before")
     @classmethod
@@ -117,9 +116,9 @@ class SpeechToSpeechConfig(BaseModel):
     s2s_params: dict[str, Any] = Field({}, description="Additional speech-to-speech model parameters (JSON)")
 
     @property
-    def pipeline_name(self) -> str:
-        """Short name for use in folder names."""
-        return _param_alias(self.s2s_params) or self.s2s
+    def pipeline_parts(self) -> dict[str, str]:
+        """Component names for this pipeline."""
+        return {"s2s": _param_alias(self.s2s_params) or self.s2s}
 
 
 class AudioLLMConfig(BaseModel):
@@ -143,13 +142,12 @@ class AudioLLMConfig(BaseModel):
     tts_params: dict[str, Any] = Field({}, description="Additional TTS model parameters (JSON)")
 
     @property
-    def pipeline_name(self) -> str:
-        """Short name for use in folder names."""
-        parts = [
-            _param_alias(self.audio_llm_params) or self.audio_llm,
-            _param_alias(self.tts_params) or self.tts or "",
-        ]
-        return "_".join(p for p in parts if p)
+    def pipeline_parts(self) -> dict[str, str]:
+        """Component names for this pipeline."""
+        return {
+            "audio_llm": _param_alias(self.audio_llm_params) or self.audio_llm,
+            "tts": _param_alias(self.tts_params) or self.tts or "",
+        }
 
 
 _PIPELINE_FIELDS = {
@@ -488,7 +486,8 @@ class RunConfig(BaseSettings):
 
         # Append model names to auto-generated run_id
         if "run_id" not in self.model_fields_set:
-            self.run_id = f"{self.run_id}_{self.model.pipeline_name}"
+            suffix = "_".join(v for v in self.model.pipeline_parts.values() if v)
+            self.run_id = f"{self.run_id}_{suffix}"
 
         return self
 
