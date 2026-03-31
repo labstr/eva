@@ -540,6 +540,16 @@ class RunConfig(BaseSettings):
             return [m for m in get_global_registry().list_metrics() if m not in cls._VALIDATION_METRIC_NAMES]
         return v
 
+    @classmethod
+    def _is_secret_key(cls, key: str) -> bool:
+        """Return True if *key* matches any pattern in _SECRET_KEY_PATTERNS."""
+        return any(pattern in key for pattern in cls._SECRET_KEY_PATTERNS)
+
+    @classmethod
+    def _redact_dict(cls, params: dict) -> dict:
+        """Return a copy of *params* with secret values replaced by ``***``."""
+        return {k: "***" if cls._is_secret_key(k) else v for k, v in params.items()}
+
     @field_serializer("model_list")
     @classmethod
     def _redact_model_list(cls, deployments: list[ModelDeployment]) -> list[dict]:
@@ -548,10 +558,7 @@ class RunConfig(BaseSettings):
         for deployment in deployments:
             deployment = copy.deepcopy(deployment)
             if "litellm_params" in deployment:
-                params = deployment["litellm_params"]
-                for key in params:
-                    if "key" in key or "credentials" in key:
-                        params[key] = "***"
+                deployment["litellm_params"] = cls._redact_dict(deployment["litellm_params"])
             redacted.append(deployment)
         return redacted
 
@@ -562,9 +569,7 @@ class RunConfig(BaseSettings):
         data = model.model_dump(mode="json")
         for field_name, value in data.items():
             if field_name.endswith("_params") and isinstance(value, dict):
-                for key in value:
-                    if "key" in key or "credentials" in key:
-                        value[key] = "***"
+                data[field_name] = cls._redact_dict(value)
         return data
 
     def apply_env_overrides(self, live: "RunConfig") -> None:
@@ -649,19 +654,16 @@ class RunConfig(BaseSettings):
                     saved_params[key] = live_params[key]
 
         # ── Log resolved configuration ──
-        def _safe_params(p: dict) -> dict:
-            return {k: "***" if any(s in k for s in self._SECRET_KEY_PATTERNS) else v for k, v in p.items()}
-
         for params_field, provider_field in self._PARAMS_TO_PROVIDER.items():
             params = getattr(self.model, params_field, None)
             provider = getattr(self.model, provider_field, None)
             if isinstance(params, dict) and params:
-                logger.info(f"Resolved {provider_field} ({provider}): {_safe_params(params)}")
+                logger.info(f"Resolved {provider_field} ({provider}): {self._redact_dict(params)}")
 
         for deployment in self.model_list:
             name = deployment.get("model_name", "?")
             params = deployment.get("litellm_params", {})
-            logger.info(f"Resolved deployment {name}: {_safe_params(params)}")
+            logger.info(f"Resolved deployment {name}: {self._redact_dict(params)}")
 
     @classmethod
     def from_yaml(cls, path: Path | str) -> "RunConfig":
