@@ -50,13 +50,14 @@ from eva.models.agents import AgentConfig
 
 # Conditional Gemini imports - may fail if google-genai package version is incompatible
 try:
-    from pipecat.services.google.gemini_live.llm import GeminiLiveLLMService
+    from pipecat.services.google.gemini_live.llm import GeminiLiveLLMService, GeminiVADParams
     from pipecat.services.google.tts import GeminiTTSService
 
     GEMINI_AVAILABLE = True
 except ImportError:
     # Gemini services unavailable - will fail at runtime if requested
     GeminiLiveLLMService = None
+    GeminiVADParams = None
     GeminiTTSService = None
     GEMINI_AVAILABLE = False
 from pipecat.adapters.schemas.function_schema import FunctionSchema
@@ -476,11 +477,13 @@ def create_realtime_llm_service(
 
         return GeminiLiveLLMService(
             api_key=params["api_key"],
-            system_instruction=system_prompt,
             tools=pipecat_tools,
-            inference_on_context_initialization=True,
-            model=gemini_model,
-            voice_id=params.get("voice", "Puck"),  # Aoede, Charon, Fenrir, Kore, Puck
+            settings=GeminiLiveLLMService.Settings(
+                model=gemini_model,
+                system_instruction=system_prompt,
+                voice=params.get("voice", "Puck"),  # Aoede, Charon, Fenrir, Kore, Puck
+                vad=GeminiVADParams(disabled=params.get("vad_disabled", True)),
+            ),
         )
 
     else:
