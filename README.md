@@ -141,7 +141,7 @@ python main.py \
 
 ### Exploring Results
 
-EVA includes a Streamlit analysis app for visualizing and comparing benchmark results:
+EVA includes a Streamlit analysis app for visualizing and comparing results:
 
 ```bash
 streamlit run apps/analysis.py
