@@ -728,12 +728,16 @@ class AssistantServer:
                 pass
             elif self.non_instrumented_realtime_llm:
                 # Non-instrumented realtime fallback (e.g. Ultravox)
+                print("non_instrumented_realtime_llm user turn stopped")
                 if message.content:
                     self.audit_log.append_user_input(
                         message.content,
                         timestamp_ms=self._user_turn_started_wall_ms,
                     )
                     self._user_turn_started_wall_ms = None
+                    await self._save_transcript_message_from_turn(
+                        role="user", content=message.content, timestamp=self._user_turn_started_wall_ms
+                    )
 
         @user_aggregator.event_handler("on_user_turn_started")
         async def on_user_turn_started(aggregator, strategy):
