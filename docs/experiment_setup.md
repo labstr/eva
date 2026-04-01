@@ -114,7 +114,8 @@ EVA_MODEL_LIST='[
 
 ## ElevenLabs User Simulator
 
-We created 2 ElevenLabs Agents for the user simulator, with a female and a male voice, with the following configuration:
+We created 2 ElevenLabs Agents for the user simulator, one with a female and one with a male voice. When you create a new agent, create a "Blank Agent".
+Then, use the following configuration:
 
 | Parameter                            | Value                                                                             |
 |--------------------------------------|-----------------------------------------------------------------------------------|
