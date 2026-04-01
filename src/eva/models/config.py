@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 def _param_alias(params: dict[str, Any]) -> str:
     """Return the display alias from a params dict."""
-    return params.get("alias") or params.get("model") or ""
+    return params.get("alias") or params["model"]
 
 
 class PipelineConfig(BaseModel):
@@ -82,9 +82,9 @@ class PipelineConfig(BaseModel):
     def pipeline_parts(self) -> dict[str, str]:
         """Component names for this pipeline."""
         return {
-            "stt": _param_alias(self.stt_params) or self.stt or "",
+            "stt": _param_alias(self.stt_params) or self.stt,
             "llm": self.llm,
-            "tts": _param_alias(self.tts_params) or self.tts or "",
+            "tts": _param_alias(self.tts_params) or self.tts,
         }
 
     @model_validator(mode="before")
@@ -142,7 +142,7 @@ class AudioLLMConfig(BaseModel):
         """Component names for this pipeline."""
         return {
             "audio_llm": _param_alias(self.audio_llm_params) or self.audio_llm,
-            "tts": _param_alias(self.tts_params) or self.tts or "",
+            "tts": _param_alias(self.tts_params) or self.tts,
         }
 
 
@@ -591,20 +591,20 @@ class RunConfig(BaseSettings):
                 continue
 
             if has_redacted:
-                saved_provider = getattr(self.model, provider_field, None)
-                live_provider = getattr(live.model, provider_field, None)
-                if saved_provider != live_provider:
-                    raise ValueError(
-                        f"Cannot restore secrets: saved {provider_field}={saved_provider!r} "
-                        f"but current environment has {provider_field}={live_provider!r}"
-                    )
-
                 saved_alias = saved.get("alias")
                 live_alias = source.get("alias")
                 if saved_alias and live_alias and saved_alias != live_alias:
                     raise ValueError(
                         f"Cannot restore secrets: saved {params_field}[alias]={saved_alias!r} "
                         f"but current environment has {params_field}[alias]={live_alias!r}"
+                    )
+
+                saved_provider = getattr(self.model, provider_field, None)
+                live_provider = getattr(live.model, provider_field, None)
+                if saved_provider != live_provider:
+                    logger.warning(
+                        f"Provider mismatch for {params_field}: saved {saved_provider!r}, "
+                        f"current environment has {live_provider!r}"
                     )
 
                 saved_model = saved.get("model")
