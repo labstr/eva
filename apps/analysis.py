@@ -36,13 +36,11 @@ _DEFAULT_OUTPUT_DIR = os.environ.get("EVA_OUTPUT_DIR", "output")
 def _build_metric_group_map() -> dict[str, str]:
     """Build metric name -> display category mapping from the metric registry."""
     registry = get_global_registry()
-    group_map: dict[str, str] = {}
-    for name, metric_class in registry.get_all().items():
-        raw = getattr(metric_class, "category", "other")
+    return {
         # Normalize category to title case, take first segment if compound
-        label = raw.split("/")[0].replace("_", " ").strip().title()
-        group_map[name] = label
-    return group_map
+        name: getattr(metric_class, "category", "other").split("/")[0].replace("_", " ").strip().title()
+        for name, metric_class in registry.get_all().items()
+    }
 
 
 _METRIC_GROUP: dict[str, str] = _build_metric_group_map()
@@ -193,11 +191,8 @@ def format_transcript(transcript_path: Path) -> pd.DataFrame:
     if not transcript_path.exists():
         return pd.DataFrame()
     try:
-        entries = []
         with open(transcript_path) as f:
-            for line in f:
-                if line.strip():
-                    entries.append(json.loads(line))
+            entries = [json.loads(line) for line in f if line.strip()]
         if not entries:
             return pd.DataFrame()
         df = pd.DataFrame(entries)
@@ -497,14 +492,13 @@ def _collect_run_metrics(run_dir: Path) -> tuple[list[dict], list[str]]:
 
             for metric_name, metric_score in metrics.metrics.items():
                 all_metric_names.add(metric_name)
-                if metric_score.error:
-                    row[metric_name] = None
-                else:
-                    row[metric_name] = (
-                        metric_score.normalized_score
-                        if metric_score.normalized_score is not None
-                        else metric_score.score
-                    )
+                row[metric_name] = (
+                    None
+                    if metric_score.error
+                    else metric_score.normalized_score
+                    if metric_score.normalized_score is not None
+                    else metric_score.score
+                )
 
             rows.append(row)
 
@@ -811,13 +805,8 @@ def _render_eva_scatter_plot(scatter_data: list[dict]):
             f"EVA-A<sub>{subscript}</sub>: {p['x']:.3f}",
             f"EVA-X<sub>{subscript}</sub>: {p['y']:.3f}",
             f"Type: {ptype}",
+            *(f"{model.upper()}: {p[model]}" for model in ("llm", "stt", "tts") if p[model])
         ]
-        if p["llm"]:
-            hover_parts.append(f"LLM: {p['llm']}")
-        if p["stt"]:
-            hover_parts.append(f"STT: {p['stt']}")
-        if p["tts"]:
-            hover_parts.append(f"TTS: {p['tts']}")
 
         on_frontier = (p["x"], p["y"]) in frontier_set
         show_text = label_mode == "All" or (label_mode == "Pareto" and on_frontier)
@@ -1122,21 +1111,18 @@ def render_run_overview(run_dir: Path):
         standalone_data = {m: s for m, s in summary_data.items() if m in _NON_NORMALIZED_METRICS}
 
         # Build a dataframe for the bar chart (normalized 0-1 metrics only)
-        chart_rows = []
-        for m, stats in normalized_data.items():
-            cat = _METRIC_GROUP.get(m, "Other")
-            display_name = _format_metric_name(m)
-            chart_rows.append(
-                {
-                    "metric": display_name,
-                    "mean": stats["mean"],
-                    "std": stats["std"],
-                    "min": stats["min"],
-                    "max": stats["max"],
-                    "count": stats["count"],
-                    "category": cat,
-                }
-            )
+        chart_rows = [
+            {
+                "metric": _format_metric_name(m),
+                "mean": stats["mean"],
+                "std": stats["std"],
+                "min": stats["min"],
+                "max": stats["max"],
+                "count": stats["count"],
+                "category": _METRIC_GROUP.get(m, "Other"),
+            }
+            for m, stats in normalized_data.items()
+        ]
 
         if chart_rows:
             chart_df = pd.DataFrame(chart_rows)

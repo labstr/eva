@@ -59,11 +59,8 @@ def _get_tool_type(tool: dict) -> str:
 
 @st.cache_data
 def load_dataset() -> list[dict]:
-    records = []
     with open(DATASET_PATH) as f:
-        for line in f:
-            records.append(json.loads(line))
-    return records
+        return [json.loads(line) for line in f]
 
 
 @st.cache_data
@@ -91,11 +88,8 @@ def get_group(record_id: str) -> str:
 
 
 def get_routes(record: dict) -> list[tuple[str, str]]:
-    routes = []
     edb = record["ground_truth"]["expected_scenario_db"]
-    for j in edb.get("journeys", {}).values():
-        routes.append((j.get("origin", ""), j.get("destination", "")))
-    return routes
+    return [(journey.get("origin", ""), journey.get("destination", "")) for journey in edb.get("journeys", {}).values()]
 
 
 def get_airports(record: dict) -> set[str]:
