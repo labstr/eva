@@ -2,7 +2,6 @@
 
 import json
 import os
-from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -85,7 +84,8 @@ class TestRunConfig:
 
         assert config.dataset_path == Path("data/airline_dataset.jsonl")
         assert config.tool_mocks_path == Path("data/airline_scenarios")
-        assert datetime.strptime(config.run_id, "%Y-%m-%d_%H-%M-%S.%f")
+        # run_id = timestamp + model suffix (e.g. "2024-01-15_14-30-45.123456_nova-2_gpt-5.2_sonic")
+        assert config.run_id.endswith("nova-2_gpt-5.2_sonic")
         assert config.max_concurrent_conversations == 1
         assert config.conversation_timeout_seconds == 360
 
@@ -164,13 +164,169 @@ class TestRunConfig:
         assert config.model_list == MODEL_LIST
 
     def test_secrets_redacted(self):
-        """Secrets are redacted in model_list."""
+        """Secrets are redacted in model_list and STT/TTS params."""
         config = _config(env_vars=_BASE_ENV)
         dumped = config.model_dump(mode="json")
         assert dumped["model_list"][0]["litellm_params"]["api_key"] == "***"
         assert dumped["model_list"][1]["litellm_params"]["vertex_credentials"] == "***"
         assert dumped["model_list"][2]["litellm_params"]["aws_access_key_id"] == "***"
         assert dumped["model_list"][2]["litellm_params"]["aws_secret_access_key"] == "***"
+        # STT/TTS params api_key must also be redacted
+        assert dumped["model"]["stt_params"]["api_key"] == "***"
+        assert dumped["model"]["tts_params"]["api_key"] == "***"
+        # Non-secret fields preserved
+        assert dumped["model"]["stt_params"]["model"] == "nova-2"
+        assert dumped["model"]["tts_params"]["model"] == "sonic"
+
+    def test_secrets_redaction_does_not_mutate_live_config(self):
+        """Serializing must not corrupt the in-memory config objects."""
+        config = _config(env_vars=_BASE_ENV)
+        config.model_dump(mode="json")
+        # model_list keys must still hold real values
+        assert config.model_list[0]["litellm_params"]["api_key"] == "must_be_redacted"
+        assert config.model_list[1]["litellm_params"]["vertex_credentials"] == "must_be_redacted"
+        # STT/TTS params must still hold real values
+        assert config.model.stt_params["api_key"] == "test_key"
+        assert config.model.tts_params["api_key"] == "test_key"
+
+    def test_apply_env_overrides(self):
+        """Redacted secrets are restored from a live config for both model and model_list."""
+        config = _config(env_vars=_BASE_ENV)
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        # Everything is redacted after round-trip
+        assert loaded.model.stt_params["api_key"] == "***"
+        assert loaded.model.tts_params["api_key"] == "***"
+        assert loaded.model_list[0]["litellm_params"]["api_key"] == "***"
+        assert loaded.model_list[1]["litellm_params"]["vertex_credentials"] == "***"
+        assert loaded.model_list[2]["litellm_params"]["aws_access_key_id"] == "***"
+
+        loaded.apply_env_overrides(config)
+
+        # STT/TTS params restored
+        assert loaded.model.stt_params["api_key"] == "test_key"
+        assert loaded.model.tts_params["api_key"] == "test_key"
+        assert loaded.model.stt_params["model"] == "nova-2"
+        # model_list restored
+        assert loaded.model_list[0]["litellm_params"]["api_key"] == "must_be_redacted"
+        assert loaded.model_list[1]["litellm_params"]["vertex_credentials"] == "must_be_redacted"
+        assert loaded.model_list[2]["litellm_params"]["aws_access_key_id"] == "must_be_redacted"
+        assert loaded.model_list[2]["litellm_params"]["aws_secret_access_key"] == "must_be_redacted"
+
+    def test_apply_env_overrides_provider_mismatch(self):
+        """Restoring secrets fails if the STT/TTS provider changed."""
+        config = _config(env_vars=_BASE_ENV)
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        live = _config(
+            env_vars=_BASE_ENV
+            | {
+                "EVA_MODEL__STT": "openai_whisper",
+                "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "whisper-1"}),
+            }
+        )
+        with pytest.raises(ValueError, match=r"saved stt='deepgram'.*current environment has stt='openai_whisper'"):
+            loaded.apply_env_overrides(live)
+
+    def test_apply_env_overrides_alias_mismatch(self):
+        """Restoring secrets fails if the alias changed."""
+        config = _config(
+            env_vars=_BASE_ENV
+            | {
+                "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2", "alias": "stt-v1"}),
+            }
+        )
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        live = _config(
+            env_vars=_BASE_ENV
+            | {
+                "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2", "alias": "stt-v2"}),
+            }
+        )
+        with pytest.raises(
+            ValueError,
+            match=r"saved stt_params\[alias\]='stt-v1'.*current environment has stt_params\[alias\]='stt-v2'",
+        ):
+            loaded.apply_env_overrides(live)
+
+    def test_apply_env_overrides_model_mismatch_warns(self, caplog):
+        """Restoring secrets warns (but succeeds) if the STT/TTS model changed."""
+        config = _config(env_vars=_BASE_ENV)
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        live = _config(env_vars=_BASE_ENV | {"EVA_MODEL__TTS_PARAMS": json.dumps({"api_key": "k", "model": "sonic-2"})})
+        with caplog.at_level("WARNING", logger="eva.models.config"):
+            loaded.apply_env_overrides(live)
+        assert "sonic" in caplog.text
+        assert "sonic-2" in caplog.text
+        assert loaded.model.tts_params["api_key"] == "k"
+
+    def test_apply_env_overrides_url_from_env(self, caplog):
+        """Url is always taken from the live env, with a warning if it differs."""
+        saved_env = _BASE_ENV | {
+            "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2", "url": "wss://old-host/stt"}),
+        }
+        config = _config(env_vars=saved_env)
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        # Live env has a different url
+        live_env = _BASE_ENV | {
+            "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2", "url": "wss://new-host/stt"}),
+        }
+        live = _config(env_vars=live_env)
+
+        with caplog.at_level("WARNING", logger="eva.models.config"):
+            loaded.apply_env_overrides(live)
+
+        assert loaded.model.stt_params["url"] == "wss://new-host/stt"
+        assert "wss://old-host/stt" in caplog.text
+        assert "wss://new-host/stt" in caplog.text
+
+    def test_apply_env_overrides_url_added_from_env(self):
+        """Url from live env is added even if the saved config didn't have one."""
+        config = _config(env_vars=_BASE_ENV)
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        live_env = _BASE_ENV | {
+            "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2", "url": "wss://new-host/stt"}),
+        }
+        live = _config(env_vars=live_env)
+        loaded.apply_env_overrides(live)
+
+        assert loaded.model.stt_params["url"] == "wss://new-host/stt"
+
+    def test_apply_env_overrides_llm_deployment_mismatch(self):
+        """Restoring secrets fails if a saved LLM deployment is missing from the live model_list."""
+        config = _config(env_vars=_BASE_ENV)
+        dumped_json = config.model_dump_json()
+        loaded = RunConfig.model_validate_json(dumped_json)
+
+        # Live config has a different model_list (only one deployment, different name)
+        different_model_list = [
+            {
+                "model_name": "gpt-4o",
+                "litellm_params": {"model": "openai/gpt-4o", "api_key": "real_key"},
+            }
+        ]
+        live = _config(
+            env_vars={
+                "EVA_MODEL_LIST": json.dumps(different_model_list),
+                "EVA_MODEL__LLM": "gpt-4o",
+                "EVA_MODEL__STT": "deepgram",
+                "EVA_MODEL__TTS": "cartesia",
+                "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2"}),
+                "EVA_MODEL__TTS_PARAMS": json.dumps({"api_key": "k", "model": "sonic"}),
+            }
+        )
+        with pytest.raises(ValueError, match=r"deployment 'gpt-5.2' not found in current EVA_MODEL_LIST"):
+            loaded.apply_env_overrides(live)
 
     @pytest.mark.parametrize(
         "environ, expected_exception, expected_message",
