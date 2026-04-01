@@ -1454,11 +1454,12 @@ def render_conversation_trace_tab(metrics: Optional[RecordMetrics], record_dir: 
         all_top_metrics[name] = m
 
     if all_top_metrics:
+        selected = st.session_state.get("selected_metric")
+
         st.markdown(
             """<style>
-            div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
+            div[class*="st-key-metric_btn_"] button {
                 height: 4.5rem;
-                white-space: normal;
             }
             </style>""",
             unsafe_allow_html=True,
@@ -1482,25 +1483,18 @@ def render_conversation_trace_tab(metrics: Optional[RecordMetrics], record_dir: 
                 with cols[i % len(cols)]:
                     display_name = _format_metric_name(name)
                     score_str = f"{score:.3f}" if score is not None else "N/A"
-                    icon = None
-                    if score is not None:
-                        if score >= 0.8:
-                            icon = "🟢"
-                        elif score >= 0.4:
-                            icon = "🟡"
-                        else:
-                            icon = "🔴"
-                    if st.button(
-                        f"{display_name}\n{score_str}", key=f"metric_btn_{name}", use_container_width=True, icon=icon
-                    ):
-                        if st.session_state.get("selected_metric") == name:
-                            st.session_state["selected_metric"] = None
-                        else:
-                            st.session_state["selected_metric"] = name
-                        st.rerun()
+                    icon = None if score is None else "🟢" if score >= 0.8 else "🟡" if score >= 0.4 else "🔴"
+                    st.button(
+                        f"{display_name}\n{score_str}",
+                        key=f"metric_btn_{name}",
+                        on_click=st.session_state.update,
+                        kwargs={"selected_metric": None if selected == name else name},
+                        type="primary" if selected == name else "secondary",
+                        icon=icon,
+                        width="stretch",
+                    )
 
         # Show details for selected metric
-        selected = st.session_state.get("selected_metric")
         if selected and selected in conversation_metrics:
             m = conversation_metrics[selected]
             details = m.get("details", {})
