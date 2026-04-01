@@ -805,7 +805,7 @@ def _render_eva_scatter_plot(scatter_data: list[dict]):
             f"EVA-A<sub>{subscript}</sub>: {p['x']:.3f}",
             f"EVA-X<sub>{subscript}</sub>: {p['y']:.3f}",
             f"Type: {ptype}",
-            *(f"{model.upper()}: {p[model]}" for model in ("llm", "stt", "tts") if p[model])
+            *(f"{model.upper()}: {p[model]}" for model in ("llm", "stt", "tts") if p[model]),
         ]
 
         on_frontier = (p["x"], p["y"]) in frontier_set
