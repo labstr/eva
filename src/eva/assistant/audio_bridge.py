@@ -8,7 +8,6 @@ All framework servers need to:
 This module provides the common infrastructure.
 """
 
-import asyncio
 import audioop
 import json
 import struct
@@ -22,6 +21,7 @@ logger = get_logger(__name__)
 
 
 # ── Audio format conversion ──────────────────────────────────────────
+
 
 def mulaw_8k_to_pcm16_16k(mulaw_bytes: bytes) -> bytes:
     """Convert 8kHz mu-law audio to 16kHz 16-bit PCM."""
@@ -68,13 +68,13 @@ def pcm16_mix(track_a: bytes, track_b: bytes) -> bytes:
 
     # Zero-pad shorter track
     if len_a < max_len:
-        track_a = track_a + b'\x00' * (max_len - len_a)
+        track_a = track_a + b"\x00" * (max_len - len_a)
     if len_b < max_len:
-        track_b = track_b + b'\x00' * (max_len - len_b)
+        track_b = track_b + b"\x00" * (max_len - len_b)
 
     # Mix with clipping
     n_samples = max_len // 2
-    fmt = f'<{n_samples}h'
+    fmt = f"<{n_samples}h"
     samples_a = struct.unpack(fmt, track_a)
     samples_b = struct.unpack(fmt, track_b)
     mixed = struct.pack(fmt, *(max(-32768, min(32767, a + b)) for a, b in zip(samples_a, samples_b)))
@@ -104,32 +104,37 @@ def parse_twilio_media_message(message: str) -> Optional[bytes]:
 def create_twilio_media_message(stream_sid: str, audio_bytes: bytes) -> str:
     """Create a Twilio media WebSocket message with the given audio bytes."""
     payload = base64.b64encode(audio_bytes).decode("ascii")
-    return json.dumps({
-        "event": "media",
-        "streamSid": stream_sid,
-        "media": {
-            "payload": payload,
-        },
-    })
+    return json.dumps(
+        {
+            "event": "media",
+            "streamSid": stream_sid,
+            "media": {
+                "payload": payload,
+            },
+        }
+    )
 
 
 def create_twilio_start_response(stream_sid: str) -> str:
     """Create a Twilio 'start' event response."""
-    return json.dumps({
-        "event": "start",
-        "streamSid": stream_sid,
-        "start": {
+    return json.dumps(
+        {
+            "event": "start",
             "streamSid": stream_sid,
-            "mediaFormat": {
-                "encoding": "audio/x-mulaw",
-                "sampleRate": 8000,
-                "channels": 1,
+            "start": {
+                "streamSid": stream_sid,
+                "mediaFormat": {
+                    "encoding": "audio/x-mulaw",
+                    "sampleRate": 8000,
+                    "channels": 1,
+                },
             },
-        },
-    })
+        }
+    )
 
 
 # ── Framework Logs Writer ────────────────────────────────────────────
+
 
 class FrameworkLogWriter:
     """Writes framework_logs.jsonl (replacement for pipecat_logs.jsonl).
@@ -183,6 +188,7 @@ class FrameworkLogWriter:
 
 # ── Metrics Log Writer ───────────────────────────────────────────────
 
+
 class MetricsLogWriter:
     """Writes pipecat_metrics.jsonl equivalent for non-pipecat frameworks."""
 
@@ -213,8 +219,11 @@ class MetricsLogWriter:
         self._append(entry)
 
     def write_token_usage(
-        self, processor: str, model: str,
-        prompt_tokens: int, completion_tokens: int,
+        self,
+        processor: str,
+        model: str,
+        prompt_tokens: int,
+        completion_tokens: int,
     ) -> None:
         """Write an LLMTokenUsageMetricsData entry."""
         entry = {
