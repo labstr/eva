@@ -44,7 +44,7 @@ from pipecat.turns.user_stop import TurnAnalyzerUserTurnStopStrategy
 from pipecat.turns.user_turn_strategies import ExternalUserTurnStrategies, UserTurnStrategies
 from pipecat.utils.time import time_now_iso8601
 
-from eva.assistant.agentic.audit_log import AuditLog, current_timestamp_ms
+from eva.assistant.agentic.audit_log import current_timestamp_ms
 from eva.assistant.base_server import INITIAL_MESSAGE, AbstractAssistantServer
 from eva.assistant.pipeline.agent_processor import BenchmarkAgentProcessor, UserAudioCollector, UserObserver
 from eva.assistant.pipeline.audio_llm_processor import (
@@ -75,6 +75,7 @@ SMART_TURN_STOP_SECS = 3  # Default from SmartTurnParams
 # Pre-speech audio buffer - captures audio BEFORE VAD fires to avoid cutting off speech start.
 # Should be larger than pipecat's VAD start_secs (0.2s) to account for VAD latency.
 VAD_PRE_SPEECH_BUFFER_SECS = 0.5
+
 
 class AssistantServer(AbstractAssistantServer):
     """Pipecat-based WebSocket server for the assistant in voice conversations.

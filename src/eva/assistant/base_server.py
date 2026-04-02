@@ -10,7 +10,7 @@ import json
 import wave
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from eva.assistant.agentic.audit_log import AuditLog
 from eva.assistant.tools.tool_executor import ToolExecutor
@@ -159,9 +159,8 @@ class AbstractAssistantServer(ABC):
         # Auto-compute mixed audio from user + assistant tracks when not populated
         if not self._audio_buffer and self.user_audio_buffer and self.assistant_audio_buffer:
             from eva.assistant.audio_bridge import pcm16_mix
-            self._audio_buffer = bytearray(
-                pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer))
-            )
+
+            self._audio_buffer = bytearray(pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer)))
         elif not self._audio_buffer and self.user_audio_buffer:
             self._audio_buffer = bytearray(self.user_audio_buffer)
         elif not self._audio_buffer and self.assistant_audio_buffer:

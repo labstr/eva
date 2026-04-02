@@ -47,7 +47,9 @@ def _get_server_class(framework: str) -> type[AbstractAssistantServer]:
 
         return DeepgramAssistantServer
     else:
-        raise ValueError(f"Unknown framework: {framework!r}. Supported: pipecat, openai_realtime, gemini_live, elevenlabs, deepgram")
+        raise ValueError(
+            f"Unknown framework: {framework!r}. Supported: pipecat, openai_realtime, gemini_live, elevenlabs, deepgram"
+        )
 
 
 def _percentile(sorted_data: list[float], p: float) -> float:

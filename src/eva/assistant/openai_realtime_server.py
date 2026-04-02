@@ -9,27 +9,24 @@ records all conversation events in the audit log.
 import asyncio
 import base64
 import json
-import os
 import time
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any, Optional
 
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from openai import AsyncOpenAI
 
-from eva.assistant.agentic.audit_log import current_timestamp_ms
 from eva.assistant.audio_bridge import (
     FrameworkLogWriter,
     MetricsLogWriter,
+    create_twilio_media_message,
     mulaw_8k_to_pcm16_24k,
+    parse_twilio_media_message,
     pcm16_24k_to_mulaw_8k,
     pcm16_mix,
-    parse_twilio_media_message,
-    create_twilio_media_message,
 )
-from eva.assistant.base_server import AbstractAssistantServer, INITIAL_MESSAGE
+from eva.assistant.base_server import AbstractAssistantServer
 from eva.utils.logging import get_logger
 from eva.utils.prompt_manager import PromptManager
 
@@ -107,7 +104,6 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
         self._model: str = self.pipeline_config.s2s
 
-
     async def start(self) -> None:
         """Start the FastAPI WebSocket server."""
         if self._running:
@@ -176,12 +172,9 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         """Save all outputs including mixed audio."""
         # Compute mixed audio from user + assistant tracks
         if self.user_audio_buffer and self.assistant_audio_buffer:
-            self._audio_buffer = bytearray(
-                pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer))
-            )
+            self._audio_buffer = bytearray(pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer)))
 
         await super().save_outputs()
-
 
     async def _handle_session(self, websocket: WebSocket) -> None:
         """Handle a single WebSocket session.
@@ -210,34 +203,32 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         try:
             async with client.beta.realtime.connect(model=self._model) as conn:
                 # Configure the session
-                await conn.session.update(session={
-                    "modalities": ["text", "audio"],
-                    "instructions": self._system_prompt,
-                    "voice": self.pipeline_config.s2s_params.get("voice", "marin"),
-                    "input_audio_format": "pcm16",
-                    "output_audio_format": "pcm16",
-                    "input_audio_transcription": {
-                        "model": self.pipeline_config.s2s_params.get("transcription_model", "whisper-1"),
-                    },
-                    "turn_detection": {
-                        "type": "server_vad",
-                        "threshold": 0.5,
-                        "prefix_padding_ms": 300,
-                        "silence_duration_ms": 200,
-                    },
-                    "tools": self._realtime_tools,
-                })
+                await conn.session.update(
+                    session={
+                        "modalities": ["text", "audio"],
+                        "instructions": self._system_prompt,
+                        "voice": self.pipeline_config.s2s_params.get("voice", "marin"),
+                        "input_audio_format": "pcm16",
+                        "output_audio_format": "pcm16",
+                        "input_audio_transcription": {
+                            "model": self.pipeline_config.s2s_params.get("transcription_model", "whisper-1"),
+                        },
+                        "turn_detection": {
+                            "type": "server_vad",
+                            "threshold": 0.5,
+                            "prefix_padding_ms": 300,
+                            "silence_duration_ms": 200,
+                        },
+                        "tools": self._realtime_tools,
+                    }
+                )
 
                 # Trigger the initial greeting
                 await conn.response.create()
 
                 # Run forwarding tasks concurrently
-                forward_task = asyncio.create_task(
-                    self._forward_user_audio(websocket, conn)
-                )
-                receive_task = asyncio.create_task(
-                    self._process_openai_events(conn, websocket)
-                )
+                forward_task = asyncio.create_task(self._forward_user_audio(websocket, conn))
+                receive_task = asyncio.create_task(self._process_openai_events(conn, websocket))
 
                 done, pending = await asyncio.wait(
                     [forward_task, receive_task],
@@ -459,14 +450,12 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             # First audio chunk in a NEW response → pad silence from the
             # end of the previous response (or session start).
             ref_time = (
-                self._assistant_audio_last_wall
-                if self._assistant_audio_last_wall > 0
-                else self._session_start_wall
+                self._assistant_audio_last_wall if self._assistant_audio_last_wall > 0 else self._session_start_wall
             )
             gap = now - ref_time
             if gap > 0.02:  # >20ms gap → insert silence
                 silence_samples = int(gap * OPENAI_SAMPLE_RATE)
-                self.assistant_audio_buffer.extend(b'\x00\x00' * silence_samples)
+                self.assistant_audio_buffer.extend(b"\x00\x00" * silence_samples)
 
             self._assistant_state.first_audio_wall_ms = _wall_ms()
             self._assistant_state.responding = True
@@ -498,7 +487,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             _MULAW_CHUNK = 160
             offset = 0
             while offset < len(mulaw_bytes):
-                chunk = mulaw_bytes[offset:offset + _MULAW_CHUNK]
+                chunk = mulaw_bytes[offset : offset + _MULAW_CHUNK]
                 offset += _MULAW_CHUNK
                 twilio_msg = create_twilio_media_message(self._stream_sid, chunk)
                 await websocket.send_text(twilio_msg)
@@ -548,19 +537,24 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         self.audit_log.append_tool_response(func_name, result)
 
         if self._fw_log:
-            self._fw_log.write("tool_call", {
-                "frame": "tool_call",
-                "tool_name": func_name,
-                "arguments": arguments,
-                "result": result,
-            })
+            self._fw_log.write(
+                "tool_call",
+                {
+                    "frame": "tool_call",
+                    "tool_name": func_name,
+                    "arguments": arguments,
+                    "result": result,
+                },
+            )
 
         # Send function call output back to OpenAI
-        await conn.conversation.item.create(item={
-            "type": "function_call_output",
-            "call_id": call_id,
-            "output": json.dumps(result),
-        })
+        await conn.conversation.item.create(
+            item={
+                "type": "function_call_output",
+                "call_id": call_id,
+                "output": json.dumps(result),
+            }
+        )
 
         # Trigger next response after tool result
         await conn.response.create()
@@ -659,16 +653,18 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             return tools
 
         for tool in self.agent.tools:
-            tools.append({
-                "type": "function",
-                "name": tool.function_name,
-                "description": f"{tool.name}: {tool.description}",
-                "parameters": {
-                    "type": "object",
-                    "properties": tool.get_parameter_properties(),
-                    "required": tool.get_required_param_names(),
-                },
-            })
+            tools.append(
+                {
+                    "type": "function",
+                    "name": tool.function_name,
+                    "description": f"{tool.name}: {tool.description}",
+                    "parameters": {
+                        "type": "object",
+                        "properties": tool.get_parameter_properties(),
+                        "required": tool.get_required_param_names(),
+                    },
+                }
+            )
         return tools
 
     @staticmethod
@@ -695,11 +691,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             for part in content_list:
                 part_type = getattr(part, "type", "")
                 if part_type in ("audio", "text"):
-                    transcript = (
-                        getattr(part, "transcript", None)
-                        or getattr(part, "text", None)
-                        or ""
-                    )
+                    transcript = getattr(part, "transcript", None) or getattr(part, "text", None) or ""
                     if transcript:
                         text_parts.append(transcript)
 
