@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
-from eva.assistant.server import AssistantServer
+from eva.assistant.base_server import AbstractAssistantServer
 from eva.models.agents import AgentConfig
 from eva.models.config import RunConfig
 from eva.models.record import EvaluationRecord
@@ -18,6 +18,36 @@ from eva.utils.hash_utils import get_dict_hash
 from eva.utils.logging import add_record_log_file, current_record_id, get_logger, remove_record_log_file
 
 logger = get_logger(__name__)
+
+
+def _get_server_class(framework: str) -> type[AbstractAssistantServer]:
+    """Return the server class for the given framework name.
+
+    Uses lazy imports to avoid importing heavy dependencies (pipecat, openai, etc.)
+    unless the framework is actually selected.
+    """
+    if framework == "pipecat":
+        from eva.assistant.server import AssistantServer
+
+        return AssistantServer
+    elif framework == "openai_realtime":
+        from eva.assistant.openai_realtime_server import OpenAIRealtimeAssistantServer
+
+        return OpenAIRealtimeAssistantServer
+    elif framework == "gemini_live":
+        from eva.assistant.gemini_live_server import GeminiLiveAssistantServer
+
+        return GeminiLiveAssistantServer
+    elif framework == "elevenlabs":
+        from eva.assistant.elevenlabs_server import ElevenLabsAssistantServer
+
+        return ElevenLabsAssistantServer
+    elif framework == "deepgram":
+        from eva.assistant.deepgram_server import DeepgramAssistantServer
+
+        return DeepgramAssistantServer
+    else:
+        raise ValueError(f"Unknown framework: {framework!r}. Supported: pipecat, openai_realtime, gemini_live, elevenlabs, deepgram")
 
 
 def _percentile(sorted_data: list[float], p: float) -> float:
@@ -223,7 +253,7 @@ class ConversationWorker:
             transcript_path=str(self.output_dir / "transcript.jsonl"),
             audit_log_path=str(self.output_dir / "audit_log.json"),
             conversation_log_path=str(self.output_dir / "logs.log"),
-            pipecat_logs_path=str(self.output_dir / "pipecat_logs.jsonl"),
+            pipecat_logs_path=self._resolve_framework_logs_path(),
             elevenlabs_logs_path=str(self.output_dir / "elevenlabs_events.jsonl"),
             num_turns=self._conversation_stats.get("num_turns", 0),
             num_tool_calls=self._conversation_stats.get("num_tool_calls", 0),
@@ -234,8 +264,9 @@ class ConversationWorker:
         )
 
     async def _start_assistant(self) -> None:
-        """Start the assistant server."""
-        self._assistant_server = AssistantServer(
+        """Start the assistant server using the configured framework."""
+        server_cls = _get_server_class(self.config.framework)
+        self._assistant_server = server_cls(
             current_date_time=self.record.current_date_time,
             pipeline_config=self.config.model,
             agent=self.agent,
@@ -275,6 +306,14 @@ class ConversationWorker:
             self._conversation_stats = self._assistant_server.get_conversation_stats()
 
         return ended_reason
+
+    def _resolve_framework_logs_path(self) -> str:
+        """Resolve the framework/pipecat logs path, preferring framework_logs.jsonl."""
+        framework_path = self.output_dir / "framework_logs.jsonl"
+        pipecat_path = self.output_dir / "pipecat_logs.jsonl"
+        if framework_path.exists():
+            return str(framework_path)
+        return str(pipecat_path)
 
     async def _cleanup(self) -> None:
         """Clean up resources."""
