@@ -270,6 +270,11 @@ class UserSimulator:
                 except Exception as e:
                     logger.warning(f"Failed to check conversation history for end_call: {e}")
 
+                try:
+                    await self._fetch_elevenlabs_audio(conversation_id)
+                except Exception as e:
+                    logger.warning(f"Failed to fetch ElevenLabs server audio: {e}")
+
             self.event_logger.log_connection_state("session_ended", {"reason": self._end_reason})
 
         except Exception as e:
@@ -333,6 +338,27 @@ class UserSimulator:
 
         logger.warning(f"Conversation transcript still empty after {max_attempts} attempts")
         return False
+
+    async def _fetch_elevenlabs_audio(self, conversation_id: str) -> None:
+        max_attempts = 5
+        delay = 2.0
+
+        for attempt in range(max_attempts):
+            try:
+                audio_iter = self._client.conversational_ai.conversations.audio.get(conversation_id)
+                audio_path = self.output_dir / "elevenlabs_audio_recording.mp3"
+                with open(audio_path, "wb") as f:
+                    for chunk in audio_iter:
+                        f.write(chunk)
+                logger.info(f"Saved ElevenLabs server-side audio to {audio_path}")
+                return
+            except Exception as e:
+                if attempt < max_attempts - 1:
+                    logger.debug(f"Audio not yet available (attempt {attempt + 1}/{max_attempts}): {e}")
+                    await asyncio.sleep(delay)
+                    delay = min(delay * 2, 10.0)
+                else:
+                    logger.warning(f"Failed to fetch ElevenLabs server audio after {max_attempts} attempts: {e}")
 
     def _reset_keepalive_counter(self) -> None:
         """Reset the consecutive keep-alive counter on user/agent activity."""
