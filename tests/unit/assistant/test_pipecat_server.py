@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from eva.assistant.agentic.audit_log import AuditLog
-from eva.assistant.server import SAMPLE_RATE, AssistantServer
+from eva.assistant.pipecat_server import SAMPLE_RATE, AssistantServer
 
 
 def _make_server(tmp_path: Path):

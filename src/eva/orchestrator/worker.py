@@ -27,7 +27,7 @@ def _get_server_class(framework: str) -> type[AbstractAssistantServer]:
     unless the framework is actually selected.
     """
     if framework == "pipecat":
-        from eva.assistant.server import AssistantServer
+        from eva.assistant.pipecat_server import AssistantServer
 
         return AssistantServer
     elif framework == "openai_realtime":
