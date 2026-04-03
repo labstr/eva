@@ -24,7 +24,7 @@ from eva.assistant.audio_bridge import (
     mulaw_8k_to_pcm16_24k,
     parse_twilio_media_message,
     pcm16_24k_to_mulaw_8k,
-    pcm16_mix,
+    sync_buffer_to_position,
 )
 from eva.assistant.base_server import AbstractAssistantServer
 from eva.utils.logging import get_logger
@@ -98,9 +98,10 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         self._assistant_state = _AssistantResponseState()
         self._stream_sid: str = ""
 
-        # Wall-clock tracking for audio alignment
-        self._session_start_wall: float = 0.0  # time.time() when session starts
-        self._assistant_audio_last_wall: float = 0.0  # time.time() of last assistant audio write
+        self._user_speaking: bool = False
+        self._bot_speaking: bool = False
+        self._user_frame_count: int = 0
+        self._delta_count: int = 0
 
         self._model: str = self.pipeline_config.s2s
 
@@ -170,18 +171,6 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
     async def save_outputs(self) -> None:
         """Save all outputs including mixed audio."""
-        user_duration = len(self.user_audio_buffer) / (OPENAI_SAMPLE_RATE * 2) if self.user_audio_buffer else 0.0
-        asst_duration = (
-            len(self.assistant_audio_buffer) / (OPENAI_SAMPLE_RATE * 2) if self.assistant_audio_buffer else 0.0
-        )
-        logger.info(
-            f"[SILENCE DEBUG] Final buffers: user={user_duration:.2f}s, "
-            f"assistant={asst_duration:.2f}s, diff={user_duration - asst_duration:.2f}s"
-        )
-        # Compute mixed audio from user + assistant tracks
-        if self.user_audio_buffer and self.assistant_audio_buffer:
-            self._audio_buffer = bytearray(pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer)))
-
         await super().save_outputs()
 
     async def _handle_session(self, websocket: WebSocket) -> None:
@@ -202,8 +191,8 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         self._user_turn = None
         self._assistant_state = _AssistantResponseState()
         self._stream_sid = self.conversation_id
-        self._session_start_wall = time.time()
-        self._assistant_audio_last_wall = 0.0
+        self._user_speaking = False
+        self._bot_speaking = False
 
         api_key = self.pipeline_config.s2s_params.get("api_key")
         if not api_key:
@@ -293,8 +282,23 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                 # Convert 8kHz mulaw -> 24kHz PCM16
                 pcm16_24k = mulaw_8k_to_pcm16_24k(mulaw_bytes)
 
-                # Record user audio
+                asst_before = len(self.assistant_audio_buffer)
+                synced = 0
+                if not self._bot_speaking:
+                    sync_target = len(self.user_audio_buffer)
+                    sync_buffer_to_position(self.assistant_audio_buffer, sync_target)
+                    synced = len(self.assistant_audio_buffer) - asst_before
                 self.user_audio_buffer.extend(pcm16_24k)
+                self._user_frame_count += 1
+                if self._user_frame_count % 50 == 0:
+                    diff = len(self.user_audio_buffer) - len(self.assistant_audio_buffer)
+                    diff_ms = diff / (OPENAI_SAMPLE_RATE * 2) * 1000
+                    logger.debug(
+                        f"[ALIGN DEBUG] user_frame #{self._user_frame_count}: "
+                        f"user={len(self.user_audio_buffer)} asst={len(self.assistant_audio_buffer)} "
+                        f"diff={diff}({diff_ms:.0f}ms) bot_spk={self._bot_speaking} "
+                        f"usr_spk={self._user_speaking} added={len(pcm16_24k)} synced={synced}"
+                    )
 
                 # Encode as base64 and send to OpenAI
                 audio_b64 = base64.b64encode(pcm16_24k).decode("ascii")
@@ -385,6 +389,14 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
     async def _on_speech_started(self, event: Any) -> None:
         """Handle input_audio_buffer.speech_started."""
+        self._user_speaking = True
+        diff = len(self.user_audio_buffer) - len(self.assistant_audio_buffer)
+        diff_ms = diff / (OPENAI_SAMPLE_RATE * 2) * 1000
+        logger.debug(
+            f"[ALIGN DEBUG] speech_started: user={len(self.user_audio_buffer)} "
+            f"asst={len(self.assistant_audio_buffer)} diff={diff}({diff_ms:.0f}ms) "
+            f"bot_spk={self._bot_speaking}"
+        )
         wall = _wall_ms()
 
         # If assistant was responding, flush interrupted response
@@ -409,6 +421,14 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
     async def _on_speech_stopped(self, event: Any) -> None:
         """Handle input_audio_buffer.speech_stopped."""
+        self._user_speaking = False
+        diff = len(self.user_audio_buffer) - len(self.assistant_audio_buffer)
+        diff_ms = diff / (OPENAI_SAMPLE_RATE * 2) * 1000
+        logger.debug(
+            f"[ALIGN DEBUG] speech_stopped: user={len(self.user_audio_buffer)} "
+            f"asst={len(self.assistant_audio_buffer)} diff={diff}({diff_ms:.0f}ms) "
+            f"bot_spk={self._bot_speaking}"
+        )
         wall = _wall_ms()
         if self._user_turn:
             self._user_turn.speech_stopped_wall_ms = wall
@@ -443,42 +463,14 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         if not delta_b64:
             return
 
-        # Decode base64 PCM16 audio
         pcm16_bytes = base64.b64decode(delta_b64)
         now = time.time()
 
-        # --- Wall-clock aligned audio recording ---
-        # Only insert silence between RESPONSES (not between delta chunks
-        # within a single response).  This keeps the assistant audio track
-        # aligned with the user track without inflating it with micro-gaps.
         if self._assistant_state.first_audio_wall_ms is None:
-            # First audio chunk in a NEW response → pad silence from the
-            # end of the previous response (or session start).
-            ref_time = (
-                self._assistant_audio_last_wall if self._assistant_audio_last_wall > 0 else self._session_start_wall
-            )
-            gap = now - ref_time
-            if gap > 0.02:  # >20ms gap → insert silence
-                silence_samples = int(gap * OPENAI_SAMPLE_RATE)
-                silence_duration = silence_samples / OPENAI_SAMPLE_RATE
-                logger.info(
-                    f"[SILENCE DEBUG] Inserting {silence_duration:.3f}s silence "
-                    f"({silence_samples} samples). gap={gap:.3f}s, "
-                    f"ref_time={ref_time:.3f}, now={now:.3f}, "
-                    f"asst_buf_before={len(self.assistant_audio_buffer)}, "
-                    f"user_buf={len(self.user_audio_buffer)}"
-                )
-                self.assistant_audio_buffer.extend(b"\x00\x00" * silence_samples)
-            else:
-                logger.info(
-                    f"[SILENCE DEBUG] Gap too small, NO silence inserted. "
-                    f"gap={gap:.3f}s, ref_time={ref_time:.3f}, now={now:.3f}"
-                )
-
             self._assistant_state.first_audio_wall_ms = _wall_ms()
             self._assistant_state.responding = True
+            self._bot_speaking = True
 
-            # Measure response latency (speech_stopped -> first audio)
             if hasattr(self, "_speech_stopped_time"):
                 latency = now - self._speech_stopped_time
                 self._latency_measurements.append(latency)
@@ -490,14 +482,22 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                     )
                 logger.debug(f"Response latency: {latency:.3f}s")
 
-        # Record assistant audio (no silence padding between delta chunks
-        # within the same response — they arrive rapidly and represent
-        # continuous speech).
+        user_before = len(self.user_audio_buffer)
+        synced = 0
+        if not self._user_speaking:
+            sync_buffer_to_position(self.user_audio_buffer, len(self.assistant_audio_buffer))
+            synced = len(self.user_audio_buffer) - user_before
         self.assistant_audio_buffer.extend(pcm16_bytes)
-        self._last_audio_delta_wall = time.time()
-
-        # Update the last-write wall time only at RESPONSE boundaries
-        # (done in _reset_assistant_state, called from _on_response_done).
+        self._delta_count += 1
+        if self._delta_count % 10 == 0:
+            diff = len(self.user_audio_buffer) - len(self.assistant_audio_buffer)
+            diff_ms = diff / (OPENAI_SAMPLE_RATE * 2) * 1000
+            logger.debug(
+                f"[ALIGN DEBUG] audio_delta #{self._delta_count}: "
+                f"user={len(self.user_audio_buffer)} asst={len(self.assistant_audio_buffer)} "
+                f"diff={diff}({diff_ms:.0f}ms) bot_spk={self._bot_speaking} "
+                f"usr_spk={self._user_speaking} added={len(pcm16_bytes)} synced_user={synced}"
+            )
 
         # Convert 24kHz PCM16 -> 8kHz mulaw and send in small chunks
         # (160 bytes = 20ms at 8kHz mulaw) for proper user sim timing
@@ -652,25 +652,17 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
     # ── Helpers ───────────────────────────────────────────────────────
 
     def _reset_assistant_state(self) -> None:
-        """Clear accumulated assistant response state.
-
-        Only updates the wall-clock reference when audio was actually
-        streamed in this response. Tool-call-only responses must NOT
-        advance the reference, otherwise the silence gap for the next
-        audio response gets swallowed.
-        """
+        """Clear accumulated assistant response state."""
         audio_was_streamed = self._assistant_state.first_audio_wall_ms is not None
-        now = time.time()
-        last_delta = getattr(self, "_last_audio_delta_wall", 0.0)
-        drift = now - last_delta if last_delta > 0 else 0.0
-        logger.info(
-            f"[SILENCE DEBUG] reset_assistant_state: audio_was_streamed={audio_was_streamed}, "
-            f"now={now:.3f}, last_audio_delta={last_delta:.3f}, drift={drift:.3f}s, "
-            f"asst_buf={len(self.assistant_audio_buffer)}, "
-            f"user_buf={len(self.user_audio_buffer)}"
+        diff = len(self.user_audio_buffer) - len(self.assistant_audio_buffer)
+        diff_ms = diff / (OPENAI_SAMPLE_RATE * 2) * 1000
+        logger.debug(
+            f"[ALIGN DEBUG] reset_state: user={len(self.user_audio_buffer)} "
+            f"asst={len(self.assistant_audio_buffer)} diff={diff}({diff_ms:.0f}ms) "
+            f"audio_streamed={audio_was_streamed} bot_spk={self._bot_speaking}"
         )
         if audio_was_streamed:
-            self._assistant_audio_last_wall = now
+            self._bot_speaking = False
         self._assistant_state = _AssistantResponseState()
 
     def _build_realtime_tools(self) -> list[dict]:
