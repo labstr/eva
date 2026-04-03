@@ -198,7 +198,9 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         self._assistant_audio_last_wall = 0.0
 
         api_key = self.pipeline_config.s2s_params.get("api_key")
-        client = AsyncOpenAI(api_key=api_key) if api_key else AsyncOpenAI()
+        if not api_key:
+            raise ValueError("API key required for openai realtime")
+        client = AsyncOpenAI(api_key=api_key)
 
         try:
             async with client.beta.realtime.connect(model=self._model) as conn:
@@ -213,6 +215,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                         "input_audio_transcription": {
                             "model": self.pipeline_config.s2s_params.get("transcription_model", "whisper-1"),
                         },
+                        # TODO: Add support for client_vad and configurable turn detection params
                         "turn_detection": {
                             "type": "server_vad",
                             "threshold": 0.5,
@@ -332,7 +335,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                 await self._on_transcription_completed(event)
 
             case "conversation.item.input_audio_transcription.delta":
-                logger.debug(f"Transcription delta: {getattr(event, 'delta', '')[:60]}")
+                logger.debug(f"Transcription delta: {getattr(event, 'delta', '')}")
 
             case "conversation.item.input_audio_transcription.failed":
                 error_info = getattr(event, "error", "")
@@ -362,12 +365,6 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
             case "response.done":
                 await self._on_response_done(event)
-
-            case "output_audio_buffer.started":
-                logger.debug("Assistant audio playback started")
-
-            case "output_audio_buffer.stopped":
-                logger.debug("Assistant audio playback stopped")
 
             case "error":
                 error_data = getattr(event, "error", None)
