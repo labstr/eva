@@ -1,0 +1,222 @@
+{
+  "_current_date": "2026-04-15",
+  "_scenario_id": "MHR-1.1.1",
+  "_flow": "license_extension",
+  "_auth_flow": "provider_auth",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "ACLS",
+      "BLS"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "ACLS",
+      "BLS",
+      "PALS",
+      "NRP"
+    ]
+  },
+  "providers": {
+    "1487392045": {
+      "npi": "1487392045",
+      "employee_id": "EMP048271",
+      "first_name": "Aigerim",
+      "last_name": "Bekova",
+      "facility_code": "MGH-04B",
+      "pin": "7291",
+      "phone_last_four": "4471",
+      "otp_code": "483920",
+      "role_code": "RN",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2018-06-10",
+      "ehr_access_status": "suspended",
+      "ehr_access_case_id": null,
+      "clearance_code": "CLR-OCC-048271",
+      "licenses": {
+        "MA-RN-004821": {
+          "state_license_number": "MA-RN-004821",
+          "license_type": "RN",
+          "state_code": "MA",
+          "expiration_date": "2026-04-27",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "proassurance",
+        "policy_number": "POL-2023-AX7731",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2023-07-01",
+        "expiration_date": "2026-07-01",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "MGH-04B",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-01-15",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-CARD-001",
+            "description": "Cardiac catheterization",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-CARD-002",
+            "description": "Echocardiography interpretation",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-ICU-003",
+            "description": "ICU patient management",
+            "status": "suspended"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    },
+    "2039487561": {
+      "npi": "2039487561",
+      "employee_id": "EMP039124",
+      "first_name": "Rajesh",
+      "last_name": "Subramaniam",
+      "facility_code": "MGH-04B",
+      "pin": "5583",
+      "phone_last_four": "8823",
+      "otp_code": "291847",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2015-03-01",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {
+        "MA-MD-009214": {
+          "state_license_number": "MA-MD-009214",
+          "license_type": "MD",
+          "state_code": "MA",
+          "expiration_date": "2027-03-15",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2024-RX2294",
+        "per_occurrence_limit_usd": 2000000,
+        "aggregate_limit_usd": 5000000,
+        "effective_date": "2024-01-01",
+        "expiration_date": "2027-01-01",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": null,
+      "privileges": null,
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP048271": {
+      "employee_id": "EMP048271",
+      "first_name": "Aigerim",
+      "last_name": "Bekova",
+      "date_of_birth": "1986-03-04",
+      "phone_last_four": "4471",
+      "otp_code": "483920",
+      "department_code": "CARDIOLOGY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-06-10",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 94,
+        "hours_worked_past_year": 1820,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": null,
+      "oncall_schedule": {},
+      "scheduled_appointments": [],
+      "i9_record": null,
+      "visa_record": null,
+      "leave_records": []
+    },
+    "EMP039124": {
+      "employee_id": "EMP039124",
+      "first_name": "Rajesh",
+      "last_name": "Subramaniam",
+      "date_of_birth": "1979-11-22",
+      "phone_last_four": "8823",
+      "otp_code": "291847",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2015-03-01",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 133,
+        "hours_worked_past_year": 2100,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": null,
+      "oncall_schedule": {},
+      "scheduled_appointments": [],
+      "i9_record": null,
+      "visa_record": null,
+      "leave_records": []
+    }
+  },
+  "shifts": {},
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {}
+}

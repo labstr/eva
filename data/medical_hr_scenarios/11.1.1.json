@@ -1,0 +1,79 @@
+{
+  "_current_date": "2026-04-15",
+  "_scenario_id": "MHR-11.1.1",
+  "_flow": "visa_dependent",
+  "_auth_flow": "employee_auth+otp",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "ACLS",
+      "BLS"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "ACLS",
+      "BLS",
+      "PALS",
+      "NRP"
+    ]
+  },
+  "providers": {},
+  "employees": {
+    "EMP081034": {
+      "employee_id": "EMP081034",
+      "first_name": "Miroslav",
+      "last_name": "Kowalczyk",
+      "date_of_birth": "1988-02-14",
+      "phone_last_four": "6617",
+      "otp_code": "309482",
+      "department_code": "ONCOLOGY",
+      "role_code": "RN",
+      "unit_code": "3C-ONC",
+      "hire_date": "2019-09-02",
+      "employment_status": "on_leave",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 79,
+        "hours_worked_past_year": 1640,
+        "fmla_weeks_remaining": 8,
+        "reason": null
+      },
+      "onboarding_checklist": null,
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": null,
+      "visa_record": {
+        "petition_number": "WAC2512045678",
+        "visa_type": "H1B",
+        "status": "approved",
+        "expiration_date": "2028-10-01",
+        "dependents": [],
+        "amendment_id": null
+      },
+      "leave_records": []
+    }
+  },
+  "shifts": {},
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {}
+}
