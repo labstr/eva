@@ -214,8 +214,8 @@ class TestRunConfig:
         assert loaded.model_list[2]["litellm_params"]["aws_access_key_id"] == "must_be_redacted"
         assert loaded.model_list[2]["litellm_params"]["aws_secret_access_key"] == "must_be_redacted"
 
-    def test_apply_env_overrides_provider_mismatch(self):
-        """Restoring secrets fails if the STT/TTS provider changed."""
+    def test_apply_env_overrides_provider_mismatch(self, caplog):
+        """Restoring secrets warns (but succeeds) if the STT/TTS provider changed."""
         config = _config(env_vars=_BASE_ENV)
         dumped_json = config.model_dump_json()
         loaded = RunConfig.model_validate_json(dumped_json)
@@ -227,8 +227,9 @@ class TestRunConfig:
                 "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "whisper-1"}),
             }
         )
-        with pytest.raises(ValueError, match=r"saved stt='deepgram'.*current environment has stt='openai_whisper'"):
+        with caplog.at_level("WARNING", logger="eva.models.config"):
             loaded.apply_env_overrides(live)
+        assert "saved 'deepgram', current environment has 'openai_whisper'" in caplog.text
 
     def test_apply_env_overrides_alias_mismatch(self):
         """Restoring secrets fails if the alias changed."""
