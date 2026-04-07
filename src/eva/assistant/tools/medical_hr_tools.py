@@ -55,12 +55,17 @@ Tool sequences per flow:
     verify_employee_auth → initiate_otp_auth → verify_otp_auth
     → get_employee_record → get_visa_record → add_visa_dependent
     → notify_immigration_counsel
+
+  Flow 12 – PTO Request:
+    verify_employee_auth → get_employee_record → get_pto_balance
+    → check_pto_eligibility → submit_pto_request
+    → notify_department_manager
 """
 
 import copy
 from pydantic import ValidationError
 
-from eva.assistant.tools.medical_hr_params import (
+from  eva.assistant.tools.medical_hr_params import (
     # Auth
     VerifyEmployeeAuthParams,
     VerifyProviderAuthParams,
@@ -119,6 +124,10 @@ from eva.assistant.tools.medical_hr_params import (
     GetVisaRecordParams,
     AddVisaDependentParams,
     NotifyImmigrationCounselParams,
+    # Flow 12
+    GetPtoBalanceParams,
+    CheckPtoEligibilityParams,
+    SubmitPtoRequestParams,
     validation_error_response,
 )
 
@@ -642,6 +651,7 @@ def notify_department_manager(params: dict, db: dict, call_index: int) -> dict:
     - Flow 2 (employee_auth) — shift_swap_confirmed
     - Flow 6 (employee_auth + otp_auth) — fmla_opened
     - Flow 7 (employee_auth) — payroll_correction_submitted
+    - Flow 12 (employee_auth) — pto_request_submitted
     The OR gate allows the tool to work regardless of which auth the flow used.
     """
     try:
@@ -1542,3 +1552,221 @@ def notify_immigration_counsel(params: dict, db: dict, call_index: int) -> dict:
             "visa_petition_number": p.visa_petition_number,
             "notification_type": p.notification_type,
             "message": f"Immigration counsel notified: {p.notification_type}"}
+
+
+# ---------------------------------------------------------------------------
+# FLOW 12: PTO Request
+#
+# PTO day calculation depends on the employee's schedule_type:
+#   - "standard" (M-F office workers): count weekdays in range minus org holidays
+#   - "shift" (nurses, doctors, techs): count scheduled shifts in range
+# ---------------------------------------------------------------------------
+
+def _count_weekdays(start: str, end: str) -> list[str]:
+    """Return list of weekday date strings (Mon-Fri) in [start, end] inclusive."""
+    from datetime import date, timedelta
+    s = date.fromisoformat(start)
+    e = date.fromisoformat(end)
+    days = []
+    current = s
+    while current <= e:
+        if current.weekday() < 5:  # Mon=0 .. Fri=4
+            days.append(current.isoformat())
+        current += timedelta(days=1)
+    return days
+
+
+def _get_shifts_in_range(db: dict, employee_id: str, start: str, end: str) -> list[str]:
+    """Return sorted list of shift dates for an employee within [start, end]."""
+    dates = set()
+    for shift in db.get("shifts", {}).values():
+        if shift.get("employee_id") == employee_id:
+            d = shift.get("date", "")
+            if start <= d <= end:
+                dates.add(d)
+    return sorted(dates)
+
+
+def get_pto_balance(params: dict, db: dict, call_index: int) -> dict:
+    """Retrieve an employee's PTO balances by type (pto and sick).
+
+    Also returns schedule_type so the agent can inform the caller how
+    PTO days are calculated.
+    """
+    try:
+        p = GetPtoBalanceParams.model_validate(params)
+    except ValidationError as exc:
+        return validation_error_response(exc, GetPtoBalanceParams)
+
+    if not _is_authenticated(db, "employee_auth"):
+        return _auth_required("employee_auth")
+
+    emp = db.get("employees", {}).get(p.employee_id)
+    if not emp:
+        return _employee_not_found(p.employee_id)
+
+    balances = emp.get("pto_balances")
+    if not balances:
+        return {"status": "error", "error_type": "pto_record_not_found",
+                "message": f"No PTO balance record found for {p.employee_id}"}
+
+    schedule_type = emp.get("schedule_type", "standard")
+
+    return {"status": "success", "employee_id": p.employee_id,
+            "schedule_type": schedule_type,
+            "pto_balances": copy.deepcopy(balances),
+            "message": f"PTO balances retrieved. Schedule type: {schedule_type}"}
+
+
+def check_pto_eligibility(params: dict, db: dict, call_index: int) -> dict:
+    """Check whether an employee can take PTO for a given date range.
+
+    Validates:
+    1. Sufficient PTO balance for the number of working days in range.
+       - Standard (M-F) employees: weekdays minus org holidays.
+       - Shift employees: scheduled shifts in the date range.
+    2. No department blackout dates overlap with the requested range.
+    3. No existing PTO request overlaps with the requested range.
+
+    Returns the exact working days that count toward PTO so the caller
+    can confirm before submitting.
+    """
+    try:
+        p = CheckPtoEligibilityParams.model_validate(params)
+    except ValidationError as exc:
+        return validation_error_response(exc, CheckPtoEligibilityParams)
+
+    if not _is_authenticated(db, "employee_auth"):
+        return _auth_required("employee_auth")
+
+    emp = db.get("employees", {}).get(p.employee_id)
+    if not emp:
+        return _employee_not_found(p.employee_id)
+
+    if p.start_date > p.end_date:
+        return {"status": "error", "error_type": "invalid_date_range",
+                "message": "Start date must be on or before end date"}
+
+    balances = emp.get("pto_balances", {})
+    current_balance = balances.get(p.pto_type, 0.0)
+    schedule_type = emp.get("schedule_type", "standard")
+
+    # Calculate working days based on schedule type
+    if schedule_type == "standard":
+        weekdays = _count_weekdays(p.start_date, p.end_date)
+        # Remove org holidays
+        org_holidays = set(db.get("org_holidays", []))
+        working_days = [d for d in weekdays if d not in org_holidays]
+    else:
+        # Shift worker: count scheduled shifts in range
+        working_days = _get_shifts_in_range(db, p.employee_id, p.start_date, p.end_date)
+
+    pto_days_required = float(len(working_days))
+
+    # Check balance
+    if pto_days_required > current_balance:
+        return {"status": "error", "error_type": "insufficient_pto_balance",
+                "message": f"Insufficient {p.pto_type} balance: {pto_days_required} days "
+                           f"required but only {current_balance} available",
+                "pto_days_required": pto_days_required,
+                "current_balance": current_balance}
+
+    # Check department blackout dates
+    dept = emp.get("department_code", "")
+    blackout_dates = set(db.get("department_blackout_dates", {}).get(dept, []))
+    blocked = sorted(set(working_days) & blackout_dates)
+    if blocked:
+        return {"status": "error", "error_type": "blackout_date_conflict",
+                "message": f"Requested dates overlap with department blackout dates: {blocked}",
+                "conflicting_dates": blocked}
+
+    # Check overlap with existing PTO requests
+    existing = emp.get("pto_requests", [])
+    for req in existing:
+        if req.get("status") in ("pending", "approved"):
+            if p.start_date <= req.get("end_date", "") and p.end_date >= req.get("start_date", ""):
+                return {"status": "error", "error_type": "pto_overlap",
+                        "message": f"Requested dates overlap with existing PTO request "
+                                   f"{req.get('start_date')} to {req.get('end_date')} "
+                                   f"(case {req.get('case_id')})",
+                        "overlapping_case_id": req.get("case_id")}
+
+    remaining = current_balance - pto_days_required
+
+    return {"status": "success", "eligible": True,
+            "employee_id": p.employee_id,
+            "schedule_type": schedule_type,
+            "pto_type": p.pto_type,
+            "pto_days_required": pto_days_required,
+            "working_days_in_range": working_days,
+            "current_balance": current_balance,
+            "remaining_after": remaining,
+            "message": f"Eligible. {pto_days_required} {p.pto_type} day(s) required, "
+                       f"{remaining} remaining after."}
+
+
+def submit_pto_request(params: dict, db: dict, call_index: int) -> dict:
+    """Submit a PTO request for a date range.
+
+    Recomputes the PTO days internally (does not trust the LLM's count)
+    and deducts from the employee's balance. Returns a case_id.
+    """
+    try:
+        p = SubmitPtoRequestParams.model_validate(params)
+    except ValidationError as exc:
+        return validation_error_response(exc, SubmitPtoRequestParams)
+
+    if not _is_authenticated(db, "employee_auth"):
+        return _auth_required("employee_auth")
+
+    emp = db.get("employees", {}).get(p.employee_id)
+    if not emp:
+        return _employee_not_found(p.employee_id)
+
+    if p.start_date > p.end_date:
+        return {"status": "error", "error_type": "invalid_date_range",
+                "message": "Start date must be on or before end date"}
+
+    balances = emp.get("pto_balances", {})
+    current_balance = balances.get(p.pto_type, 0.0)
+    schedule_type = emp.get("schedule_type", "standard")
+
+    # Recompute working days (do not trust LLM)
+    if schedule_type == "standard":
+        weekdays = _count_weekdays(p.start_date, p.end_date)
+        org_holidays = set(db.get("org_holidays", []))
+        working_days = [d for d in weekdays if d not in org_holidays]
+    else:
+        working_days = _get_shifts_in_range(db, p.employee_id, p.start_date, p.end_date)
+
+    pto_days = float(len(working_days))
+
+    if pto_days > current_balance:
+        return {"status": "error", "error_type": "insufficient_pto_balance",
+                "message": f"Insufficient {p.pto_type} balance: {pto_days} days "
+                           f"required but only {current_balance} available"}
+
+    # Deduct from balance
+    balances[p.pto_type] = current_balance - pto_days
+
+    case_id = _make_case_id("PTO", p.employee_id)
+    pto_record = {
+        "case_id": case_id,
+        "pto_type": p.pto_type,
+        "start_date": p.start_date,
+        "end_date": p.end_date,
+        "pto_days_deducted": pto_days,
+        "working_days": working_days,
+        "status": "pending",
+    }
+    emp.setdefault("pto_requests", []).append(pto_record)
+
+    return {"status": "success", "employee_id": p.employee_id,
+            "case_id": case_id,
+            "pto_type": p.pto_type,
+            "start_date": p.start_date, "end_date": p.end_date,
+            "pto_days_deducted": pto_days,
+            "working_days": working_days,
+            "remaining_balance": balances[p.pto_type],
+            "message": f"PTO request submitted. {pto_days} {p.pto_type} day(s) deducted. "
+                       f"Case ID: {case_id}"}

@@ -230,6 +230,25 @@ instructions: |
 
   ---
 
+  ### PTO Request
+
+  Employees may request paid time off (PTO) or sick leave. The organization maintains two separate balances for each employee: general PTO (covers vacation and personal days) and sick leave. Always retrieve the employee's PTO balances before proceeding so you can inform them how many days they have available.
+
+  When the caller states the dates they want off, ask whether they are using PTO or sick leave. Then check eligibility before submitting.
+
+  PTO days are calculated differently depending on the employee's schedule type, which is returned by the PTO balance lookup:
+
+  - **Standard schedule** (Monday through Friday office workers such as HR, admin, billing): only weekdays within the requested date range count as PTO days. Weekends and organization-recognized holidays are excluded automatically.
+  - **Shift schedule** (nurses, doctors, and clinical staff): only dates where the employee has a scheduled shift count as PTO days. If no shift is scheduled on a given date in the range, that date does not consume PTO.
+
+  Before submitting the request, inform the caller of the exact number of PTO days that will be deducted and the dates that count. Ask them to confirm.
+
+  After the request is submitted, notify the department manager.
+
+  Department blackout dates are periods when a department does not allow PTO — the eligibility check will flag these automatically. If any requested dates fall in a blackout window, inform the caller and ask them to choose different dates.
+
+  ---
+
   ### I-9 Work Authorization Verification
 
   I-9 verification is required for all new hires and must be renewed when work authorization documents expire.
@@ -572,8 +591,9 @@ tools:
     description: >
       Notify the department manager of a completed employee action. Called after
       confirm_shift_swap (notification_type: shift_swap_confirmed), submit_fmla_case
-      (notification_type: fmla_opened), or submit_payroll_correction
-      (notification_type: payroll_correction_submitted).
+      (notification_type: fmla_opened), submit_payroll_correction
+      (notification_type: payroll_correction_submitted), or submit_pto_request
+      (notification_type: pto_request_submitted).
     tool_type: write
     domain: hr
     required_parameters:
@@ -585,7 +605,7 @@ tools:
         description: "Case ID in format CASE-PREFIX-6digits, returned by the preceding write tool. Example: CASE-SWP-048271"
       - name: notification_type
         type: string
-        description: "Type of notification: shift_swap_confirmed, fmla_opened, or payroll_correction_submitted. Must match the action that was just completed."
+        description: "Type of notification: shift_swap_confirmed, fmla_opened, payroll_correction_submitted, or pto_request_submitted. Must match the action that was just completed."
 
   # ── FLOW 3: MALPRACTICE COVERAGE UPDATE ───────────────────────────────────────
 
@@ -1174,3 +1194,66 @@ tools:
       - name: notification_type
         type: string
         description: "Must be dependent_added for this flow"
+
+  # ── FLOW 12: PTO REQUEST ─────────────────────────────────────────────────────
+
+  - id: get_pto_balance
+    name: get_pto_balance
+    description: >
+      Retrieve an employee's PTO balances by type (pto and sick). Also returns
+      the employee's schedule_type (standard or shift) which determines how PTO
+      days are calculated. Call after get_employee_record.
+    tool_type: read
+    domain: hr
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID in format EMP followed by 6 digits — the authenticated caller's ID. Example: EMP048271"
+
+  - id: check_pto_eligibility
+    name: check_pto_eligibility
+    description: >
+      Check whether an employee can take PTO for a given date range. Validates
+      sufficient balance, no department blackout conflicts, and no overlap with
+      existing PTO requests. Returns the exact working days that will count as
+      PTO and the number of days to be deducted. For standard (M-F) employees,
+      only weekdays minus org holidays count. For shift employees, only
+      scheduled shifts in the range count. Must be called before submit_pto_request.
+    tool_type: read
+    domain: hr
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID in format EMP followed by 6 digits — the authenticated caller's ID. Example: EMP048271"
+      - name: pto_type
+        type: string
+        description: "Type of PTO to use: pto (general paid time off for vacation/personal) or sick (sick leave)"
+      - name: start_date
+        type: string
+        description: "First day of requested time off in YYYY-MM-DD format. Example: 2026-05-07"
+      - name: end_date
+        type: string
+        description: "Last day of requested time off in YYYY-MM-DD format. Example: 2026-05-13"
+
+  - id: submit_pto_request
+    name: submit_pto_request
+    description: >
+      Submit a PTO request for a date range. Recomputes the PTO days internally
+      and deducts from the employee's balance. Returns a case_id and the exact
+      days deducted. Call only after check_pto_eligibility returns eligible: true
+      and the caller has confirmed the details.
+    tool_type: write
+    domain: hr
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID in format EMP followed by 6 digits — the authenticated caller's ID. Example: EMP048271"
+      - name: pto_type
+        type: string
+        description: "Type of PTO to use: pto (general paid time off) or sick (sick leave). Same value used in check_pto_eligibility."
+      - name: start_date
+        type: string
+        description: "First day of requested time off in YYYY-MM-DD format. Same value used in check_pto_eligibility. Example: 2026-05-07"
+      - name: end_date
+        type: string
+        description: "Last day of requested time off in YYYY-MM-DD format. Same value used in check_pto_eligibility. Example: 2026-05-13"

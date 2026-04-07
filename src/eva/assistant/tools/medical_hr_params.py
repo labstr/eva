@@ -63,6 +63,11 @@ Tool sequences per flow:
     verify_employee_auth → initiate_otp_auth → verify_otp_auth
     → get_employee_record → get_visa_record → add_visa_dependent
     → notify_immigration_counsel
+
+  Flow 12 – PTO Request:
+    verify_employee_auth → get_employee_record → get_pto_balance
+    → check_pto_eligibility → submit_pto_request
+    → notify_department_manager
 """
 
 from enum import StrEnum
@@ -158,7 +163,7 @@ CaseIdStr = Annotated[
     Field(
         pattern=r"^CASE-[A-Z0-9]{2,6}-\d{6}$",
         description="HR case ID in format CASE-PREFIX-6digits",
-        examples=["CASE-FMLA-048271", "CASE-LIC-048271"],
+        examples=["CASE-FMLA-048271", "CASE-LIC-048271", "CASE-I9V-072948"],
     ),
 ]
 
@@ -291,6 +296,15 @@ class OnCallTier(StrEnum):
     backup = "backup"
 
 
+class PtoType(StrEnum):
+    """PTO balance types:
+    - pto: general paid time off (covers vacation and personal days)
+    - sick: sick leave (separate accrual and legal protections)
+    """
+    pto = "pto"
+    sick = "sick"
+
+
 class LeaveTypeOnRecord(StrEnum):
     """Administrative leave category the provider was on — mutually exclusive:
     - medical_leave: employer-approved medical leave (not FMLA-protected)
@@ -350,6 +364,7 @@ class ManagerNotificationType(StrEnum):
     shift_swap_confirmed = "shift_swap_confirmed"
     fmla_opened = "fmla_opened"
     payroll_correction_submitted = "payroll_correction_submitted"
+    pto_request_submitted = "pto_request_submitted"
 
 
 class HrComplianceNotificationType(StrEnum):
@@ -738,6 +753,28 @@ class NotifyImmigrationCounselParams(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Flow 12: PTO Request
+# ---------------------------------------------------------------------------
+
+class GetPtoBalanceParams(BaseModel):
+    employee_id: EmployeeIdStr
+
+
+class CheckPtoEligibilityParams(BaseModel):
+    employee_id: EmployeeIdStr
+    pto_type: PtoType
+    start_date: DateStr
+    end_date: DateStr
+
+
+class SubmitPtoRequestParams(BaseModel):
+    employee_id: EmployeeIdStr
+    pto_type: PtoType
+    start_date: DateStr
+    end_date: DateStr
+
+
+# ---------------------------------------------------------------------------
 # FIELD_ERROR_TYPES
 # ---------------------------------------------------------------------------
 
@@ -816,6 +853,10 @@ FIELD_ERROR_TYPES: dict[str, tuple[str, str]] = {
     # Department / case
     "department_code": ("invalid_department_code", "department_code"),
     "case_id": ("invalid_case_id_format", "case_id"),
+    # PTO
+    "pto_type": ("invalid_pto_type", "pto_type"),
+    "start_date": ("invalid_date_format", "start_date"),
+    "end_date": ("invalid_date_format", "end_date"),
 }
 
 
