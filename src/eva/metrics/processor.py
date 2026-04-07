@@ -90,16 +90,23 @@ class _TurnExtractionState:
     # user_speech lands at the same turn.
     rollback_advance_consumed_by_user: bool = False
 
-    def advance_turn_if_needed(self) -> None:
+    def advance_turn_if_needed(self, from_audio_start: bool = False) -> None:
         """Advance turn if the assistant responded since the last user event.
 
         Called on audio_start(elevenlabs_user) and audit_log/user events.
-        After an interruption, hold_turn consumes one advance without incrementing.
+        After an interruption, hold_turn suppresses one advance from audit_log/user
+        (late STT from the interrupted session) but never blocks audio_start
+        (the user speaking again always starts a new turn).
         """
         if self.hold_turn:
-            self.hold_turn = False
-            self.assistant_spoke_in_turn = False
-            return
+            if from_audio_start:
+                # New user speech — clear hold_turn but still advance
+                self.hold_turn = False
+            else:
+                # Late STT chunk from interrupted session — consume without advancing
+                self.hold_turn = False
+                self.assistant_spoke_in_turn = False
+                return
         if self.assistant_spoke_in_turn:
             self.turn_num += 1
             self.assistant_spoke_in_turn = False
@@ -327,7 +334,7 @@ def _handle_audio_start(
             state.assistant_spoke_in_turn = True
             state.pending_advance_after_rollback = False
         state.rollback_advance_consumed_by_user = False
-        state.advance_turn_if_needed()
+        state.advance_turn_if_needed(from_audio_start=True)
         # Mark the NEW turn (after advance) as a user-interrupted turn — the user's interrupting speech
         # lands here, symmetric with assistant_interrupted_turns.
         if state.pending_user_interrupts_label:
