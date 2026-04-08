@@ -1,0 +1,267 @@
+{
+  "_current_date": "2026-07-23",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ONC-CERT"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS",
+      "NRP"
+    ]
+  },
+  "providers": {
+    "1487392045": {
+      "npi": "1487392045",
+      "employee_id": "EMP790731",
+      "first_name": "Avery",
+      "last_name": "Morgan",
+      "facility_code": "MGH-04B",
+      "pin": "4821",
+      "phone_last_four": "4419",
+      "otp_code": "965322",
+      "role_code": "RN",
+      "department_code": "EMERGENCY",
+      "hire_date": "2021-05-17",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {},
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2026-AX7731",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2026-01-01",
+        "expiration_date": "2026-12-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "MGH-04B",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-03-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP790731": {
+      "employee_id": "EMP790731",
+      "first_name": "Avery",
+      "last_name": "Morgan",
+      "date_of_birth": "1986-10-02",
+      "phone_last_four": "4419",
+      "otp_code": "965322",
+      "department_code": "EMERGENCY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2021-05-17",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 62,
+        "hours_worked_past_year": 1864,
+        "fmla_weeks_remaining": 6,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 12.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    },
+    "EMP129751": {
+      "employee_id": "EMP129751",
+      "first_name": "Jordan",
+      "last_name": "Lee",
+      "date_of_birth": "1990-04-14",
+      "phone_last_four": "5528",
+      "otp_code": "481207",
+      "department_code": "EMERGENCY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2022-09-12",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 46,
+        "hours_worked_past_year": 1792,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 16.0,
+        "sick": 6.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260730-0700": {
+      "shift_id": "SHF-20260730-0700",
+      "employee_id": "EMP790731",
+      "unit_code": "4B-ICU",
+      "date": "2026-07-30",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "EMERGENCY": {
+        "2026-07-28": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-07-29": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-07-31": [
+          "09:30",
+          "15:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "EMERGENCY": {
+        "2026-10-13": [
+          "09:00",
+          "13:00",
+          "15:00"
+        ],
+        "2026-10-14": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-10-15": [
+          "09:30",
+          "11:30"
+        ]
+      }
+    },
+    "competency_review": {
+      "EMERGENCY": {
+        "2026-07-27": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-28": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-07-30": [
+          "09:30",
+          "15:30"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-07-04",
+    "2026-09-07",
+    "2026-11-26"
+  ],
+  "department_blackout_dates": {
+    "EMERGENCY": [],
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "PEDIATRICS": [],
+    "CARDIOLOGY": [],
+    "RADIOLOGY": []
+  }
+}

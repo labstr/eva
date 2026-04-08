@@ -1,0 +1,285 @@
+{
+  "_current_date": "2026-08-13",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "ACLS",
+      "BLS"
+    ],
+    "3C-ONC": [
+      "ACLS",
+      "BLS",
+      "ONCC"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS",
+      "NRP"
+    ]
+  },
+  "providers": {
+    "1749459431": {
+      "npi": "1749459431",
+      "employee_id": "EMP937302",
+      "first_name": "Adaeze",
+      "last_name": "Obi",
+      "facility_code": "WDJU-85K",
+      "pin": "1258",
+      "phone_last_four": "6418",
+      "otp_code": "282710",
+      "role_code": "MD",
+      "department_code": "PATHOLOGY",
+      "hire_date": "2018-07-16",
+      "ehr_access_status": "suspended",
+      "ehr_access_case_id": null,
+      "clearance_code": "CLR-OCC-378258",
+      "licenses": {},
+      "malpractice": {
+        "carrier": "medpro",
+        "policy_number": "POL-2025-QX7M2N",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2025-06-01",
+        "expiration_date": "2026-05-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "JP8583392",
+        "facility_code": "WDJU-85K",
+        "state_code": "GA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-11-30",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-CARD-003",
+            "description": "Advanced cardiac pathology consultation",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-ECHO-009",
+            "description": "Echocardiography interpretation oversight",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-PATH-011",
+            "description": "Frozen section pathology",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP937302": {
+      "employee_id": "EMP937302",
+      "first_name": "Adaeze",
+      "last_name": "Obi",
+      "date_of_birth": "1976-10-11",
+      "phone_last_four": "6418",
+      "otp_code": "282710",
+      "department_code": "PATHOLOGY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2018-07-16",
+      "employment_status": "on_leave",
+      "certifications": [
+        "ACLS",
+        "BLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 96,
+        "hours_worked_past_year": 1680,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [
+        {
+          "leave_type": "medical",
+          "start_date": "2026-03-15",
+          "end_date": "2026-08-31",
+          "status": "active",
+          "case_id": "CASE-LOA-937302"
+        }
+      ],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP482611": {
+      "employee_id": "EMP482611",
+      "first_name": "Nina",
+      "last_name": "Patel",
+      "date_of_birth": "1985-02-22",
+      "phone_last_four": "2284",
+      "otp_code": "731904",
+      "department_code": "CARDIOLOGY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2020-04-06",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 76,
+        "hours_worked_past_year": 1872,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 11.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260820-0700": {
+      "shift_id": "SHF-20260820-0700",
+      "employee_id": "EMP937302",
+      "unit_code": "2A-MED",
+      "date": "2026-08-20",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "PATHOLOGY": {
+        "2026-09-10": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-09-12": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "PATHOLOGY": {
+        "2026-09-29": [
+          "09:00",
+          "13:00"
+        ],
+        "2026-10-01": [
+          "10:00",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "PATHOLOGY": {
+        "2026-09-25": [
+          "08:00",
+          "10:00",
+          "13:00"
+        ],
+        "2026-09-26": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-09-29": [
+          "08:30",
+          "14:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-09-07",
+    "2026-11-26",
+    "2026-12-25"
+  ],
+  "department_blackout_dates": {
+    "PATHOLOGY": [],
+    "CARDIOLOGY": [
+      "2026-09-14"
+    ],
+    "EMERGENCY": [],
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "PEDIATRICS": []
+  }
+}

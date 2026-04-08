@@ -1,0 +1,280 @@
+{
+  "_current_date": "2026-07-11",
+  "unit_cert_requirements": {
+    "4B-PEDS": [
+      "BLS",
+      "PALS"
+    ],
+    "4B-ICU": [
+      "BLS",
+      "ACLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ACLS"
+    ],
+    "5A-SURG": [
+      "BLS",
+      "ACLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS",
+      "NRP"
+    ]
+  },
+  "providers": {
+    "1487392045": {
+      "npi": "1487392045",
+      "employee_id": "EMP666847",
+      "first_name": "Solomon",
+      "last_name": "Tesfaye",
+      "facility_code": "MGH-04B",
+      "pin": "7291",
+      "phone_last_four": "1847",
+      "otp_code": "483920",
+      "role_code": "RN",
+      "department_code": "PEDIATRICS",
+      "hire_date": "2018-03-12",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {},
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2026-AX7731",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2026-01-01",
+        "expiration_date": "2026-12-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "MGH-04B",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-05-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP666847": {
+      "employee_id": "EMP666847",
+      "first_name": "Solomon",
+      "last_name": "Tesfaye",
+      "date_of_birth": "1965-02-25",
+      "phone_last_four": "1847",
+      "otp_code": "483920",
+      "department_code": "PEDIATRICS",
+      "role_code": "RN",
+      "unit_code": "4B-PEDS",
+      "hire_date": "2018-03-12",
+      "employment_status": "on_leave",
+      "certifications": [
+        "BLS",
+        "PALS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 100,
+        "hours_worked_past_year": 1872,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [
+        {
+          "leave_type": "medical",
+          "start_date": "2026-07-01",
+          "end_date": "2026-08-20",
+          "status": "approved",
+          "case_id": "CASE-LOA-666847"
+        }
+      ],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 6.0
+      },
+      "pto_requests": []
+    },
+    "EMP104221": {
+      "employee_id": "EMP104221",
+      "first_name": "Nora",
+      "last_name": "Fields",
+      "date_of_birth": "1988-11-09",
+      "phone_last_four": "4221",
+      "otp_code": "551204",
+      "department_code": "PEDIATRICS",
+      "role_code": "RN",
+      "unit_code": "1D-PEDS",
+      "hire_date": "2020-06-15",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "PALS",
+        "NRP"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 72,
+        "hours_worked_past_year": 1920,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": [
+          {
+            "date": "2026-08-05",
+            "tier": "primary",
+            "unit_code": "1D-PEDS",
+            "registration_id": "CASE-ONC-104221"
+          }
+        ]
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 12.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260824-0700": {
+      "shift_id": "SHF-20260824-0700",
+      "employee_id": "EMP666847",
+      "unit_code": "4B-PEDS",
+      "date": "2026-08-24",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "PEDIATRICS": {
+        "2026-07-15": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-07-16": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-07-20": [
+          "09:00",
+          "15:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "PEDIATRICS": {
+        "2026-08-21": [
+          "09:00",
+          "10:00",
+          "14:00"
+        ],
+        "2026-08-24": [
+          "11:00",
+          "15:00"
+        ],
+        "2026-08-25": [
+          "09:00",
+          "13:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "PEDIATRICS": {
+        "2026-07-22": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-23": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-07-27": [
+          "09:00",
+          "15:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-07-03",
+    "2026-09-07",
+    "2026-11-26"
+  ],
+  "department_blackout_dates": {
+    "PEDIATRICS": []
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "_current_date": "2026-07-06",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ACLS"
+    ],
+    "5A-SURG": [
+      "BLS",
+      "ACLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS"
+    ]
+  },
+  "providers": {
+    "5897045684": {
+      "npi": "5897045684",
+      "employee_id": "EMP292401",
+      "first_name": "Anh",
+      "last_name": "Nguyen",
+      "facility_code": "MGH-04B",
+      "pin": "4821",
+      "phone_last_four": "7742",
+      "otp_code": "179046",
+      "role_code": "MD",
+      "department_code": "EMERGENCY",
+      "hire_date": "2018-09-17",
+      "ehr_access_status": "suspended",
+      "ehr_access_case_id": null,
+      "clearance_code": "CLR-OCC-564999",
+      "licenses": {
+        "MA-MD-402918": {
+          "state_license_number": "MA-MD-402918",
+          "license_type": "MD",
+          "state_code": "MA",
+          "expiration_date": "2027-03-31",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2026-AX7731",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2026-01-01",
+        "expiration_date": "2026-12-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "MGH-04B",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-08-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-ICU-009",
+            "description": "Adult intensive care unit admitting and management",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-ED-002",
+            "description": "Emergency department attending coverage",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP292401": {
+      "employee_id": "EMP292401",
+      "first_name": "Anh",
+      "last_name": "Nguyen",
+      "date_of_birth": "1982-08-08",
+      "phone_last_four": "7742",
+      "otp_code": "179046",
+      "department_code": "EMERGENCY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-09-17",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 94,
+        "hours_worked_past_year": 1760,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [
+        {
+          "leave_type": "personal",
+          "start_date": "2026-05-01",
+          "end_date": "2026-06-30",
+          "status": "completed",
+          "case_id": "CASE-LEV-292401"
+        }
+      ],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260710-0700": {
+      "shift_id": "SHF-20260710-0700",
+      "employee_id": "EMP292401",
+      "unit_code": "4B-ICU",
+      "date": "2026-07-10",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "EMERGENCY": {
+        "2026-07-15": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-07-16": [
+          "10:00",
+          "13:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "EMERGENCY": {
+        "2026-07-14": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-17": [
+          "10:00",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "EMERGENCY": {
+        "2026-07-08": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-07-09": [
+          "09:00",
+          "15:00"
+        ],
+        "2026-07-21": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-07-03",
+    "2026-09-07",
+    "2026-11-26"
+  ],
+  "department_blackout_dates": {
+    "EMERGENCY": [],
+    "CARDIOLOGY": [],
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "PEDIATRICS": []
+  }
+}

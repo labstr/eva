@@ -1,0 +1,283 @@
+{
+  "_current_date": "2026-09-27",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "ACLS",
+      "BLS"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS",
+      "NRP"
+    ]
+  },
+  "providers": {
+    "1851819913": {
+      "npi": "1851819913",
+      "employee_id": "EMP515922",
+      "first_name": "Tendai",
+      "last_name": "Moyo",
+      "facility_code": "RQCU-97T",
+      "pin": "2983",
+      "phone_last_four": "4412",
+      "otp_code": "934904",
+      "role_code": "MD",
+      "department_code": "EMERGENCY",
+      "hire_date": "2019-08-12",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {
+        "MI-MD-582194": {
+          "state_license_number": "MI-MD-582194",
+          "license_type": "MD",
+          "state_code": "MI",
+          "expiration_date": "2027-11-30",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {},
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "RQCU-97T",
+        "state_code": "OH",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-05-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-EM-001",
+            "description": "Emergency department attending privileges",
+            "status": "active"
+          },
+          {
+            "code": "PRV-EM-002",
+            "description": "Procedural sedation",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP515922": {
+      "employee_id": "EMP515922",
+      "first_name": "Tendai",
+      "last_name": "Moyo",
+      "date_of_birth": "1983-02-19",
+      "phone_last_four": "4412",
+      "otp_code": "934904",
+      "department_code": "EMERGENCY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2019-08-12",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "PALS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 85,
+        "hours_worked_past_year": 1886,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP204811": {
+      "employee_id": "EMP204811",
+      "first_name": "Alicia",
+      "last_name": "Grant",
+      "date_of_birth": "1990-07-08",
+      "phone_last_four": "8821",
+      "otp_code": "521337",
+      "department_code": "SURGERY",
+      "role_code": "RN",
+      "unit_code": "5A-SURG",
+      "hire_date": "2021-04-05",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 65,
+        "hours_worked_past_year": 1920,
+        "fmla_weeks_remaining": 8,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 11.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20261002-0700": {
+      "shift_id": "SHF-20261002-0700",
+      "employee_id": "EMP515922",
+      "unit_code": "2A-MED",
+      "date": "2026-10-02",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "EMERGENCY": {
+        "2026-09-29": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-09-30": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-10-01": [
+          "09:30",
+          "15:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "EMERGENCY": {
+        "2026-09-30": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-10-02": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-10-05": [
+          "09:00",
+          "13:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "EMERGENCY": {
+        "2026-09-30": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-10-01": [
+          "09:00",
+          "14:00"
+        ],
+        "2026-10-06": [
+          "11:00",
+          "15:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-11-26",
+    "2026-12-25",
+    "2027-01-01"
+  ],
+  "department_blackout_dates": {
+    "EMERGENCY": [],
+    "SURGERY": [
+      "2026-11-27"
+    ],
+    "ONCOLOGY": [],
+    "CARDIOLOGY": [],
+    "PEDIATRICS": []
+  }
+}

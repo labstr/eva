@@ -1,0 +1,364 @@
+{
+  "_current_date": "2026-06-10",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS",
+      "ACLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ONC-CERT"
+    ],
+    "5A-SURG": [
+      "BLS",
+      "ACLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS"
+    ]
+  },
+  "providers": {
+    "3746317213": {
+      "npi": "3746317213",
+      "employee_id": "EMP300588",
+      "first_name": "Priya",
+      "last_name": "Sharma",
+      "facility_code": "KAFN-13R",
+      "pin": "4257",
+      "phone_last_four": "6214",
+      "otp_code": "482913",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2019-08-12",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {
+        "FL-MD-30058838": {
+          "state_license_number": "FL-MD-30058838",
+          "license_type": "MD",
+          "state_code": "FL",
+          "expiration_date": "2026-06-18",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "medpro",
+        "policy_number": "POL-2025-AX7731",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2025-07-01",
+        "expiration_date": "2026-06-30",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "KAFN-13R",
+        "state_code": "FL",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-03-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-CARD-001",
+            "description": "Cardiac catheterization",
+            "status": "active"
+          },
+          {
+            "code": "PRV-CARD-002",
+            "description": "Stress testing supervision",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    },
+    "3342331444": {
+      "npi": "3342331444",
+      "employee_id": "EMP441144",
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "facility_code": "KAFN-13R",
+      "pin": "9182",
+      "phone_last_four": "8841",
+      "otp_code": "731204",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2016-02-01",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {
+        "FL-MD-44114422": {
+          "state_license_number": "FL-MD-44114422",
+          "license_type": "MD",
+          "state_code": "FL",
+          "expiration_date": "2027-11-30",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2025-CV8812",
+        "per_occurrence_limit_usd": 2000000,
+        "aggregate_limit_usd": 4000000,
+        "effective_date": "2025-01-01",
+        "expiration_date": "2026-12-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BM5839201",
+        "facility_code": "KAFN-13R",
+        "state_code": "FL",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2028-01-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-CARD-010",
+            "description": "General cardiology attending privileges",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP300588": {
+      "employee_id": "EMP300588",
+      "first_name": "Priya",
+      "last_name": "Sharma",
+      "date_of_birth": "1984-09-14",
+      "phone_last_four": "6214",
+      "otp_code": "482913",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2019-08-12",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 82,
+        "hours_worked_past_year": 1896,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
+      },
+      "pto_requests": [],
+      "schedule_type": "shift"
+    },
+    "EMP441144": {
+      "employee_id": "EMP441144",
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "date_of_birth": "1976-03-22",
+      "phone_last_four": "8841",
+      "otp_code": "731204",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2016-02-01",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 124,
+        "hours_worked_past_year": 2012,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 18.0,
+        "sick": 6.0
+      },
+      "pto_requests": [],
+      "schedule_type": "shift"
+    }
+  },
+  "shifts": {
+    "SHF-20260614-0700": {
+      "shift_id": "SHF-20260614-0700",
+      "employee_id": "EMP300588",
+      "unit_code": "2A-MED",
+      "date": "2026-06-14",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "CARDIOLOGY": {
+        "2026-06-12": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-06-13": [
+          "10:00",
+          "13:00",
+          "15:00"
+        ],
+        "2026-06-16": [
+          "09:00",
+          "12:00",
+          "16:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "CARDIOLOGY": {
+        "2026-06-12": [
+          "09:30",
+          "11:30"
+        ],
+        "2026-06-15": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-06-17": [
+          "09:00",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "CARDIOLOGY": {
+        "2026-06-12": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-06-15": [
+          "09:00",
+          "13:00"
+        ],
+        "2026-06-18": [
+          "11:00",
+          "15:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-07-03",
+    "2026-09-07",
+    "2026-11-26"
+  ],
+  "department_blackout_dates": {
+    "CARDIOLOGY": [],
+    "EMERGENCY": [
+      "2026-07-04"
+    ],
+    "ONCOLOGY": [],
+    "SURGERY": [
+      "2026-06-30"
+    ],
+    "PEDIATRICS": []
+  }
+}

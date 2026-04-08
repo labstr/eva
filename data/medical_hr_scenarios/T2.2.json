@@ -1,0 +1,361 @@
+{
+  "_current_date": "2026-06-19",
+  "unit_cert_requirements": {
+    "1D-PEDS": [
+      "BLS",
+      "PALS"
+    ],
+    "4B-ICU": [
+      "BLS",
+      "ACLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS",
+      "ACLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ACLS"
+    ],
+    "5A-SURG": [
+      "BLS",
+      "ACLS",
+      "TNCC"
+    ]
+  },
+  "providers": {
+    "2847692041": {
+      "npi": "2847692041",
+      "employee_id": "EMP575755",
+      "first_name": "Nikolai",
+      "last_name": "Sorokin",
+      "facility_code": "CRWO-37N",
+      "pin": "8398",
+      "phone_last_four": "4418",
+      "otp_code": "339592",
+      "role_code": "PA",
+      "department_code": "PEDIATRICS",
+      "hire_date": "2018-03-12",
+      "ehr_access_status": "suspended",
+      "ehr_access_case_id": null,
+      "clearance_code": "CLR-OCC-533914",
+      "licenses": {
+        "CO-PA-584221": {
+          "state_license_number": "CO-PA-584221",
+          "license_type": "PA",
+          "state_code": "CO",
+          "expiration_date": "2027-11-30",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2025-AX4812",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2025-08-20",
+        "expiration_date": "2026-08-19",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "RJ3560856",
+        "facility_code": "CRWO-37N",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2028-02-28",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-SURG-008",
+            "description": "Pediatric minor surgical procedures",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-ECHO-007",
+            "description": "Pediatric echocardiography interpretation",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-PEDS-002",
+            "description": "General pediatric inpatient management",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    },
+    "1938475620": {
+      "npi": "1938475620",
+      "employee_id": "EMP221144",
+      "first_name": "Mara",
+      "last_name": "Levin",
+      "facility_code": "NWMC-12A",
+      "pin": "5521",
+      "phone_last_four": "8821",
+      "otp_code": "118204",
+      "role_code": "MD",
+      "department_code": "SURGERY",
+      "hire_date": "2016-09-01",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": "CLR-OCC-882104",
+      "licenses": {
+        "MA-MD-772341": {
+          "state_license_number": "MA-MD-772341",
+          "license_type": "MD",
+          "state_code": "MA",
+          "expiration_date": "2027-06-30",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "medpro",
+        "policy_number": "POL-2026-QX1100",
+        "per_occurrence_limit_usd": 2000000,
+        "aggregate_limit_usd": 4000000,
+        "effective_date": "2026-01-01",
+        "expiration_date": "2026-12-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "NWMC-12A",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-10-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-SURG-001",
+            "description": "General surgery",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP575755": {
+      "employee_id": "EMP575755",
+      "first_name": "Nikolai",
+      "last_name": "Sorokin",
+      "date_of_birth": "1970-12-17",
+      "phone_last_four": "4418",
+      "otp_code": "339592",
+      "department_code": "PEDIATRICS",
+      "role_code": "PA",
+      "unit_code": "1D-PEDS",
+      "hire_date": "2018-03-12",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "PALS",
+        "ACLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 99,
+        "hours_worked_past_year": 1680,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [
+        {
+          "leave_type": "fmla",
+          "start_date": "2026-03-02",
+          "end_date": "2026-06-15",
+          "status": "completed",
+          "case_id": "CASE-FMLA-575755"
+        }
+      ],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    },
+    "EMP221144": {
+      "employee_id": "EMP221144",
+      "first_name": "Mara",
+      "last_name": "Levin",
+      "date_of_birth": "1981-04-23",
+      "phone_last_four": "8821",
+      "otp_code": "118204",
+      "department_code": "SURGERY",
+      "role_code": "MD",
+      "unit_code": "5A-SURG",
+      "hire_date": "2016-09-01",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 117,
+        "hours_worked_past_year": 1920,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 18.0,
+        "sick": 6.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260624-0700": {
+      "shift_id": "SHF-20260624-0700",
+      "employee_id": "EMP575755",
+      "unit_code": "1D-PEDS",
+      "date": "2026-06-24",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": 8.0,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "logged",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "PEDIATRICS": {
+        "2026-06-26": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-06-29": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "PEDIATRICS": {
+        "2026-06-26": [
+          "09:30",
+          "13:30"
+        ],
+        "2026-06-30": [
+          "10:30",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "PEDIATRICS": {
+        "2026-09-11": [
+          "08:00",
+          "09:30",
+          "13:00"
+        ],
+        "2026-09-14": [
+          "08:30",
+          "11:00"
+        ],
+        "2026-09-16": [
+          "10:00",
+          "14:30"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-07-03",
+    "2026-09-07",
+    "2026-11-26"
+  ],
+  "department_blackout_dates": {
+    "PEDIATRICS": [],
+    "SURGERY": [
+      "2026-07-06"
+    ]
+  }
+}

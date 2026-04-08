@@ -1,0 +1,305 @@
+{
+  "_current_date": "2026-09-09",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "ACLS",
+      "BLS"
+    ],
+    "3C-ONC": [
+      "ACLS",
+      "BLS",
+      "ONC-CERT"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "PALS"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS"
+    ]
+  },
+  "providers": {
+    "2595467139": {
+      "npi": "2595467139",
+      "employee_id": "EMP576877",
+      "first_name": "Fumiko",
+      "last_name": "Sato",
+      "facility_code": "GAWO-88H",
+      "pin": "2035",
+      "phone_last_four": "4421",
+      "otp_code": "766269",
+      "role_code": "RN",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2019-03-18",
+      "ehr_access_status": "suspended",
+      "ehr_access_case_id": null,
+      "clearance_code": "CLR-OCC-963874",
+      "licenses": {
+        "NY-RN-31614326": {
+          "state_license_number": "NY-RN-31614326",
+          "license_type": "RN",
+          "state_code": "NY",
+          "expiration_date": "2026-09-18",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2025-QX1182",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2025-08-21",
+        "expiration_date": "2026-08-20",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "GAWO-88H",
+        "state_code": "NY",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-12-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-ECHO-005",
+            "description": "Adult transthoracic echocardiography interpretation",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-ECHO-002",
+            "description": "Adult transthoracic echocardiography performance",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-ECHO-009",
+            "description": "Stress echocardiography supervision",
+            "status": "suspended"
+          },
+          {
+            "code": "PRV-CARD-011",
+            "description": "Telemetry review",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP576877": {
+      "employee_id": "EMP576877",
+      "first_name": "Fumiko",
+      "last_name": "Sato",
+      "date_of_birth": "1989-11-07",
+      "phone_last_four": "4421",
+      "otp_code": "766269",
+      "department_code": "CARDIOLOGY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2019-03-18",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 90,
+        "hours_worked_past_year": 1840,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [
+        {
+          "leave_type": "medical",
+          "start_date": "2026-06-15",
+          "end_date": "2026-09-05",
+          "status": "completed",
+          "case_id": "CASE-LOA-576877"
+        }
+      ],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 6.0
+      },
+      "pto_requests": []
+    },
+    "EMP884211": {
+      "employee_id": "EMP884211",
+      "first_name": "Mara",
+      "last_name": "Chen",
+      "date_of_birth": "1991-04-22",
+      "phone_last_four": "1187",
+      "otp_code": "145883",
+      "department_code": "CARDIOLOGY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2021-07-11",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 62,
+        "hours_worked_past_year": 1922,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 12.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260912-0700": {
+      "shift_id": "SHF-20260912-0700",
+      "employee_id": "EMP576877",
+      "unit_code": "4B-ICU",
+      "date": "2026-09-12",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "CARDIOLOGY": {
+        "2026-09-11": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-09-14": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "CARDIOLOGY": {
+        "2026-09-11": [
+          "09:30",
+          "13:30"
+        ],
+        "2026-09-15": [
+          "10:30",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "CARDIOLOGY": {
+        "2026-09-16": [
+          "08:00",
+          "09:00",
+          "13:00"
+        ],
+        "2026-09-18": [
+          "08:30",
+          "11:00"
+        ],
+        "2026-09-20": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-09-07",
+    "2026-11-26",
+    "2026-12-25"
+  ],
+  "department_blackout_dates": {
+    "CARDIOLOGY": [],
+    "EMERGENCY": [
+      "2026-11-27"
+    ],
+    "ONCOLOGY": [],
+    "SURGERY": [
+      "2026-12-24"
+    ],
+    "PEDIATRICS": []
+  }
+}

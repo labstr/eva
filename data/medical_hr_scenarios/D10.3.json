@@ -1,0 +1,362 @@
+{
+  "_current_date": "2026-07-21",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ONC-CERT"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS"
+    ]
+  },
+  "providers": {
+    "1487392045": {
+      "npi": "1487392045",
+      "employee_id": "EMP900001",
+      "first_name": "Avery",
+      "last_name": "Chen",
+      "facility_code": "MGH-04B",
+      "pin": "7291",
+      "phone_last_four": "8821",
+      "otp_code": "315842",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2018-06-15",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {},
+      "malpractice": {
+        "carrier": "medpro",
+        "policy_number": "POL-2025-AX7731",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2025-01-01",
+        "expiration_date": "2026-12-31",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "MGH-04B",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2027-05-31",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP211834": {
+      "employee_id": "EMP211834",
+      "first_name": "Rohan",
+      "last_name": "Kapoor",
+      "date_of_birth": "1980-07-19",
+      "phone_last_four": "3951",
+      "otp_code": "476395",
+      "department_code": "RADIOLOGY",
+      "role_code": "PA",
+      "unit_code": "2A-MED",
+      "hire_date": "2021-03-08",
+      "employment_status": "active",
+      "certifications": [
+        "BLS"
+      ],
+      "schedule_type": "shift",
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 64,
+        "hours_worked_past_year": 1876,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": {
+        "petition_number": "WAC2512045678",
+        "visa_type": "H1B",
+        "status": "approved",
+        "expiration_date": "2027-09-30",
+        "dependents": [],
+        "amendment_id": null
+      },
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 8.0,
+        "sick": 2.0
+      },
+      "pto_requests": []
+    },
+    "EMP900001": {
+      "employee_id": "EMP900001",
+      "first_name": "Avery",
+      "last_name": "Chen",
+      "date_of_birth": "1979-11-02",
+      "phone_last_four": "8821",
+      "otp_code": "315842",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-06-15",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "schedule_type": "shift",
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 96,
+        "hours_worked_past_year": 2104,
+        "fmla_weeks_remaining": 10,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260722-0800": {
+      "shift_id": "SHF-20260722-0800",
+      "employee_id": "EMP211834",
+      "unit_code": "2A-MED",
+      "date": "2026-07-22",
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260723-0800": {
+      "shift_id": "SHF-20260723-0800",
+      "employee_id": "EMP211834",
+      "unit_code": "2A-MED",
+      "date": "2026-07-23",
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260724-0800": {
+      "shift_id": "SHF-20260724-0800",
+      "employee_id": "EMP211834",
+      "unit_code": "2A-MED",
+      "date": "2026-07-24",
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260722-0700": {
+      "shift_id": "SHF-20260722-0700",
+      "employee_id": "EMP900001",
+      "unit_code": "4B-ICU",
+      "date": "2026-07-22",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "RADIOLOGY": {
+        "2026-07-22": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-07-23": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-07-24": [
+          "09:30",
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-22": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-23": [
+          "14:00",
+          "15:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "RADIOLOGY": {
+        "2026-07-22": [
+          "09:00",
+          "10:00",
+          "14:00"
+        ],
+        "2026-07-23": [
+          "11:00",
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-22": [
+          "09:00",
+          "13:00"
+        ],
+        "2026-07-24": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "RADIOLOGY": {
+        "2026-07-22": [
+          "08:30",
+          "10:30"
+        ],
+        "2026-07-23": [
+          "09:00",
+          "13:30"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-22": [
+          "09:00",
+          "11:00",
+          "15:00"
+        ],
+        "2026-07-23": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-07-03",
+    "2026-09-07",
+    "2026-11-26"
+  ],
+  "department_blackout_dates": {
+    "RADIOLOGY": [],
+    "CARDIOLOGY": [],
+    "EMERGENCY": [],
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "PEDIATRICS": []
+  }
+}

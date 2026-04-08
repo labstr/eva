@@ -1,0 +1,340 @@
+{
+  "_current_date": "2026-08-08",
+  "unit_cert_requirements": {
+    "4B-ICU": [
+      "ACLS",
+      "BLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
+    ],
+    "3C-ONC": [
+      "BLS",
+      "ONC-CERT"
+    ],
+    "5A-SURG": [
+      "ACLS",
+      "BLS",
+      "TNCC"
+    ],
+    "1D-PEDS": [
+      "BLS",
+      "PALS"
+    ]
+  },
+  "providers": {
+    "1487392045": {
+      "npi": "1487392045",
+      "employee_id": "EMP405420",
+      "first_name": "Wei",
+      "last_name": "Liu",
+      "facility_code": "RAD-01A",
+      "pin": "4821",
+      "phone_last_four": "4207",
+      "otp_code": "731482",
+      "role_code": "RN",
+      "department_code": "RADIOLOGY",
+      "hire_date": "2026-07-13",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {},
+      "malpractice": {
+        "carrier": "medpro",
+        "policy_number": "POL-2026-RD4054",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2026-07-13",
+        "expiration_date": "2027-07-12",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BK4729183",
+        "facility_code": "RAD-01A",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2029-08-31",
+        "status": "inactive",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    }
+  },
+  "employees": {
+    "EMP405420": {
+      "employee_id": "EMP405420",
+      "first_name": "Wei",
+      "last_name": "Liu",
+      "date_of_birth": "1992-01-20",
+      "phone_last_four": "4207",
+      "otp_code": "731482",
+      "department_code": "RADIOLOGY",
+      "role_code": "RN",
+      "unit_code": "2A-MED",
+      "hire_date": "2026-07-13",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS"
+      ],
+      "schedule_type": "shift",
+      "fmla_eligibility": {
+        "eligible": false,
+        "months_employed": 0,
+        "hours_worked_past_year": 0,
+        "fmla_weeks_remaining": 0,
+        "reason": "New hire has not met FMLA tenure and hours requirements"
+      },
+      "onboarding_checklist": {
+        "tasks": {
+          "OCC_HEALTH": {
+            "status": "pending"
+          },
+          "HIPAA_TRAIN": {
+            "status": "pending"
+          },
+          "BADGE_PICKUP": {
+            "status": "complete"
+          }
+        }
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "pending",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 7.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP405421": {
+      "employee_id": "EMP405421",
+      "first_name": "Jordan",
+      "last_name": "Patel",
+      "date_of_birth": "1989-06-14",
+      "phone_last_four": "1184",
+      "otp_code": "552901",
+      "department_code": "RADIOLOGY",
+      "role_code": "RN",
+      "unit_code": "2A-MED",
+      "hire_date": "2021-03-15",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS"
+      ],
+      "schedule_type": "shift",
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 65,
+        "hours_worked_past_year": 1872,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 6.0
+      },
+      "pto_requests": []
+    }
+  },
+  "shifts": {
+    "SHF-20260826-0700": {
+      "shift_id": "SHF-20260826-0700",
+      "employee_id": "EMP405420",
+      "unit_code": "2A-MED",
+      "date": "2026-08-26",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260827-0700": {
+      "shift_id": "SHF-20260827-0700",
+      "employee_id": "EMP405420",
+      "unit_code": "2A-MED",
+      "date": "2026-08-27",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260828-0700": {
+      "shift_id": "SHF-20260828-0700",
+      "employee_id": "EMP405420",
+      "unit_code": "2A-MED",
+      "date": "2026-08-28",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260830-0700": {
+      "shift_id": "SHF-20260830-0700",
+      "employee_id": "EMP405421",
+      "unit_code": "2A-MED",
+      "date": "2026-08-30",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": null,
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    }
+  },
+  "notifications": [],
+  "session": {},
+  "appointment_availability": {
+    "orientation_followup": {
+      "RADIOLOGY": {
+        "2026-07-22": [
+          "08:00",
+          "09:30",
+          "11:00"
+        ],
+        "2026-07-23": [
+          "08:30",
+          "10:00"
+        ],
+        "2026-07-24": [
+          "09:00",
+          "13:30"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "RADIOLOGY": {
+        "2026-08-18": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-08-19": [
+          "10:00",
+          "14:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "RADIOLOGY": {
+        "2026-08-20": [
+          "09:00",
+          "13:00"
+        ],
+        "2026-08-21": [
+          "08:30",
+          "10:30"
+        ]
+      }
+    }
+  },
+  "org_holidays": [
+    "2026-09-07",
+    "2026-11-26",
+    "2026-12-25"
+  ],
+  "department_blackout_dates": {
+    "RADIOLOGY": [],
+    "CARDIOLOGY": [
+      "2026-08-31"
+    ],
+    "EMERGENCY": [
+      "2026-09-05",
+      "2026-09-06"
+    ],
+    "ONCOLOGY": [],
+    "SURGERY": [
+      "2026-08-21"
+    ],
+    "PEDIATRICS": []
+  }
+}
