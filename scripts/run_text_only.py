@@ -423,7 +423,7 @@ def write_trace(
     lines = [
         f"Record: {record.id}",
         f"Category: {record.category or 'N/A'}",
-        f"Expected flow: {record.expected_flow}",
+        # f"Expected flow: {record.expected_flow}",
         f"User goal: {record.user_goal.get('high_level_user_goal', '')}",
         "=" * 60,
         "",
