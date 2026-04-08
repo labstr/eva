@@ -86,19 +86,20 @@ def save_feedback(record_id: str, feedback: dict):
 
 
 # ── Trace helpers ────────────────────────────────────────────────────────────
-def extract_write_tool_calls(
+def extract_review_tool_calls(
     trace: list[dict],
     tool_type_map: dict[str, str],
 ) -> list[dict]:
-    """Extract write tool_call events from the expected trace."""
+    """Extract auth and write tool_call events from the expected trace."""
     calls = []
     for msg in trace:
         if msg.get("event_type") == "tool_call":
             name = msg.get("tool_name", "unknown")
-            if tool_type_map.get(name) == "write":
+            if tool_type_map.get(name) in ("auth", "write"):
                 calls.append(
                     {
                         "name": name,
+                        "tool_type": tool_type_map.get(name, "write"),
                         "params": msg.get("params", {}),
                     }
                 )
@@ -179,7 +180,7 @@ if st.session_state.get("_prev_record_id") != current_id:
         st.session_state["user_goal_comments"] = ug.get("comments", "")
 
         gt = existing.get("ground_truth_trace", {})
-        for i, tc in enumerate(gt.get("write_tool_calls", [])):
+        for i, tc in enumerate(gt.get("review_tool_calls", [])):
             st.session_state[f"wtc_{current_id}_{i}_grounded"] = tc.get("inputs_grounded", "")
             st.session_state[f"wtc_{current_id}_{i}_policy"] = tc.get("policy_consistent", "")
         st.session_state["q_unwanted_mods"] = gt.get("unwanted_modifications", "")
@@ -218,7 +219,7 @@ expected_db = ground_truth.get("expected_scenario_db", {})
 initial_db = load_initial_scenario(current_id)
 
 # Extract tool calls from trace (if it exists) for the review form
-write_tool_calls = extract_write_tool_calls(trace, tool_type_map) if trace else []
+review_tool_calls = extract_review_tool_calls(trace, tool_type_map) if trace else []
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SIDEBAR: Navigation + Review Questions
@@ -285,10 +286,18 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("#### Ground Truth Trace")
 
-    if write_tool_calls:
-        st.markdown("**Per write tool call:**")
-        for i, tc in enumerate(write_tool_calls):
-            st.markdown(f"`{tc['name']}`")
+    if review_tool_calls:
+        st.markdown("**Per auth/write tool call:**")
+        for i, tc in enumerate(review_tool_calls):
+            tt = tc.get("tool_type", "write")
+            color = TOOL_TYPE_COLORS.get(tt, "#999")
+            label = TOOL_TYPE_LABELS.get(tt, "?")
+            st.markdown(
+                f'<span style="background:{color};color:white;padding:2px 6px;'
+                f'border-radius:3px;font-size:0.7em">{label}</span> '
+                f"`{tc['name']}`",
+                unsafe_allow_html=True,
+            )
             st.selectbox(
                 "Inputs grounded?",
                 YES_NO_NA,
@@ -304,7 +313,7 @@ with st.sidebar:
     elif trace is None:
         st.info("Trace not available yet — per-tool-call questions will appear when trace data is added.")
     else:
-        st.info("No write tool calls found in this trace.")
+        st.info("No auth/write tool calls found in this trace.")
 
     st.markdown("**Overall trace:**")
     q_unwanted_mods = st.selectbox(
@@ -364,13 +373,14 @@ with st.sidebar:
                 "comments": st.session_state.get("user_goal_comments", ""),
             },
             "ground_truth_trace": {
-                "write_tool_calls": [
+                "review_tool_calls": [
                     {
                         "tool_name": tc["name"],
+                        "tool_type": tc.get("tool_type", "write"),
                         "inputs_grounded": st.session_state.get(f"wtc_{current_id}_{i}_grounded", ""),
                         "policy_consistent": st.session_state.get(f"wtc_{current_id}_{i}_policy", ""),
                     }
-                    for i, tc in enumerate(write_tool_calls)
+                    for i, tc in enumerate(review_tool_calls)
                 ],
                 "unwanted_modifications": st.session_state.get("q_unwanted_mods", ""),
                 "missing_modifications": st.session_state.get("q_missing_mods", ""),
@@ -397,7 +407,7 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.title(f"Record {current_id}")
-st.info(record.get("scenario_context", "No scenario context available."))
+st.info(f"**Scenario Context:** {record.get('scenario_context', 'No scenario context available.')}")
 
 
 # ── Reference expander ───────────────────────────────────────────────────────
