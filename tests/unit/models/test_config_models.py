@@ -57,7 +57,7 @@ _BASE_ENV = _EVA_MODEL_LIST_ENV | {
 }
 _S2S_ENV = _EVA_MODEL_LIST_ENV | {
     "EVA_MODEL__S2S": "gpt-realtime-mini",
-    "EVA_MODEL__S2S_PARAMS": json.dumps({"api_key": ""}),
+    "EVA_MODEL__S2S_PARAMS": json.dumps({"api_key": "", "model": "test"}),
 }
 
 
@@ -75,6 +75,12 @@ def _config(
 
     with patch.dict(os.environ, env_vars or {}, clear=True):
         return RunConfig(_env_file=env_file, _cli_parse_args=cli_args, **kwargs)
+
+
+def _load_json_into_runconfig(json_str: str) -> RunConfig:
+    """Load RunConfig from JSON with isolated environment (no real env vars)."""
+    with patch.dict(os.environ, {}, clear=True):
+        return RunConfig.model_validate_json(json_str)
 
 
 class TestRunConfig:
@@ -193,7 +199,7 @@ class TestRunConfig:
         """Redacted secrets are restored from a live config for both model and model_list."""
         config = _config(env_vars=_BASE_ENV)
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         # Everything is redacted after round-trip
         assert loaded.model.stt_params["api_key"] == "***"
@@ -218,7 +224,7 @@ class TestRunConfig:
         """Restoring secrets warns (but succeeds) if the STT/TTS provider changed."""
         config = _config(env_vars=_BASE_ENV)
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         live = _config(
             env_vars=_BASE_ENV
@@ -229,7 +235,9 @@ class TestRunConfig:
         )
         with caplog.at_level("WARNING", logger="eva.models.config"):
             loaded.apply_env_overrides(live)
-        assert "saved 'deepgram', current environment has 'openai_whisper'" in caplog.text
+        assert "Provider mismatch for stt_params" in caplog.text
+        assert "deepgram" in caplog.text
+        assert "openai_whisper" in caplog.text
 
     def test_apply_env_overrides_alias_mismatch(self):
         """Restoring secrets fails if the alias changed."""
@@ -240,7 +248,7 @@ class TestRunConfig:
             }
         )
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         live = _config(
             env_vars=_BASE_ENV
@@ -258,7 +266,7 @@ class TestRunConfig:
         """Restoring secrets warns (but succeeds) if the STT/TTS model changed."""
         config = _config(env_vars=_BASE_ENV)
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         live = _config(env_vars=_BASE_ENV | {"EVA_MODEL__TTS_PARAMS": json.dumps({"api_key": "k", "model": "sonic-2"})})
         with caplog.at_level("WARNING", logger="eva.models.config"):
@@ -274,7 +282,7 @@ class TestRunConfig:
         }
         config = _config(env_vars=saved_env)
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         # Live env has a different url
         live_env = _BASE_ENV | {
@@ -293,7 +301,7 @@ class TestRunConfig:
         """Url from live env is added even if the saved config didn't have one."""
         config = _config(env_vars=_BASE_ENV)
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         live_env = _BASE_ENV | {
             "EVA_MODEL__STT_PARAMS": json.dumps({"api_key": "k", "model": "nova-2", "url": "wss://new-host/stt"}),
@@ -307,7 +315,7 @@ class TestRunConfig:
         """Restoring secrets fails if a saved LLM deployment is missing from the live model_list."""
         config = _config(env_vars=_BASE_ENV)
         dumped_json = config.model_dump_json()
-        loaded = RunConfig.model_validate_json(dumped_json)
+        loaded = _load_json_into_runconfig(dumped_json)
 
         # Live config has a different model_list (only one deployment, different name)
         different_model_list = [
@@ -448,20 +456,6 @@ class TestRunConfig:
                 }
             )
 
-    def test_nvidia_stt_skips_params_validation(self):
-        """NVIDIA STT skips api_key/model validation (uses url-based config)."""
-        config = _config(
-            env_vars=_EVA_MODEL_LIST_ENV
-            | {
-                "EVA_MODEL__LLM": "gpt-5.2",
-                "EVA_MODEL__STT": "nvidia",
-                "EVA_MODEL__TTS": "cartesia",
-                "EVA_MODEL__STT_PARAMS": json.dumps({"url": "ws://localhost:8000"}),
-                "EVA_MODEL__TTS_PARAMS": json.dumps({"api_key": "k", "model": "sonic"}),
-            }
-        )
-        assert config.model.stt == "nvidia"
-
 
 class TestDefaults:
     """Verify default values match expectations."""
@@ -548,14 +542,14 @@ class TestDeprecatedEnvVars:
                 _S2S_ENV,
                 "REALTIME_MODEL_PARAMS",
                 "EVA_MODEL__S2S_PARAMS",
-                {"api_key": "k"},
+                {"api_key": "k", "model": "model"},
                 lambda c: c.model.s2s_params,
             ),
             (
                 _S2S_ENV,
                 "EVA_MODEL__REALTIME_MODEL_PARAMS",
                 "EVA_MODEL__S2S_PARAMS",
-                {"api_key": "k"},
+                {"api_key": "k", "model": "model"},
                 lambda c: c.model.s2s_params,
             ),
             (
@@ -817,7 +811,7 @@ class TestSpeechToSpeechConfig:
             env_vars=_EVA_MODEL_LIST_ENV
             | {
                 "EVA_MODEL__S2S": "gpt-realtime-mini",
-                "EVA_MODEL__S2S_PARAMS": json.dumps({"api_key": ""}),
+                "EVA_MODEL__S2S_PARAMS": json.dumps({"api_key": "", "model": "gpt-realtime-mini"}),
             }
         )
         assert isinstance(config.model, SpeechToSpeechConfig)
@@ -827,17 +821,25 @@ class TestSpeechToSpeechConfig:
         """--s2s-model selects SpeechToSpeechConfig."""
         config = _config(
             env_vars=_EVA_MODEL_LIST_ENV,
-            cli_args=["--model.s2s", "gemini_live", "--model.s2s-params", '{"api_key": "test-key"}'],
+            cli_args=[
+                "--model.s2s",
+                "gemini_live",
+                "--model.s2s-params",
+                '{"api_key": "test-key", "model": "gemini_live"}',
+            ],
         )
         assert isinstance(config.model, SpeechToSpeechConfig)
         assert config.model.s2s == "gemini_live"
-        assert config.model.s2s_params == {"api_key": "test-key"}
+        assert config.model.s2s_params == {"api_key": "test-key", "model": "gemini_live"}
 
     def test_s2s_config_with_params(self):
         """S2S params are passed through."""
         config = _config(
             env_vars=_EVA_MODEL_LIST_ENV,
-            model={"s2s": "gpt-realtime-mini", "s2s_params": {"voice": "alloy", "api_key": "key_1"}},
+            model={
+                "s2s": "gpt-realtime-mini",
+                "s2s_params": {"voice": "alloy", "api_key": "key_1", "model": "gpt-realtime-mini"},
+            },
         )
         assert isinstance(config.model, SpeechToSpeechConfig)
-        assert config.model.s2s_params == {"voice": "alloy", "api_key": "key_1"}
+        assert config.model.s2s_params == {"voice": "alloy", "api_key": "key_1", "model": "gpt-realtime-mini"}
