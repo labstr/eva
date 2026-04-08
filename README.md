@@ -30,8 +30,7 @@ Agents that score well on task completion tend to score worse on conversational 
 
 We recommend using [uv](https://docs.astral.sh/uv/) for fast, reliable dependency management. If you don't have `uv` installed, see the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
-> [!NOTE]
-> This project requires **Python 3.11–3.13** (set via `requires-python` in `pyproject.toml`). `uv` will automatically select a compatible version. If you're using pip, make sure you're running a supported Python version.
+This project requires **Python 3.11–3.13** (set via `requires-python` in `pyproject.toml`). `uv` will automatically select a compatible version. If you're using pip, make sure you're running a supported Python version.
 
 ```bash
 # Clone the repository
@@ -46,18 +45,16 @@ cp .env.example .env
 # Edit .env with your API keys (ELEVENLABS_API_KEY, OPENAI_API_KEY required)
 ```
 
-> [!TIP]
-> After installation, you can run EVA using either:
-> - `eva` — CLI entry point (e.g., `eva --help`)
-> - `python main.py` — script at the repo root (e.g., `python main.py --help`)
->
-> If using an IDE, point your Python interpreter to `.venv/bin/python` so commands run in the virtual environment automatically. Otherwise, prefix commands with `uv run` or activate the environment with `source .venv/bin/activate`.
+After installation, you can run EVA using either:
+- `eva` — CLI entry point (e.g., `eva --help`)
+- `python main.py` — script at the repo root (e.g., `python main.py --help`)
+
+If using an IDE, point your Python interpreter to `.venv/bin/python` so commands run in the virtual environment automatically. Otherwise, prefix commands with `uv run` or activate the environment with `source .venv/bin/activate`.
 
 <details>
 <summary>Alternative: using pip</summary>
 
-> [!NOTE]
-> This project requires Python 3.11. If you need to manage multiple Python versions, consider using [pyenv](https://github.com/pyenv/pyenv).
+This project requires Python 3.11. If you need to manage multiple Python versions, consider using [pyenv](https://github.com/pyenv/pyenv).
 
 ```bash
 # Create and activate a virtual environment
