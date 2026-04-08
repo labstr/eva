@@ -407,6 +407,7 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.title(f"Record {current_id}")
+st.caption(f"Current date/time: **{record.get('current_date_time', '—')}**")
 st.info(f"**Scenario Context:** {record.get('scenario_context', 'No scenario context available.')}")
 
 
