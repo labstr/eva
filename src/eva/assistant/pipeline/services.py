@@ -412,19 +412,22 @@ def create_realtime_llm_service(
     if model_lower.startswith("openai"):
         session_properties = get_openai_session_properties(system_prompt, params, pipecat_tools)
         if audit_log is not None:
-            logger.info(
-                f"Using InstrumentedRealtimeLLMService for audit log interception: openai: {params.get('model')}"
-            )
+            logger.info(f"Using InstrumentedRealtimeLLMService for audit log interception: openai: {params['model']}")
             return InstrumentedRealtimeLLMService(
-                model=params.get("model"),
+                settings=OpenAIRealtimeLLMService.Settings(
+                    model=params["model"],
+                    session_properties=session_properties,
+                ),
                 audit_log=audit_log,
                 api_key=params["api_key"],
-                session_properties=session_properties,
             )
 
         return OpenAIRealtimeLLMService(
             api_key=params["api_key"],
-            session_properties=session_properties,
+            settings=OpenAIRealtimeLLMService.Settings(
+                model=params["model"],
+                session_properties=session_properties,
+            ),
         )
     elif model_lower.startswith("azure") or model_lower.startswith("gpt-realtime"):
         #
@@ -438,17 +441,21 @@ def create_realtime_llm_service(
         if audit_log is not None:
             logger.info("Using InstrumentedRealtimeLLMService for audit log interception")
             service = InstrumentedRealtimeLLMService(
-                model=params.get("model"),
                 audit_log=audit_log,
                 api_key=params["api_key"],
                 base_url=url,
                 session_properties=session_properties,
+                settings=OpenAIRealtimeLLMService.Settings(
+                    model=params["model"],
+                    session_properties=session_properties,
+                ),
             )
             InstrumentedRealtimeLLMService._connect = override__connect  # azure realtime connect
             return service
 
         return OpenAIRealtimeLLMService(
             api_key=params["api_key"],
+            model=params["model"],
             base_url=url,
             session_properties=session_properties,
         )
@@ -461,6 +468,7 @@ def create_realtime_llm_service(
                 temperature=0.3,
                 max_duration=datetime.timedelta(minutes=6),
                 voice=params.get("voice", "03e20d03-35e4-43c4-bb18-9b18a2cd3086"),
+                model=params["model"],
             ),
             one_shot_selected_tools=pipecat_tools,
         )

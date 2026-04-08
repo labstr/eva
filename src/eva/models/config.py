@@ -82,9 +82,9 @@ class PipelineConfig(BaseModel):
     def pipeline_parts(self) -> dict[str, str]:
         """Component names for this pipeline."""
         return {
-            "stt": _param_alias(self.stt_params) or self.stt,
+            "stt": _param_alias(self.stt_params),
             "llm": self.llm,
-            "tts": _param_alias(self.tts_params) or self.tts,
+            "tts": _param_alias(self.tts_params),
         }
 
     @model_validator(mode="before")
@@ -307,9 +307,6 @@ class RunConfig(BaseSettings):
         "EVA_METRICS_TO_RUN": "EVA_METRICS",
     }
 
-    # Providers that manage their own model/key resolution (e.g. WebSocket-based)
-    _SKIP_PARAMS_VALIDATION: ClassVar[set[str]] = {"nvidia"}
-
     # Maps *_params field names to their provider field for env override logic
     _PARAMS_TO_PROVIDER: ClassVar[dict[str, str]] = {
         "stt_params": "stt",
@@ -503,7 +500,7 @@ class RunConfig(BaseSettings):
             self._validate_service_params("audio_llm", self.model.audio_llm, required_keys, self.model.audio_llm_params)
         elif isinstance(self.model, SpeechToSpeechConfig):
             # api_key is required, some s2s services don't require model
-            self._validate_service_params("S2S", self.model.s2s, ["api_key"], self.model.s2s_params)
+            self._validate_service_params("S2S", self.model.s2s, required_keys, self.model.s2s_params)
         return self
 
     @model_validator(mode="after")
@@ -518,8 +515,6 @@ class RunConfig(BaseSettings):
         cls, service: str, provider: str, required_keys: list[str], params: dict[str, Any]
     ) -> None:
         """Validate that STT/TTS params contain required keys."""
-        if provider.lower() in cls._SKIP_PARAMS_VALIDATION:
-            return
         missing = [key for key in required_keys if key not in params]
         if missing:
             missing_str = " and ".join(f'"{k}"' for k in missing)
