@@ -278,12 +278,14 @@ class AgenticSystem:
                     yield GENERIC_ERROR
                 return
 
+            if response_content:
+                logger.info(f"💬 Assistant LLM response: {response_content}")
+                yield response_content
+
+            self.audit_log.append_assistant_output(content=response_content, tool_calls=tool_calls_dicts or None)
+
             if not tool_calls_dicts:
                 # No tool calls, this is the final response
-                if response_content:
-                    logger.info(f"💬 Assistant LLM response: {response_content}")
-                    yield response_content
-                    self.audit_log.append_assistant_output(response_content)
                 return
 
             messages.append(
@@ -293,8 +295,6 @@ class AgenticSystem:
                     "tool_calls": tool_calls_dicts,
                 }
             )
-
-            self.audit_log.append_assistant_output(content=response_content, tool_calls=tool_calls_dicts)
 
             # Execute each tool call
             for tool_call in response_tool_calls:

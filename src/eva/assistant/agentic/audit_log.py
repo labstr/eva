@@ -202,7 +202,7 @@ class AuditLog:
                 wall-clock captured at the first ``audio_delta`` so the audit
                 log reflects when the assistant actually started responding.
         """
-        if content and not tool_calls:
+        if content:
             entry = {
                 "value": content,
                 "displayName": "Bot",
@@ -213,12 +213,10 @@ class AuditLog:
             }
             self.transcript.append(entry)
 
-        # With tool calls, we save an empty content regardless because it is never returned to the client.
-        # TODO Implement returning the content to the client while tool calls are in progress
         self.conversation_messages.append(
             ConversationMessage(
                 role=MessageRole.ASSISTANT,
-                content="" if tool_calls else content,
+                content=content,
                 tool_calls=tool_calls,
             )
         )
