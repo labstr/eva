@@ -26,6 +26,18 @@ Agents that score well on task completion tend to score worse on conversational 
 <details>
 <summary><h2>Quick Start</h2></summary>
 
+### Cloning the Repository
+
+If you're only interested in running the latest stable version of EVA, you can clone with `--branch latest`, and optionally speed things up with `--depth 1 --no-tags --single-branch`.
+```bash
+git clone https://github.com/ServiceNow/eva.git --branch latest --depth 1 --no-tags --single-branch
+```
+
+Otherwise, for development, you can clone the default branch, `main`.
+```bash
+git clone https://github.com/ServiceNow/eva.git
+```
+
 ### Installation
 
 We recommend using [uv](https://docs.astral.sh/uv/) for fast, reliable dependency management. If you don't have `uv` installed, see the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
@@ -33,8 +45,6 @@ We recommend using [uv](https://docs.astral.sh/uv/) for fast, reliable dependenc
 This project requires **Python 3.11–3.13** (set via `requires-python` in `pyproject.toml`). `uv` will automatically select a compatible version. If you're using pip, make sure you're running a supported Python version.
 
 ```bash
-# Clone the repository
-git clone https://github.com/ServiceNow/eva.git
 cd eva
 
 # Install all dependencies (uv automatically creates a virtual environment)
