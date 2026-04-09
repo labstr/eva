@@ -34,6 +34,17 @@ instructions: |
   - Read all IDs and codes slowly, broken into short segments: NPI as two groups of five, DEA numbers as the two letters then digits in groups of three and four, dates with the full month name spoken out.
   - If interrupted, stop and listen.
 
+  ## Escalation Policy
+
+  Offer to transfer to a live agent when:
+  - The caller explicitly requests to speak with a live agent.
+  - A policy exception is needed that exceeds your authority.
+  - The caller's issue cannot be resolved after three attempts.
+  - A complaint remains unresolved and the caller is dissatisfied.
+  - A technical system issue prevents you from completing the request.
+
+  When transferring, summarize what the caller needed, what you attempted, and why the transfer is necessary so the live agent has full context.
+
   ## Policies
 
   ---
@@ -1253,3 +1264,25 @@ tools:
       - name: end_date
         type: string
         description: "Last day of requested time off in YYYY-MM-DD format. Same value used in check_pto_eligibility. Example: 2026-05-13"
+
+  # ── SYSTEM: TRANSFER TO LIVE AGENT ──────────────────────────────────────────
+
+  - id: transfer_to_agent
+    name: transfer_to_agent
+    description: >
+      Transfer the call to a live human agent. Use when the caller explicitly
+      requests a live agent, when the issue cannot be resolved after reasonable
+      attempts, or when a situation arises that exceeds the automated agent's
+      authority. Provide context so the live agent can pick up seamlessly.
+    tool_type: system
+    domain: hr
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID of the authenticated caller, in format EMP followed by 6 digits. If the caller has not been authenticated yet, use the employee ID they provided. Example: EMP048271"
+      - name: transfer_reason
+        type: string
+        description: "Reason for transfer: caller_requested, policy_exception_needed, unable_to_resolve, complaint_escalation, or technical_issue"
+      - name: issue_summary
+        type: string
+        description: "Brief summary of the caller's request, what has been attempted so far, and why the transfer is needed"

@@ -122,6 +122,7 @@ from eva.assistant.tools.medical_hr_params import (
     SubmitPayrollCorrectionParams,
     SubmitPtoRequestParams,
     TransferDeaRegistrationParams,
+    TransferToAgentParams,
     UpdateEhrAccessParams,
     UpdateMalpracticeCoverageParams,
     VerifyColleagueCertificationsParams,
@@ -2178,4 +2179,33 @@ def submit_pto_request(params: dict, db: dict, call_index: int) -> dict:
         "working_days": working_days,
         "remaining_balance": balances[p.pto_type],
         "message": f"PTO request submitted. {pto_days} {p.pto_type} day(s) deducted. Case ID: {case_id}",
+    }
+
+
+# ---------------------------------------------------------------------------
+# SYSTEM: Transfer to Live Agent
+# ---------------------------------------------------------------------------
+
+
+def transfer_to_agent(params: dict, db: dict, call_index: int) -> dict:
+    """Transfer the call to a live human agent."""
+    try:
+        p = TransferToAgentParams.model_validate(params)
+    except ValidationError as exc:
+        return validation_error_response(exc, TransferToAgentParams)
+
+    employee_id = p.employee_id
+    transfer_reason = p.transfer_reason
+    issue_summary = p.issue_summary
+
+    transfer_id = f"TRF-{employee_id}-{str(call_index).zfill(3)}"
+
+    return {
+        "status": "success",
+        "transfer_id": transfer_id,
+        "employee_id": employee_id,
+        "transfer_reason": transfer_reason,
+        "issue_summary": issue_summary,
+        "estimated_wait": "2-3 minutes",
+        "message": "Transferring to live agent",
     }

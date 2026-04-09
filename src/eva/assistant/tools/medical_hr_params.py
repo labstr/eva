@@ -805,6 +805,17 @@ class SubmitPtoRequestParams(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# System Tools
+# ---------------------------------------------------------------------------
+
+
+class TransferToAgentParams(BaseModel):
+    employee_id: EmployeeIdStr
+    transfer_reason: str
+    issue_summary: str
+
+
+# ---------------------------------------------------------------------------
 # FIELD_ERROR_TYPES
 # ---------------------------------------------------------------------------
 
