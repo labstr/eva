@@ -43,6 +43,7 @@ def get_display_style(tool_type: str) -> tuple[str, str]:
         return TOOL_TYPE_COLORS["write"], TOOL_TYPE_LABELS["write"]
     return TOOL_TYPE_COLORS.get(tool_type, "#999"), TOOL_TYPE_LABELS.get(tool_type, "?")
 
+
 # ── Question definitions ─────────────────────────────────────────────────────
 QUESTIONS = [
     {
@@ -409,7 +410,9 @@ with nav_right:
         st.rerun()
 with nav_labeler:
     labeler_idx = labeler_options.index(selected_labeler) if selected_labeler in labeler_options else 0
-    new_labeler = st.selectbox("Labeler", labeler_options, index=labeler_idx, key="labeler_filter", label_visibility="collapsed")
+    new_labeler = st.selectbox(
+        "Labeler", labeler_options, index=labeler_idx, key="labeler_filter", label_visibility="collapsed"
+    )
     if new_labeler != selected_labeler:
         st.rerun()
 with nav_height:
@@ -630,8 +633,7 @@ try:
 except ValueError:
     pass
 st.markdown(
-    f'<span style="font-size:1.15em"><strong>Current date/time:</strong> '
-    f'<code>{_dt_display}</code></span>',
+    f'<span style="font-size:1.15em"><strong>Current date/time:</strong> <code>{_dt_display}</code></span>',
     unsafe_allow_html=True,
 )
 
