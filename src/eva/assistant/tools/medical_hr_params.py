@@ -560,6 +560,13 @@ class GetOnboardingChecklistParams(BaseModel):
 class CompleteOnboardingTaskParams(BaseModel):
     employee_id: EmployeeIdStr
     task_code: OnboardingTaskCodeStr
+    completion_code: Annotated[
+        str,
+        Field(
+            pattern=r"^[A-Za-z0-9]{4}$",
+            description="4-character alphanumeric completion code provided by the employee upon finishing the task. Example: AB12",
+        ),
+    ]
 
 
 class ScheduleOrientationFollowupParams(BaseModel):

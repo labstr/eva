@@ -118,6 +118,8 @@ instructions: |
 
   A provider's professional license is the basis for their ability to practice. Requests related to licenses must be handled carefully.
 
+  Extensions may only be requested within 60 days of the license expiration date. If a provider calls about a license that expires more than 60 days from now, inform them they must wait until they are within the 60-day window. Extensions cannot be requested for already-expired licenses.
+
   When a provider requests an extension on an expiring license, ask them whether they are seeking a provisional extension (continuing independent practice while renewal is pending) or a supervised extension (practicing under the oversight of a supervising physician). These are distinct arrangements:
 
   - **Provisional extensions** do not require a supervising physician. Do not ask for one and do not pass supervising_physician_npi to the tool.
@@ -231,6 +233,8 @@ instructions: |
   ### Onboarding
 
   New hires complete a checklist of required onboarding tasks. When an employee calls to mark tasks complete, retrieve their employee record first to confirm their department, then retrieve their checklist to confirm which tasks are outstanding.
+
+  Each onboarding task has a 4-character completion code that the employee receives upon finishing the task. Ask the caller to provide the completion code for each task they want to mark complete. The tool will verify the code before marking the task done.
 
   Mark tasks complete one at a time in the order the caller provides. Only tasks currently showing as pending may be marked complete.
 
@@ -458,8 +462,9 @@ tools:
     name: check_extension_eligibility
     description: >
       Verify a license is eligible for an extension. Blocks if the license already
-      has a pending extension, is under investigation, or has expired beyond the
-      allowable window. Returns eligible: true and the expiration date on success.
+      has a pending extension, is under investigation, has already expired, or
+      expires more than 60 days from the current date. Returns eligible: true
+      and the expiration date on success.
       Must be called before submit_license_extension.
     tool_type: read
     domain: hr
@@ -681,9 +686,11 @@ tools:
   - id: complete_onboarding_task
     name: complete_onboarding_task
     description: >
-      Mark a single onboarding task as complete. Must be called once per task —
-      do not attempt to batch multiple tasks into one call. Returns the list of
-      remaining incomplete tasks after the update.
+      Mark a single onboarding task as complete. The caller must provide the
+      4-character completion code they received upon finishing the task. The
+      tool validates the code before marking the task complete. Must be called
+      once per task — do not batch multiple tasks into one call. Returns the
+      list of remaining incomplete tasks after the update.
     tool_type: write
     domain: hr
     required_parameters:
@@ -693,6 +700,9 @@ tools:
       - name: task_code
         type: string
         description: "Task code to mark complete. Must be one of: BLS_UPLOAD, I9_VERIFY, BADGE_PICKUP, OCC_HEALTH, HIPAA_TRAIN, DRUG_SCREEN, TB_TEST, or ORIENTATION"
+      - name: completion_code
+        type: string
+        description: "4-character alphanumeric code the employee received upon completing the task. Case-insensitive. Example: AB12"
 
   - id: schedule_orientation_followup
     name: schedule_orientation_followup
@@ -735,10 +745,11 @@ tools:
   - id: transfer_dea_registration
     name: transfer_dea_registration
     description: >
-      Transfer a DEA registration to a new facility and state. The transfer
-      overwrites the current facility/state on the record, moving the registration
-      from the old location to the new one. Requires both provider_auth and
-      otp_auth. Returns a case_id on success.
+      Transfer a DEA registration to a new facility and state. The current
+      facility and state remain on the record until the effective date. A
+      pending_transfer object is created with the new facility, state, and
+      effective date. Requires both provider_auth and otp_auth. Returns a
+      case_id on success.
     tool_type: write
     domain: hr
     required_parameters:

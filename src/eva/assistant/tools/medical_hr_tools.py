@@ -517,6 +517,27 @@ def check_extension_eligibility(params: dict, db: dict, call_index: int) -> dict
             "message": "License is under investigation and cannot be extended",
         }
 
+    current_date = db.get("_current_date", "")
+    expiration_date = lic.get("expiration_date", "")
+    if current_date and expiration_date:
+        from datetime import datetime as _dt
+
+        current = _dt.strptime(current_date, "%Y-%m-%d")
+        expiry = _dt.strptime(expiration_date, "%Y-%m-%d")
+        days_until = (expiry - current).days
+        if days_until < 0:
+            return {
+                "status": "error",
+                "error_type": "license_expired",
+                "message": f"License expired on {expiration_date}. Extensions cannot be requested for already-expired licenses.",
+            }
+        if days_until > 60:
+            return {
+                "status": "error",
+                "error_type": "extension_too_early",
+                "message": f"License does not expire for {days_until} days. Extensions may only be requested within 60 days of the expiration date.",
+            }
+
     return {
         "status": "success",
         "eligible": True,
@@ -959,7 +980,23 @@ def complete_onboarding_task(params: dict, db: dict, call_index: int) -> dict:
             "message": f"Task {p.task_code} not in checklist for {p.employee_id}",
         }
 
-    tasks[p.task_code]["status"] = "complete"
+    task = tasks[p.task_code]
+    if task.get("status") == "complete":
+        return {
+            "status": "error",
+            "error_type": "task_already_complete",
+            "message": f"Task {p.task_code} is already marked complete",
+        }
+
+    expected_code = task.get("completion_code", "")
+    if expected_code and p.completion_code.upper() != expected_code.upper():
+        return {
+            "status": "error",
+            "error_type": "invalid_completion_code",
+            "message": f"Completion code does not match for task {p.task_code}. Please verify and try again.",
+        }
+
+    task["status"] = "complete"
     remaining = [t for t, v in tasks.items() if v.get("status") != "complete"]
 
     return {
@@ -1053,8 +1090,8 @@ def get_dea_record(params: dict, db: dict, call_index: int) -> dict:
 def transfer_dea_registration(params: dict, db: dict, call_index: int) -> dict:
     """Transfer a DEA registration to a new facility and state.
 
-    The transfer overwrites the current facility/state on the registration
-    record, effectively moving it from the old location to the new one.
+    The current facility and state remain on the record. A pending_transfer
+    object is created with the new facility, state, and effective date.
     """
     try:
         p = TransferDeaRegistrationParams.model_validate(params)
@@ -1083,27 +1120,27 @@ def transfer_dea_registration(params: dict, db: dict, call_index: int) -> dict:
         }
 
     case_id = _make_case_id("DEA", provider.get("employee_id", p.npi))
-    dea.update(
-        {
-            "facility_code": p.new_facility_code,
-            "state_code": p.new_state_code,
-            "transfer_reason": p.transfer_reason,
-            "effective_date": p.effective_date,
-            "transfer_case_id": case_id,
-            "status": "transfer_pending",
-        }
-    )
+    dea["status"] = "transfer_pending"
+    dea["pending_transfer"] = {
+        "new_facility_code": p.new_facility_code,
+        "new_state_code": p.new_state_code,
+        "transfer_reason": p.transfer_reason,
+        "effective_date": p.effective_date,
+        "transfer_case_id": case_id,
+    }
 
     return {
         "status": "success",
         "npi": p.npi,
         "dea_number": p.dea_number,
+        "current_facility_code": dea.get("facility_code"),
+        "current_state_code": dea.get("state_code"),
         "new_facility_code": p.new_facility_code,
         "new_state_code": p.new_state_code,
         "transfer_reason": p.transfer_reason,
         "effective_date": p.effective_date,
         "case_id": case_id,
-        "message": f"DEA transfer submitted. Case ID: {case_id}",
+        "message": f"DEA transfer submitted. Current registration unchanged until effective date {p.effective_date}. Case ID: {case_id}",
     }
 
 
