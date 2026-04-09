@@ -145,7 +145,7 @@ def _id_sort_key(rid: str) -> tuple:
 
 
 @st.cache_data
-def load_records(_mtime: float = 0) -> list[dict]:
+def load_records(mtime: float = 0) -> list[dict]:
     records = []
     with open(DATASET_PATH) as f:
         for line in f:
@@ -156,7 +156,7 @@ def load_records(_mtime: float = 0) -> list[dict]:
 
 
 @st.cache_data
-def load_agent_config(_mtime: float = 0) -> tuple[list[dict], str, dict[str, str]]:
+def load_agent_config(mtime: float = 0) -> tuple[list[dict], str, dict[str, str]]:
     with open(AGENT_YAML_PATH) as f:
         config = yaml.safe_load(f)
     tools = config.get("tools", [])
@@ -166,7 +166,7 @@ def load_agent_config(_mtime: float = 0) -> tuple[list[dict], str, dict[str, str
 
 
 @st.cache_data
-def load_flow_sequences(_mtime: float = 0) -> list[dict]:
+def load_flow_sequences(mtime: float = 0) -> list[dict]:
     """Parse flow sequences from medical_hr_tools.py docstring."""
     with open(TOOLS_MODULE_PATH) as f:
         content = f.read()
@@ -197,7 +197,7 @@ def load_flow_sequences(_mtime: float = 0) -> list[dict]:
 
 
 @st.cache_data
-def load_initial_scenario(record_id: str, _mtime: float = 0) -> dict:
+def load_initial_scenario(record_id: str, mtime: float = 0) -> dict:
     path = SCENARIOS_DIR / f"{record_id}.json"
     if path.exists():
         with open(path) as f:
