@@ -190,6 +190,7 @@ def verify_employee_auth(params: dict, db: dict, call_index: int) -> dict:
         "authenticated": True,
         "employee_id": p.employee_id,
         "first_name": emp.get("first_name"),
+        "last_name": emp.get("last_name"),
         "message": f"Employee {p.employee_id} authenticated successfully",
     }
 
