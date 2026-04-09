@@ -65,15 +65,10 @@ def test_current_date_matches_between_dbs(domain, record_id, current_date_time, 
     initial_date = initial_db.get("_current_date")
     expected_date = expected_db.get("_current_date")
 
-    assert initial_date is not None, (
-        f"[{domain}/{record_id}] Initial scenario DB missing _current_date"
-    )
-    assert expected_date is not None, (
-        f"[{domain}/{record_id}] Expected scenario DB missing _current_date"
-    )
+    assert initial_date is not None, f"[{domain}/{record_id}] Initial scenario DB missing _current_date"
+    assert expected_date is not None, f"[{domain}/{record_id}] Expected scenario DB missing _current_date"
     assert initial_date == expected_date, (
-        f"[{domain}/{record_id}] _current_date mismatch: "
-        f"initial={initial_date!r}, expected_final={expected_date!r}"
+        f"[{domain}/{record_id}] _current_date mismatch: initial={initial_date!r}, expected_final={expected_date!r}"
     )
 
 
@@ -84,9 +79,7 @@ def test_current_date_matches_between_dbs(domain, record_id, current_date_time, 
 )
 def test_current_date_time_matches_db(domain, record_id, current_date_time, initial_db, expected_db):
     """The date part of current_date_time must match _current_date in the scenario DBs."""
-    assert current_date_time, (
-        f"[{domain}/{record_id}] Record missing current_date_time"
-    )
+    assert current_date_time, f"[{domain}/{record_id}] Record missing current_date_time"
     # current_date_time is formatted like "2026-03-17 10:45 CST" — extract the date part
     date_part = current_date_time.split(" ")[0]
 
