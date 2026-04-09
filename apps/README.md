@@ -45,11 +45,3 @@ EVA_OUTPUT_DIR=path/to/results streamlit run apps/analysis.py
 3. **Run Selection** — Pick a run (with metadata summary)
 4. **Record Selection** — Pick a record within the selected run
 5. **Trial Selection** — If a record has multiple trials, pick one
-
-## Dataset Explorer App
-
-Browse the EVA airline dataset and scenario databases.
-
-```bash
-streamlit run apps/dataset_explorer.py
-```
