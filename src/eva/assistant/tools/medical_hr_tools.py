@@ -1185,7 +1185,7 @@ def check_leave_eligibility(params: dict, db: dict, call_index: int) -> dict:
 
 
 def submit_fmla_case(params: dict, db: dict, call_index: int) -> dict:
-    """Open an FMLA leave case and assign a covering employee."""
+    """Open an FMLA leave case."""
     try:
         p = SubmitFmlaCaseParams.model_validate(params)
     except ValidationError as exc:
@@ -1197,8 +1197,6 @@ def submit_fmla_case(params: dict, db: dict, call_index: int) -> dict:
     emp = db.get("employees", {}).get(p.employee_id)
     if not emp:
         return _employee_not_found(p.employee_id)
-    if p.covering_employee_id not in db.get("employees", {}):
-        return _employee_not_found(p.covering_employee_id)
 
     case_id = _make_case_id("FMLA", p.employee_id)
     leave_record = {
@@ -1206,7 +1204,6 @@ def submit_fmla_case(params: dict, db: dict, call_index: int) -> dict:
         "leave_category": p.leave_category,
         "leave_start_date": p.leave_start_date,
         "leave_end_date": p.leave_end_date,
-        "covering_employee_id": p.covering_employee_id,
         "status": "open",
     }
     emp.setdefault("leave_records", []).append(leave_record)
@@ -1218,7 +1215,6 @@ def submit_fmla_case(params: dict, db: dict, call_index: int) -> dict:
         "leave_category": p.leave_category,
         "leave_start_date": p.leave_start_date,
         "leave_end_date": p.leave_end_date,
-        "covering_employee_id": p.covering_employee_id,
         "message": f"FMLA case opened. Case ID: {case_id}",
     }
 
@@ -1239,6 +1235,22 @@ def schedule_return_to_work_checkin(params: dict, db: dict, call_index: int) -> 
     emp = db.get("employees", {}).get(p.employee_id)
     if not emp:
         return _employee_not_found(p.employee_id)
+
+    # Validate appointment is after the FMLA leave end date
+    fmla_case = None
+    for lr in emp.get("leave_records", []):
+        if lr.get("case_id") == p.case_id:
+            fmla_case = lr
+            break
+    if fmla_case:
+        leave_end = fmla_case.get("leave_end_date", "")
+        appt_date = p.appointment_datetime.split(" ")[0] if " " in p.appointment_datetime else p.appointment_datetime
+        if leave_end and appt_date < leave_end:
+            return {
+                "status": "error",
+                "error_type": "appointment_before_leave_end",
+                "message": f"Return-to-work check-in must be scheduled on or after the leave end date ({leave_end}). Requested date: {appt_date}",
+            }
 
     # Validate and book the slot
     ok, err = _validate_and_book_slot(db, "return_to_work_checkin", p.department_code, p.appointment_datetime)

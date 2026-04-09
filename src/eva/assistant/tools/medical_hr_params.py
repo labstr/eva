@@ -612,7 +612,6 @@ class SubmitFmlaCaseParams(BaseModel):
     leave_category: LeaveCategory
     leave_start_date: DateStr
     leave_end_date: DateStr
-    covering_employee_id: EmployeeIdStr
 
 
 class ScheduleReturnToWorkCheckinParams(BaseModel):

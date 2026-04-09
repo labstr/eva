@@ -212,11 +212,8 @@ instructions: |
     - bonding: birth, adoption, or foster placement of a child within 12 months of the event
     - military_exigency: qualifying exigency arising from a family member's active military duty
   - The leave start and end dates
-  - The employee ID of the colleague who will cover during the leave
 
-  The covering colleague's employee ID is a different value from the caller's employee ID. Ask for it explicitly.
-
-  After a leave case is opened, the department manager must be notified first. Then schedule a return-to-work check-in following the standard scheduling process. Use the department code from the employee's record for scheduling.
+  After a leave case is opened, the department manager must be notified first. Then schedule a return-to-work check-in following the standard scheduling process. Use the department code from the employee's record for scheduling. The return-to-work check-in must be scheduled for a date on or after the leave end date.
 
   ---
 
@@ -794,9 +791,9 @@ tools:
   - id: submit_fmla_case
     name: submit_fmla_case
     description: >
-      Open an FMLA leave case. Records leave category, start/end dates, and the
-      covering employee. Returns a case_id. Call only after check_leave_eligibility
-      returns eligible: true.
+      Open an FMLA leave case. Records leave category and start/end dates.
+      Returns a case_id. Call only after check_leave_eligibility returns
+      eligible: true.
     tool_type: write
     domain: hr
     required_parameters:
@@ -812,15 +809,14 @@ tools:
       - name: leave_end_date
         type: string
         description: "Leave end date in YYYY-MM-DD format. Example: 2026-07-01"
-      - name: covering_employee_id
-        type: string
-        description: "Employee ID of the colleague covering during leave, in format EMP followed by 6 digits. This is DIFFERENT from the caller's employee_id. Example: EMP093812"
 
   - id: schedule_return_to_work_checkin
     name: schedule_return_to_work_checkin
     description: >
       Schedule a return-to-work check-in appointment tied to an FMLA case.
-      The appointment_datetime must be a slot confirmed as available by
+      The appointment must be on or after the leave end date — the tool will
+      reject appointments scheduled before the leave ends. The
+      appointment_datetime must be a slot confirmed as available by
       check_appointment_availability. Called after notify_department_manager
       and check_appointment_availability.
     tool_type: write
