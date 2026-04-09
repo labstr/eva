@@ -15,7 +15,9 @@ ROOT = Path(__file__).parent.parent
 DATASET_PATH = ROOT / "data" / "medical_hr_dataset.jsonl"
 SCENARIOS_DIR = ROOT / "data" / "medical_hr_scenarios"
 AGENT_YAML_PATH = ROOT / "configs" / "agents" / "medical_hr_agent.yaml"
+TOOLS_MODULE_PATH = ROOT / "src" / "eva" / "assistant" / "tools" / "medical_hr_tools.py"
 FEEDBACK_DIR = ROOT / "hr_review_feedback"
+ASSIGNMENTS_PATH = ROOT / "configs" / "hr_assignments.yaml"
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(page_title="HR Data Review", layout="wide")
@@ -32,12 +34,107 @@ TOOL_TYPE_LABELS = {
     "write": "WRITE",
 }
 
-YES_NO_UNCLEAR = ["", "Yes", "No", "Unclear"]
-YES_NO_NA = ["", "Yes", "No", "NA"]
-YES_NO = ["", "Yes", "No"]
+YES_NO = ["Yes", "No"]
+
+
+def get_display_style(tool_type: str) -> tuple[str, str]:
+    """Return (color, label) for badge display. Auth tools display as write."""
+    if tool_type == "auth":
+        return TOOL_TYPE_COLORS["write"], TOOL_TYPE_LABELS["write"]
+    return TOOL_TYPE_COLORS.get(tool_type, "#999"), TOOL_TYPE_LABELS.get(tool_type, "?")
+
+# ── Question definitions ─────────────────────────────────────────────────────
+QUESTIONS = [
+    {
+        "id": "user_goal",
+        "label": "User Goal",
+        "fields": [
+            {
+                "key": "q_reflects",
+                "question": "Does it reflect intended scenario context?",
+                "options": YES_NO,
+                "help": "We are trying to test a specific scenario that is described by the scenario context. We just want to check that the user goal is aligned with that scenario. Intents that are not meant to be satisfiable should be in nice to have, whereas intents that are satisfiable should be in must have. Adversarial intents should always be in nice to have.",
+            },
+            {
+                "key": "q_realistic",
+                "question": "Is it sufficiently realistic — could a caller reasonably ask this over the phone?",
+                "options": YES_NO,
+                "help": "Just a quick check that the user goal is sufficiently realistic to include in this dataset (i.e. is topical, sounds reasonable).",
+            },
+            {
+                "key": "q_complete",
+                "question": "Is it complete/deterministic?",
+                "options": YES_NO,
+                "help": "Does this user goal cover all directions the agent might go in? Is there enough information on how to respond to different scenarios, are the resolution and failure conditions sufficiently clear and distinct from each other, etc. You may need to read the trace and check the expected flow to understand this one.",
+            },
+            {
+                "key": "q_raw_info",
+                "question": "Is all raw info present? (codes, names, etc.)",
+                "options": YES_NO,
+                "help": "Does the user info contain all the required raw information that the caller would need to do the flow? You may need to read the trace and check the expected flow to understand this one.",
+            },
+        ],
+        "comment_key": "user_goal_comments",
+        "comment_help": "Any comments, questions, concerns, etc that you have about this user goal or user goals in general.",
+    },
+    {
+        "id": "trace",
+        "label": "Trace",
+        "has_tool_calls": True,
+        "fields": [
+            {
+                "key": "q_unwanted_mods",
+                "question": "Modification tools that shouldn't have happened?",
+                "options": YES_NO,
+                "help": "Are there any modification/write tools in the trace that should not have happened (they violate policies, aren't required for this flow, etc)?",
+            },
+            {
+                "key": "q_missing_mods",
+                "question": "Missing modification tools?",
+                "options": YES_NO,
+                "help": "Are there modification tools we expect to see in this flow that are missing? For example maybe a missing notification tool that's in the expected flow sequence, etc.",
+            },
+            {
+                "key": "q_alt_path",
+                "question": "Another way to reach a different end DB state (following policies)?",
+                "options": YES_NO,
+                "help": "Is there a different sequence of modification tools or different parameters that could be used to still arrive at a correct end outcome? If so this is a problem because we need there to only be 1 correct answer.",
+            },
+        ],
+        "comment_key": "trace_comments",
+        "comment_help": "Any comments you have about the trace.",
+    },
+    {
+        "id": "diff",
+        "label": "Diff",
+        "fields": [],
+        "comment_key": "diff_comments",
+        "comment_help": "Any comments you have about the diff. If you see changes that don't make sense given the tool sequence, please flag them here.",
+    },
+    {
+        "id": "general",
+        "label": "General",
+        "fields": [],
+        "comment_key": "general_comments",
+        "comment_help": "Any other comments or concerns about this record that don't fit into the sections above.",
+    },
+]
 
 
 # ── Data loaders ─────────────────────────────────────────────────────────────
+
+
+def _id_sort_key(rid: str) -> tuple:
+    """Numeric-aware sort key for record IDs like '2.1', 'A3', 'D10.3'."""
+    match = re.match(r"^([A-Z]*)(\d.*)$", rid)
+    if not match:
+        return (1, rid, 0, 0)
+    prefix = match.group(1)
+    parts = tuple(int(x) for x in match.group(2).split("."))
+    prefix_key = (0, "") if not prefix else (1, prefix)
+    return prefix_key + parts
+
+
 @st.cache_data
 def load_records() -> list[dict]:
     records = []
@@ -46,7 +143,7 @@ def load_records() -> list[dict]:
             line = line.strip()
             if line:
                 records.append(json.loads(line))
-    return sorted(records, key=lambda r: r["id"])
+    return sorted(records, key=lambda r: _id_sort_key(r["id"]))
 
 
 @st.cache_data
@@ -57,6 +154,37 @@ def load_agent_config() -> tuple[list[dict], str, dict[str, str]]:
     instructions = config.get("instructions", "")
     tool_type_map = {t["name"]: t.get("tool_type", "read") for t in tools}
     return tools, instructions, tool_type_map
+
+
+@st.cache_data
+def load_flow_sequences() -> list[dict]:
+    """Parse flow sequences from medical_hr_tools.py docstring."""
+    with open(TOOLS_MODULE_PATH) as f:
+        content = f.read()
+    match = re.search(r'"""(.*?)"""', content, re.DOTALL)
+    if not match:
+        return []
+    docstring = match.group(1)
+    flows = []
+    blocks = re.split(r"\n\s*\n", docstring)
+    flow_header = re.compile(r"Flow\s+(\d+)\s+[–-]\s+(.+?):\s*\n(.+)", re.DOTALL)
+    for block in blocks:
+        m = flow_header.search(block.strip())
+        if not m:
+            continue
+        number = int(m.group(1))
+        name = m.group(2).strip()
+        tool_text = re.sub(r"\s*\n\s*", " ", m.group(3).strip())
+        tool_names = [t.strip() for t in re.split(r"\s*→\s*", tool_text)]
+        parsed_tools = []
+        for t in tool_names:
+            repeat_match = re.match(r"(.+?)\s*\(×N\)", t)
+            if repeat_match:
+                parsed_tools.append({"name": repeat_match.group(1), "repeat": True})
+            else:
+                parsed_tools.append({"name": t, "repeat": False})
+        flows.append({"number": number, "name": name, "tools": parsed_tools})
+    return sorted(flows, key=lambda f: f["number"])
 
 
 @st.cache_data
@@ -85,6 +213,14 @@ def save_feedback(record_id: str, feedback: dict):
         json.dump(feedback, f, indent=2)
 
 
+def load_assignments() -> dict[str, list[str]]:
+    if not ASSIGNMENTS_PATH.exists():
+        return {}
+    with open(ASSIGNMENTS_PATH) as f:
+        config = yaml.safe_load(f) or {}
+    return config.get("assignments", {}) or {}
+
+
 # ── Trace helpers ────────────────────────────────────────────────────────────
 def extract_review_tool_calls(
     trace: list[dict],
@@ -107,58 +243,90 @@ def extract_review_tool_calls(
 
 
 def render_trace(trace: list[dict], tool_type_map: dict[str, str]):
-    """Render expected trace with color-coded tool calls."""
+    """Render expected trace with styled divs (no chat_message to avoid auto-scroll)."""
     for msg in trace:
         event = msg.get("event_type", "")
 
         if event == "user_utterance":
-            with st.chat_message("user"):
-                st.markdown(msg.get("utterance", ""))
+            st.markdown(
+                f'<div style="background:#1a2733;border-left:3px solid #2196F3;'
+                f'padding:8px 12px;margin:4px 0;border-radius:4px">'
+                f'<strong style="color:#64B5F6">User:</strong> '
+                f"{msg.get('utterance', '')}</div>",
+                unsafe_allow_html=True,
+            )
 
         elif event == "agent_utterance":
-            with st.chat_message("assistant"):
-                st.markdown(msg.get("utterance", ""))
+            st.markdown(
+                f'<div style="background:#1a1a2e;border-left:3px solid #9C27B0;'
+                f'padding:8px 12px;margin:4px 0;border-radius:4px">'
+                f'<strong style="color:#CE93D8">Agent:</strong> '
+                f"{msg.get('utterance', '')}</div>",
+                unsafe_allow_html=True,
+            )
 
         elif event == "tool_call":
             name = msg.get("tool_name", "unknown")
             tool_type = tool_type_map.get(name, "read")
-            color = TOOL_TYPE_COLORS.get(tool_type, "#999")
-            label = TOOL_TYPE_LABELS.get(tool_type, "?")
+            color, label = get_display_style(tool_type)
             params = msg.get("params", {})
-            with st.chat_message("assistant", avatar=":material/build:"):
-                st.markdown(
-                    f'<span style="background:{color};color:white;padding:2px 8px;'
-                    f'border-radius:4px;font-size:0.75em;font-weight:bold">{label}</span> '
-                    f"**`{name}`**",
-                    unsafe_allow_html=True,
-                )
-                if params:
-                    st.code(json.dumps(params, indent=2), language="json")
+            badge = (
+                f'<span style="background:{color};color:white;padding:2px 8px;'
+                f'border-radius:4px;font-size:0.75em;font-weight:bold">{label}</span>'
+            )
+            st.markdown(
+                f'<div style="background:#1c1c1c;border-left:3px solid {color};'
+                f'padding:8px 12px;margin:4px 0;border-radius:4px">'
+                f"{badge} <code>{name}</code></div>",
+                unsafe_allow_html=True,
+            )
+            if params:
+                st.code(json.dumps(params, indent=2), language="json")
 
         elif event == "tool_response":
             name = msg.get("tool_name", "unknown")
             tool_type = tool_type_map.get(name, "read")
-            color = TOOL_TYPE_COLORS.get(tool_type, "#999")
-            label = TOOL_TYPE_LABELS.get(tool_type, "?")
+            color, label = get_display_style(tool_type)
             status = msg.get("status", "")
             response = msg.get("response", {})
-            with st.chat_message("assistant", avatar=":material/output:"):
-                st.markdown(
-                    f'<span style="background:{color};color:white;padding:2px 8px;'
-                    f'border-radius:4px;font-size:0.75em;font-weight:bold">{label}</span> '
-                    f"`{name}` — **{status}**",
-                    unsafe_allow_html=True,
-                )
-                if response:
-                    st.json(response)
+            badge = (
+                f'<span style="background:{color};color:white;padding:2px 8px;'
+                f'border-radius:4px;font-size:0.75em;font-weight:bold">{label}</span>'
+            )
+            st.markdown(
+                f'<div style="background:#111;border-left:3px solid #666;'
+                f'padding:8px 12px;margin:4px 0;border-radius:4px">'
+                f"{badge} <code>{name}</code> — <strong>{status}</strong></div>",
+                unsafe_allow_html=True,
+            )
+            if response:
+                st.json(response)
 
 
 # ── Load data ────────────────────────────────────────────────────────────────
 records = load_records()
-ids = [r["id"] for r in records]
-id_set = set(ids)
-record_by_id = {r["id"]: r for r in records}
+all_ids = [r["id"] for r in records]
 tools, instructions, tool_type_map = load_agent_config()
+flow_sequences = load_flow_sequences()
+assignments = load_assignments()
+labeler_names = sorted(assignments.keys())
+
+# ── Labeler filter (rendered in nav bar below) ───────────────────────────────
+labeler_options = ["All"] + labeler_names
+selected_labeler = st.session_state.get("labeler_filter", "All")
+
+if selected_labeler != "All" and selected_labeler in assignments:
+    assigned_ids = set(assignments[selected_labeler])
+    filtered_records = [r for r in records if r["id"] in assigned_ids]
+    if not filtered_records:
+        st.sidebar.warning(f"No records assigned to {selected_labeler}")
+        filtered_records = records
+else:
+    filtered_records = records
+
+ids = [r["id"] for r in filtered_records]
+id_set = set(ids)
+record_by_id = {r["id"]: r for r in filtered_records}
 
 # ── Determine current record from query params ──────────────────────────────
 params = st.query_params
@@ -222,193 +390,144 @@ initial_db = load_initial_scenario(current_id)
 review_tool_calls = extract_review_tool_calls(trace, tool_type_map) if trace else []
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SIDEBAR: Navigation + Review Questions
+# HEADER: Title + Navigation
 # ══════════════════════════════════════════════════════════════════════════════
-with st.sidebar:
-    st.header("Navigation")
 
-    # Record selector
-    selected = st.selectbox("Record", ids, index=current_idx)
+nav_left, nav_mid, nav_right, nav_labeler, nav_height = st.columns([1, 3, 1, 2, 1])
+with nav_left:
+    if st.button("< Prev", disabled=current_idx == 0, use_container_width=True):
+        st.query_params["record_id"] = ids[current_idx - 1]
+        st.rerun()
+with nav_mid:
+    selected = st.selectbox("Record", ids, index=current_idx, label_visibility="collapsed")
     if selected != current_id:
         st.query_params["record_id"] = selected
         st.rerun()
-
-    # Prev / Next
-    c_prev, c_next = st.columns(2)
-    with c_prev:
-        if st.button("< Prev", disabled=current_idx == 0, use_container_width=True):
-            st.query_params["record_id"] = ids[current_idx - 1]
-            st.rerun()
-    with c_next:
-        if st.button("Next >", disabled=current_idx == len(ids) - 1, use_container_width=True):
-            st.query_params["record_id"] = ids[current_idx + 1]
-            st.rerun()
-
-    st.divider()
-
-    # ── Review Questions ─────────────────────────────────────────────────────
-    st.header("Review Questions")
-
-    # -- User Goal --
-    st.markdown("#### User Goal")
-    q_reflects = st.selectbox(
-        "Does it reflect intended scenario context?",
-        YES_NO_UNCLEAR,
-        key="q_reflects",
-        help="We are trying to test a specific scenario that is described by the scenario context. We just want to check that the user goal is aligned with that scenario. Intents that are not meant to be satisfiable should be in nice to have, whereas intents that are satisfiable should be in must have. Adversarial intents should always be in nice to have.",
-    )
-    q_realistic = st.selectbox(
-        "Is it sufficiently realistic — could a caller reasonably ask this over the phone?",
-        YES_NO_UNCLEAR,
-        key="q_realistic",
-        help="Just a quick check that the user goal is sufficiently realistic to include in this dataset (i.e. is topical, sounds reasonable).",
-    )
-    q_complete = st.selectbox(
-        "Is it complete/deterministic?",
-        YES_NO_UNCLEAR,
-        key="q_complete",
-        help="Does this user goal cover all directions the agent might go in? Is there enough information on how to respond to different scenarios, are the resolution and failure conditions sufficiently clear and distinct from each other, etc. You may need to read the trace and check the expected flow to understand this one.",
-    )
-    q_raw_info = st.selectbox(
-        "Is all raw info present? (codes, names, etc.)",
-        YES_NO_UNCLEAR,
-        key="q_raw_info",
-        help="Does the user info contain all the required raw information that the caller would need to do the flow? You may need to read the trace and check the expected flow to understand this one.",
-    )
-    user_goal_comments = st.text_area(
-        "User goal comments",
-        key="user_goal_comments",
-        height=80,
-        help="Any comments, questions, concerns, etc that you have about this user goal or user goals in general.",
-    )
-
-    # -- Ground Truth Trace --
-    st.markdown("---")
-    st.markdown("#### Ground Truth Trace")
-
-    if review_tool_calls:
-        st.markdown("**Per auth/write tool call:**")
-        for i, tc in enumerate(review_tool_calls):
-            tt = tc.get("tool_type", "write")
-            color = TOOL_TYPE_COLORS.get(tt, "#999")
-            label = TOOL_TYPE_LABELS.get(tt, "?")
-            st.markdown(
-                f'<span style="background:{color};color:white;padding:2px 6px;'
-                f'border-radius:3px;font-size:0.7em">{label}</span> '
-                f"`{tc['name']}`",
-                unsafe_allow_html=True,
-            )
-            st.selectbox(
-                "Inputs grounded?",
-                YES_NO_NA,
-                key=f"wtc_{current_id}_{i}_grounded",
-                help="Can this tool call's inputs be inferred from previous tool call output, user info, or policies?",
-            )
-            st.selectbox(
-                "Consistent with policies?",
-                YES_NO_NA,
-                key=f"wtc_{current_id}_{i}_policy",
-                help="Is this tool call consistent with the agent policies?",
-            )
-    elif trace is None:
-        st.info("Trace not available yet — per-tool-call questions will appear when trace data is added.")
-    else:
-        st.info("No auth/write tool calls found in this trace.")
-
-    st.markdown("**Overall trace:**")
-    q_unwanted_mods = st.selectbox(
-        "Modification tools that shouldn't have happened?",
-        YES_NO,
-        key="q_unwanted_mods",
-        help="Are there any modification/write tools in the trace that should not have happened (they violate policies, aren't required for this flow, etc)?",
-    )
-    q_missing_mods = st.selectbox(
-        "Missing modification tools?",
-        YES_NO,
-        key="q_missing_mods",
-        help="Are there modification tools we expect to see in this flow that are missing? For example maybe a missing notification tool that's in the expected flow sequence, etc.",
-    )
-    q_alt_path = st.selectbox(
-        "Another way to reach a different end DB state (following policies)?",
-        YES_NO_UNCLEAR,
-        key="q_alt_path",
-        help="Is there a different sequence of modification tools or different parameters that could be used to still arrive at a correct end outcome? If so this is a problem because we need there to only be 1 correct answer.",
-    )
-    trace_comments = st.text_area(
-        "Trace comments",
-        key="trace_comments",
-        height=80,
-        help="Any comments you have about the trace.",
-    )
-
-    # -- Diff --
-    st.markdown("---")
-    st.markdown("#### Diff")
-    diff_comments = st.text_area(
-        "Diff comments",
-        key="diff_comments",
-        height=80,
-        help="Any comments you have about the diff. If you see changes that don't make sense given the tool sequence, please flag them here.",
-    )
-
-    # -- General --
-    st.markdown("---")
-    st.markdown("#### General")
-    general_comments = st.text_area(
-        "Any other comments or issues",
-        key="general_comments",
-        height=100,
-        help="Any other comments or concerns about this record that don't fit into the sections above.",
-    )
-
-    # -- Save --
-    st.markdown("---")
-    if st.button("Save Feedback", type="primary", use_container_width=True):
-        feedback = {
-            "user_goal": {
-                "reflects_context": st.session_state.get("q_reflects", ""),
-                "is_realistic": st.session_state.get("q_realistic", ""),
-                "is_complete": st.session_state.get("q_complete", ""),
-                "raw_info_present": st.session_state.get("q_raw_info", ""),
-                "comments": st.session_state.get("user_goal_comments", ""),
-            },
-            "ground_truth_trace": {
-                "review_tool_calls": [
-                    {
-                        "tool_name": tc["name"],
-                        "tool_type": tc.get("tool_type", "write"),
-                        "inputs_grounded": st.session_state.get(f"wtc_{current_id}_{i}_grounded", ""),
-                        "policy_consistent": st.session_state.get(f"wtc_{current_id}_{i}_policy", ""),
-                    }
-                    for i, tc in enumerate(review_tool_calls)
-                ],
-                "unwanted_modifications": st.session_state.get("q_unwanted_mods", ""),
-                "missing_modifications": st.session_state.get("q_missing_mods", ""),
-                "alternative_path_exists": st.session_state.get("q_alt_path", ""),
-                "comments": st.session_state.get("trace_comments", ""),
-            },
-            "diff": {
-                "comments": st.session_state.get("diff_comments", ""),
-            },
-            "general": {
-                "comments": st.session_state.get("general_comments", ""),
-            },
-        }
-        save_feedback(current_id, feedback)
-        st.success(f"Saved feedback for {current_id}")
-
-    # Show status if feedback exists
-    existing_fb = load_feedback(current_id)
-    if existing_fb:
-        st.caption(f"Last saved: {existing_fb.get('last_updated', '—')}")
+with nav_right:
+    if st.button("Next >", disabled=current_idx == len(ids) - 1, use_container_width=True):
+        st.query_params["record_id"] = ids[current_idx + 1]
+        st.rerun()
+with nav_labeler:
+    labeler_idx = labeler_options.index(selected_labeler) if selected_labeler in labeler_options else 0
+    new_labeler = st.selectbox("Labeler", labeler_options, index=labeler_idx, key="labeler_filter", label_visibility="collapsed")
+    if new_labeler != selected_labeler:
+        st.rerun()
+with nav_height:
+    q_height = st.slider("Height", 200, 800, 400, 50, label_visibility="collapsed")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# MAIN AREA: Data display
+# REVIEW QUESTIONS
 # ══════════════════════════════════════════════════════════════════════════════
 
-st.title(f"Record {current_id}")
-st.caption(f"Current date/time: **{record.get('current_date_time', '—')}**")
-st.info(f"**Scenario Context:** {record.get('scenario_context', 'No scenario context available.')}")
+q_labels = [q["label"] for q in QUESTIONS]
+st.markdown("**Review Questions**")
+with st.container(height=q_height):
+    q_tabs = st.tabs(q_labels)
+
+for q_section, tab in zip(QUESTIONS, q_tabs):
+    with tab:
+        fields = q_section["fields"]
+        # Lay out radio questions in a grid (2 per row)
+        if fields:
+            for row_start in range(0, len(fields), 2):
+                row_fields = fields[row_start : row_start + 2]
+                cols = st.columns(len(row_fields))
+                for col, field in zip(cols, row_fields):
+                    with col:
+                        st.radio(
+                            field["question"],
+                            field["options"],
+                            key=field["key"],
+                            help=field["help"],
+                            horizontal=True,
+                        )
+
+        # Per auth/write tool call questions (only for trace section)
+        if q_section.get("has_tool_calls"):
+            if review_tool_calls:
+                st.markdown("**Per write tool call:**")
+                # Lay out tool calls in a grid (2 per row)
+                for row_start in range(0, len(review_tool_calls), 2):
+                    row_tcs = review_tool_calls[row_start : row_start + 2]
+                    cols = st.columns(len(row_tcs))
+                    for col, (i, tc) in zip(
+                        cols, enumerate(review_tool_calls[row_start : row_start + 2], start=row_start)
+                    ):
+                        with col:
+                            tt = tc.get("tool_type", "write")
+                            color, label = get_display_style(tt)
+                            st.markdown(
+                                f'{i + 1}) <span style="background:{color};color:white;padding:2px 6px;'
+                                f'border-radius:3px;font-size:0.7em">{label}</span> '
+                                f"`{tc['name']}`",
+                                unsafe_allow_html=True,
+                            )
+                            st.radio(
+                                "Inputs grounded?",
+                                YES_NO,
+                                key=f"wtc_{current_id}_{i}_grounded",
+                                help="Can this tool call's inputs be inferred from previous tool call output, user info, or policies?",
+                                horizontal=True,
+                            )
+                            st.radio(
+                                "Consistent with policies?",
+                                YES_NO,
+                                key=f"wtc_{current_id}_{i}_policy",
+                                help="Is this tool call consistent with the agent policies?",
+                                horizontal=True,
+                            )
+            elif trace is None:
+                st.info("Trace not available yet — per-tool-call questions will appear when trace data is added.")
+            else:
+                st.info("No auth/write tool calls found in this trace.")
+
+        # Comment box
+        st.text_area(
+            "Comments",
+            key=q_section["comment_key"],
+            height=max(80, q_height - 200),
+            help=q_section["comment_help"],
+        )
+
+        # Save button in every tab for convenience
+        if st.button("Save Feedback", type="primary", key=f"save_{q_section['id']}"):
+            feedback = {
+                "user_goal": {
+                    "reflects_context": st.session_state.get("q_reflects", ""),
+                    "is_realistic": st.session_state.get("q_realistic", ""),
+                    "is_complete": st.session_state.get("q_complete", ""),
+                    "raw_info_present": st.session_state.get("q_raw_info", ""),
+                    "comments": st.session_state.get("user_goal_comments", ""),
+                },
+                "ground_truth_trace": {
+                    "review_tool_calls": [
+                        {
+                            "tool_name": tc["name"],
+                            "tool_type": tc.get("tool_type", "write"),
+                            "inputs_grounded": st.session_state.get(f"wtc_{current_id}_{i}_grounded", ""),
+                            "policy_consistent": st.session_state.get(f"wtc_{current_id}_{i}_policy", ""),
+                        }
+                        for i, tc in enumerate(review_tool_calls)
+                    ],
+                    "unwanted_modifications": st.session_state.get("q_unwanted_mods", ""),
+                    "missing_modifications": st.session_state.get("q_missing_mods", ""),
+                    "alternative_path_exists": st.session_state.get("q_alt_path", ""),
+                    "comments": st.session_state.get("trace_comments", ""),
+                },
+                "diff": {
+                    "comments": st.session_state.get("diff_comments", ""),
+                },
+                "general": {
+                    "comments": st.session_state.get("general_comments", ""),
+                },
+            }
+            save_feedback(current_id, feedback)
+            st.success(f"Saved feedback for {current_id}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DATA DISPLAY: User Goal (left) | Trace (right), Diff below
+# ══════════════════════════════════════════════════════════════════════════════
 
 
 # ── Reference expander ───────────────────────────────────────────────────────
@@ -444,8 +563,8 @@ for idx, m in enumerate(_matches):
     _policy_sections.append((title, body))
 _preamble = instructions[: _matches[0].start()].strip() if _matches else ""
 
-with st.expander("Reference: Tool Schemas & Agent Policies", expanded=False):
-    tab_tools, tab_policies = st.tabs(["Tool Schemas", "Agent Policies"])
+with st.expander("Reference: Tool Schemas, Flows & Agent Policies", expanded=False):
+    tab_tools, tab_flows, tab_policies = st.tabs(["Tool Schemas", "Flows", "Agent Policies"])
     with tab_tools:
         for tt, label in [
             ("auth", "Auth Tools"),
@@ -454,77 +573,132 @@ with st.expander("Reference: Tool Schemas & Agent Policies", expanded=False):
         ]:
             group = tools_by_type.get(tt, [])
             with st.expander(f"{label} ({len(group)})", expanded=False):
-                _render_tools(group)
+                _render_tools(sorted(group, key=lambda t: t["name"]))
+    with tab_flows:
+        for flow in flow_sequences:
+            with st.expander(f"Flow {flow['number']} — {flow['name']}", expanded=False):
+                parts = []
+                for tool in flow["tools"]:
+                    tt = tool_type_map.get(tool["name"], "read")
+                    color, label = get_display_style(tt)
+                    badge = (
+                        f'<span style="background:{color};color:white;padding:2px 6px;'
+                        f'border-radius:3px;font-size:0.7em;font-weight:bold">{label}</span>'
+                    )
+                    name_str = f"<code>{tool['name']}</code>"
+                    if tool["repeat"]:
+                        name_str += " (xN)"
+                    parts.append(f"{badge} {name_str}")
+                st.markdown(" &rarr; ".join(parts), unsafe_allow_html=True)
+    _policy_flow_map = {
+        "Credentialing and Licenses": "Flow 1",
+        "Shift Scheduling and Swaps": "Flow 2",
+        "Malpractice Coverage": "Flow 3",
+        "Onboarding": "Flow 4",
+        "DEA Registration": "Flow 5",
+        "Leave of Absence (FMLA)": "Flow 6",
+        "Payroll Corrections": "Flow 7",
+        "Clinical Privileges": "Flow 8",
+        "On-Call Registration": "Flow 9",
+        "I-9 Work Authorization Verification": "Flow 10",
+        "Visa and Immigration": "Flow 11",
+        "PTO Request": "Flow 12",
+    }
     with tab_policies:
         if _preamble:
             with st.expander("General", expanded=False):
                 st.markdown(_preamble)
-        for title, body in _policy_sections:
-            with st.expander(title, expanded=False):
+        _general_sections = [(t, b) for t, b in _policy_sections if t not in _policy_flow_map]
+        _flow_sections = [(t, b) for t, b in _policy_sections if t in _policy_flow_map]
+        _flow_sections.sort(key=lambda x: int(_policy_flow_map[x[0]].split()[1]))
+        for title, body in _general_sections + _flow_sections:
+            flow_label = _policy_flow_map.get(title, "")
+            display_title = f"{title} ({flow_label})" if flow_label else title
+            with st.expander(display_title, expanded=False):
                 st.markdown(body)
 
-# ── User Goal ────────────────────────────────────────────────────────────────
-with st.expander("User Goal", expanded=True):
-    st.markdown("##### High-level Goal")
-    st.info(goal.get("high_level_user_goal", "—"))
+with st.expander("Scenario Context", expanded=False):
+    st.info(record.get("scenario_context", "No scenario context available."))
+_raw_dt = record.get("current_date_time", "—")
+_dt_display = _raw_dt
+try:
+    _dt_match = re.match(r"(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})\s*(.*)", _raw_dt)
+    if _dt_match:
+        _parsed = datetime.strptime(_dt_match.group(1), "%Y-%m-%d")
+        _spelled = _parsed.strftime("%B %d, %Y").replace(" 0", " ")
+        _dt_display = f"{_dt_match.group(1)} ({_spelled}) {_dt_match.group(2)} {_dt_match.group(3)}".strip()
+except ValueError:
+    pass
+st.markdown(
+    f'<span style="font-size:1.15em"><strong>Current date/time:</strong> '
+    f'<code>{_dt_display}</code></span>',
+    unsafe_allow_html=True,
+)
 
-    st.markdown("##### Starting Utterance")
-    st.code(goal.get("starting_utterance", "—"), language=None)
+# ── Side-by-side: User Goal | Trace ──────────────────────────────────────────
+col_goal, col_trace = st.columns(2)
 
-    # Decision tree
-    if dt.get("must_have_criteria"):
-        st.markdown("##### Must-Have Criteria")
-        for i, item in enumerate(dt["must_have_criteria"], 1):
-            st.markdown(f"{i}. {item}")
+with col_goal:
+    st.markdown("##### User Goal")
+    with st.container(height=700):
+        st.markdown("###### High-level Goal")
+        st.info(goal.get("high_level_user_goal", "—"))
 
-    if dt.get("nice_to_have_criteria"):
-        st.markdown("##### Nice-to-Have Criteria")
-        for item in dt["nice_to_have_criteria"]:
-            st.markdown(f"- {item}")
+        st.markdown("###### Starting Utterance")
+        st.code(goal.get("starting_utterance", "—"), language=None)
 
-    if dt.get("negotiation_behavior"):
-        st.markdown("##### Negotiation Behavior")
-        for i, item in enumerate(dt["negotiation_behavior"], 1):
-            st.markdown(f"{i}. {item}")
+        if dt.get("must_have_criteria"):
+            st.markdown("###### Must-Have Criteria")
+            for i, item in enumerate(dt["must_have_criteria"], 1):
+                st.markdown(f"{i}. {item}")
 
-    st.markdown("##### Resolution Condition")
-    st.success(dt.get("resolution_condition", "—"))
+        if dt.get("nice_to_have_criteria"):
+            st.markdown("###### Nice-to-Have Criteria")
+            for item in dt["nice_to_have_criteria"]:
+                st.markdown(f"- {item}")
 
-    st.markdown("##### Failure Condition")
-    st.error(dt.get("failure_condition", "—"))
+        if dt.get("negotiation_behavior"):
+            st.markdown("###### Negotiation Behavior")
+            for i, item in enumerate(dt["negotiation_behavior"], 1):
+                st.markdown(f"{i}. {item}")
 
-    if dt.get("escalation_behavior"):
-        st.markdown("##### Escalation Behavior")
-        st.warning(dt["escalation_behavior"])
+        st.markdown("###### Resolution Condition")
+        st.success(dt.get("resolution_condition", "—"))
 
-    if dt.get("edge_cases"):
-        st.markdown("##### Edge Cases")
-        for item in dt["edge_cases"]:
-            st.markdown(f"- {item}")
+        st.markdown("###### Failure Condition")
+        st.error(dt.get("failure_condition", "—"))
 
-    # Information required
-    info = goal.get("information_required", {})
-    if info:
-        st.markdown("##### Information Required")
-        rows = []
-        for k, v in info.items():
-            if isinstance(v, (dict, list)):
-                v = json.dumps(v, default=str)
-            rows.append(f"| **{k}** | `{v}` |")
-        st.markdown("| Field | Value |\n|---|---|\n" + "\n".join(rows))
+        if dt.get("escalation_behavior"):
+            st.markdown("###### Escalation Behavior")
+            st.warning(dt["escalation_behavior"])
 
+        if dt.get("edge_cases"):
+            st.markdown("###### Edge Cases")
+            for item in dt["edge_cases"]:
+                st.markdown(f"- {item}")
 
-# ── Ground Truth Trace ───────────────────────────────────────────────────────
-with st.expander("Ground Truth Trace", expanded=True):
-    if trace is None:
-        st.warning(
-            "Trace data not yet available for this record. "
-            "This section will populate when ground truth traces are added."
-        )
-    else:
-        render_trace(trace, tool_type_map)
+        info = goal.get("information_required", {})
+        if info:
+            st.markdown("###### Information Required")
+            rows = []
+            for k, v in info.items():
+                if isinstance(v, (dict, list)):
+                    v = json.dumps(v, default=str)
+                rows.append(f"| **{k}** | `{v}` |")
+            st.markdown("| Field | Value |\n|---|---|\n" + "\n".join(rows))
 
-# ── Scenario DB Diff ─────────────────────────────────────────────────────────
+with col_trace:
+    st.markdown("##### Ground Truth Trace")
+    with st.container(height=700):
+        if trace is None:
+            st.warning(
+                "Trace data not yet available for this record. "
+                "This section will populate when ground truth traces are added."
+            )
+        else:
+            render_trace(trace, tool_type_map)
+
+# ── Diff (full width below) ─────────────────────────────────────────────────
 with st.expander("Scenario DB Diff (Initial vs Expected Final)", expanded=True):
     if not initial_db:
         st.warning("Initial scenario DB not found.")
@@ -545,7 +719,6 @@ with st.expander("Scenario DB Diff (Initial vs Expected Final)", expanded=True):
         if not diff_lines:
             st.success("No differences between initial and expected scenario DB.")
         else:
-            # Build GitHub-style unified diff HTML
             rows = []
             for line in diff_lines:
                 escaped = line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
