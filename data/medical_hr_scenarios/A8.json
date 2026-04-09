@@ -7,43 +7,41 @@
       "CCRN"
     ],
     "2A-MED": [
-      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ONS"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP555001",
-      "first_name": "Maya",
-      "last_name": "Srinivasan",
+      "employee_id": "EMP197966",
+      "first_name": "Oleg",
+      "last_name": "Chernyshev",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "1184",
-      "otp_code": "381204",
-      "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2018-09-17",
+      "phone_last_four": "6612",
+      "otp_code": "720556",
+      "role_code": "RN",
+      "department_code": "PEDIATRICS",
+      "hire_date": "2023-05-15",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
+        "carrier": "coverys",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -80,22 +78,21 @@
       "first_name": "Oleg",
       "last_name": "Chernyshev",
       "date_of_birth": "1997-11-06",
-      "phone_last_four": "6624",
+      "phone_last_four": "6612",
       "otp_code": "720556",
-      "department_code": "OBSTETRICS",
+      "department_code": "PEDIATRICS",
       "role_code": "RN",
       "unit_code": "1D-PEDS",
-      "hire_date": "2024-02-12",
+      "hire_date": "2023-05-15",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "PALS",
-        "NRP"
+        "PALS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 29,
-        "hours_worked_past_year": 1864,
+        "months_employed": 38,
+        "hours_worked_past_year": 1876,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -119,31 +116,30 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
+        "pto": 14.0,
         "sick": 5.0
       },
       "pto_requests": []
     },
-    "EMP555001": {
-      "employee_id": "EMP555001",
+    "EMP284510": {
+      "employee_id": "EMP284510",
       "first_name": "Maya",
-      "last_name": "Srinivasan",
-      "date_of_birth": "1984-04-18",
-      "phone_last_four": "1184",
-      "otp_code": "381204",
-      "department_code": "CARDIOLOGY",
-      "role_code": "MD",
-      "unit_code": "4B-ICU",
-      "hire_date": "2018-09-17",
+      "last_name": "Donnelly",
+      "date_of_birth": "1989-04-18",
+      "phone_last_four": "4428",
+      "otp_code": "118204",
+      "department_code": "PEDIATRICS",
+      "role_code": "RN",
+      "unit_code": "1D-PEDS",
+      "hire_date": "2021-09-20",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
         "BLS",
-        "CCRN"
+        "PALS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 94,
+        "months_employed": 58,
         "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 10,
         "reason": null
@@ -169,17 +165,17 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 18.0,
-        "sick": 6.0
+        "sick": 7.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260724-0700": {
-      "shift_id": "SHF-20260724-0700",
+    "SHF-20260805-0700": {
+      "shift_id": "SHF-20260805-0700",
       "employee_id": "EMP197966",
       "unit_code": "1D-PEDS",
-      "date": "2026-07-24",
+      "date": "2026-08-05",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -193,7 +189,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -202,76 +198,59 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "OBSTETRICS": {
+      "PEDIATRICS": {
         "2026-07-24": [
           "09:00",
-          "11:00"
+          "11:00",
+          "14:00"
         ],
         "2026-07-27": [
           "10:00",
-          "14:00"
-        ],
-        "2026-07-29": [
-          "09:30",
-          "15:00"
+          "13:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "OBSTETRICS": {
+      "PEDIATRICS": {
+        "2026-07-06": [
+          "09:00",
+          "10:30"
+        ],
         "2026-10-13": [
           "09:00",
           "11:00",
           "14:00"
         ],
         "2026-10-14": [
-          "10:00",
-          "13:00"
-        ],
-        "2026-10-16": [
-          "09:30",
-          "15:30"
+          "08:30",
+          "10:00"
         ]
       }
     },
     "competency_review": {
-      "OBSTETRICS": {
-        "2026-07-24": [
-          "08:00",
-          "13:00"
-        ],
+      "PEDIATRICS": {
         "2026-07-28": [
           "09:00",
-          "14:00"
+          "13:00"
         ],
         "2026-07-30": [
           "10:00",
           "15:00"
         ]
-      },
-      "CARDIOLOGY": {
-        "2026-07-24": [
-          "09:00",
-          "14:00"
-        ],
-        "2026-07-29": [
-          "10:00",
-          "15:00"
-        ],
-        "2026-07-31": [
-          "08:30",
-          "13:30"
-        ]
       }
     }
   },
   "org_holidays": [
-    "2026-07-03",
+    "2026-07-04",
     "2026-09-07",
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "OBSTETRICS": [],
-    "CARDIOLOGY": []
+    "PEDIATRICS": [],
+    "EMERGENCY": [],
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "CARDIOLOGY": [],
+    "RADIOLOGY": []
   }
 }

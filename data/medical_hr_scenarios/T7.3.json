@@ -34,12 +34,12 @@
       "first_name": "Keiko",
       "last_name": "Mori",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "4418",
-      "otp_code": "483920",
+      "pin": "4826",
+      "phone_last_four": "4826",
+      "otp_code": "654321",
       "role_code": "RN",
       "department_code": "EMERGENCY",
-      "hire_date": "2018-03-12",
+      "hire_date": "2018-09-17",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -82,12 +82,12 @@
       "first_name": "Keiko",
       "last_name": "Mori",
       "date_of_birth": "1972-05-25",
-      "phone_last_four": "4418",
-      "otp_code": "483920",
+      "phone_last_four": "4826",
+      "otp_code": "654321",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "4A-MED",
-      "hire_date": "2018-03-12",
+      "hire_date": "2018-09-17",
       "employment_status": "active",
       "certifications": [
         "BLS",
@@ -95,7 +95,7 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 101,
+        "months_employed": 95,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -120,22 +120,22 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
-        "sick": 5.0
+        "pto": 14.5,
+        "sick": 6.0
       },
       "pto_requests": []
     },
     "EMP676713": {
       "employee_id": "EMP676713",
       "first_name": "Lena",
-      "last_name": "Park",
-      "date_of_birth": "1985-11-02",
-      "phone_last_four": "7724",
-      "otp_code": "291604",
+      "last_name": "Patel",
+      "date_of_birth": "1986-11-08",
+      "phone_last_four": "7713",
+      "otp_code": "112233",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "4A-MED",
-      "hire_date": "2020-07-19",
+      "hire_date": "2020-03-02",
       "employment_status": "active",
       "certifications": [
         "BLS",
@@ -143,7 +143,7 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 73,
+        "months_employed": 77,
         "hours_worked_past_year": 1820,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -169,7 +169,7 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 12.0,
-        "sick": 6.0
+        "sick": 5.0
       },
       "pto_requests": []
     }
@@ -183,9 +183,9 @@
       "start_time": "19:00",
       "end_time": "07:30",
       "hours_scheduled": 12.5,
-      "hours_logged": 12.0,
-      "on_call": false,
-      "on_call_tier": null,
+      "hours_logged": 12.5,
+      "on_call": true,
+      "on_call_tier": "primary",
       "status": "logged",
       "swap_locked": false,
       "pay_period_closed": false,
@@ -193,7 +193,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-16",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -201,7 +201,7 @@
       "shift_id": "SHF-20260723-0700",
       "employee_id": "EMP688956",
       "unit_code": "4A-MED",
-      "date": "2026-07-23",
+      "date": "2026-08-11",
       "start_time": "07:00",
       "end_time": "19:30",
       "hours_scheduled": 12.5,
@@ -215,7 +215,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-16",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -237,7 +237,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-16",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -259,21 +259,22 @@
         ],
         "2026-08-14": [
           "09:30",
-          "12:30"
+          "12:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-08-12": [
+        "2026-08-17": [
           "09:00",
-          "10:30"
-        ],
-        "2026-08-13": [
-          "11:00",
+          "10:30",
           "14:00"
         ],
-        "2026-08-14": [
+        "2026-08-18": [
+          "11:00",
+          "13:30"
+        ],
+        "2026-08-19": [
           "09:00",
           "15:00"
         ]
@@ -282,31 +283,36 @@
     "competency_review": {
       "EMERGENCY": {
         "2026-08-12": [
-          "08:30",
+          "08:00",
+          "10:00",
           "13:00"
         ],
         "2026-08-13": [
           "09:00",
-          "14:30"
+          "11:00",
+          "14:00"
         ],
-        "2026-08-15": [
+        "2026-08-14": [
           "10:00",
-          "12:00"
+          "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-07-03",
     "2026-09-07",
-    "2026-11-26"
+    "2026-11-26",
+    "2026-12-25"
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "ONCOLOGY": [],
-    "SURGERY": [],
+    "ONCOLOGY": [
+      "2026-11-27"
+    ],
+    "SURGERY": [
+      "2026-08-31"
+    ],
     "PEDIATRICS": [],
-    "CARDIOLOGY": [],
     "RADIOLOGY": []
   }
 }

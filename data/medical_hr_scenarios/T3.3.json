@@ -31,10 +31,10 @@
       "last_name": "Boateng",
       "facility_code": "ILMQ-45S",
       "pin": "1920",
-      "phone_last_four": "7712",
+      "phone_last_four": "4821",
       "otp_code": "469038",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
@@ -44,7 +44,7 @@
           "state_license_number": "GA-MD-8404547",
           "license_type": "MD",
           "state_code": "GA",
-          "expiration_date": "2026-07-05",
+          "expiration_date": "2026-07-31",
           "status": "active",
           "investigation_hold": false,
           "extension_status": "pending",
@@ -55,19 +55,19 @@
         }
       },
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2025-RT91M2",
+        "carrier": "medpro",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-10-17",
-        "expiration_date": "2026-10-16",
+        "effective_date": "2025-07-01",
+        "expiration_date": "2026-07-10",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
         "dea_number": "NI8581856",
         "facility_code": "ILMQ-45S",
-        "state_code": "GA",
+        "state_code": "IL",
         "schedule_codes": [
           "CII",
           "CIII",
@@ -82,8 +82,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-EMERG-001",
-            "description": "Emergency department attending privileges",
+            "code": "PRV-CARD-001",
+            "description": "General cardiology consults",
+            "status": "active"
+          },
+          {
+            "code": "PRV-CARD-002",
+            "description": "Stress testing supervision",
             "status": "active"
           }
         ],
@@ -93,23 +98,23 @@
     },
     "8891474909": {
       "npi": "8891474909",
-      "employee_id": "EMP341225",
-      "first_name": "Mina",
-      "last_name": "Harrison",
-      "facility_code": "AZMC-22A",
-      "pin": "4418",
-      "phone_last_four": "2284",
-      "otp_code": "118204",
+      "employee_id": "EMP774211",
+      "first_name": "Elena",
+      "last_name": "Morales",
+      "facility_code": "PHX-22M",
+      "pin": "4471",
+      "phone_last_four": "1138",
+      "otp_code": "812455",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
-      "hire_date": "2016-03-21",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2016-02-19",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-HJ82L1",
+        "carrier": "coverys",
+        "policy_number": "POL-2026-ZX1144",
         "per_occurrence_limit_usd": 2000000,
         "aggregate_limit_usd": 6000000,
         "effective_date": "2026-01-01",
@@ -119,7 +124,7 @@
       },
       "dea_registration": {
         "dea_number": "BK4729183",
-        "facility_code": "AZMC-22A",
+        "facility_code": "PHX-22M",
         "state_code": "AZ",
         "schedule_codes": [
           "CII",
@@ -144,23 +149,22 @@
       "employee_id": "EMP586490",
       "first_name": "Kwesi",
       "last_name": "Boateng",
-      "date_of_birth": "1982-11-04",
-      "phone_last_four": "7712",
+      "date_of_birth": "1981-04-22",
+      "phone_last_four": "4821",
       "otp_code": "469038",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "4B-ICU",
+      "unit_code": "2A-MED",
       "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
         "BLS",
-        "CCRN"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 82,
-        "hours_worked_past_year": 1864,
+        "hours_worked_past_year": 1876,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -189,26 +193,26 @@
       },
       "pto_requests": []
     },
-    "EMP341225": {
-      "employee_id": "EMP341225",
-      "first_name": "Mina",
-      "last_name": "Harrison",
-      "date_of_birth": "1978-02-19",
-      "phone_last_four": "2284",
-      "otp_code": "118204",
-      "department_code": "EMERGENCY",
+    "EMP774211": {
+      "employee_id": "EMP774211",
+      "first_name": "Elena",
+      "last_name": "Morales",
+      "date_of_birth": "1976-09-14",
+      "phone_last_four": "1138",
+      "otp_code": "812455",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2016-03-21",
+      "hire_date": "2016-02-19",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
-        "BLS"
+        "BLS",
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 123,
-        "hours_worked_past_year": 1902,
+        "months_employed": 124,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -239,25 +243,25 @@
     }
   },
   "shifts": {
-    "SHF-20260620-0700": {
-      "shift_id": "SHF-20260620-0700",
+    "SHF-20260620-0800": {
+      "shift_id": "SHF-20260620-0800",
       "employee_id": "EMP586490",
-      "unit_code": "4B-ICU",
+      "unit_code": "2A-MED",
       "date": "2026-06-20",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": 12.0,
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-06-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -266,53 +270,52 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
-        "2026-06-24": [
+      "CARDIOLOGY": {
+        "2026-06-22": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-25": [
+        "2026-06-23": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-06-26": [
+        "2026-06-24": [
           "09:30",
           "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
-        "2026-06-29": [
+      "CARDIOLOGY": {
+        "2026-06-22": [
           "09:00",
-          "11:00",
-          "15:00"
+          "11:00"
         ],
-        "2026-06-30": [
+        "2026-06-25": [
           "10:00",
           "14:00"
         ],
-        "2026-07-01": [
+        "2026-06-29": [
           "09:30",
-          "13:30"
+          "15:30"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
+      "CARDIOLOGY": {
         "2026-06-23": [
           "09:00",
-          "10:30",
+          "11:00",
           "14:00"
         ],
         "2026-06-24": [
-          "08:30",
+          "10:00",
           "13:00"
         ],
-        "2026-06-25": [
-          "09:00",
+        "2026-06-26": [
+          "09:30",
           "15:00"
         ]
       }
@@ -324,10 +327,14 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
     "CARDIOLOGY": [],
+    "EMERGENCY": [
+      "2026-07-04"
+    ],
     "ONCOLOGY": [],
-    "SURGERY": [],
+    "SURGERY": [
+      "2026-06-30"
+    ],
     "PEDIATRICS": []
   }
 }

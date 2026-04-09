@@ -10,12 +10,13 @@
       "BLS"
     ],
     "3C-ONC": [
+      "ACLS",
       "BLS",
-      "ACLS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -26,22 +27,22 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP174637",
-      "first_name": "Thandi",
-      "last_name": "Ndlovu",
+      "employee_id": "EMP900001",
+      "first_name": "Amina",
+      "last_name": "Patel",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "4412",
-      "otp_code": "929683",
-      "role_code": "RN",
-      "department_code": "SURGERY",
-      "hire_date": "2018-03-12",
+      "pin": "4821",
+      "phone_last_four": "7712",
+      "otp_code": "483920",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2018-07-09",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "coverys",
+        "carrier": "medpro",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -60,7 +61,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2027-06-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -78,21 +79,22 @@
       "first_name": "Thandi",
       "last_name": "Ndlovu",
       "date_of_birth": "1979-05-26",
-      "phone_last_four": "4412",
+      "phone_last_four": "4427",
       "otp_code": "929683",
       "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2018-03-12",
+      "hire_date": "2021-03-15",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
+      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 101,
+        "months_employed": 66,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -117,82 +119,33 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
+        "pto": 10.0,
         "sick": 6.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     },
-    "EMP671015": {
-      "employee_id": "EMP671015",
-      "first_name": "Miriam",
+    "EMP900001": {
+      "employee_id": "EMP900001",
+      "first_name": "Amina",
       "last_name": "Patel",
-      "date_of_birth": "1988-11-14",
-      "phone_last_four": "8821",
-      "otp_code": "451208",
-      "department_code": "SURGERY",
-      "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2020-06-08",
+      "date_of_birth": "1983-11-02",
+      "phone_last_four": "7712",
+      "otp_code": "483920",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-07-09",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 74,
-        "hours_worked_past_year": 1820,
-        "fmla_weeks_remaining": 10,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 11.0,
-        "sick": 4.0
-      },
-      "pto_requests": [],
-      "schedule_type": "shift"
-    },
-    "EMP302944": {
-      "employee_id": "EMP302944",
-      "first_name": "Jordan",
-      "last_name": "Kim",
-      "date_of_birth": "1991-02-03",
-      "phone_last_four": "1934",
-      "otp_code": "664211",
-      "department_code": "ONCOLOGY",
-      "role_code": "RN",
-      "unit_code": "3C-ONC",
-      "hire_date": "2022-01-10",
-      "employment_status": "active",
-      "certifications": [
         "BLS",
-        "ACLS"
+        "CCRN"
       ],
+      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 55,
-        "hours_worked_past_year": 1760,
+        "months_employed": 96,
+        "hours_worked_past_year": 2100,
         "fmla_weeks_remaining": 8,
         "reason": null
       },
@@ -216,19 +169,18 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 9.0,
+        "pto": 15.0,
         "sick": 5.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260602-0700": {
-      "shift_id": "SHF-20260602-0700",
+    "SHF-20260828-0700": {
+      "shift_id": "SHF-20260828-0700",
       "employee_id": "EMP174637",
       "unit_code": "5A-SURG",
-      "date": "2026-06-02",
+      "date": "2026-08-28",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -242,15 +194,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260603-0700": {
-      "shift_id": "SHF-20260603-0700",
+    "SHF-20260830-0700": {
+      "shift_id": "SHF-20260830-0700",
       "employee_id": "EMP174637",
       "unit_code": "5A-SURG",
-      "date": "2026-06-03",
+      "date": "2026-08-30",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -264,15 +216,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260604-0700": {
-      "shift_id": "SHF-20260604-0700",
+    "SHF-20260901-0700": {
+      "shift_id": "SHF-20260901-0700",
       "employee_id": "EMP174637",
       "unit_code": "5A-SURG",
-      "date": "2026-06-04",
+      "date": "2026-09-01",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -286,15 +238,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-13",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260605-0700": {
-      "shift_id": "SHF-20260605-0700",
+    "SHF-20260903-0700": {
+      "shift_id": "SHF-20260903-0700",
       "employee_id": "EMP174637",
       "unit_code": "5A-SURG",
-      "date": "2026-06-05",
+      "date": "2026-09-03",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -308,15 +260,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-13",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260606-0700": {
-      "shift_id": "SHF-20260606-0700",
+    "SHF-20261006-0700": {
+      "shift_id": "SHF-20261006-0700",
       "employee_id": "EMP174637",
       "unit_code": "5A-SURG",
-      "date": "2026-06-06",
+      "date": "2026-10-06",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -330,29 +282,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260822-0700": {
-      "shift_id": "SHF-20260822-0700",
-      "employee_id": "EMP174637",
-      "unit_code": "5A-SURG",
-      "date": "2026-08-22",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-10-11",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -369,52 +299,85 @@
         ],
         "2026-08-26": [
           "10:00",
-          "13:00"
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-08-25": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-08-27": [
+          "13:00",
+          "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "SURGERY": {
-        "2026-07-09": [
-          "08:00",
+        "2026-10-05": [
+          "09:00",
+          "10:00",
+          "13:00"
+        ],
+        "2026-10-06": [
+          "08:30",
           "09:30",
           "11:00"
         ],
-        "2026-07-10": [
-          "08:30",
-          "10:00"
-        ],
-        "2026-07-13": [
+        "2026-10-07": [
           "09:00",
-          "13:30"
+          "14:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-10-05": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-10-06": [
+          "10:00",
+          "14:00"
         ]
       }
     },
     "competency_review": {
       "SURGERY": {
-        "2026-08-27": [
+        "2026-08-24": [
           "09:00",
           "11:00"
         ],
-        "2026-08-28": [
+        "2026-08-25": [
           "10:00",
           "14:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-08-24": [
+          "09:00",
+          "13:00"
+        ],
+        "2026-08-26": [
+          "10:00",
+          "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-05-25",
-    "2026-07-03",
-    "2026-09-07"
+    "2026-09-07",
+    "2026-11-26",
+    "2026-12-25"
   ],
   "department_blackout_dates": {
-    "SURGERY": [],
-    "ONCOLOGY": [
+    "SURGERY": [
+      "2026-12-23",
       "2026-12-24"
     ],
+    "CARDIOLOGY": [],
+    "ONCOLOGY": [],
     "EMERGENCY": [],
     "PEDIATRICS": [],
-    "CARDIOLOGY": []
+    "RADIOLOGY": []
   }
 }

@@ -11,38 +11,37 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ONCCHEMO"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
       "employee_id": "EMP921414",
-      "first_name": "Alicia",
-      "last_name": "Fuentes",
+      "first_name": "Pavel",
+      "last_name": "Kowalski",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "4412",
+      "phone_last_four": "1842",
       "otp_code": "610311",
-      "role_code": "RN",
-      "department_code": "PEDIATRICS",
-      "hire_date": "2024-02-12",
+      "role_code": "MD",
+      "department_code": "RADIOLOGY",
+      "hire_date": "2022-03-14",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "coverys",
+        "carrier": "medpro",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -76,25 +75,24 @@
   "employees": {
     "EMP921414": {
       "employee_id": "EMP921414",
-      "first_name": "Alicia",
-      "last_name": "Fuentes",
+      "first_name": "Pavel",
+      "last_name": "Kowalski",
       "date_of_birth": "2000-11-23",
-      "phone_last_four": "4412",
+      "phone_last_four": "1842",
       "otp_code": "610311",
-      "department_code": "PEDIATRICS",
-      "role_code": "RN",
-      "unit_code": "1D-PEDS",
-      "hire_date": "2024-02-12",
+      "department_code": "RADIOLOGY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2022-03-14",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "PALS",
-        "NRP"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 29,
-        "hours_worked_past_year": 1876,
+        "months_employed": 52,
+        "hours_worked_past_year": 1980,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -126,31 +124,31 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 5.0
+        "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260718-0700": {
-      "shift_id": "SHF-20260718-0700",
+    "SHF-20260725-0700": {
+      "shift_id": "SHF-20260725-0700",
       "employee_id": "EMP921414",
-      "unit_code": "1D-PEDS",
-      "date": "2026-07-18",
+      "unit_code": "2A-MED",
+      "date": "2026-07-25",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
-      "swap_locked": true,
+      "status": "scheduled",
+      "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -159,51 +157,51 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "PEDIATRICS": {
-        "2026-07-23": [
+      "RADIOLOGY": {
+        "2026-07-24": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-24": [
+        "2026-07-27": [
           "10:00",
           "13:00"
         ],
-        "2026-07-27": [
+        "2026-07-29": [
           "09:30",
           "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "PEDIATRICS": {
-        "2026-07-23": [
-          "08:30",
-          "10:30"
-        ],
-        "2026-07-24": [
+      "RADIOLOGY": {
+        "2026-07-28": [
           "09:00",
+          "11:00"
+        ],
+        "2026-07-30": [
+          "10:00",
           "14:00"
         ],
-        "2026-07-27": [
-          "11:00",
-          "15:30"
+        "2026-08-03": [
+          "09:00",
+          "13:00"
         ]
       }
     },
     "competency_review": {
-      "PEDIATRICS": {
-        "2026-07-23": [
+      "RADIOLOGY": {
+        "2026-07-29": [
           "09:00",
-          "13:00"
+          "11:00"
         ],
-        "2026-07-24": [
+        "2026-07-31": [
           "10:00",
-          "14:30"
+          "14:00"
         ],
-        "2026-07-27": [
-          "08:00",
-          "12:00"
+        "2026-08-04": [
+          "09:30",
+          "15:00"
         ]
       }
     }
@@ -214,11 +212,17 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "PEDIATRICS": [],
-    "CARDIOLOGY": [],
-    "EMERGENCY": [],
+    "RADIOLOGY": [],
+    "CARDIOLOGY": [
+      "2026-08-10"
+    ],
+    "EMERGENCY": [
+      "2026-07-31"
+    ],
     "ONCOLOGY": [],
-    "SURGERY": [],
-    "RADIOLOGY": []
+    "SURGERY": [
+      "2026-08-03"
+    ],
+    "PEDIATRICS": []
   }
 }

@@ -934,14 +934,19 @@ def update_malpractice_coverage(params: dict, db: dict, call_index: int) -> dict
 
 
 def get_onboarding_checklist(params: dict, db: dict, call_index: int) -> dict:
-    """Retrieve the onboarding task checklist for a new hire."""
+    """Retrieve the onboarding task checklist for a new hire.
+
+    Accepts either employee_auth or otp_auth because this tool is used in:
+    - Flow 4 standalone (employee_auth only)
+    - Flow 4 combined with provider flows like DEA (provider_auth + otp_auth)
+    """
     try:
         p = GetOnboardingChecklistParams.model_validate(params)
     except ValidationError as exc:
         return validation_error_response(exc, GetOnboardingChecklistParams)
 
-    if not _is_authenticated(db, "employee_auth"):
-        return _auth_required("employee_auth")
+    if not _is_authenticated(db, "employee_auth") and not _is_authenticated(db, "otp_auth"):
+        return _auth_required("employee_auth or otp_auth")
 
     emp = db.get("employees", {}).get(p.employee_id)
     if not emp:
@@ -959,14 +964,17 @@ def get_onboarding_checklist(params: dict, db: dict, call_index: int) -> dict:
 
 
 def complete_onboarding_task(params: dict, db: dict, call_index: int) -> dict:
-    """Mark a single onboarding task as complete. Called once per task."""
+    """Mark a single onboarding task as complete. Called once per task.
+
+    Accepts either employee_auth or otp_auth (same gate as get_onboarding_checklist).
+    """
     try:
         p = CompleteOnboardingTaskParams.model_validate(params)
     except ValidationError as exc:
         return validation_error_response(exc, CompleteOnboardingTaskParams)
 
-    if not _is_authenticated(db, "employee_auth"):
-        return _auth_required("employee_auth")
+    if not _is_authenticated(db, "employee_auth") and not _is_authenticated(db, "otp_auth"):
+        return _auth_required("employee_auth or otp_auth")
 
     emp = db.get("employees", {}).get(p.employee_id)
     if not emp:
@@ -1012,14 +1020,15 @@ def schedule_orientation_followup(params: dict, db: dict, call_index: int) -> di
     """Schedule a post-onboarding orientation follow-up appointment.
 
     Validates the requested time slot is available before booking.
+    Accepts either employee_auth or otp_auth (same gate as onboarding tools).
     """
     try:
         p = ScheduleOrientationFollowupParams.model_validate(params)
     except ValidationError as exc:
         return validation_error_response(exc, ScheduleOrientationFollowupParams)
 
-    if not _is_authenticated(db, "employee_auth"):
-        return _auth_required("employee_auth")
+    if not _is_authenticated(db, "employee_auth") and not _is_authenticated(db, "otp_auth"):
+        return _auth_required("employee_auth or otp_auth")
 
     emp = db.get("employees", {}).get(p.employee_id)
     if not emp:
@@ -1796,7 +1805,10 @@ def submit_i9_verification(params: dict, db: dict, call_index: int) -> dict:
         return _employee_not_found(p.employee_id)
 
     case_id = _make_case_id("I9V", p.employee_id)
-    i9 = emp.setdefault("i9_record", {})
+    i9 = emp.get("i9_record")
+    if not i9:
+        i9 = {}
+        emp["i9_record"] = i9
     i9.update(
         {
             "verification_action": p.verification_action,

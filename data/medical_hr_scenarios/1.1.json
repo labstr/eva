@@ -12,7 +12,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ONS"
     ],
     "5A-SURG": [
       "BLS",
@@ -27,13 +27,13 @@
   "providers": {
     "3746317213": {
       "npi": "3746317213",
-      "employee_id": "EMP300588",
+      "employee_id": "EMP482713",
       "first_name": "Priya",
       "last_name": "Sharma",
       "facility_code": "KAFN-13R",
       "pin": "4257",
-      "phone_last_four": "6214",
-      "otp_code": "482913",
+      "phone_last_four": "4821",
+      "otp_code": "731944",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
       "hire_date": "2019-08-12",
@@ -61,7 +61,7 @@
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2025-07-01",
-        "expiration_date": "2026-06-30",
+        "expiration_date": "2026-07-01",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -84,11 +84,11 @@
         "privilege_list": [
           {
             "code": "PRV-CARD-001",
-            "description": "Cardiac catheterization",
+            "description": "General cardiology admitting privileges",
             "status": "active"
           },
           {
-            "code": "PRV-CARD-002",
+            "code": "PRV-CARD-014",
             "description": "Stress testing supervision",
             "status": "active"
           }
@@ -99,22 +99,22 @@
     },
     "3342331444": {
       "npi": "3342331444",
-      "employee_id": "EMP441144",
+      "employee_id": "EMP331444",
       "first_name": "Daniel",
-      "last_name": "Reyes",
+      "last_name": "Kline",
       "facility_code": "KAFN-13R",
-      "pin": "9182",
-      "phone_last_four": "8841",
-      "otp_code": "731204",
+      "pin": "8812",
+      "phone_last_four": "1444",
+      "otp_code": "118204",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2016-02-01",
+      "hire_date": "2014-05-19",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "FL-MD-44114422": {
-          "state_license_number": "FL-MD-44114422",
+        "FL-MD-24001122": {
+          "state_license_number": "FL-MD-24001122",
           "license_type": "MD",
           "state_code": "FL",
           "expiration_date": "2027-11-30",
@@ -129,16 +129,16 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2025-CV8812",
+        "policy_number": "POL-2025-BX6622",
         "per_occurrence_limit_usd": 2000000,
         "aggregate_limit_usd": 4000000,
-        "effective_date": "2025-01-01",
-        "expiration_date": "2026-12-31",
+        "effective_date": "2025-09-01",
+        "expiration_date": "2026-09-01",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BM5839201",
+        "dea_number": "BF3819027",
         "facility_code": "KAFN-13R",
         "state_code": "FL",
         "schedule_codes": [
@@ -155,8 +155,8 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-CARD-010",
-            "description": "General cardiology attending privileges",
+            "code": "PRV-CARD-101",
+            "description": "Interventional cardiology privileges",
             "status": "active"
           }
         ],
@@ -166,26 +166,26 @@
     }
   },
   "employees": {
-    "EMP300588": {
-      "employee_id": "EMP300588",
+    "EMP482713": {
+      "employee_id": "EMP482713",
       "first_name": "Priya",
       "last_name": "Sharma",
-      "date_of_birth": "1984-09-14",
-      "phone_last_four": "6214",
-      "otp_code": "482913",
+      "date_of_birth": "1985-04-22",
+      "phone_last_four": "4821",
+      "otp_code": "731944",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "2A-MED",
+      "unit_code": "4B-ICU",
       "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
-        "BLS"
+        "BLS",
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 82,
-        "hours_worked_past_year": 1896,
+        "hours_worked_past_year": 1860,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -212,30 +212,28 @@
         "pto": 15.0,
         "sick": 5.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     },
-    "EMP441144": {
-      "employee_id": "EMP441144",
+    "EMP331444": {
+      "employee_id": "EMP331444",
       "first_name": "Daniel",
-      "last_name": "Reyes",
-      "date_of_birth": "1976-03-22",
-      "phone_last_four": "8841",
-      "otp_code": "731204",
+      "last_name": "Kline",
+      "date_of_birth": "1976-11-03",
+      "phone_last_four": "1444",
+      "otp_code": "118204",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "4B-ICU",
-      "hire_date": "2016-02-01",
+      "unit_code": "2A-MED",
+      "hire_date": "2014-05-19",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
         "BLS",
-        "CCRN"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 124,
-        "hours_worked_past_year": 2012,
+        "months_employed": 145,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -262,16 +260,15 @@
         "pto": 18.0,
         "sick": 6.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260614-0700": {
-      "shift_id": "SHF-20260614-0700",
-      "employee_id": "EMP300588",
-      "unit_code": "2A-MED",
-      "date": "2026-06-14",
+    "SHF-20260612-0700": {
+      "shift_id": "SHF-20260612-0700",
+      "employee_id": "EMP482713",
+      "unit_code": "4B-ICU",
+      "date": "2026-06-12",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -285,7 +282,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-06-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -295,18 +292,18 @@
   "appointment_availability": {
     "orientation_followup": {
       "CARDIOLOGY": {
-        "2026-06-12": [
+        "2026-06-15": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-13": [
+        "2026-06-16": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-06-16": [
-          "09:00",
+        "2026-06-18": [
+          "09:30",
           "12:00",
           "16:00"
         ]
@@ -314,33 +311,39 @@
     },
     "return_to_work_checkin": {
       "CARDIOLOGY": {
-        "2026-06-12": [
-          "09:30",
-          "11:30"
-        ],
-        "2026-06-15": [
-          "10:00",
+        "2026-06-22": [
+          "09:00",
+          "11:00",
           "14:00"
         ],
-        "2026-06-17": [
-          "09:00",
+        "2026-06-23": [
+          "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-06-24": [
+          "09:30",
+          "12:30",
+          "16:00"
         ]
       }
     },
     "competency_review": {
       "CARDIOLOGY": {
-        "2026-06-12": [
-          "08:00",
-          "10:00"
-        ],
-        "2026-06-15": [
+        "2026-06-17": [
           "09:00",
-          "13:00"
-        ],
-        "2026-06-18": [
           "11:00",
+          "14:00"
+        ],
+        "2026-06-19": [
+          "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-06-20": [
+          "09:30",
+          "12:00",
+          "16:00"
         ]
       }
     }

@@ -33,29 +33,15 @@
       "last_name": "Patel",
       "facility_code": "SOE-95M",
       "pin": "3851",
-      "phone_last_four": "4412",
+      "phone_last_four": "0827",
       "otp_code": "745414",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "hire_date": "2019-06-17",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
       "clearance_code": "CLR-OCC-324082",
-      "licenses": {
-        "OH-MD-482193": {
-          "state_license_number": "OH-MD-482193",
-          "license_type": "MD",
-          "state_code": "OH",
-          "expiration_date": "2027-11-30",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
+      "licenses": {},
       "malpractice": {
         "carrier": "medpro",
         "policy_number": "POL-2026-AX7731",
@@ -69,14 +55,14 @@
       "dea_registration": {
         "dea_number": "OK1006810",
         "facility_code": "SOE-95M",
-        "state_code": "OH",
+        "state_code": "PA",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-10-31",
+        "expiration_date": "2027-03-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -85,18 +71,13 @@
         "privilege_list": [
           {
             "code": "PRV-ECHO-003",
-            "description": "Transthoracic echocardiography interpretation",
+            "description": "Adult transthoracic echocardiography",
             "status": "suspended"
           },
           {
             "code": "PRV-CARD-005",
-            "description": "Emergency cardiac consult management",
+            "description": "General cardiology inpatient consults",
             "status": "suspended"
-          },
-          {
-            "code": "PRV-TRAUMA-002",
-            "description": "Trauma resuscitation oversight",
-            "status": "active"
           }
         ],
         "reactivation_case_id": null
@@ -110,22 +91,21 @@
       "first_name": "Nalini",
       "last_name": "Patel",
       "date_of_birth": "1989-09-22",
-      "phone_last_four": "4412",
+      "phone_last_four": "0827",
       "otp_code": "745414",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "5A-SURG",
+      "unit_code": "2A-MED",
       "hire_date": "2019-06-17",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "TNCC"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 86,
-        "hours_worked_past_year": 1780,
+        "hours_worked_past_year": 1760,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -149,11 +129,11 @@
       "visa_record": null,
       "leave_records": [
         {
-          "leave_type": "personal",
-          "start_date": "2026-05-15",
-          "end_date": "2026-08-31",
-          "status": "approved",
-          "case_id": "CASE-PRS-799287"
+          "leave_type": "fmla",
+          "start_date": "2026-05-01",
+          "end_date": "2026-07-15",
+          "status": "completed",
+          "case_id": "CASE-FMLA-799287"
         }
       ],
       "pto_balances": {
@@ -162,17 +142,17 @@
       },
       "pto_requests": []
     },
-    "EMP455120": {
-      "employee_id": "EMP455120",
-      "first_name": "Jordan",
-      "last_name": "Reed",
-      "date_of_birth": "1984-02-11",
-      "phone_last_four": "8821",
-      "otp_code": "183920",
-      "department_code": "SURGERY",
+    "EMP411208": {
+      "employee_id": "EMP411208",
+      "first_name": "Marcus",
+      "last_name": "Lee",
+      "date_of_birth": "1981-02-14",
+      "phone_last_four": "6612",
+      "otp_code": "112233",
+      "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "4B-ICU",
-      "hire_date": "2018-03-04",
+      "hire_date": "2018-10-09",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -181,8 +161,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 101,
-        "hours_worked_past_year": 1920,
+        "months_employed": 94,
+        "hours_worked_past_year": 1820,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -206,7 +186,7 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 11.0,
+        "pto": 12.0,
         "sick": 4.0
       },
       "pto_requests": []
@@ -216,11 +196,11 @@
     "SHF-20260812-0700": {
       "shift_id": "SHF-20260812-0700",
       "employee_id": "EMP799287",
-      "unit_code": "5A-SURG",
+      "unit_code": "2A-MED",
       "date": "2026-08-12",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -231,7 +211,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-22",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -240,43 +220,42 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
-        "2026-08-12": [
+      "CARDIOLOGY": {
+        "2026-08-11": [
           "09:00",
-          "11:00"
-        ],
-        "2026-08-13": [
-          "10:00",
+          "11:00",
           "14:00"
+        ],
+        "2026-08-12": [
+          "10:00",
+          "13:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
+      "CARDIOLOGY": {
+        "2026-08-11": [
+          "09:00",
+          "10:00"
+        ],
         "2026-08-12": [
           "09:30",
-          "13:30"
-        ],
-        "2026-08-14": [
-          "10:30",
-          "15:00"
+          "11:00"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
-        "2026-07-22": [
-          "08:00",
-          "10:00",
-          "13:00"
-        ],
-        "2026-07-23": [
+      "CARDIOLOGY": {
+        "2026-08-08": [],
+        "2026-08-11": [
           "09:00",
-          "11:00"
-        ],
-        "2026-07-24": [
-          "08:30",
+          "10:30",
           "14:00"
+        ],
+        "2026-08-12": [
+          "08:30",
+          "09:30",
+          "13:00"
         ]
       }
     }
@@ -287,13 +266,12 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
-    "SURGERY": [
-      "2026-11-25",
+    "CARDIOLOGY": [],
+    "EMERGENCY": [
       "2026-11-27"
     ],
-    "CARDIOLOGY": [],
     "ONCOLOGY": [],
+    "SURGERY": [],
     "PEDIATRICS": []
   }
 }

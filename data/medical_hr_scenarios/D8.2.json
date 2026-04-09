@@ -15,8 +15,9 @@
       "BLS"
     ],
     "3C-ONC": [
+      "ACLS",
       "BLS",
-      "ONC-CHEMO"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -27,22 +28,22 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP700111",
-      "first_name": "Evan",
-      "last_name": "Shore",
+      "employee_id": "EMP900111",
+      "first_name": "Dana",
+      "last_name": "Shaw",
       "facility_code": "MGH-04B",
       "pin": "7291",
-      "phone_last_four": "8821",
+      "phone_last_four": "1111",
       "otp_code": "483920",
       "role_code": "MD",
       "department_code": "EMERGENCY",
-      "hire_date": "2019-08-12",
+      "hire_date": "2018-09-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
+        "carrier": "coverys",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -79,12 +80,12 @@
       "first_name": "Rosa",
       "last_name": "Delgado",
       "date_of_birth": "1968-04-17",
-      "phone_last_four": "3321",
-      "otp_code": "551204",
+      "phone_last_four": "4821",
+      "otp_code": "561204",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "8A-ICU",
-      "hire_date": "2017-03-06",
+      "hire_date": "2019-03-18",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -93,7 +94,7 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 112,
+        "months_employed": 88,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -118,7 +119,7 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
+        "pto": 14.5,
         "sick": 6.0
       },
       "pto_requests": []
@@ -127,13 +128,13 @@
       "employee_id": "EMP559398",
       "first_name": "Maya",
       "last_name": "Chen",
-      "date_of_birth": "1989-11-02",
-      "phone_last_four": "5398",
-      "otp_code": "602144",
+      "date_of_birth": "1987-11-02",
+      "phone_last_four": "3398",
+      "otp_code": "774211",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "8A-ICU",
-      "hire_date": "2021-09-20",
+      "hire_date": "2021-06-14",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -142,8 +143,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 58,
-        "hours_worked_past_year": 1764,
+        "months_employed": 61,
+        "hours_worked_past_year": 1810,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -168,30 +169,31 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 12.0,
-        "sick": 5.0
+        "sick": 4.5
       },
       "pto_requests": []
     },
-    "EMP700111": {
-      "employee_id": "EMP700111",
-      "first_name": "Evan",
-      "last_name": "Shore",
-      "date_of_birth": "1978-07-11",
-      "phone_last_four": "8821",
-      "otp_code": "483920",
-      "department_code": "EMERGENCY",
-      "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2019-08-12",
+    "EMP700222": {
+      "employee_id": "EMP700222",
+      "first_name": "Leo",
+      "last_name": "Martinez",
+      "date_of_birth": "1990-08-09",
+      "phone_last_four": "0222",
+      "otp_code": "660145",
+      "department_code": "SURGERY",
+      "role_code": "RN",
+      "unit_code": "5A-SURG",
+      "hire_date": "2022-01-10",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS"
+        "BLS",
+        "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 83,
-        "hours_worked_past_year": 1900,
+        "months_employed": 54,
+        "hours_worked_past_year": 1760,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -215,8 +217,56 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
+        "pto": 10.0,
         "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP900111": {
+      "employee_id": "EMP900111",
+      "first_name": "Dana",
+      "last_name": "Shaw",
+      "date_of_birth": "1979-02-21",
+      "phone_last_four": "1111",
+      "otp_code": "483920",
+      "department_code": "EMERGENCY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-09-10",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 94,
+        "hours_worked_past_year": 1960,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 18.0,
+        "sick": 6.0
       },
       "pto_requests": []
     }
@@ -240,7 +290,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -262,15 +312,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260910-0700": {
-      "shift_id": "SHF-20260910-0700",
+    "SHF-20260728-0700": {
+      "shift_id": "SHF-20260728-0700",
       "employee_id": "EMP559398",
       "unit_code": "8A-ICU",
-      "date": "2026-09-10",
+      "date": "2026-07-28",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -284,7 +334,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -294,51 +344,51 @@
   "appointment_availability": {
     "orientation_followup": {
       "EMERGENCY": {
-        "2026-07-24": [
+        "2026-07-27": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-27": [
+        "2026-07-28": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-07-29": [
+        "2026-07-30": [
           "09:30",
-          "11:30"
+          "12:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-07-24": [
-          "09:00",
-          "10:00"
-        ],
-        "2026-07-28": [
-          "13:00",
-          "15:00"
-        ],
-        "2026-07-30": [
-          "09:00",
-          "11:00"
-        ]
-      }
-    },
-    "competency_review": {
-      "EMERGENCY": {
-        "2026-07-25": [
+        "2026-07-27": [
           "09:00",
           "11:00"
         ],
-        "2026-07-28": [
+        "2026-07-29": [
           "10:00",
           "14:00"
         ],
         "2026-07-31": [
           "09:30",
           "13:30"
+        ]
+      }
+    },
+    "competency_review": {
+      "EMERGENCY": {
+        "2026-07-28": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-07-29": [
+          "09:00",
+          "15:00"
+        ],
+        "2026-08-03": [
+          "11:00",
+          "14:00"
         ]
       }
     }
@@ -350,8 +400,10 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
+    "SURGERY": [
+      "2026-08-15"
+    ],
     "ONCOLOGY": [],
-    "SURGERY": [],
     "PEDIATRICS": [],
     "RADIOLOGY": []
   }

@@ -11,11 +11,11 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -27,22 +27,22 @@
     "1487392045": {
       "npi": "1487392045",
       "employee_id": "EMP724834",
-      "first_name": "Omar",
-      "last_name": "El-Amin",
+      "first_name": "Ingrid",
+      "last_name": "Bergstrom",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "1186",
+      "phone_last_four": "7319",
       "otp_code": "265840",
-      "role_code": "MD",
+      "role_code": "NP",
       "department_code": "RADIOLOGY",
-      "hire_date": "2019-03-11",
+      "hire_date": "2019-03-18",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-RD1186",
+        "carrier": "coverys",
+        "policy_number": "POL-2026-RA4412",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -60,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-04-30",
+        "expiration_date": "2027-02-28",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -75,15 +75,15 @@
   "employees": {
     "EMP724834": {
       "employee_id": "EMP724834",
-      "first_name": "Omar",
-      "last_name": "El-Amin",
+      "first_name": "Ingrid",
+      "last_name": "Bergstrom",
       "date_of_birth": "1972-05-14",
-      "phone_last_four": "1186",
+      "phone_last_four": "7319",
       "otp_code": "265840",
       "department_code": "RADIOLOGY",
-      "role_code": "MD",
+      "role_code": "NP",
       "unit_code": "2A-MED",
-      "hire_date": "2019-03-11",
+      "hire_date": "2019-03-18",
       "employment_status": "active",
       "certifications": [
         "BLS",
@@ -92,7 +92,7 @@
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 88,
-        "hours_worked_past_year": 1880,
+        "hours_worked_past_year": 1876,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -127,6 +127,55 @@
         "sick": 5.0
       },
       "pto_requests": []
+    },
+    "EMP551902": {
+      "employee_id": "EMP551902",
+      "first_name": "Marcus",
+      "last_name": "Lee",
+      "date_of_birth": "1988-11-02",
+      "phone_last_four": "4402",
+      "otp_code": "918274",
+      "department_code": "SURGERY",
+      "role_code": "RN",
+      "unit_code": "5A-SURG",
+      "hire_date": "2021-06-14",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 61,
+        "hours_worked_past_year": 2012,
+        "fmla_weeks_remaining": 10,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 12.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
     }
   },
   "shifts": {
@@ -148,7 +197,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -165,27 +214,48 @@
         ],
         "2026-07-23": [
           "10:00",
-          "13:00"
+          "13:00",
+          "15:00"
         ],
         "2026-07-24": [
           "09:30",
-          "15:00"
+          "11:30"
+        ]
+      },
+      "SURGERY": {
+        "2026-07-22": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-07-23": [
+          "09:00",
+          "14:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "RADIOLOGY": {
         "2026-07-22": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-23": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-07-24": [
+          "09:00",
+          "13:00"
+        ]
+      },
+      "SURGERY": {
+        "2026-07-22": [
           "08:30",
           "10:30"
         ],
         "2026-07-23": [
-          "09:00",
-          "14:00"
-        ],
-        "2026-07-24": [
-          "11:00",
-          "15:30"
+          "09:30",
+          "15:00"
         ]
       }
     },
@@ -197,29 +267,35 @@
         ],
         "2026-07-23": [
           "10:00",
-          "14:30"
+          "15:00"
         ],
         "2026-07-24": [
+          "11:00",
+          "14:00"
+        ]
+      },
+      "SURGERY": {
+        "2026-07-22": [
           "08:00",
           "12:00"
+        ],
+        "2026-07-23": [
+          "09:00",
+          "13:00"
         ]
       }
     }
   },
   "org_holidays": [
+    "2026-07-03",
     "2026-09-07",
-    "2026-11-26",
-    "2026-12-25"
+    "2026-11-26"
   ],
   "department_blackout_dates": {
     "RADIOLOGY": [],
-    "EMERGENCY": [
-      "2026-11-27"
-    ],
-    "ONCOLOGY": [],
     "SURGERY": [
-      "2026-12-24"
-    ],
-    "PEDIATRICS": []
+      "2026-08-01",
+      "2026-08-02"
+    ]
   }
 }

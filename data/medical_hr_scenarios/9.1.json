@@ -18,25 +18,24 @@
     "3C-ONC": [
       "BLS",
       "ACLS",
-      "ONS"
+      "ONC-CERT"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP358607",
-      "first_name": "Amara",
-      "last_name": "Okafor",
+      "employee_id": "EMP910245",
+      "first_name": "Lena",
+      "last_name": "Morris",
       "facility_code": "MGH-04B",
       "pin": "7291",
-      "phone_last_four": "1842",
+      "phone_last_four": "2214",
       "otp_code": "483920",
-      "role_code": "RN",
+      "role_code": "NP",
       "department_code": "SURGERY",
       "hire_date": "2021-03-15",
       "ehr_access_status": "active",
@@ -81,22 +80,21 @@
       "first_name": "Amara",
       "last_name": "Okafor",
       "date_of_birth": "1992-10-13",
-      "phone_last_four": "1842",
-      "otp_code": "483920",
+      "phone_last_four": "4827",
+      "otp_code": "615204",
       "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "9E-SURG",
-      "hire_date": "2021-03-15",
+      "hire_date": "2020-06-08",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "ACLS",
-        "TNCC",
-        "PALS"
+        "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 64,
+        "months_employed": 73,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -105,7 +103,14 @@
         "tasks": {}
       },
       "oncall_schedule": {
-        "registrations": []
+        "registrations": [
+          {
+            "date": "2026-07-18",
+            "tier": "backup",
+            "unit_code": "9E-SURG",
+            "registration_id": "CASE-ONC-358608"
+          }
+        ]
       },
       "scheduled_appointments": [],
       "i9_record": {
@@ -122,27 +127,26 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 5.0
+        "sick": 6.0
       },
       "pto_requests": []
     },
-    "EMP412980": {
-      "employee_id": "EMP412980",
-      "first_name": "Lena",
-      "last_name": "Morris",
-      "date_of_birth": "1988-06-22",
-      "phone_last_four": "5510",
-      "otp_code": "621407",
+    "EMP472118": {
+      "employee_id": "EMP472118",
+      "first_name": "Jordan",
+      "last_name": "Lee",
+      "date_of_birth": "1988-04-21",
+      "phone_last_four": "1182",
+      "otp_code": "551903",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "4B-ICU",
-      "hire_date": "2019-09-08",
+      "hire_date": "2019-09-01",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "ACLS",
-        "CCRN",
-        "TNCC"
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
@@ -172,17 +176,66 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 12.0,
-        "sick": 4.0
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP910245": {
+      "employee_id": "EMP910245",
+      "first_name": "Lena",
+      "last_name": "Morris",
+      "date_of_birth": "1987-02-19",
+      "phone_last_four": "2214",
+      "otp_code": "483920",
+      "department_code": "SURGERY",
+      "role_code": "NP",
+      "unit_code": "9E-SURG",
+      "hire_date": "2021-03-15",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 64,
+        "hours_worked_past_year": 1824,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260718-0700": {
-      "shift_id": "SHF-20260718-0700",
+    "SHF-20260712-0700": {
+      "shift_id": "SHF-20260712-0700",
       "employee_id": "EMP358607",
       "unit_code": "9E-SURG",
-      "date": "2026-07-18",
+      "date": "2026-07-12",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -196,7 +249,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-24",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -206,7 +259,7 @@
   "appointment_availability": {
     "orientation_followup": {
       "SURGERY": {
-        "2026-07-15": [
+        "2026-07-14": [
           "09:00",
           "11:00",
           "14:00"
@@ -223,6 +276,23 @@
     },
     "return_to_work_checkin": {
       "SURGERY": {
+        "2026-08-24": [
+          "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-08-25": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-08-26": [
+          "09:30",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "SURGERY": {
         "2026-07-21": [
           "09:00",
           "11:00",
@@ -232,24 +302,7 @@
           "10:00",
           "13:00"
         ],
-        "2026-07-24": [
-          "09:30",
-          "15:00"
-        ]
-      }
-    },
-    "competency_review": {
-      "SURGERY": {
         "2026-07-23": [
-          "09:00",
-          "11:00",
-          "14:00"
-        ],
-        "2026-07-27": [
-          "10:00",
-          "13:00"
-        ],
-        "2026-07-29": [
           "09:30",
           "15:00"
         ]
@@ -257,7 +310,7 @@
     }
   },
   "org_holidays": [
-    "2026-07-04",
+    "2026-07-03",
     "2026-09-07",
     "2026-11-26"
   ],
@@ -268,6 +321,6 @@
     ],
     "ONCOLOGY": [],
     "PEDIATRICS": [],
-    "MEDICINE": []
+    "RADIOLOGY": []
   }
 }

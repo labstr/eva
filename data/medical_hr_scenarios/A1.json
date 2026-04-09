@@ -2,48 +2,47 @@
   "_current_date": "2026-07-15",
   "unit_cert_requirements": {
     "3C-ER": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "4B-ICU": [
-      "BLS",
       "ACLS",
+      "BLS",
       "CCRN"
     ],
     "2A-MED": [
       "BLS"
     ],
     "5A-SURG": [
-      "BLS",
-      "ACLS"
+      "ACLS",
+      "BLS"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP846385",
-      "first_name": "Dante",
-      "last_name": "Ferreira",
+      "employee_id": "EMP900111",
+      "first_name": "Mara",
+      "last_name": "Levin",
       "facility_code": "MGH-04B",
       "pin": "7291",
-      "phone_last_four": "6385",
+      "phone_last_four": "1188",
       "otp_code": "483920",
-      "role_code": "RN",
-      "department_code": "EMERGENCY",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
       "hire_date": "2018-03-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2025-AX7731",
+        "carrier": "medpro",
+        "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -79,21 +78,21 @@
       "first_name": "Dante",
       "last_name": "Ferreira",
       "date_of_birth": "1979-02-07",
-      "phone_last_four": "6385",
-      "otp_code": "483920",
+      "phone_last_four": "4829",
+      "otp_code": "615204",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "3C-ER",
-      "hire_date": "2018-03-12",
+      "hire_date": "2017-09-18",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 100,
+        "months_employed": 106,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -118,31 +117,80 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
-        "sick": 5.0
+        "pto": 14.0,
+        "sick": 6.0
       },
       "pto_requests": []
     },
     "EMP844031": {
       "employee_id": "EMP844031",
-      "first_name": "Maya",
-      "last_name": "Lopez",
-      "date_of_birth": "1988-11-19",
-      "phone_last_four": "4031",
-      "otp_code": "552781",
+      "first_name": "Lena",
+      "last_name": "Morrison",
+      "date_of_birth": "1988-11-21",
+      "phone_last_four": "3014",
+      "otp_code": "772144",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "3C-ER",
-      "hire_date": "2021-09-01",
+      "hire_date": "2021-04-05",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS"
+        "ACLS",
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 58,
+        "months_employed": 63,
         "hours_worked_past_year": 1764,
+        "fmla_weeks_remaining": 10,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 11.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    },
+    "EMP900111": {
+      "employee_id": "EMP900111",
+      "first_name": "Mara",
+      "last_name": "Levin",
+      "date_of_birth": "1980-06-15",
+      "phone_last_four": "1188",
+      "otp_code": "483920",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-03-12",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 100,
+        "hours_worked_past_year": 1900,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -166,8 +214,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
+        "pto": 18.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
@@ -177,7 +225,7 @@
       "shift_id": "SHF-20260608-2300",
       "employee_id": "EMP846385",
       "unit_code": "3C-ER",
-      "date": "2026-06-08",
+      "date": "2026-08-08",
       "start_time": "23:00",
       "end_time": "07:00",
       "hours_scheduled": 8.0,
@@ -191,7 +239,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -213,7 +261,29 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-31",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260722-1900": {
+      "shift_id": "SHF-20260722-1900",
+      "employee_id": "EMP900111",
+      "unit_code": "4B-ICU",
+      "date": "2026-07-22",
+      "start_time": "19:00",
+      "end_time": "07:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-07-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -230,43 +300,63 @@
         ],
         "2026-07-21": [
           "10:00",
-          "13:00"
-        ],
-        "2026-07-22": [
-          "09:30",
+          "13:00",
           "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-22": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-23": [
+          "10:00",
+          "14:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-07-23": [
-          "09:00",
-          "11:00"
-        ],
         "2026-07-24": [
-          "10:00",
+          "09:00",
+          "10:30",
           "14:00"
         ],
         "2026-07-27": [
-          "08:30",
-          "13:30"
+          "11:00",
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-24": [
+          "09:30",
+          "13:00"
+        ],
+        "2026-07-28": [
+          "10:00",
+          "14:30"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-07-28": [
+        "2026-07-25": [
           "09:00",
-          "11:00"
+          "13:00"
         ],
         "2026-07-29": [
           "10:00",
-          "14:00"
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-25": [
+          "08:30",
+          "11:30"
         ],
         "2026-07-30": [
-          "08:30",
-          "13:30"
+          "09:00",
+          "14:00"
         ]
       }
     }
@@ -278,9 +368,8 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "ONCOLOGY": [],
-    "SURGERY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "CARDIOLOGY": [
+      "2026-07-31"
+    ]
   }
 }

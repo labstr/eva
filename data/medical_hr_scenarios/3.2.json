@@ -12,7 +12,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONS"
+      "ONC"
     ],
     "5A-SURG": [
       "ACLS",
@@ -27,12 +27,12 @@
   "providers": {
     "4289233844": {
       "npi": "4289233844",
-      "employee_id": "EMP428923",
+      "employee_id": "EMP482900",
       "first_name": "Takeshi",
       "last_name": "Nakamura",
       "facility_code": "MOGW-64G",
       "pin": "9835",
-      "phone_last_four": "4418",
+      "phone_last_four": "4829",
       "otp_code": "731204",
       "role_code": "MD",
       "department_code": "SURGERY",
@@ -41,8 +41,8 @@
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "MA-MD-428923": {
-          "state_license_number": "MA-MD-428923",
+        "MA-MD-482900": {
+          "state_license_number": "MA-MD-482900",
           "license_type": "MD",
           "state_code": "MA",
           "expiration_date": "2027-06-30",
@@ -55,9 +55,9 @@
           "extension_case_id": null
         }
       },
-      "malpractice": {},
+      "malpractice": null,
       "dea_registration": {
-        "dea_number": "BN4289233",
+        "dea_number": "BK4729183",
         "facility_code": "MOGW-64G",
         "state_code": "MA",
         "schedule_codes": [
@@ -77,33 +77,38 @@
             "code": "PRV-SURG-001",
             "description": "General surgery admitting privileges",
             "status": "active"
+          },
+          {
+            "code": "PRV-SURG-002",
+            "description": "Minor bedside procedures",
+            "status": "active"
           }
         ],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
     },
-    "1487392045": {
-      "npi": "1487392045",
-      "employee_id": "EMP148739",
+    "1556677889": {
+      "npi": "1556677889",
+      "employee_id": "EMP155667",
       "first_name": "Elena",
-      "last_name": "Morales",
+      "last_name": "Morris",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "8821",
-      "otp_code": "482901",
-      "role_code": "PA",
+      "pin": "4421",
+      "phone_last_four": "1138",
+      "otp_code": "482193",
+      "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2021-03-10",
+      "hire_date": "2019-03-11",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-148739",
+      "clearance_code": "CLR-OCC-155667",
       "licenses": {
-        "MA-PA-004821": {
-          "state_license_number": "MA-PA-004821",
-          "license_type": "PA",
+        "MA-MD-155667": {
+          "state_license_number": "MA-MD-155667",
+          "license_type": "MD",
           "state_code": "MA",
-          "expiration_date": "2027-03-31",
+          "expiration_date": "2027-10-31",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -115,24 +120,24 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2025-AX7731",
+        "policy_number": "POL-2026-QW12ER",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-04-01",
-        "expiration_date": "2026-04-01",
+        "effective_date": "2026-01-01",
+        "expiration_date": "2027-01-01",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BK4729183",
+        "dea_number": "BM5612390",
         "facility_code": "MGH-04B",
         "state_code": "MA",
         "schedule_codes": [
+          "CII",
           "CIII",
-          "CIV",
-          "CV"
+          "CIV"
         ],
-        "expiration_date": "2027-11-30",
+        "expiration_date": "2027-12-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -141,7 +146,7 @@
         "privilege_list": [
           {
             "code": "PRV-CARD-001",
-            "description": "Cardiology consult privileges",
+            "description": "Cardiac catheterization",
             "status": "active"
           }
         ],
@@ -151,12 +156,12 @@
     }
   },
   "employees": {
-    "EMP428923": {
-      "employee_id": "EMP428923",
+    "EMP482900": {
+      "employee_id": "EMP482900",
       "first_name": "Takeshi",
       "last_name": "Nakamura",
       "date_of_birth": "1984-11-22",
-      "phone_last_four": "4418",
+      "phone_last_four": "4829",
       "otp_code": "731204",
       "department_code": "SURGERY",
       "role_code": "MD",
@@ -170,8 +175,8 @@
       ],
       "fmla_eligibility": {
         "eligible": false,
-        "months_employed": 1,
-        "hours_worked_past_year": 120,
+        "months_employed": 0,
+        "hours_worked_past_year": 40,
         "fmla_weeks_remaining": 0,
         "reason": "Employee has not met minimum tenure requirement"
       },
@@ -198,20 +203,19 @@
         "pto": 15.0,
         "sick": 5.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     },
-    "EMP148739": {
-      "employee_id": "EMP148739",
+    "EMP155667": {
+      "employee_id": "EMP155667",
       "first_name": "Elena",
-      "last_name": "Morales",
-      "date_of_birth": "1989-02-14",
-      "phone_last_four": "8821",
-      "otp_code": "482901",
+      "last_name": "Morris",
+      "date_of_birth": "1979-04-18",
+      "phone_last_four": "1138",
+      "otp_code": "482193",
       "department_code": "CARDIOLOGY",
-      "role_code": "PA",
+      "role_code": "MD",
       "unit_code": "4B-ICU",
-      "hire_date": "2021-03-10",
+      "hire_date": "2019-03-11",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -220,7 +224,7 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 64,
+        "months_employed": 87,
         "hours_worked_past_year": 1890,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -245,8 +249,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
+        "pto": 18.0,
+        "sick": 7.0
       },
       "pto_requests": []
     }
@@ -254,12 +258,12 @@
   "shifts": {
     "SHF-20260705-0700": {
       "shift_id": "SHF-20260705-0700",
-      "employee_id": "EMP428923",
+      "employee_id": "EMP482900",
       "unit_code": "5A-SURG",
       "date": "2026-07-05",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -270,7 +274,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-11",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -290,7 +294,7 @@
           "13:00",
           "15:00"
         ],
-        "2026-07-08": [
+        "2026-07-09": [
           "09:30",
           "12:30"
         ]
@@ -298,18 +302,17 @@
     },
     "return_to_work_checkin": {
       "SURGERY": {
-        "2026-07-09": [
-          "09:00",
-          "11:00",
-          "14:00"
-        ],
         "2026-07-10": [
-          "10:00",
-          "13:00"
+          "09:00",
+          "11:00"
         ],
         "2026-07-13": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-07-14": [
           "09:30",
-          "15:00"
+          "15:30"
         ]
       }
     },
@@ -317,22 +320,21 @@
       "SURGERY": {
         "2026-07-08": [
           "09:00",
-          "10:30",
-          "14:00"
+          "13:00"
         ],
         "2026-07-09": [
-          "11:00",
-          "13:30"
+          "10:00",
+          "14:00"
         ],
-        "2026-07-10": [
-          "09:30",
+        "2026-07-15": [
+          "11:00",
           "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-07-03",
+    "2026-07-04",
     "2026-09-07",
     "2026-11-26"
   ],
@@ -340,6 +342,10 @@
     "SURGERY": [],
     "CARDIOLOGY": [
       "2026-07-15"
-    ]
+    ],
+    "EMERGENCY": [],
+    "ONCOLOGY": [],
+    "PEDIATRICS": [],
+    "RADIOLOGY": []
   }
 }

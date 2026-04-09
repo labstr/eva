@@ -12,7 +12,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -32,10 +32,10 @@
       "last_name": "Yoshida",
       "facility_code": "KY-82H",
       "pin": "1651",
-      "phone_last_four": "4128",
+      "phone_last_four": "4821",
       "otp_code": "749468",
       "role_code": "DO",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "hire_date": "2019-08-12",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
@@ -45,7 +45,7 @@
           "state_license_number": "NY-DO-88331132",
           "license_type": "DO",
           "state_code": "NY",
-          "expiration_date": "2026-06-20",
+          "expiration_date": "2026-06-18",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -56,7 +56,7 @@
         }
       },
       "malpractice": {
-        "carrier": "medpro",
+        "carrier": "coverys",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -68,7 +68,7 @@
       "dea_registration": {
         "dea_number": "BK4729183",
         "facility_code": "KY-82H",
-        "state_code": "NY",
+        "state_code": "KY",
         "schedule_codes": [
           "CII",
           "CIII",
@@ -84,17 +84,17 @@
         "privilege_list": [
           {
             "code": "PRV-SURG-007",
-            "description": "Emergency surgical procedures",
+            "description": "Cardiothoracic surgical assist and procedural participation",
             "status": "suspended"
           },
           {
             "code": "PRV-ICU-005",
-            "description": "Intensive care unit management",
+            "description": "Critical care / ICU management",
             "status": "suspended"
           },
           {
-            "code": "PRV-ED-003",
-            "description": "Emergency department attending coverage",
+            "code": "PRV-CARD-002",
+            "description": "Outpatient cardiology consults",
             "status": "active"
           }
         ],
@@ -104,24 +104,24 @@
     },
     "8370987661": {
       "npi": "8370987661",
-      "employee_id": "EMP440221",
-      "first_name": "Samuel",
-      "last_name": "Roth",
+      "employee_id": "EMP650221",
+      "first_name": "Daniel",
+      "last_name": "Mercer",
       "facility_code": "KY-82H",
-      "pin": "2844",
-      "phone_last_four": "9831",
-      "otp_code": "552190",
+      "pin": "4827",
+      "phone_last_four": "1184",
+      "otp_code": "384921",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
-      "hire_date": "2016-04-18",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2016-04-25",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "NY-MD-55442177": {
-          "state_license_number": "NY-MD-55442177",
+        "KY-MD-55218841": {
+          "state_license_number": "KY-MD-55218841",
           "license_type": "MD",
-          "state_code": "NY",
+          "state_code": "KY",
           "expiration_date": "2027-11-30",
           "status": "active",
           "investigation_hold": false,
@@ -133,8 +133,8 @@
         }
       },
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2026-BX4412",
+        "carrier": "medpro",
+        "policy_number": "POL-2026-QX1184",
         "per_occurrence_limit_usd": 2000000,
         "aggregate_limit_usd": 6000000,
         "effective_date": "2026-01-01",
@@ -143,16 +143,16 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BL5821044",
+        "dea_number": "BM5638291",
         "facility_code": "KY-82H",
-        "state_code": "NY",
+        "state_code": "KY",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-02-28",
+        "expiration_date": "2028-01-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -160,8 +160,8 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-ED-010",
-            "description": "Emergency department oversight",
+            "code": "PRV-CARD-010",
+            "description": "General cardiology attending privileges",
             "status": "active"
           }
         ],
@@ -176,9 +176,9 @@
       "first_name": "Hana",
       "last_name": "Yoshida",
       "date_of_birth": "1990-07-07",
-      "phone_last_four": "4128",
+      "phone_last_four": "4821",
       "otp_code": "749468",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "role_code": "DO",
       "unit_code": "4B-ICU",
       "hire_date": "2019-08-12",
@@ -186,14 +186,13 @@
       "certifications": [
         "ACLS",
         "BLS",
-        "CCRN",
-        "TNCC"
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 82,
-        "hours_worked_past_year": 1760,
-        "fmla_weeks_remaining": 12,
+        "hours_worked_past_year": 1640,
+        "fmla_weeks_remaining": 8,
         "reason": null
       },
       "onboarding_checklist": {
@@ -220,7 +219,7 @@
           "start_date": "2026-03-01",
           "end_date": "2026-05-31",
           "status": "completed",
-          "case_id": "CASE-LEV-723939"
+          "case_id": "CASE-LOA-723939"
         }
       ],
       "pto_balances": {
@@ -229,22 +228,22 @@
       },
       "pto_requests": []
     },
-    "EMP440221": {
-      "employee_id": "EMP440221",
-      "first_name": "Samuel",
-      "last_name": "Roth",
-      "date_of_birth": "1981-02-14",
-      "phone_last_four": "9831",
-      "otp_code": "552190",
-      "department_code": "EMERGENCY",
+    "EMP650221": {
+      "employee_id": "EMP650221",
+      "first_name": "Daniel",
+      "last_name": "Mercer",
+      "date_of_birth": "1978-11-14",
+      "phone_last_four": "1184",
+      "otp_code": "384921",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2016-04-18",
+      "unit_code": "4B-ICU",
+      "hire_date": "2016-04-25",
       "employment_status": "active",
       "certifications": [
         "ACLS",
         "BLS",
-        "TNCC"
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
@@ -280,11 +279,11 @@
     }
   },
   "shifts": {
-    "SHF-20260610-0700": {
-      "shift_id": "SHF-20260610-0700",
+    "SHF-20260620-0700": {
+      "shift_id": "SHF-20260620-0700",
       "employee_id": "EMP723939",
       "unit_code": "4B-ICU",
-      "date": "2026-06-10",
+      "date": "2026-06-20",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -298,7 +297,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-06-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -307,65 +306,64 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
-        "2026-06-12": [
+      "CARDIOLOGY": {
+        "2026-06-10": [
           "09:00",
-          "11:00"
+          "11:00",
+          "14:00"
         ],
-        "2026-06-15": [
-          "08:00",
-          "10:00"
-        ],
-        "2026-06-18": [
-          "13:00",
-          "15:00"
+        "2026-06-12": [
+          "10:00",
+          "13:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
-        "2026-06-12": [
-          "09:30",
-          "13:30"
-        ],
-        "2026-06-15": [
-          "08:30",
-          "14:00"
+      "CARDIOLOGY": {
+        "2026-06-16": [
+          "09:00",
+          "10:30"
         ],
         "2026-06-18": [
-          "10:00",
-          "15:30"
+          "08:30",
+          "11:00"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
+      "CARDIOLOGY": {
         "2026-06-15": [
           "08:00",
-          "09:30",
+          "09:00",
+          "11:00",
           "14:00"
         ],
         "2026-06-16": [
+          "08:30",
           "10:00",
-          "13:00"
+          "13:30"
         ],
-        "2026-06-18": [
+        "2026-06-17": [
           "09:00",
-          "11:00"
+          "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-05-25",
     "2026-07-03",
-    "2026-09-07"
+    "2026-09-07",
+    "2026-11-26"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
     "CARDIOLOGY": [],
+    "EMERGENCY": [
+      "2026-07-04"
+    ],
     "ONCOLOGY": [],
-    "SURGERY": [],
+    "SURGERY": [
+      "2026-06-30"
+    ],
     "PEDIATRICS": []
   }
 }

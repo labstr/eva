@@ -26,22 +26,22 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP900001",
-      "first_name": "Arun",
-      "last_name": "Mehta",
+      "employee_id": "EMP900111",
+      "first_name": "Elena",
+      "last_name": "Morris",
       "facility_code": "MGH-04B",
       "pin": "7291",
-      "phone_last_four": "4421",
+      "phone_last_four": "2211",
       "otp_code": "483920",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2018-03-12",
+      "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
+        "carrier": "coverys",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -60,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-08-31",
+        "expiration_date": "2027-05-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -78,7 +78,7 @@
       "first_name": "Deepa",
       "last_name": "Ranganathan",
       "date_of_birth": "1974-02-16",
-      "phone_last_four": "3184",
+      "phone_last_four": "4821",
       "otp_code": "615204",
       "department_code": "NEUROLOGY",
       "role_code": "RN",
@@ -93,9 +93,9 @@
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not yet met minimum tenure requirements"
+        "reason": "Employee has not met minimum tenure requirements"
       },
-      "onboarding_checklist": null,
+      "onboarding_checklist": {},
       "oncall_schedule": {
         "registrations": []
       },
@@ -109,17 +109,17 @@
       },
       "pto_requests": []
     },
-    "EMP900001": {
-      "employee_id": "EMP900001",
-      "first_name": "Arun",
-      "last_name": "Mehta",
-      "date_of_birth": "1980-07-21",
-      "phone_last_four": "4421",
+    "EMP900111": {
+      "employee_id": "EMP900111",
+      "first_name": "Elena",
+      "last_name": "Morris",
+      "date_of_birth": "1981-11-03",
+      "phone_last_four": "2211",
       "otp_code": "483920",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
       "unit_code": "4B-ICU",
-      "hire_date": "2018-03-12",
+      "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -128,8 +128,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 96,
-        "hours_worked_past_year": 1980,
+        "months_employed": 82,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -166,8 +166,8 @@
       "unit_code": "2A-MED",
       "date": "2026-06-16",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -178,7 +178,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-06-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -190,58 +190,57 @@
       "NEUROLOGY": {
         "2026-07-24": [
           "09:00",
-          "11:00",
-          "14:00"
+          "11:00"
         ],
         "2026-07-25": [
           "10:00",
           "13:00"
         ],
         "2026-07-27": [
-          "09:30",
-          "15:00"
+          "09:00",
+          "14:00"
         ]
       },
       "CARDIOLOGY": {
-        "2026-07-24": [
+        "2026-06-20": [
           "09:00",
-          "10:00"
+          "11:00"
         ],
-        "2026-07-25": [
-          "11:00",
+        "2026-06-21": [
+          "10:00",
           "14:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "NEUROLOGY": {
-        "2026-07-24": [
+        "2026-07-28": [
           "09:00",
-          "13:00"
+          "11:00"
         ],
-        "2026-07-27": [
+        "2026-07-29": [
           "10:00",
-          "15:00"
+          "14:00"
         ]
       }
     },
     "competency_review": {
       "NEUROLOGY": {
-        "2026-07-24": [
-          "08:00",
-          "10:00"
-        ],
-        "2026-07-28": [
+        "2026-06-22": [
           "09:00",
+          "11:00"
+        ],
+        "2026-06-23": [
+          "10:00",
           "14:00"
         ]
       },
       "CARDIOLOGY": {
-        "2026-07-24": [
+        "2026-06-18": [
           "09:00",
-          "11:00"
+          "13:00"
         ],
-        "2026-07-29": [
+        "2026-06-19": [
           "10:00",
           "15:00"
         ]
@@ -255,11 +254,8 @@
   ],
   "department_blackout_dates": {
     "NEUROLOGY": [],
-    "CARDIOLOGY": [],
-    "ONCOLOGY": [
+    "CARDIOLOGY": [
       "2026-07-01"
-    ],
-    "SURGERY": [],
-    "PEDIATRICS": []
+    ]
   }
 }

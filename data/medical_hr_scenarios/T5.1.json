@@ -1,6 +1,10 @@
 {
   "_current_date": "2026-08-01",
   "unit_cert_requirements": {
+    "8E-MED": [
+      "ACLS",
+      "BLS"
+    ],
     "4B-ICU": [
       "ACLS",
       "BLS",
@@ -10,7 +14,6 @@
       "BLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
       "ONC-CERT"
     ],
@@ -18,10 +21,6 @@
       "ACLS",
       "BLS",
       "TNCC"
-    ],
-    "1D-PEDS": [
-      "BLS",
-      "PALS"
     ]
   },
   "providers": {
@@ -31,12 +30,12 @@
       "first_name": "Nadia",
       "last_name": "Bouzid",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "4412",
+      "pin": "4821",
+      "phone_last_four": "4182",
       "otp_code": "772324",
       "role_code": "RN",
       "department_code": "ORTHOPEDICS",
-      "hire_date": "2018-03-12",
+      "hire_date": "2021-03-15",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -61,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-10-31",
+        "expiration_date": "2027-06-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -79,21 +78,20 @@
       "first_name": "Nadia",
       "last_name": "Bouzid",
       "date_of_birth": "1973-05-02",
-      "phone_last_four": "4412",
+      "phone_last_four": "4182",
       "otp_code": "772324",
       "department_code": "ORTHOPEDICS",
       "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2018-03-12",
+      "unit_code": "8E-MED",
+      "hire_date": "2021-03-15",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "TNCC"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 101,
+        "months_employed": 65,
         "hours_worked_past_year": 1864,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -119,32 +117,30 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 10.0
+        "sick": 7.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     },
-    "EMP207573": {
-      "employee_id": "EMP207573",
-      "first_name": "Leila",
-      "last_name": "Hamdi",
-      "date_of_birth": "1986-11-14",
-      "phone_last_four": "8831",
-      "otp_code": "445118",
+    "EMP386042": {
+      "employee_id": "EMP386042",
+      "first_name": "Lena",
+      "last_name": "Mercier",
+      "date_of_birth": "1988-11-19",
+      "phone_last_four": "2204",
+      "otp_code": "551908",
       "department_code": "ORTHOPEDICS",
       "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2019-07-08",
+      "unit_code": "8E-MED",
+      "hire_date": "2019-09-08",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "TNCC"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 84,
-        "hours_worked_past_year": 1728,
+        "months_employed": 83,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 10,
         "reason": null
       },
@@ -168,23 +164,22 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
-        "sick": 6.0
+        "pto": 11.0,
+        "sick": 4.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     },
-    "EMP386042": {
-      "employee_id": "EMP386042",
-      "first_name": "Carlos",
-      "last_name": "Mendez",
-      "date_of_birth": "1989-02-21",
-      "phone_last_four": "1904",
-      "otp_code": "118203",
-      "department_code": "ORTHOPEDICS",
+    "EMP112233": {
+      "employee_id": "EMP112233",
+      "first_name": "Marcus",
+      "last_name": "Lee",
+      "date_of_birth": "1990-01-14",
+      "phone_last_four": "7731",
+      "otp_code": "114422",
+      "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2021-01-19",
+      "hire_date": "2022-06-11",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -193,8 +188,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 67,
-        "hours_worked_past_year": 1802,
+        "months_employed": 50,
+        "hours_worked_past_year": 1780,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -218,19 +213,18 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 9.0,
-        "sick": 4.0
+        "pto": 10.0,
+        "sick": 3.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
     }
   },
   "shifts": {
     "SHF-20260525-1500": {
       "shift_id": "SHF-20260525-1500",
       "employee_id": "EMP940181",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-25",
+      "unit_code": "8E-MED",
+      "date": "2026-08-12",
       "start_time": "15:00",
       "end_time": "23:00",
       "hours_scheduled": 8.0,
@@ -244,18 +238,18 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260608-0700": {
-      "shift_id": "SHF-20260608-0700",
+    "SHF-20260809-0700": {
+      "shift_id": "SHF-20260809-0700",
       "employee_id": "EMP940181",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-08",
+      "unit_code": "8E-MED",
+      "date": "2026-08-10",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -266,18 +260,18 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260610-0700": {
-      "shift_id": "SHF-20260610-0700",
+    "SHF-20260811-0700": {
+      "shift_id": "SHF-20260811-0700",
       "employee_id": "EMP940181",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-10",
+      "unit_code": "8E-MED",
+      "date": "2026-08-12",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -288,17 +282,17 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260612-0700": {
-      "shift_id": "SHF-20260612-0700",
+    "SHF-20260813-1900": {
+      "shift_id": "SHF-20260813-1900",
       "employee_id": "EMP940181",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-12",
-      "start_time": "07:00",
-      "end_time": "19:00",
+      "unit_code": "8E-MED",
+      "date": "2026-08-14",
+      "start_time": "19:00",
+      "end_time": "07:00",
       "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
@@ -310,18 +304,18 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260614-0700": {
-      "shift_id": "SHF-20260614-0700",
+    "SHF-20260816-0700": {
+      "shift_id": "SHF-20260816-0700",
       "employee_id": "EMP940181",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-14",
+      "unit_code": "8E-MED",
+      "date": "2026-08-16",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -332,29 +326,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260618-0700": {
-      "shift_id": "SHF-20260618-0700",
-      "employee_id": "EMP386042",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-18",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -364,66 +336,61 @@
   "appointment_availability": {
     "orientation_followup": {
       "ORTHOPEDICS": {
-        "2026-06-09": [
+        "2026-08-05": [
           "09:00",
-          "11:00"
-        ],
-        "2026-06-10": [
-          "08:00",
-          "10:00"
-        ],
-        "2026-06-12": [
-          "09:00",
+          "11:00",
           "14:00"
+        ],
+        "2026-08-06": [
+          "10:00",
+          "13:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "ORTHOPEDICS": {
-        "2026-06-10": [
-          "08:00",
-          "09:30",
-          "13:00"
-        ],
-        "2026-06-11": [
+        "2026-09-18": [
           "09:00",
+          "10:00",
+          "14:00"
+        ],
+        "2026-09-19": [
+          "09:30",
           "11:00"
         ],
-        "2026-06-12": [
+        "2026-09-21": [
           "08:30",
-          "10:30"
+          "10:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "ORTHOPEDICS": {
-        "2026-06-10": [
-          "10:00",
-          "14:00"
-        ],
-        "2026-06-11": [
+        "2026-08-07": [
           "09:00",
-          "15:00"
+          "11:00"
         ],
-        "2026-06-12": [
-          "11:00",
-          "13:00"
+        "2026-08-10": [
+          "10:00",
+          "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-05-25",
     "2026-07-03",
-    "2026-09-07"
+    "2026-09-07",
+    "2026-11-26"
   ],
   "department_blackout_dates": {
     "ORTHOPEDICS": [],
-    "CARDIOLOGY": [],
-    "EMERGENCY": [],
+    "SURGERY": [
+      "2026-11-25",
+      "2026-11-27"
+    ],
     "ONCOLOGY": [],
-    "SURGERY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "EMERGENCY": [],
+    "PEDIATRICS": []
   }
 }

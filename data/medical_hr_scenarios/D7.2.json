@@ -10,10 +10,12 @@
       "BLS"
     ],
     "3C-ONC": [
+      "ACLS",
       "BLS",
-      "ACLS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
+      "ACLS",
       "BLS",
       "TNCC"
     ],
@@ -26,15 +28,15 @@
     "1487392045": {
       "npi": "1487392045",
       "employee_id": "EMP560485",
-      "first_name": "Alex",
-      "last_name": "Morrison",
+      "first_name": "Brahim",
+      "last_name": "Benali",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "7712",
+      "pin": "4826",
+      "phone_last_four": "4826",
       "otp_code": "418862",
       "role_code": "RN",
-      "department_code": "ONCOLOGY",
-      "hire_date": "2019-03-11",
+      "department_code": "PATHOLOGY",
+      "hire_date": "2018-03-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -74,25 +76,24 @@
   "employees": {
     "EMP560485": {
       "employee_id": "EMP560485",
-      "first_name": "Alex",
-      "last_name": "Morrison",
+      "first_name": "Brahim",
+      "last_name": "Benali",
       "date_of_birth": "1972-08-23",
-      "phone_last_four": "7712",
+      "phone_last_four": "4826",
       "otp_code": "418862",
-      "department_code": "ONCOLOGY",
+      "department_code": "PATHOLOGY",
       "role_code": "RN",
-      "unit_code": "3C-ONC",
-      "hire_date": "2019-03-11",
+      "unit_code": "2A-MED",
+      "hire_date": "2018-03-12",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "ACLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 89,
-        "hours_worked_past_year": 1824,
+        "months_employed": 101,
+        "hours_worked_past_year": 1864,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -117,32 +118,32 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 2.0,
-        "sick": 6.0
+        "sick": 6.5
       },
       "pto_requests": []
     },
-    "EMP666211": {
-      "employee_id": "EMP666211",
-      "first_name": "Jordan",
-      "last_name": "Lee",
-      "date_of_birth": "1988-11-14",
-      "phone_last_four": "8821",
-      "otp_code": "553104",
+    "EMP224466": {
+      "employee_id": "EMP224466",
+      "first_name": "Elena",
+      "last_name": "Morris",
+      "date_of_birth": "1988-02-14",
+      "phone_last_four": "1174",
+      "otp_code": "552901",
       "department_code": "ONCOLOGY",
       "role_code": "RN",
       "unit_code": "3C-ONC",
-      "hire_date": "2020-06-22",
+      "hire_date": "2021-06-21",
       "employment_status": "active",
       "certifications": [
+        "ACLS",
         "BLS",
-        "ACLS"
+        "ONC-CERT"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 74,
-        "hours_worked_past_year": 1760,
-        "fmla_weeks_remaining": 12,
+        "months_employed": 62,
+        "hours_worked_past_year": 1920,
+        "fmla_weeks_remaining": 10,
         "reason": null
       },
       "onboarding_checklist": {
@@ -172,10 +173,32 @@
     }
   },
   "shifts": {
+    "SHF-20260820-0700": {
+      "shift_id": "SHF-20260820-0700",
+      "employee_id": "EMP560485",
+      "unit_code": "2A-MED",
+      "date": "2026-08-20",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-08-31",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
     "SHF-20260924-0700": {
       "shift_id": "SHF-20260924-0700",
       "employee_id": "EMP560485",
-      "unit_code": "3C-ONC",
+      "unit_code": "2A-MED",
       "date": "2026-09-24",
       "start_time": "07:00",
       "end_time": "15:00",
@@ -190,14 +213,14 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
     "SHF-20260925-0700": {
       "shift_id": "SHF-20260925-0700",
       "employee_id": "EMP560485",
-      "unit_code": "3C-ONC",
+      "unit_code": "2A-MED",
       "date": "2026-09-25",
       "start_time": "07:00",
       "end_time": "15:00",
@@ -212,14 +235,14 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
     "SHF-20260928-0700": {
       "shift_id": "SHF-20260928-0700",
       "employee_id": "EMP560485",
-      "unit_code": "3C-ONC",
+      "unit_code": "2A-MED",
       "date": "2026-09-28",
       "start_time": "07:00",
       "end_time": "15:00",
@@ -234,18 +257,18 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260810-0700": {
-      "shift_id": "SHF-20260810-0700",
-      "employee_id": "EMP560485",
+    "SHF-20260812-0700": {
+      "shift_id": "SHF-20260812-0700",
+      "employee_id": "EMP224466",
       "unit_code": "3C-ONC",
-      "date": "2026-08-10",
+      "date": "2026-08-12",
       "start_time": "07:00",
-      "end_time": "15:00",
-      "hours_scheduled": 8.0,
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -256,7 +279,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -265,7 +288,7 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "ONCOLOGY": {
+      "PATHOLOGY": {
         "2026-08-05": [
           "09:00",
           "11:00",
@@ -278,28 +301,32 @@
       }
     },
     "return_to_work_checkin": {
-      "ONCOLOGY": {
-        "2026-09-03": [],
-        "2026-09-04": [
+      "PATHOLOGY": {
+        "2026-09-18": [
           "09:00",
-          "11:00"
-        ],
-        "2026-09-08": [
-          "08:30",
           "10:00",
-          "14:00"
+          "11:00",
+          "15:00"
+        ],
+        "2026-09-19": [
+          "09:30",
+          "10:30"
+        ],
+        "2026-09-21": [
+          "08:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
-      "ONCOLOGY": {
-        "2026-08-12": [
+      "PATHOLOGY": {
+        "2026-08-10": [
           "09:00",
           "13:00"
         ],
-        "2026-08-13": [
+        "2026-08-11": [
           "10:00",
-          "15:00"
+          "14:00"
         ]
       }
     }
@@ -310,10 +337,10 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "ONCOLOGY": [],
-    "CARDIOLOGY": [],
-    "EMERGENCY": [],
-    "SURGERY": [],
-    "PEDIATRICS": []
+    "PATHOLOGY": [],
+    "ONCOLOGY": [
+      "2026-12-24",
+      "2026-12-31"
+    ]
   }
 }

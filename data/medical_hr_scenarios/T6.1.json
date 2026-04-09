@@ -11,16 +11,18 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
       "PALS"
+    ],
+    "2R-RAD": [
+      "BLS"
     ]
   },
   "providers": {
@@ -29,30 +31,30 @@
       "employee_id": "EMP405420",
       "first_name": "Wei",
       "last_name": "Liu",
-      "facility_code": "RAD-01A",
+      "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "4207",
-      "otp_code": "731482",
+      "phone_last_four": "4821",
+      "otp_code": "483920",
       "role_code": "RN",
       "department_code": "RADIOLOGY",
-      "hire_date": "2026-07-13",
+      "hire_date": "2026-08-04",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-RD4054",
+        "carrier": "coverys",
+        "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-07-13",
-        "expiration_date": "2027-07-12",
+        "effective_date": "2026-08-04",
+        "expiration_date": "2027-08-03",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
         "dea_number": "BK4729183",
-        "facility_code": "RAD-01A",
+        "facility_code": "MGH-04B",
         "state_code": "MA",
         "schedule_codes": [
           "CII",
@@ -60,7 +62,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2029-08-31",
+        "expiration_date": "2029-08-03",
         "status": "inactive",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -78,16 +80,15 @@
       "first_name": "Wei",
       "last_name": "Liu",
       "date_of_birth": "1992-01-20",
-      "phone_last_four": "4207",
-      "otp_code": "731482",
+      "phone_last_four": "4821",
+      "otp_code": "483920",
       "department_code": "RADIOLOGY",
       "role_code": "RN",
-      "unit_code": "2A-MED",
-      "hire_date": "2026-07-13",
+      "unit_code": "2R-RAD",
+      "hire_date": "2026-08-04",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS"
+        "BLS"
       ],
       "schedule_type": "shift",
       "fmla_eligibility": {
@@ -95,18 +96,21 @@
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "New hire has not met FMLA tenure and hours requirements"
+        "reason": "Employee has not yet met minimum FMLA tenure requirements"
       },
       "onboarding_checklist": {
         "tasks": {
           "OCC_HEALTH": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "N6FM"
           },
           "HIPAA_TRAIN": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "FS9D"
           },
-          "BADGE_PICKUP": {
-            "status": "complete"
+          "BADGE_PHOTO": {
+            "status": "complete",
+            "completion_code": "Q2LP"
           }
         }
       },
@@ -127,31 +131,29 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 7.0,
+        "pto": 15.0,
         "sick": 5.0
       },
       "pto_requests": []
     },
     "EMP405421": {
       "employee_id": "EMP405421",
-      "first_name": "Jordan",
+      "first_name": "Nora",
       "last_name": "Patel",
-      "date_of_birth": "1989-06-14",
-      "phone_last_four": "1184",
-      "otp_code": "552901",
+      "date_of_birth": "1989-03-11",
+      "phone_last_four": "1884",
+      "otp_code": "771204",
       "department_code": "RADIOLOGY",
       "role_code": "RN",
-      "unit_code": "2A-MED",
-      "hire_date": "2021-03-15",
+      "unit_code": "2R-RAD",
+      "hire_date": "2021-05-17",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS"
+        "BLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 65,
+        "months_employed": 63,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -176,8 +178,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
-        "sick": 6.0
+        "pto": 12.0,
+        "sick": 4.0
       },
       "pto_requests": []
     }
@@ -186,7 +188,7 @@
     "SHF-20260826-0700": {
       "shift_id": "SHF-20260826-0700",
       "employee_id": "EMP405420",
-      "unit_code": "2A-MED",
+      "unit_code": "2R-RAD",
       "date": "2026-08-26",
       "start_time": "07:00",
       "end_time": "15:00",
@@ -201,14 +203,14 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
     "SHF-20260827-0700": {
       "shift_id": "SHF-20260827-0700",
       "employee_id": "EMP405420",
-      "unit_code": "2A-MED",
+      "unit_code": "2R-RAD",
       "date": "2026-08-27",
       "start_time": "07:00",
       "end_time": "15:00",
@@ -223,14 +225,14 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
     "SHF-20260828-0700": {
       "shift_id": "SHF-20260828-0700",
       "employee_id": "EMP405420",
-      "unit_code": "2A-MED",
+      "unit_code": "2R-RAD",
       "date": "2026-08-28",
       "start_time": "07:00",
       "end_time": "15:00",
@@ -245,29 +247,29 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
     "SHF-20260830-0700": {
       "shift_id": "SHF-20260830-0700",
       "employee_id": "EMP405421",
-      "unit_code": "2A-MED",
+      "unit_code": "2R-RAD",
       "date": "2026-08-30",
       "start_time": "07:00",
       "end_time": "15:00",
       "hours_scheduled": 8.0,
-      "hours_logged": null,
+      "hours_logged": 8.0,
       "on_call": false,
       "on_call_tier": null,
-      "status": "scheduled",
+      "status": "logged",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-12",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -277,30 +279,35 @@
   "appointment_availability": {
     "orientation_followup": {
       "RADIOLOGY": {
-        "2026-07-22": [
-          "08:00",
-          "09:30",
-          "11:00"
-        ],
-        "2026-07-23": [
+        "2026-08-12": [
           "08:30",
-          "10:00"
-        ],
-        "2026-07-24": [
           "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-08-13": [
+          "09:30",
+          "10:30",
           "13:30"
+        ],
+        "2026-08-14": [
+          "08:00",
+          "09:00",
+          "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "RADIOLOGY": {
-        "2026-08-18": [
+        "2026-08-31": [
           "09:00",
-          "11:00"
-        ],
-        "2026-08-19": [
-          "10:00",
+          "11:00",
           "14:00"
+        ],
+        "2026-09-01": [
+          "08:30",
+          "10:00",
+          "15:00"
         ]
       }
     },
@@ -308,11 +315,13 @@
       "RADIOLOGY": {
         "2026-08-20": [
           "09:00",
-          "13:00"
+          "10:00",
+          "14:00"
         ],
         "2026-08-21": [
           "08:30",
-          "10:30"
+          "11:00",
+          "13:00"
         ]
       }
     }
@@ -325,15 +334,15 @@
   "department_blackout_dates": {
     "RADIOLOGY": [],
     "CARDIOLOGY": [
-      "2026-08-31"
+      "2026-11-27"
     ],
     "EMERGENCY": [
-      "2026-09-05",
-      "2026-09-06"
+      "2026-12-24",
+      "2026-12-31"
     ],
     "ONCOLOGY": [],
     "SURGERY": [
-      "2026-08-21"
+      "2026-10-15"
     ],
     "PEDIATRICS": []
   }

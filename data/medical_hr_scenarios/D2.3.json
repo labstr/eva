@@ -7,36 +7,36 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
     "7161404428": {
       "npi": "7161404428",
-      "employee_id": "EMP891359",
+      "employee_id": "EMP716140",
       "first_name": "Aleksandr",
       "last_name": "Petrov",
       "facility_code": "ULZD-83G",
       "pin": "5173",
-      "phone_last_four": "4428",
-      "otp_code": "384921",
+      "phone_last_four": "0184",
+      "otp_code": "482913",
       "role_code": "PA",
       "department_code": "SURGERY",
-      "hire_date": "2019-06-24",
+      "hire_date": "2021-06-14",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -45,14 +45,14 @@
           "state_license_number": "NC-PA-89138359",
           "license_type": "PA",
           "state_code": "NC",
-          "expiration_date": "2026-09-01",
+          "expiration_date": "2026-08-29",
           "status": "active",
           "investigation_hold": false,
           "extension_status": "pending",
-          "extension_type": "provisional",
-          "extension_days": 90,
+          "extension_type": "temporary",
+          "extension_days": 60,
           "supervising_physician_npi": null,
-          "extension_case_id": "CASE-LIC-891359"
+          "extension_case_id": "CASE-LIC-716140"
         }
       },
       "malpractice": {},
@@ -66,7 +66,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-04-30",
+        "expiration_date": "2027-10-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -79,8 +79,61 @@
             "status": "active"
           },
           {
-            "code": "PRV-SURG-002",
-            "description": "Pre-operative assessment",
+            "code": "PRV-CLIN-014",
+            "description": "Outpatient surgical follow-up",
+            "status": "active"
+          }
+        ],
+        "reactivation_case_id": null
+      },
+      "scheduled_appointments": []
+    },
+    "1487392045": {
+      "npi": "1487392045",
+      "employee_id": "EMP048271",
+      "first_name": "Mina",
+      "last_name": "Lopez",
+      "facility_code": "MGH-04B",
+      "pin": "7291",
+      "phone_last_four": "4421",
+      "otp_code": "631204",
+      "role_code": "MD",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2018-02-05",
+      "ehr_access_status": "active",
+      "ehr_access_case_id": null,
+      "clearance_code": null,
+      "licenses": {},
+      "malpractice": {
+        "carrier": "coverys",
+        "policy_number": "POL-2025-QX77L2",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
+        "effective_date": "2025-07-01",
+        "expiration_date": "2026-06-30",
+        "recredential_required": false,
+        "update_case_id": null
+      },
+      "dea_registration": {
+        "dea_number": "BM5639201",
+        "facility_code": "MGH-04B",
+        "state_code": "MA",
+        "schedule_codes": [
+          "CII",
+          "CIII",
+          "CIV",
+          "CV"
+        ],
+        "expiration_date": "2028-01-15",
+        "status": "active",
+        "transfer_reason": null,
+        "transfer_case_id": null
+      },
+      "privileges": {
+        "privilege_list": [
+          {
+            "code": "PRV-CARD-001",
+            "description": "Cardiac catheterization",
             "status": "active"
           }
         ],
@@ -90,27 +143,27 @@
     }
   },
   "employees": {
-    "EMP891359": {
-      "employee_id": "EMP891359",
+    "EMP716140": {
+      "employee_id": "EMP716140",
       "first_name": "Aleksandr",
       "last_name": "Petrov",
       "date_of_birth": "1984-11-22",
-      "phone_last_four": "4428",
-      "otp_code": "384921",
+      "phone_last_four": "0184",
+      "otp_code": "482913",
       "department_code": "SURGERY",
       "role_code": "PA",
       "unit_code": "5A-SURG",
-      "hire_date": "2019-06-24",
+      "hire_date": "2021-06-14",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 86,
-        "hours_worked_past_year": 1880,
+        "months_employed": 62,
+        "hours_worked_past_year": 1860,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -134,17 +187,65 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
-        "sick": 5.0
+        "pto": 14.0,
+        "sick": 6.0
       },
-      "pto_requests": [],
-      "schedule_type": "shift"
+      "pto_requests": []
+    },
+    "EMP048271": {
+      "employee_id": "EMP048271",
+      "first_name": "Mina",
+      "last_name": "Lopez",
+      "date_of_birth": "1979-03-18",
+      "phone_last_four": "4421",
+      "otp_code": "631204",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "4B-ICU",
+      "hire_date": "2018-02-05",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 102,
+        "hours_worked_past_year": 2048,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 18.5,
+        "sick": 7.0
+      },
+      "pto_requests": []
     }
   },
   "shifts": {
     "SHF-20260820-0700": {
       "shift_id": "SHF-20260820-0700",
-      "employee_id": "EMP891359",
+      "employee_id": "EMP716140",
       "unit_code": "5A-SURG",
       "date": "2026-08-20",
       "start_time": "07:00",
@@ -160,7 +261,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -170,7 +271,7 @@
   "appointment_availability": {
     "orientation_followup": {
       "SURGERY": {
-        "2026-08-19": [
+        "2026-08-20": [
           "09:00",
           "11:00",
           "14:00"
@@ -182,7 +283,6 @@
         ],
         "2026-08-24": [
           "09:30",
-          "11:30",
           "14:30"
         ]
       }
@@ -191,37 +291,33 @@
       "SURGERY": {
         "2026-08-25": [
           "09:00",
-          "10:30",
-          "14:00"
+          "11:00",
+          "15:00"
         ],
         "2026-08-26": [
-          "11:00",
-          "13:30",
-          "15:00"
+          "10:00",
+          "14:00"
         ],
         "2026-08-27": [
           "09:30",
-          "12:00",
-          "16:00"
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "SURGERY": {
         "2026-08-20": [
-          "09:00",
-          "11:00",
-          "15:00"
+          "08:30",
+          "10:30",
+          "15:30"
         ],
         "2026-08-22": [
-          "10:00",
-          "13:00",
-          "16:00"
+          "09:00",
+          "11:30"
         ],
         "2026-08-24": [
-          "08:30",
-          "12:30",
-          "14:30"
+          "13:00",
+          "16:00"
         ]
       }
     }
@@ -233,10 +329,6 @@
   ],
   "department_blackout_dates": {
     "SURGERY": [],
-    "CARDIOLOGY": [],
-    "EMERGENCY": [],
-    "ONCOLOGY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "CARDIOLOGY": []
   }
 }

@@ -10,12 +10,13 @@
       "BLS"
     ],
     "3C-ONC": [
+      "ACLS",
       "BLS",
-      "ACLS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -31,17 +32,17 @@
       "last_name": "Park",
       "facility_code": "AJT-63R",
       "pin": "9947",
-      "phone_last_four": "4418",
+      "phone_last_four": "8821",
       "otp_code": "938722",
       "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2019-08-12",
+      "department_code": "EMERGENCY",
+      "hire_date": "2021-03-08",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "MA-MD-884211": {
-          "state_license_number": "MA-MD-884211",
+        "MA-MD-482190": {
+          "state_license_number": "MA-MD-482190",
           "license_type": "MD",
           "state_code": "MA",
           "expiration_date": "2027-11-30",
@@ -56,11 +57,11 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2025-QX7M91",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-08-06",
-        "expiration_date": "2026-08-05",
+        "effective_date": "2025-07-01",
+        "expiration_date": "2026-07-26",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -74,7 +75,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-03-31",
+        "expiration_date": "2028-02-29",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -82,62 +83,16 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-CARD-001",
-            "description": "General cardiology consults",
+            "code": "PRV-EMERG-001",
+            "description": "Emergency department attending privileges",
             "status": "active"
           },
           {
-            "code": "PRV-CARD-014",
-            "description": "Stress test supervision",
+            "code": "PRV-SEDAT-002",
+            "description": "Moderate sedation administration",
             "status": "active"
           }
         ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "6612459081": {
-      "npi": "6612459081",
-      "employee_id": "EMP441205",
-      "first_name": "Elena",
-      "last_name": "Morris",
-      "facility_code": "MGH-04B",
-      "pin": "5512",
-      "phone_last_four": "8821",
-      "otp_code": "271904",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2017-04-17",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": null,
-      "licenses": {},
-      "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2026-ZR88K1",
-        "per_occurrence_limit_usd": 1000000,
-        "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2027-01-01",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BK4729183",
-        "facility_code": "MGH-04B",
-        "state_code": "MA",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV"
-        ],
-        "expiration_date": "2027-12-31",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -148,21 +103,22 @@
       "employee_id": "EMP998348",
       "first_name": "Jin-Ho",
       "last_name": "Park",
-      "date_of_birth": "1981-02-14",
-      "phone_last_four": "4418",
+      "date_of_birth": "1982-09-14",
+      "phone_last_four": "8821",
       "otp_code": "938722",
-      "department_code": "CARDIOLOGY",
+      "department_code": "EMERGENCY",
       "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2019-08-12",
+      "unit_code": "4B-ICU",
+      "hire_date": "2021-03-08",
       "employment_status": "active",
       "certifications": [
+        "ACLS",
         "BLS",
-        "ACLS"
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 83,
+        "months_employed": 64,
         "hours_worked_past_year": 1864,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -187,81 +143,32 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
+        "pto": 14.0,
         "sick": 6.0
-      },
-      "pto_requests": []
-    },
-    "EMP441205": {
-      "employee_id": "EMP441205",
-      "first_name": "Elena",
-      "last_name": "Morris",
-      "date_of_birth": "1978-09-22",
-      "phone_last_four": "8821",
-      "otp_code": "271904",
-      "department_code": "SURGERY",
-      "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2017-04-17",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 111,
-        "hours_worked_past_year": 1920,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260720-0800": {
-      "shift_id": "SHF-20260720-0800",
+    "SHF-20260718-0700": {
+      "shift_id": "SHF-20260718-0700",
       "employee_id": "EMP998348",
-      "unit_code": "2A-MED",
-      "date": "2026-07-20",
-      "start_time": "08:00",
-      "end_time": "16:00",
-      "hours_scheduled": 8.0,
-      "hours_logged": 8.0,
+      "unit_code": "4B-ICU",
+      "date": "2026-07-18",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -270,43 +177,53 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "CARDIOLOGY": {
-        "2026-07-21": [
+      "EMERGENCY": {
+        "2026-07-20": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-22": [
+        "2026-07-21": [
           "10:00",
           "13:00",
           "15:00"
+        ],
+        "2026-07-22": [
+          "09:30",
+          "12:00",
+          "14:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "CARDIOLOGY": {
-        "2026-07-23": [
+      "EMERGENCY": {
+        "2026-07-20": [
           "09:00",
-          "11:00",
-          "15:00"
+          "11:00"
         ],
-        "2026-07-24": [
+        "2026-07-21": [
           "10:00",
           "14:00"
+        ],
+        "2026-07-22": [
+          "09:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
-      "CARDIOLOGY": {
-        "2026-07-25": [
+      "EMERGENCY": {
+        "2026-07-20": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-07-21": [
           "09:00",
+          "15:00"
+        ],
+        "2026-07-22": [
           "11:00",
           "14:00"
-        ],
-        "2026-07-28": [
-          "10:00",
-          "13:00",
-          "15:00"
         ]
       }
     }
@@ -317,12 +234,10 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "CARDIOLOGY": [],
-    "SURGERY": [
-      "2026-08-14"
-    ],
     "EMERGENCY": [],
+    "CARDIOLOGY": [],
     "ONCOLOGY": [],
+    "SURGERY": [],
     "PEDIATRICS": []
   }
 }

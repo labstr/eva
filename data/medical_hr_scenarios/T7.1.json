@@ -3,8 +3,7 @@
   "unit_cert_requirements": {
     "2D-SURG": [
       "BLS",
-      "ACLS",
-      "TNCC"
+      "ACLS"
     ],
     "4B-ICU": [
       "BLS",
@@ -12,13 +11,11 @@
       "CCRN"
     ],
     "2A-MED": [
-      "BLS",
-      "ACLS"
+      "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
-      "ONC-CHEMO"
+      "ACLS"
     ],
     "1D-PEDS": [
       "BLS",
@@ -28,16 +25,16 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP274739",
-      "first_name": "Blessing",
-      "last_name": "Udo",
+      "employee_id": "EMP900001",
+      "first_name": "Elena",
+      "last_name": "Morris",
       "facility_code": "MGH-04B",
-      "pin": "4821",
-      "phone_last_four": "6615",
+      "pin": "7291",
+      "phone_last_four": "1188",
       "otp_code": "483920",
-      "role_code": "RN",
+      "role_code": "NP",
       "department_code": "SURGERY",
-      "hire_date": "2021-03-08",
+      "hire_date": "2019-04-15",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -62,7 +59,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-11-30",
+        "expiration_date": "2027-08-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -80,22 +77,20 @@
       "first_name": "Blessing",
       "last_name": "Udo",
       "date_of_birth": "1993-06-15",
-      "phone_last_four": "6615",
-      "otp_code": "483920",
+      "phone_last_four": "4829",
+      "otp_code": "551204",
       "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "2D-SURG",
-      "hire_date": "2021-03-08",
+      "hire_date": "2021-02-08",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ACLS",
-        "TNCC"
+        "ACLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 64,
+        "months_employed": 65,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -104,7 +99,14 @@
         "tasks": {}
       },
       "oncall_schedule": {
-        "registrations": []
+        "registrations": [
+          {
+            "date": "2026-10-20",
+            "tier": "backup",
+            "unit_code": "2D-SURG",
+            "registration_id": "CASE-ONC-274738"
+          }
+        ]
       },
       "scheduled_appointments": [],
       "i9_record": {
@@ -121,32 +123,30 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 5.0
+        "sick": 4.0
       },
       "pto_requests": []
     },
     "EMP136489": {
       "employee_id": "EMP136489",
-      "first_name": "Jordan",
-      "last_name": "Mills",
-      "date_of_birth": "1990-02-11",
-      "phone_last_four": "2248",
-      "otp_code": "128640",
+      "first_name": "Marcus",
+      "last_name": "Hill",
+      "date_of_birth": "1988-11-02",
+      "phone_last_four": "6612",
+      "otp_code": "774411",
       "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "2D-SURG",
-      "hire_date": "2019-09-16",
+      "hire_date": "2020-09-14",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ACLS",
-        "TNCC"
+        "ACLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 81,
-        "hours_worked_past_year": 1920,
+        "months_employed": 69,
+        "hours_worked_past_year": 1824,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -171,32 +171,30 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 11.0,
-        "sick": 4.0
+        "sick": 6.0
       },
       "pto_requests": []
     },
-    "EMP555120": {
-      "employee_id": "EMP555120",
+    "EMP900001": {
+      "employee_id": "EMP900001",
       "first_name": "Elena",
-      "last_name": "Park",
-      "date_of_birth": "1988-10-04",
-      "phone_last_four": "7801",
-      "otp_code": "902114",
-      "department_code": "EMERGENCY",
-      "role_code": "RN",
-      "unit_code": "4B-ICU",
-      "hire_date": "2018-05-21",
+      "last_name": "Morris",
+      "date_of_birth": "1985-03-22",
+      "phone_last_four": "1188",
+      "otp_code": "483920",
+      "department_code": "SURGERY",
+      "role_code": "NP",
+      "unit_code": "2D-SURG",
+      "hire_date": "2019-04-15",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ACLS",
-        "CCRN"
+        "ACLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 97,
-        "hours_worked_past_year": 2016,
+        "months_employed": 87,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -220,8 +218,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 16.0,
-        "sick": 6.0
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
@@ -245,7 +243,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-09-20",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -253,7 +251,7 @@
       "shift_id": "SHF-20260505-2300",
       "employee_id": "EMP274739",
       "unit_code": "2D-SURG",
-      "date": "2026-05-05",
+      "date": "2026-11-05",
       "start_time": "23:00",
       "end_time": "07:00",
       "hours_scheduled": 8.0,
@@ -267,29 +265,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260707-0700": {
-      "shift_id": "SHF-20260707-0700",
-      "employee_id": "EMP555120",
-      "unit_code": "4B-ICU",
-      "date": "2026-07-07",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-11-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -311,39 +287,39 @@
         ],
         "2026-07-08": [
           "09:30",
-          "12:00"
+          "12:00",
+          "14:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "SURGERY": {
-        "2026-07-10": [
+        "2026-07-06": [
           "09:00",
           "11:00"
         ],
-        "2026-07-13": [
+        "2026-07-07": [
           "10:00",
           "14:00"
         ],
-        "2026-07-14": [
-          "09:30",
-          "15:30"
+        "2026-07-08": [
+          "09:00",
+          "13:00"
         ]
       }
     },
     "competency_review": {
       "SURGERY": {
-        "2026-07-09": [
-          "09:00",
-          "11:00",
-          "14:00"
+        "2026-07-06": [
+          "08:30",
+          "10:30"
         ],
-        "2026-07-10": [
-          "10:00",
-          "13:00"
-        ],
-        "2026-07-15": [
+        "2026-07-07": [
           "09:30",
+          "13:30"
+        ],
+        "2026-07-08": [
+          "11:00",
           "15:00"
         ]
       }
@@ -360,6 +336,7 @@
       "2026-07-04"
     ],
     "ONCOLOGY": [],
-    "PEDIATRICS": []
+    "PEDIATRICS": [],
+    "RADIOLOGY": []
   }
 }

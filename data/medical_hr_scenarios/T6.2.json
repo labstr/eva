@@ -1,22 +1,23 @@
 {
   "_current_date": "2026-08-12",
   "unit_cert_requirements": {
-    "3C-ONC": [
-      "BLS",
-      "ACLS",
-      "ONC-CHEMO"
-    ],
     "4B-ICU": [
-      "BLS",
       "ACLS",
+      "BLS",
       "CCRN"
     ],
     "2A-MED": [
       "BLS"
     ],
+    "3C-ONC": [
+      "BLS",
+      "ACLS",
+      "ONC-CHEMO"
+    ],
     "5A-SURG": [
       "BLS",
-      "ACLS"
+      "ACLS",
+      "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
@@ -26,16 +27,16 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP550321",
-      "first_name": "Amira",
-      "last_name": "Dane",
+      "employee_id": "EMP908977",
+      "first_name": "Soraya",
+      "last_name": "Khoury",
       "facility_code": "MGH-04B",
-      "pin": "4821",
-      "phone_last_four": "6610",
+      "pin": "7291",
+      "phone_last_four": "0184",
       "otp_code": "483920",
-      "role_code": "NP",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2021-06-14",
+      "role_code": "RN",
+      "department_code": "ONCOLOGY",
+      "hire_date": "2026-08-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -45,8 +46,8 @@
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
+        "effective_date": "2026-08-10",
+        "expiration_date": "2027-08-10",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -60,7 +61,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-03-31",
+        "expiration_date": "2029-08-10",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -78,39 +79,39 @@
       "first_name": "Soraya",
       "last_name": "Khoury",
       "date_of_birth": "1986-03-02",
-      "phone_last_four": "2194",
-      "otp_code": "581204",
+      "phone_last_four": "0184",
+      "otp_code": "483920",
       "department_code": "ONCOLOGY",
       "role_code": "RN",
       "unit_code": "3C-ONC",
-      "hire_date": "2026-08-04",
+      "hire_date": "2026-08-10",
       "employment_status": "active",
-      "schedule_type": "shift",
       "certifications": [
         "BLS",
         "ACLS",
         "ONC-CHEMO"
       ],
+      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": false,
         "months_employed": 0,
-        "hours_worked_past_year": 32,
+        "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not met minimum tenure or hours requirement"
+        "reason": "Employee has not met minimum tenure or hours requirements"
       },
       "onboarding_checklist": {
         "tasks": {
           "DRUG_SCREEN": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "47Q1"
           },
           "TB_TEST": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "XXGL"
           },
-          "BADGE_PHOTO": {
-            "status": "complete"
-          },
-          "DIRECT_DEPOSIT": {
-            "status": "complete"
+          "HIPAA_TRAINING": {
+            "status": "complete",
+            "completion_code": "H9P2"
           }
         }
       },
@@ -131,32 +132,33 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 8.0,
-        "sick": 5.0
+        "pto": 3.0,
+        "sick": 4.0
       },
       "pto_requests": []
     },
-    "EMP550321": {
-      "employee_id": "EMP550321",
-      "first_name": "Amira",
-      "last_name": "Dane",
-      "date_of_birth": "1990-11-18",
-      "phone_last_four": "6610",
-      "otp_code": "483920",
-      "department_code": "CARDIOLOGY",
-      "role_code": "NP",
-      "unit_code": "2A-MED",
-      "hire_date": "2021-06-14",
+    "EMP552211": {
+      "employee_id": "EMP552211",
+      "first_name": "Mina",
+      "last_name": "Dorsey",
+      "date_of_birth": "1991-11-14",
+      "phone_last_four": "4421",
+      "otp_code": "551204",
+      "department_code": "SURGERY",
+      "role_code": "RN",
+      "unit_code": "5A-SURG",
+      "hire_date": "2022-04-18",
       "employment_status": "active",
-      "schedule_type": "standard",
       "certifications": [
         "BLS",
-        "ACLS"
+        "ACLS",
+        "TNCC"
       ],
+      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 62,
-        "hours_worked_past_year": 1860,
+        "months_employed": 52,
+        "hours_worked_past_year": 1876,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -180,79 +182,13 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
+        "pto": 12.0,
         "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260802-0700": {
-      "shift_id": "SHF-20260802-0700",
-      "employee_id": "EMP908977",
-      "unit_code": "3C-ONC",
-      "date": "2026-08-02",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260804-0700": {
-      "shift_id": "SHF-20260804-0700",
-      "employee_id": "EMP908977",
-      "unit_code": "3C-ONC",
-      "date": "2026-08-04",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260806-0700": {
-      "shift_id": "SHF-20260806-0700",
-      "employee_id": "EMP908977",
-      "unit_code": "3C-ONC",
-      "date": "2026-08-06",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
     "SHF-20260813-0700": {
       "shift_id": "SHF-20260813-0700",
       "employee_id": "EMP908977",
@@ -271,7 +207,51 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-22",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260814-0700": {
+      "shift_id": "SHF-20260814-0700",
+      "employee_id": "EMP908977",
+      "unit_code": "3C-ONC",
+      "date": "2026-08-14",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-08-22",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260816-0700": {
+      "shift_id": "SHF-20260816-0700",
+      "employee_id": "EMP552211",
+      "unit_code": "5A-SURG",
+      "date": "2026-08-16",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-08-22",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -282,26 +262,21 @@
     "orientation_followup": {
       "ONCOLOGY": {
         "2026-09-23": [
-          "08:00",
-          "09:30",
-          "11:00"
-        ],
-        "2026-09-24": [
-          "08:30",
-          "10:00"
-        ],
-        "2026-09-25": [
           "09:00",
-          "13:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-09-23": [
-          "10:00",
           "14:00"
         ],
         "2026-09-24": [
-          "09:00"
+          "08:30",
+          "13:00"
+        ],
+        "2026-09-25": [
+          "15:00"
+        ]
+      },
+      "SURGERY": {
+        "2026-09-23": [
+          "09:00",
+          "11:00"
         ]
       }
     },
@@ -318,12 +293,12 @@
       }
     },
     "competency_review": {
-      "CARDIOLOGY": {
-        "2026-08-18": [
+      "ONCOLOGY": {
+        "2026-08-20": [
           "09:00",
           "13:00"
         ],
-        "2026-08-19": [
+        "2026-08-22": [
           "10:00",
           "15:00"
         ]
@@ -337,12 +312,12 @@
   ],
   "department_blackout_dates": {
     "ONCOLOGY": [],
-    "CARDIOLOGY": [
-      "2026-11-25",
+    "SURGERY": [
       "2026-11-27"
     ],
-    "SURGERY": [],
+    "CARDIOLOGY": [],
+    "EMERGENCY": [],
     "PEDIATRICS": [],
-    "EMERGENCY": []
+    "RADIOLOGY": []
   }
 }

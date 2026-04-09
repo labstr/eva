@@ -7,12 +7,11 @@
       "CCRN"
     ],
     "2A-MED": [
-      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
-      "BLS",
-      "ONCC"
+      "ACLS",
+      "BLS"
     ],
     "5A-SURG": [
       "ACLS",
@@ -21,8 +20,7 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -33,20 +31,20 @@
       "last_name": "Villanueva",
       "facility_code": "WJ-81L",
       "pin": "2882",
-      "phone_last_four": "6612",
+      "phone_last_four": "7784",
       "otp_code": "899649",
       "role_code": "MD",
       "department_code": "NEUROLOGY",
-      "hire_date": "2018-03-19",
+      "hire_date": "2018-03-12",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
       "clearance_code": "CLR-OCC-392099",
       "licenses": {
-        "GA-MD-4839201": {
-          "state_license_number": "GA-MD-4839201",
+        "GA-MD-662104": {
+          "state_license_number": "GA-MD-662104",
           "license_type": "MD",
           "state_code": "GA",
-          "expiration_date": "2027-12-31",
+          "expiration_date": "2027-11-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -67,7 +65,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-01-31",
+        "expiration_date": "2027-12-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -76,66 +74,86 @@
         "privilege_list": [
           {
             "code": "PRV-ICU-007",
-            "description": "Intensive care unit attending privileges",
+            "description": "Intensive care unit admitting and management",
             "status": "suspended"
           },
           {
             "code": "PRV-CARD-005",
-            "description": "Cardiology consult and inpatient management privileges",
+            "description": "Inpatient cardiac consult coverage",
             "status": "suspended"
           },
           {
-            "code": "PRV-NEURO-002",
-            "description": "General neurology inpatient privileges",
-            "status": "suspended"
+            "code": "PRV-NEUR-003",
+            "description": "General neurology inpatient consultation",
+            "status": "active"
           }
         ],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
     },
-    "1487392045": {
-      "npi": "1487392045",
-      "employee_id": "EMP111111",
-      "first_name": "Marcus",
-      "last_name": "Hale",
-      "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "4401",
-      "otp_code": "483920",
+    "6224519083": {
+      "npi": "6224519083",
+      "employee_id": "EMP310844",
+      "first_name": "Harish",
+      "last_name": "Menon",
+      "facility_code": "QMC-22D",
+      "pin": "7314",
+      "phone_last_four": "4421",
+      "otp_code": "551204",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2016-07-11",
+      "hire_date": "2016-09-01",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
-      "licenses": {},
+      "licenses": {
+        "FL-MD-221904": {
+          "state_license_number": "FL-MD-221904",
+          "license_type": "MD",
+          "state_code": "FL",
+          "expiration_date": "2027-08-15",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2025-AX7731",
+        "policy_number": "POL-2026-KD2281",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-10-01",
-        "expiration_date": "2026-10-01",
+        "effective_date": "2026-01-01",
+        "expiration_date": "2027-01-01",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BK4729183",
-        "facility_code": "MGH-04B",
-        "state_code": "MA",
+        "dea_number": "BM2719044",
+        "facility_code": "QMC-22D",
+        "state_code": "FL",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2028-02-28",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [],
+        "privilege_list": [
+          {
+            "code": "PRV-CARD-002",
+            "description": "Diagnostic cardiology privileges",
+            "status": "active"
+          }
+        ],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -147,22 +165,21 @@
       "first_name": "Xiomara",
       "last_name": "Villanueva",
       "date_of_birth": "1970-08-11",
-      "phone_last_four": "6612",
+      "phone_last_four": "7784",
       "otp_code": "899649",
       "department_code": "NEUROLOGY",
       "role_code": "MD",
       "unit_code": "4B-ICU",
-      "hire_date": "2018-03-19",
-      "employment_status": "on_leave",
+      "hire_date": "2018-03-12",
+      "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "CCRN"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 99,
-        "hours_worked_past_year": 1740,
+        "hours_worked_past_year": 1680,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -187,29 +204,29 @@
       "leave_records": [
         {
           "leave_type": "medical",
-          "start_date": "2026-04-01",
-          "end_date": "2026-08-31",
-          "status": "active",
-          "case_id": "CASE-LOA-262246"
+          "start_date": "2026-03-01",
+          "end_date": "2026-05-30",
+          "status": "completed",
+          "case_id": "CASE-MLV-262246"
         }
       ],
       "pto_balances": {
-        "pto": 14.0,
-        "sick": 6.0
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     },
-    "EMP111111": {
-      "employee_id": "EMP111111",
-      "first_name": "Marcus",
-      "last_name": "Hale",
-      "date_of_birth": "1978-02-04",
-      "phone_last_four": "4401",
-      "otp_code": "483920",
+    "EMP310844": {
+      "employee_id": "EMP310844",
+      "first_name": "Harish",
+      "last_name": "Menon",
+      "date_of_birth": "1978-01-24",
+      "phone_last_four": "4421",
+      "otp_code": "551204",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2016-07-11",
+      "unit_code": "3C-ONC",
+      "hire_date": "2016-09-01",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -217,9 +234,9 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 119,
+        "months_employed": 117,
         "hours_worked_past_year": 1820,
-        "fmla_weeks_remaining": 10,
+        "fmla_weeks_remaining": 12,
         "reason": null
       },
       "onboarding_checklist": {
@@ -243,17 +260,17 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 12.0,
-        "sick": 5.0
+        "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260916-0700": {
-      "shift_id": "SHF-20260916-0700",
+    "SHF-20260615-0700": {
+      "shift_id": "SHF-20260615-0700",
       "employee_id": "EMP262246",
       "unit_code": "4B-ICU",
-      "date": "2026-09-16",
+      "date": "2026-06-15",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -267,7 +284,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-06-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -279,19 +296,19 @@
       "NEUROLOGY": {
         "2026-08-11": [
           "09:00",
-          "11:00"
+          "10:00"
         ],
         "2026-08-12": [
-          "10:00",
-          "14:00"
+          "09:00",
+          "11:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "NEUROLOGY": {
         "2026-08-11": [
-          "13:00",
-          "15:00"
+          "09:00",
+          "10:00"
         ],
         "2026-08-12": [
           "09:00",
@@ -302,27 +319,17 @@
     "competency_review": {
       "NEUROLOGY": {
         "2026-08-11": [
-          "08:00",
-          "09:30",
-          "13:00"
+          "09:00",
+          "11:00",
+          "14:00"
         ],
         "2026-08-12": [
-          "08:30",
+          "08:00",
           "10:00"
         ],
         "2026-08-13": [
           "09:00",
-          "14:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-08-11": [
-          "09:00",
-          "10:00"
-        ],
-        "2026-08-12": [
-          "11:00",
-          "15:00"
+          "13:00"
         ]
       }
     }
@@ -335,10 +342,10 @@
   "department_blackout_dates": {
     "NEUROLOGY": [],
     "CARDIOLOGY": [
-      "2026-07-01"
+      "2026-07-06"
     ],
-    "SURGERY": [],
     "ONCOLOGY": [],
+    "SURGERY": [],
     "PEDIATRICS": []
   }
 }

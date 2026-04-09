@@ -2,12 +2,12 @@
   "_current_date": "2026-07-18",
   "unit_cert_requirements": {
     "5A-SURG": [
-      "BLS",
-      "ACLS"
+      "ACLS",
+      "BLS"
     ],
     "4B-ICU": [
-      "BLS",
       "ACLS",
+      "BLS",
       "CCRN"
     ],
     "2A-MED": [
@@ -30,20 +30,20 @@
       "last_name": "Cordova",
       "facility_code": "LGJ-97L",
       "pin": "9920",
-      "phone_last_four": "4418",
+      "phone_last_four": "4821",
       "otp_code": "776149",
-      "role_code": "RN",
-      "department_code": "EMERGENCY",
+      "role_code": "MD",
+      "department_code": "SURGERY",
       "hire_date": "2018-03-12",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-999001",
+      "clearance_code": "CLR-OCC-000111",
       "licenses": {
         "NC-RN-6888532": {
           "state_license_number": "NC-RN-6888532",
-          "license_type": "RN",
+          "license_type": "MD",
           "state_code": "NC",
-          "expiration_date": "2026-07-28",
+          "expiration_date": "2026-07-24",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -55,10 +55,10 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2025-AA1122",
+        "policy_number": "POL-2024-A9K2M1",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-10-01",
+        "effective_date": "2025-06-01",
         "expiration_date": "2026-09-30",
         "recredential_required": false,
         "update_case_id": null
@@ -73,7 +73,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-04-30",
+        "expiration_date": "2027-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -82,17 +82,17 @@
         "privilege_list": [
           {
             "code": "PRV-CARD-007",
-            "description": "Cardiac emergency response procedures",
+            "description": "Cardiothoracic operative privileges",
             "status": "suspended"
           },
           {
             "code": "PRV-SURG-004",
-            "description": "Emergency surgical assist procedures",
+            "description": "General surgery operative privileges",
             "status": "suspended"
           },
           {
-            "code": "PRV-ER-002",
-            "description": "General emergency department evaluation",
+            "code": "PRV-CLIN-002",
+            "description": "Inpatient surgical consult privileges",
             "status": "active"
           }
         ],
@@ -102,46 +102,32 @@
     },
     "5246953455": {
       "npi": "5246953455",
-      "employee_id": "EMP557244",
-      "first_name": "Nina",
-      "last_name": "Bennett",
+      "employee_id": "EMP550244",
+      "first_name": "Helen",
+      "last_name": "Morris",
       "facility_code": "LGJ-97L",
-      "pin": "4401",
-      "phone_last_four": "7732",
-      "otp_code": "112908",
+      "pin": "4418",
+      "phone_last_four": "1933",
+      "otp_code": "331204",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
-      "hire_date": "2014-09-15",
+      "department_code": "SURGERY",
+      "hire_date": "2014-09-08",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-557244",
-      "licenses": {
-        "NC-MD-5544112": {
-          "state_license_number": "NC-MD-5544112",
-          "license_type": "MD",
-          "state_code": "NC",
-          "expiration_date": "2027-11-30",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
+      "clearance_code": null,
+      "licenses": {},
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-BB7788",
-        "per_occurrence_limit_usd": 1000000,
-        "aggregate_limit_usd": 3000000,
+        "policy_number": "POL-2025-Q8L7N2",
+        "per_occurrence_limit_usd": 2000000,
+        "aggregate_limit_usd": 4000000,
         "effective_date": "2026-01-01",
         "expiration_date": "2026-12-31",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BM5587612",
+        "dea_number": "BM5639201",
         "facility_code": "LGJ-97L",
         "state_code": "NC",
         "schedule_codes": [
@@ -150,19 +136,13 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-12-31",
+        "expiration_date": "2028-02-28",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-ER-010",
-            "description": "Emergency attending physician coverage",
-            "status": "active"
-          }
-        ],
+        "privilege_list": [],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -174,22 +154,21 @@
       "first_name": "Rafael",
       "last_name": "Cordova",
       "date_of_birth": "1974-08-22",
-      "phone_last_four": "4418",
+      "phone_last_four": "4821",
       "otp_code": "776149",
-      "department_code": "EMERGENCY",
-      "role_code": "RN",
+      "department_code": "SURGERY",
+      "role_code": "MD",
       "unit_code": "5A-SURG",
       "hire_date": "2018-03-12",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
-        "TNCC"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 100,
-        "hours_worked_past_year": 1760,
+        "hours_worked_past_year": 1680,
         "fmla_weeks_remaining": 8,
         "reason": null
       },
@@ -214,8 +193,8 @@
       "leave_records": [
         {
           "leave_type": "medical",
-          "start_date": "2026-03-15",
-          "end_date": "2026-07-10",
+          "start_date": "2026-03-01",
+          "end_date": "2026-07-15",
           "status": "completed",
           "case_id": "CASE-MLV-823811"
         }
@@ -226,26 +205,25 @@
       },
       "pto_requests": []
     },
-    "EMP557244": {
-      "employee_id": "EMP557244",
-      "first_name": "Nina",
-      "last_name": "Bennett",
-      "date_of_birth": "1978-01-09",
-      "phone_last_four": "7732",
-      "otp_code": "112908",
-      "department_code": "EMERGENCY",
+    "EMP550244": {
+      "employee_id": "EMP550244",
+      "first_name": "Helen",
+      "last_name": "Morris",
+      "date_of_birth": "1969-05-14",
+      "phone_last_four": "1933",
+      "otp_code": "331204",
+      "department_code": "SURGERY",
       "role_code": "MD",
       "unit_code": "5A-SURG",
-      "hire_date": "2014-09-15",
+      "hire_date": "2014-09-08",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
-        "ATLS"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 142,
+        "months_employed": 140,
         "hours_worked_past_year": 1900,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -283,8 +261,8 @@
       "unit_code": "5A-SURG",
       "date": "2026-07-22",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -295,7 +273,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -304,22 +282,10 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
+      "SURGERY": {
         "2026-07-21": [
           "09:00",
           "11:00"
-        ],
-        "2026-07-22": [
-          "08:30",
-          "10:30"
-        ]
-      }
-    },
-    "return_to_work_checkin": {
-      "EMERGENCY": {
-        "2026-07-21": [
-          "09:00",
-          "13:00"
         ],
         "2026-07-22": [
           "10:00",
@@ -327,20 +293,32 @@
         ]
       }
     },
-    "competency_review": {
-      "EMERGENCY": {
+    "return_to_work_checkin": {
+      "SURGERY": {
         "2026-07-21": [
-          "08:00",
-          "09:30",
-          "13:00"
-        ],
-        "2026-07-22": [
-          "08:30",
-          "11:00"
+          "09:00",
+          "10:00"
         ],
         "2026-07-23": [
+          "08:30",
+          "11:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "SURGERY": {
+        "2026-07-21": [
+          "08:00",
           "09:00",
-          "14:00"
+          "11:00"
+        ],
+        "2026-07-22": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-07-24": [
+          "09:00",
+          "13:00"
         ]
       }
     }
@@ -351,9 +329,11 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
     "SURGERY": [],
-    "CARDIOLOGY": [],
+    "CARDIOLOGY": [
+      "2026-07-20"
+    ],
+    "EMERGENCY": [],
     "ONCOLOGY": [],
     "PEDIATRICS": []
   }

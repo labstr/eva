@@ -7,12 +7,11 @@
       "CCRN"
     ],
     "2A-MED": [
-      "BLS",
-      "ACLS"
+      "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
       "BLS",
@@ -23,7 +22,7 @@
       "BLS",
       "PALS"
     ],
-    "6P-PATH": [
+    "7P-PATH": [
       "BLS"
     ]
   },
@@ -35,7 +34,7 @@
       "last_name": "Watanabe",
       "facility_code": "HFS-50D",
       "pin": "9779",
-      "phone_last_four": "4421",
+      "phone_last_four": "1842",
       "otp_code": "899213",
       "role_code": "MD",
       "department_code": "PATHOLOGY",
@@ -44,11 +43,11 @@
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "FL-MD-546173": {
-          "state_license_number": "FL-MD-546173",
+        "FL-MD-30058838": {
+          "state_license_number": "FL-MD-30058838",
           "license_type": "MD",
           "state_code": "FL",
-          "expiration_date": "2027-07-31",
+          "expiration_date": "2028-06-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -60,7 +59,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-HP5461",
+        "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-07-28",
@@ -70,15 +69,15 @@
       },
       "dea_registration": {
         "dea_number": "PT5747930",
-        "facility_code": "HFS-50D",
-        "state_code": "NY",
+        "facility_code": "GH-12A",
+        "state_code": "GA",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-03-31",
+        "expiration_date": "2028-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -107,11 +106,11 @@
       "first_name": "Hiroshi",
       "last_name": "Watanabe",
       "date_of_birth": "2000-06-12",
-      "phone_last_four": "4421",
+      "phone_last_four": "1842",
       "otp_code": "899213",
       "department_code": "PATHOLOGY",
       "role_code": "MD",
-      "unit_code": "6P-PATH",
+      "unit_code": "7P-PATH",
       "hire_date": "2026-07-28",
       "employment_status": "active",
       "certifications": [
@@ -122,24 +121,25 @@
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not yet met FMLA tenure requirements"
+        "reason": "New hire has not met minimum employment duration or hours worked requirements"
       },
       "onboarding_checklist": {
         "tasks": {
           "BADGE_PICKUP": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "MNWH"
           },
           "I9_VERIFY": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "ZM6U"
           },
           "TB_TEST": {
-            "status": "pending"
+            "status": "pending",
+            "completion_code": "2IBO"
           },
-          "HIPAA_TRAINING": {
-            "status": "complete"
-          },
-          "BLS_UPLOAD": {
-            "status": "complete"
+          "EMR_TRAINING": {
+            "status": "pending",
+            "completion_code": "I7YU"
           }
         }
       },
@@ -164,63 +164,14 @@
         "sick": 5.0
       },
       "pto_requests": []
-    },
-    "EMP812440": {
-      "employee_id": "EMP812440",
-      "first_name": "Elena",
-      "last_name": "Morris",
-      "date_of_birth": "1991-11-03",
-      "phone_last_four": "1184",
-      "otp_code": "551204",
-      "department_code": "SURGERY",
-      "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2021-04-19",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 64,
-        "hours_worked_past_year": 1872,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260806-0800": {
-      "shift_id": "SHF-20260806-0800",
+    "SHF-20260805-0800": {
+      "shift_id": "SHF-20260805-0800",
       "employee_id": "EMP546173",
-      "unit_code": "6P-PATH",
-      "date": "2026-08-06",
+      "unit_code": "7P-PATH",
+      "date": "2026-08-05",
       "start_time": "08:00",
       "end_time": "16:00",
       "hours_scheduled": 8.0,
@@ -234,29 +185,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260807-0700": {
-      "shift_id": "SHF-20260807-0700",
-      "employee_id": "EMP812440",
-      "unit_code": "5A-SURG",
-      "date": "2026-08-07",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -267,58 +196,50 @@
     "orientation_followup": {
       "PATHOLOGY": {
         "2026-08-24": [
-          "08:00",
-          "09:30",
-          "11:00"
+          "09:00",
+          "10:00",
+          "13:30"
         ],
         "2026-08-25": [
-          "09:00",
-          "10:30"
-        ],
-        "2026-08-27": [
-          "13:00",
-          "15:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-24": [
-          "10:00",
+          "08:30",
+          "11:00",
           "14:00"
         ],
         "2026-08-26": [
-          "09:00",
-          "11:00"
+          "09:30",
+          "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "PATHOLOGY": {
         "2026-08-24": [
-          "13:00"
+          "09:00",
+          "11:00"
         ],
         "2026-08-25": [
-          "09:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-24": [
-          "15:00"
+          "10:00",
+          "14:00"
+        ],
+        "2026-08-26": [
+          "09:00",
+          "13:00"
         ]
       }
     },
     "competency_review": {
       "PATHOLOGY": {
         "2026-08-24": [
-          "14:00"
+          "08:00",
+          "10:00"
+        ],
+        "2026-08-25": [
+          "09:00",
+          "13:00"
         ],
         "2026-08-26": [
-          "10:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-25": [
-          "08:00",
-          "13:00"
+          "11:00",
+          "15:00"
         ]
       }
     }
@@ -329,10 +250,6 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "PATHOLOGY": [],
-    "SURGERY": [
-      "2026-11-25",
-      "2026-11-27"
-    ]
+    "PATHOLOGY": []
   }
 }

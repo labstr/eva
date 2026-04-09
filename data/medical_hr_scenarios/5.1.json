@@ -11,16 +11,17 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS"
+      "PALS",
+      "NRP"
     ]
   },
   "providers": {
@@ -31,17 +32,17 @@
       "last_name": "Al-Rashidi",
       "facility_code": "EJR-99V",
       "pin": "2169",
-      "phone_last_four": "4421",
+      "phone_last_four": "1720",
       "otp_code": "738720",
       "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2019-08-12",
+      "department_code": "EMERGENCY",
+      "hire_date": "2019-09-16",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "AZ-MD-581204": {
-          "state_license_number": "AZ-MD-581204",
+        "AZ-MD-884211": {
+          "state_license_number": "AZ-MD-884211",
           "license_type": "MD",
           "state_code": "AZ",
           "expiration_date": "2027-11-30",
@@ -56,7 +57,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-AX7731",
+        "policy_number": "POL-2026-ER4412",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -82,13 +83,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-CARD-001",
-            "description": "Cardiac catheterization",
+            "code": "PRV-EM-001",
+            "description": "Emergency medicine admitting privileges",
             "status": "active"
           },
           {
-            "code": "PRV-CARD-002",
-            "description": "Stress test supervision",
+            "code": "PRV-EM-002",
+            "description": "Emergency medicine prescribing privileges",
             "status": "active"
           }
         ],
@@ -102,24 +103,23 @@
       "employee_id": "EMP148050",
       "first_name": "Fatima",
       "last_name": "Al-Rashidi",
-      "date_of_birth": "1984-02-17",
-      "phone_last_four": "4421",
+      "date_of_birth": "1984-02-11",
+      "phone_last_four": "1720",
       "otp_code": "738720",
-      "department_code": "CARDIOLOGY",
+      "department_code": "EMERGENCY",
       "role_code": "MD",
       "unit_code": "4B-ICU",
-      "hire_date": "2019-08-12",
+      "hire_date": "2019-09-16",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
         "BLS",
+        "ACLS",
         "CCRN"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 82,
-        "hours_worked_past_year": 1920,
+        "months_employed": 81,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -147,77 +147,28 @@
         "sick": 5.0
       },
       "pto_requests": []
-    },
-    "EMP260411": {
-      "employee_id": "EMP260411",
-      "first_name": "Jordan",
-      "last_name": "Mills",
-      "date_of_birth": "1990-10-08",
-      "phone_last_four": "1184",
-      "otp_code": "441992",
-      "department_code": "SURGERY",
-      "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2022-04-18",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 50,
-        "hours_worked_past_year": 1872,
-        "fmla_weeks_remaining": 10,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260624-0700": {
-      "shift_id": "SHF-20260624-0700",
+    "SHF-20260622-0700": {
+      "shift_id": "SHF-20260622-0700",
       "employee_id": "EMP148050",
       "unit_code": "4B-ICU",
-      "date": "2026-06-24",
+      "date": "2026-06-22",
       "start_time": "07:00",
-      "end_time": "15:00",
-      "hours_scheduled": 8.0,
-      "hours_logged": 8.0,
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-06-27",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -226,7 +177,7 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "CARDIOLOGY": {
+      "EMERGENCY": {
         "2026-06-23": [
           "09:00",
           "11:00",
@@ -239,42 +190,40 @@
         ],
         "2026-06-25": [
           "09:30",
-          "12:30"
+          "11:30",
+          "14:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "CARDIOLOGY": {
-        "2026-06-26": [
+      "EMERGENCY": {
+        "2026-06-23": [
           "09:00",
-          "11:00",
+          "11:00"
+        ],
+        "2026-06-24": [
+          "10:00",
           "14:00"
         ],
-        "2026-06-29": [
-          "10:00",
-          "13:00"
-        ],
-        "2026-06-30": [
+        "2026-06-25": [
           "09:30",
-          "15:00"
+          "13:30"
         ]
       }
     },
     "competency_review": {
-      "CARDIOLOGY": {
+      "EMERGENCY": {
         "2026-06-23": [
-          "09:00",
-          "11:00",
-          "14:00"
+          "08:00",
+          "10:00"
         ],
         "2026-06-24": [
-          "10:00",
-          "13:00",
+          "09:00",
           "15:00"
         ],
         "2026-06-25": [
-          "09:30",
-          "12:30"
+          "11:00",
+          "16:00"
         ]
       }
     }
@@ -285,13 +234,14 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "CARDIOLOGY": [],
-    "SURGERY": [
-      "2026-07-06"
-    ],
     "EMERGENCY": [],
+    "CARDIOLOGY": [
+      "2026-07-01"
+    ],
     "ONCOLOGY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "SURGERY": [
+      "2026-07-04"
+    ],
+    "PEDIATRICS": []
   }
 }

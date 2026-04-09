@@ -7,11 +7,13 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "ACLS",
-      "BLS"
+      "BLS",
+      "ONS"
     ],
     "5A-SURG": [
       "ACLS",
@@ -26,13 +28,13 @@
   "providers": {
     "3373077218": {
       "npi": "3373077218",
-      "employee_id": "EMP989600",
+      "employee_id": "EMP482913",
       "first_name": "Kofi",
       "last_name": "Mensah",
       "facility_code": "DIX-15L",
       "pin": "4441",
-      "phone_last_four": "6621",
-      "otp_code": "481920",
+      "phone_last_four": "4829",
+      "otp_code": "731944",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
       "hire_date": "2019-07-15",
@@ -56,16 +58,16 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-CV1122",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-07-26",
-        "expiration_date": "2026-08-25",
+        "effective_date": "2025-07-26",
+        "expiration_date": "2026-07-25",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BK4729183",
+        "dea_number": "BM4729183",
         "facility_code": "DIX-15L",
         "state_code": "MA",
         "schedule_codes": [
@@ -74,7 +76,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-03-31",
+        "expiration_date": "2027-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -88,7 +90,7 @@
           },
           {
             "code": "PRV-CARD-002",
-            "description": "Transthoracic echocardiography",
+            "description": "Transesophageal echocardiography",
             "status": "active"
           }
         ],
@@ -98,25 +100,25 @@
     },
     "4482141802": {
       "npi": "4482141802",
-      "employee_id": "EMP214180",
-      "first_name": "Elena",
-      "last_name": "Ruiz",
+      "employee_id": "EMP771204",
+      "first_name": "Amara",
+      "last_name": "Owens",
       "facility_code": "DIX-15L",
-      "pin": "7752",
-      "phone_last_four": "1184",
-      "otp_code": "572044",
+      "pin": "8126",
+      "phone_last_four": "2044",
+      "otp_code": "418225",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2016-04-11",
+      "hire_date": "2016-03-21",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "MA-MD-2141802": {
-          "state_license_number": "MA-MD-2141802",
+        "MA-MD-55120488": {
+          "state_license_number": "MA-MD-55120488",
           "license_type": "MD",
           "state_code": "MA",
-          "expiration_date": "2027-11-30",
+          "expiration_date": "2027-09-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -128,7 +130,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-QX5510",
+        "policy_number": "POL-2026-QZ4401",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -137,7 +139,7 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BR5512048",
+        "dea_number": "BO5621044",
         "facility_code": "DIX-15L",
         "state_code": "MA",
         "schedule_codes": [
@@ -145,7 +147,7 @@
           "CIII",
           "CIV"
         ],
-        "expiration_date": "2029-01-31",
+        "expiration_date": "2028-01-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -154,7 +156,7 @@
         "privilege_list": [
           {
             "code": "PRV-CARD-010",
-            "description": "Interventional cardiology supervision",
+            "description": "General cardiology practice",
             "status": "active"
           }
         ],
@@ -164,22 +166,21 @@
     }
   },
   "employees": {
-    "EMP989600": {
-      "employee_id": "EMP989600",
+    "EMP482913": {
+      "employee_id": "EMP482913",
       "first_name": "Kofi",
       "last_name": "Mensah",
-      "date_of_birth": "1982-11-14",
-      "phone_last_four": "6621",
-      "otp_code": "481920",
+      "date_of_birth": "1980-02-14",
+      "phone_last_four": "4829",
+      "otp_code": "731944",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "4B-ICU",
+      "unit_code": "2A-MED",
       "hire_date": "2019-07-15",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "CCRN"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
@@ -213,22 +214,21 @@
       },
       "pto_requests": []
     },
-    "EMP214180": {
-      "employee_id": "EMP214180",
-      "first_name": "Elena",
-      "last_name": "Ruiz",
-      "date_of_birth": "1978-02-03",
-      "phone_last_four": "1184",
-      "otp_code": "572044",
+    "EMP771204": {
+      "employee_id": "EMP771204",
+      "first_name": "Amara",
+      "last_name": "Owens",
+      "date_of_birth": "1977-12-04",
+      "phone_last_four": "2044",
+      "otp_code": "418225",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "4B-ICU",
-      "hire_date": "2016-04-11",
+      "unit_code": "2A-MED",
+      "hire_date": "2016-03-21",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "CCRN"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
@@ -258,31 +258,31 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 18.0,
-        "sick": 7.0
+        "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260810-0700": {
-      "shift_id": "SHF-20260810-0700",
-      "employee_id": "EMP989600",
-      "unit_code": "4B-ICU",
-      "date": "2026-08-10",
+    "SHF-20260808-0700": {
+      "shift_id": "SHF-20260808-0700",
+      "employee_id": "EMP482913",
+      "unit_code": "2A-MED",
+      "date": "2026-08-08",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": 8.0,
       "on_call": false,
       "on_call_tier": null,
-      "status": "scheduled",
+      "status": "logged",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -304,46 +304,41 @@
         ],
         "2026-08-12": [
           "09:30",
-          "11:30",
-          "14:30"
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "CARDIOLOGY": {
-        "2026-08-13": [
+        "2026-08-18": [
           "09:00",
-          "10:00",
+          "10:30",
           "14:00"
         ],
-        "2026-08-14": [
+        "2026-08-19": [
           "11:00",
-          "13:00",
-          "15:00"
+          "13:30"
         ],
-        "2026-08-17": [
-          "09:30",
-          "12:30",
-          "16:00"
+        "2026-08-20": [
+          "09:00",
+          "15:00"
         ]
       }
     },
     "competency_review": {
       "CARDIOLOGY": {
-        "2026-08-18": [
+        "2026-08-13": [
           "09:00",
           "11:00",
-          "15:00"
+          "14:00"
         ],
-        "2026-08-19": [
+        "2026-08-14": [
           "10:00",
-          "13:00",
-          "16:00"
+          "13:00"
         ],
-        "2026-08-20": [
+        "2026-08-17": [
           "09:30",
-          "12:00",
-          "14:30"
+          "15:30"
         ]
       }
     }
@@ -360,7 +355,7 @@
     ],
     "ONCOLOGY": [],
     "SURGERY": [
-      "2026-08-15"
+      "2026-08-28"
     ],
     "PEDIATRICS": []
   }

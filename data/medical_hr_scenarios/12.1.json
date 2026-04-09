@@ -11,11 +11,11 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -32,22 +32,22 @@
       "last_name": "Reyes",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "4402",
-      "otp_code": "381624",
+      "phone_last_four": "4829",
+      "otp_code": "731842",
       "role_code": "RN",
       "department_code": "RADIOLOGY",
-      "hire_date": "2019-03-18",
+      "hire_date": "2018-03-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-AX7731",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
+        "effective_date": "2025-01-01",
+        "expiration_date": "2025-12-31",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -79,12 +79,12 @@
       "first_name": "Catalina",
       "last_name": "Reyes",
       "date_of_birth": "1976-09-04",
-      "phone_last_four": "4402",
-      "otp_code": "381624",
+      "phone_last_four": "4829",
+      "otp_code": "731842",
       "department_code": "RADIOLOGY",
       "role_code": "RN",
       "unit_code": "2A-MED",
-      "hire_date": "2019-03-18",
+      "hire_date": "2018-03-12",
       "employment_status": "active",
       "certifications": [
         "BLS",
@@ -92,8 +92,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 87,
-        "hours_worked_past_year": 1880,
+        "months_employed": 99,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -117,32 +117,32 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 7.0
+        "pto": 15.0,
+        "sick": 6.0
       },
       "pto_requests": [],
       "schedule_type": "standard"
     },
-    "EMP517344": {
-      "employee_id": "EMP517344",
-      "first_name": "Mason",
-      "last_name": "Lee",
-      "date_of_birth": "1988-02-12",
-      "phone_last_four": "1187",
-      "otp_code": "552901",
-      "department_code": "EMERGENCY",
+    "EMP410233": {
+      "employee_id": "EMP410233",
+      "first_name": "Jordan",
+      "last_name": "Kim",
+      "date_of_birth": "1988-02-17",
+      "phone_last_four": "1337",
+      "otp_code": "554210",
+      "department_code": "SURGERY",
       "role_code": "RN",
-      "unit_code": "4B-ICU",
-      "hire_date": "2021-07-11",
+      "unit_code": "5A-SURG",
+      "hire_date": "2021-11-08",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "ACLS",
-        "CCRN"
+        "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 59,
+        "months_employed": 55,
         "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 10,
         "reason": null
@@ -170,17 +170,18 @@
         "pto": 12.0,
         "sick": 4.0
       },
-      "pto_requests": []
+      "pto_requests": [],
+      "schedule_type": "shift"
     }
   },
   "shifts": {
-    "SHF-20260714-0900": {
-      "shift_id": "SHF-20260714-0900",
+    "SHF-20260710-0800": {
+      "shift_id": "SHF-20260710-0800",
       "employee_id": "EMP624902",
       "unit_code": "2A-MED",
-      "date": "2026-07-14",
-      "start_time": "09:00",
-      "end_time": "17:00",
+      "date": "2026-07-10",
+      "start_time": "08:00",
+      "end_time": "16:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -192,7 +193,29 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-07-18",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260722-0700": {
+      "shift_id": "SHF-20260722-0700",
+      "employee_id": "EMP410233",
+      "unit_code": "5A-SURG",
+      "date": "2026-07-22",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-08-01",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -202,20 +225,19 @@
   "appointment_availability": {
     "orientation_followup": {
       "RADIOLOGY": {
-        "2026-06-29": [
+        "2026-06-30": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-30": [
+        "2026-07-01": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-07-01": [
+        "2026-07-02": [
           "09:30",
-          "11:30",
-          "14:30"
+          "11:30"
         ]
       }
     },
@@ -223,37 +245,32 @@
       "RADIOLOGY": {
         "2026-07-27": [
           "09:00",
-          "10:30",
+          "10:00",
           "14:00"
         ],
         "2026-07-28": [
           "11:00",
-          "13:00",
           "15:00"
         ],
         "2026-07-29": [
-          "09:00",
-          "12:00",
-          "16:00"
+          "09:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "RADIOLOGY": {
-        "2026-07-06": [
+        "2026-06-30": [
+          "08:30",
+          "10:30"
+        ],
+        "2026-07-01": [
           "09:00",
-          "11:00",
           "14:00"
         ],
-        "2026-07-07": [
-          "10:00",
-          "13:00",
+        "2026-07-02": [
+          "11:00",
           "15:00"
-        ],
-        "2026-07-08": [
-          "09:30",
-          "12:30",
-          "16:00"
         ]
       }
     }
@@ -265,14 +282,15 @@
   ],
   "department_blackout_dates": {
     "RADIOLOGY": [],
-    "EMERGENCY": [
+    "SURGERY": [
       "2026-07-04",
-      "2026-12-24"
+      "2026-07-05"
+    ],
+    "EMERGENCY": [
+      "2026-07-04"
     ],
     "ONCOLOGY": [],
-    "SURGERY": [
-      "2026-08-31"
-    ],
-    "PEDIATRICS": []
+    "PEDIATRICS": [],
+    "CARDIOLOGY": []
   }
 }
