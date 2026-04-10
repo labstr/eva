@@ -474,16 +474,21 @@ def _model_suffix_from_config(run_config: dict) -> str:
 _TIMESTAMP_RUN_RE = re.compile(r"^(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.\d+)_(.+)$")
 
 
-def _get_run_label(run_name: str, run_config: dict) -> str:
-    """Build a display label for a run, appending model info if not already in the name."""
-    # If the run name is <timestamp>_<system_name>, reformat as <system_name> (<timestamp>)
+def _get_system_and_timestamp(run_name: str, run_config: dict) -> tuple[str, str]:
+    """Return (system_name, timestamp) for a run."""
     m = _TIMESTAMP_RUN_RE.match(run_name)
     if m:
-        return f"{m.group(2)} ({m.group(1)})"
+        return m.group(2), m.group(1)
     suffix = _model_suffix_from_config(run_config)
-    if not suffix or suffix in run_name:
-        return run_name
-    return f"{suffix} ({run_name})"
+    if suffix and suffix not in run_name:
+        return f"{suffix} ({run_name})", ""
+    return run_name, ""
+
+
+def _get_run_label(run_name: str, run_config: dict) -> str:
+    """Build a display label for a run (used for chart legends)."""
+    system, timestamp = _get_system_and_timestamp(run_name, run_config)
+    return f"{system} ({timestamp})" if timestamp else system
 
 
 def _color_cell(val):
@@ -973,9 +978,12 @@ def render_cross_run_comparison(run_dirs: list[Path], output_dir_str: str = ""):
             metric_names = list(per_metric.keys())
             all_metric_names.update(metric_names)
             model_details = _extract_model_details(run_config)
+            system_name, run_timestamp = _get_system_and_timestamp(run_name, run_config)
             summary: dict = {
                 "run": run_name,
                 "label": _get_run_label(run_name, run_config),
+                "system_name": system_name,
+                "run_timestamp": run_timestamp,
                 "records": metrics_summary.get("total_records", 0),
                 "pipeline_type": _classify_pipeline_type(run_config),
                 **model_details,
@@ -997,9 +1005,12 @@ def render_cross_run_comparison(run_dirs: list[Path], output_dir_str: str = ""):
             all_metric_names.update(metric_names)
             df = pd.DataFrame(rows)
             model_details = _extract_model_details(run_config)
+            system_name, run_timestamp = _get_system_and_timestamp(run_name, run_config)
             summary = {
                 "run": run_name,
                 "label": _get_run_label(run_name, run_config),
+                "system_name": system_name,
+                "run_timestamp": run_timestamp,
                 "records": len(df),
                 "pipeline_type": _classify_pipeline_type(run_config),
                 **model_details,
@@ -1060,7 +1071,7 @@ def render_cross_run_comparison(run_dirs: list[Path], output_dir_str: str = ""):
 
     # Metrics table: EVA composites first, then all individual metrics
     table_composites = [c for c in _EVA_BAR_COMPOSITES if c in summary_df.columns]
-    display_cols = ["label", "records"] + table_composites + ordered_metrics
+    display_cols = ["system_name", "run_timestamp", "records"] + table_composites + ordered_metrics
     display_df = summary_df[display_cols].copy()
 
     # Add link column to navigate to Run Overview
@@ -1072,7 +1083,15 @@ def render_cross_run_comparison(run_dirs: list[Path], output_dir_str: str = ""):
     )
 
     composite_rename = {c: f"[EVA] {_EVA_COMPOSITE_DISPLAY[c]}" for c in table_composites}
-    display_df = display_df.rename(columns={"label": "Run", "records": "# Records", **composite_rename, **col_rename})
+    display_df = display_df.rename(
+        columns={
+            "system_name": "System",
+            "run_timestamp": "Timestamp",
+            "records": "# Records",
+            **composite_rename,
+            **col_rename,
+        }
+    )
     renamed_composites = [composite_rename[c] for c in table_composites]
     renamed_metrics = [col_rename[m] for m in ordered_metrics]
     all_score_cols = renamed_composites + renamed_metrics
