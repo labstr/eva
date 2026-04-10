@@ -11,9 +11,8 @@
       "BLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
-      "ONCC"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -22,8 +21,7 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -34,11 +32,11 @@
       "last_name": "Hassan",
       "facility_code": "LHTC-65D",
       "pin": "5640",
-      "phone_last_four": "8421",
+      "phone_last_four": "4821",
       "otp_code": "811163",
       "role_code": "RN",
       "department_code": "EMERGENCY",
-      "hire_date": "2021-09-13",
+      "hire_date": "2020-03-16",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -47,7 +45,7 @@
           "state_license_number": "IL-RN-53393990",
           "license_type": "RN",
           "state_code": "IL",
-          "expiration_date": "2026-07-10",
+          "expiration_date": "2026-06-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -59,11 +57,11 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2025-OLDMAL",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-10-18",
-        "expiration_date": "2026-10-17",
+        "effective_date": "2025-07-01",
+        "expiration_date": "2026-06-30",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -77,60 +75,19 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-12-31",
+        "expiration_date": "2027-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "8921456671": {
-      "npi": "8921456671",
-      "employee_id": "EMP320551",
-      "first_name": "Nora",
-      "last_name": "Levin",
-      "facility_code": "SVMC-12A",
-      "pin": "8824",
-      "phone_last_four": "1098",
-      "otp_code": "552901",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2018-04-09",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": null,
-      "licenses": {},
-      "malpractice": {
-        "carrier": "proassurance",
-        "policy_number": "POL-2026-SURG01",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 6000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BK4729183",
-        "facility_code": "SVMC-12A",
-        "state_code": "MA",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV",
-          "CV"
+        "privilege_list": [
+          {
+            "code": "PRV-ED-001",
+            "description": "Emergency triage",
+            "status": "active"
+          }
         ],
-        "expiration_date": "2028-03-31",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -141,21 +98,22 @@
       "employee_id": "EMP794093",
       "first_name": "Abdi",
       "last_name": "Hassan",
-      "date_of_birth": "1988-11-02",
-      "phone_last_four": "8421",
+      "date_of_birth": "1988-09-14",
+      "phone_last_four": "4821",
       "otp_code": "811163",
       "department_code": "EMERGENCY",
       "role_code": "RN",
-      "unit_code": "2A-MED",
-      "hire_date": "2021-09-13",
+      "unit_code": "4B-ICU",
+      "hire_date": "2020-03-16",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS"
+        "BLS",
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 57,
+        "months_employed": 75,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -180,57 +138,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
+        "pto": 14.0,
         "sick": 5.0
-      },
-      "pto_requests": []
-    },
-    "EMP320551": {
-      "employee_id": "EMP320551",
-      "first_name": "Nora",
-      "last_name": "Levin",
-      "date_of_birth": "1979-05-16",
-      "phone_last_four": "1098",
-      "otp_code": "552901",
-      "department_code": "SURGERY",
-      "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2018-04-09",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 98,
-        "hours_worked_past_year": 2104,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
       },
       "pto_requests": []
     }
@@ -239,22 +148,22 @@
     "SHF-20260620-0700": {
       "shift_id": "SHF-20260620-0700",
       "employee_id": "EMP794093",
-      "unit_code": "2A-MED",
+      "unit_code": "4B-ICU",
       "date": "2026-06-20",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
-      "hours_logged": 12.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-30",
+      "pay_period_end_date": "2026-06-27",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -276,7 +185,7 @@
         ],
         "2026-06-22": [
           "09:30",
-          "12:30",
+          "12:00",
           "16:00"
         ]
       }
@@ -299,15 +208,15 @@
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-06-18": [
-          "08:00",
-          "10:00"
-        ],
         "2026-06-19": [
           "09:00",
           "13:00"
         ],
         "2026-06-24": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-06-26": [
           "11:00",
           "15:00"
         ]
@@ -321,11 +230,13 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "SURGERY": [
-      "2026-07-04"
+    "CARDIOLOGY": [
+      "2026-07-06"
     ],
     "ONCOLOGY": [],
-    "CARDIOLOGY": [],
+    "SURGERY": [
+      "2026-06-29"
+    ],
     "PEDIATRICS": []
   }
 }

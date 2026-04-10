@@ -1,5 +1,5 @@
 {
-  "_current_date": "2026-07-22",
+  "_current_date": "2026-08-23",
   "unit_cert_requirements": {
     "4B-ICU": [
       "ACLS",
@@ -11,7 +11,8 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONS"
+      "ACLS",
+      "ONC-CHEMO"
     ],
     "5A-SURG": [
       "BLS",
@@ -24,35 +25,49 @@
     ]
   },
   "providers": {
-    "1487392045": {
-      "npi": "1487392045",
-      "employee_id": "EMP197966",
-      "first_name": "Oleg",
-      "last_name": "Chernyshev",
-      "facility_code": "MGH-04B",
-      "pin": "4821",
-      "phone_last_four": "6612",
-      "otp_code": "720556",
-      "role_code": "RN",
-      "department_code": "PEDIATRICS",
-      "hire_date": "2023-05-15",
+    "9196963901": {
+      "npi": "9196963901",
+      "employee_id": "EMP913373",
+      "first_name": "Lukas",
+      "last_name": "Hofer",
+      "facility_code": "WZH-89B",
+      "pin": "2625",
+      "phone_last_four": "4412",
+      "otp_code": "899787",
+      "role_code": "MD",
+      "department_code": "NEUROLOGY",
+      "hire_date": "2026-08-18",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
-      "licenses": {},
+      "licenses": {
+        "MA-MD-913373": {
+          "state_license_number": "MA-MD-913373",
+          "license_type": "MD",
+          "state_code": "MA",
+          "expiration_date": "2028-06-30",
+          "status": "active",
+          "investigation_hold": false,
+          "extension_status": null,
+          "extension_type": null,
+          "extension_days": null,
+          "supervising_physician_npi": null,
+          "extension_case_id": null
+        }
+      },
       "malpractice": {
         "carrier": "coverys",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
+        "effective_date": "2026-08-18",
+        "expiration_date": "2027-08-17",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BK4729183",
-        "facility_code": "MGH-04B",
+        "dea_number": "ZZ0000000",
+        "facility_code": "WZH-89B",
         "state_code": "MA",
         "schedule_codes": [
           "CII",
@@ -60,39 +75,97 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-03-31",
+        "expiration_date": "2027-12-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [],
+        "privilege_list": [
+          {
+            "code": "PRV-NEUR-001",
+            "description": "General neurology consults",
+            "status": "active"
+          },
+          {
+            "code": "PRV-NEUR-002",
+            "description": "Inpatient neurology service",
+            "status": "active"
+          }
+        ],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
     }
   },
   "employees": {
-    "EMP197966": {
-      "employee_id": "EMP197966",
-      "first_name": "Oleg",
-      "last_name": "Chernyshev",
-      "date_of_birth": "1997-11-06",
-      "phone_last_four": "6612",
-      "otp_code": "720556",
-      "department_code": "PEDIATRICS",
-      "role_code": "RN",
-      "unit_code": "1D-PEDS",
-      "hire_date": "2023-05-15",
+    "EMP913373": {
+      "employee_id": "EMP913373",
+      "first_name": "Lukas",
+      "last_name": "Hofer",
+      "date_of_birth": "1984-03-17",
+      "phone_last_four": "4412",
+      "otp_code": "899787",
+      "department_code": "NEUROLOGY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2026-08-18",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "PALS"
+        "ACLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": false,
+        "months_employed": 0,
+        "hours_worked_past_year": 0,
+        "fmla_weeks_remaining": 0,
+        "reason": "Employee has not yet met FMLA tenure and hours requirements"
+      },
+      "onboarding_checklist": null,
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP204581": {
+      "employee_id": "EMP204581",
+      "first_name": "Mina",
+      "last_name": "Patel",
+      "date_of_birth": "1990-11-02",
+      "phone_last_four": "2281",
+      "otp_code": "551204",
+      "department_code": "EMERGENCY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2021-04-12",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS",
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 38,
-        "hours_worked_past_year": 1876,
+        "months_employed": 64,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -116,69 +189,21 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
-        "sick": 5.0
-      },
-      "pto_requests": []
-    },
-    "EMP284510": {
-      "employee_id": "EMP284510",
-      "first_name": "Maya",
-      "last_name": "Donnelly",
-      "date_of_birth": "1989-04-18",
-      "phone_last_four": "4428",
-      "otp_code": "118204",
-      "department_code": "PEDIATRICS",
-      "role_code": "RN",
-      "unit_code": "1D-PEDS",
-      "hire_date": "2021-09-20",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "PALS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 58,
-        "hours_worked_past_year": 1920,
-        "fmla_weeks_remaining": 10,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 7.0
+        "pto": 12.0,
+        "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260805-0700": {
-      "shift_id": "SHF-20260805-0700",
-      "employee_id": "EMP197966",
-      "unit_code": "1D-PEDS",
-      "date": "2026-08-05",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+    "SHF-20260828-0800": {
+      "shift_id": "SHF-20260828-0800",
+      "employee_id": "EMP913373",
+      "unit_code": "2A-MED",
+      "date": "2026-08-28",
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -189,7 +214,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-15",
+      "pay_period_end_date": "2026-08-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -198,42 +223,41 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "PEDIATRICS": {
-        "2026-07-24": [
-          "09:00",
+      "NEUROLOGY": {
+        "2026-09-02": [
+          "10:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-27": [
-          "10:00",
+        "2026-09-03": [
+          "09:00",
           "13:00"
+        ],
+        "2026-09-05": [
+          "10:00",
+          "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "PEDIATRICS": {
-        "2026-07-06": [
+      "NEUROLOGY": {
+        "2026-09-10": [
           "09:00",
-          "10:30"
+          "11:00"
         ],
-        "2026-10-13": [
-          "09:00",
-          "11:00",
+        "2026-09-11": [
+          "10:00",
           "14:00"
-        ],
-        "2026-10-14": [
-          "08:30",
-          "10:00"
         ]
       }
     },
     "competency_review": {
-      "PEDIATRICS": {
-        "2026-07-28": [
+      "NEUROLOGY": {
+        "2026-09-08": [
           "09:00",
           "13:00"
         ],
-        "2026-07-30": [
+        "2026-09-09": [
           "10:00",
           "15:00"
         ]
@@ -241,16 +265,14 @@
     }
   },
   "org_holidays": [
-    "2026-07-04",
     "2026-09-07",
-    "2026-11-26"
+    "2026-11-26",
+    "2026-12-25"
   ],
   "department_blackout_dates": {
-    "PEDIATRICS": [],
-    "EMERGENCY": [],
-    "ONCOLOGY": [],
-    "SURGERY": [],
-    "CARDIOLOGY": [],
-    "RADIOLOGY": []
+    "NEUROLOGY": [],
+    "EMERGENCY": [
+      "2026-09-07"
+    ]
   }
 }

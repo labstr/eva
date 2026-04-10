@@ -2,23 +2,19 @@
   "_current_date": "2026-06-13",
   "unit_cert_requirements": {
     "8A-ER": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "4B-ICU": [
-      "BLS",
       "ACLS",
+      "BLS",
       "CCRN"
     ],
     "2A-MED": [
       "BLS"
     ],
     "3C-ONC": [
-      "BLS",
-      "ACLS"
-    ],
-    "5A-SURG": [
       "BLS",
       "ACLS"
     ],
@@ -30,16 +26,16 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP480612",
-      "first_name": "Saoirse",
-      "last_name": "O'Brien",
+      "employee_id": "EMP990001",
+      "first_name": "Avery",
+      "last_name": "Chen",
       "facility_code": "MGH-04B",
-      "pin": "4812",
-      "phone_last_four": "4812",
+      "pin": "7291",
+      "phone_last_four": "4421",
       "otp_code": "483920",
-      "role_code": "RN",
+      "role_code": "MD",
       "department_code": "EMERGENCY",
-      "hire_date": "2018-09-10",
+      "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -64,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-08-31",
+        "expiration_date": "2027-05-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -81,22 +77,22 @@
       "employee_id": "EMP480612",
       "first_name": "Saoirse",
       "last_name": "O'Brien",
-      "date_of_birth": "1984-04-02",
-      "phone_last_four": "4812",
-      "otp_code": "483920",
+      "date_of_birth": "1991-10-22",
+      "phone_last_four": "6612",
+      "otp_code": "401882",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "8A-ER",
-      "hire_date": "2018-09-10",
+      "hire_date": "2020-03-16",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 93,
+        "months_employed": 75,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -128,25 +124,25 @@
     },
     "EMP189814": {
       "employee_id": "EMP189814",
-      "first_name": "Maya",
-      "last_name": "Chen",
-      "date_of_birth": "1990-11-18",
-      "phone_last_four": "6621",
-      "otp_code": "551204",
+      "first_name": "Jordan",
+      "last_name": "Martinez",
+      "date_of_birth": "1988-04-09",
+      "phone_last_four": "9814",
+      "otp_code": "552731",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "8A-ER",
-      "hire_date": "2021-03-22",
+      "hire_date": "2018-11-05",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 62,
-        "hours_worked_past_year": 1804,
+        "months_employed": 91,
+        "hours_worked_past_year": 1936,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -174,14 +170,63 @@
         "sick": 4.0
       },
       "pto_requests": []
+    },
+    "EMP990001": {
+      "employee_id": "EMP990001",
+      "first_name": "Avery",
+      "last_name": "Chen",
+      "date_of_birth": "1981-06-14",
+      "phone_last_four": "4421",
+      "otp_code": "483920",
+      "department_code": "EMERGENCY",
+      "role_code": "MD",
+      "unit_code": "8A-ER",
+      "hire_date": "2019-08-12",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 82,
+        "hours_worked_past_year": 2016,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260619-0700": {
-      "shift_id": "SHF-20260619-0700",
+    "SHF-20260614-0700": {
+      "shift_id": "SHF-20260614-0700",
       "employee_id": "EMP480612",
       "unit_code": "8A-ER",
-      "date": "2026-06-19",
+      "date": "2026-06-14",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -199,11 +244,11 @@
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260621-0700": {
-      "shift_id": "SHF-20260621-0700",
+    "SHF-20260616-0700": {
+      "shift_id": "SHF-20260616-0700",
       "employee_id": "EMP189814",
       "unit_code": "8A-ER",
-      "date": "2026-06-21",
+      "date": "2026-06-16",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -239,40 +284,42 @@
         ],
         "2026-06-18": [
           "09:30",
-          "12:30",
-          "16:00"
+          "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-06-16": [
+        "2026-06-22": [
           "09:00",
-          "11:00"
-        ],
-        "2026-06-17": [
-          "10:00",
+          "11:00",
           "14:00"
         ],
-        "2026-06-18": [
+        "2026-06-23": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-06-24": [
           "09:30",
-          "15:30"
+          "15:00"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-06-16": [
-          "08:00",
-          "13:00"
-        ],
-        "2026-06-17": [
+        "2026-06-25": [
           "09:00",
+          "11:00",
           "14:00"
         ],
-        "2026-06-18": [
+        "2026-06-26": [
           "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-06-29": [
+          "09:30",
+          "12:30"
         ]
       }
     }
@@ -284,10 +331,9 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "CARDIOLOGY": [],
     "ONCOLOGY": [],
     "SURGERY": [],
     "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "CARDIOLOGY": []
   }
 }

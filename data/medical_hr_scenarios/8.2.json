@@ -28,19 +28,19 @@
       "employee_id": "EMP292401",
       "first_name": "Anh",
       "last_name": "Nguyen",
-      "facility_code": "MGH-04B",
+      "facility_code": "ER-01A",
       "pin": "4821",
-      "phone_last_four": "4821",
+      "phone_last_four": "4417",
       "otp_code": "179046",
       "role_code": "MD",
       "department_code": "EMERGENCY",
-      "hire_date": "2018-09-17",
+      "hire_date": "2019-08-12",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
       "clearance_code": "CLR-OCC-564657",
       "licenses": {
-        "MA-MD-564821": {
-          "state_license_number": "MA-MD-564821",
+        "MA-MD-564201": {
+          "state_license_number": "MA-MD-564201",
           "license_type": "MD",
           "state_code": "MA",
           "expiration_date": "2027-03-31",
@@ -54,8 +54,8 @@
         }
       },
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2026-EM4821",
+        "carrier": "medpro",
+        "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -65,7 +65,7 @@
       },
       "dea_registration": {
         "dea_number": "BK4729183",
-        "facility_code": "MGH-04B",
+        "facility_code": "ER-01A",
         "state_code": "MA",
         "schedule_codes": [
           "CII",
@@ -73,7 +73,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-05-31",
+        "expiration_date": "2027-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -82,78 +82,12 @@
         "privilege_list": [
           {
             "code": "PRV-ICU-009",
-            "description": "Intensive care unit admitting and management",
+            "description": "Critical care ICU admitting and management",
             "status": "suspended"
           },
           {
-            "code": "PRV-ED-101",
+            "code": "PRV-EM-003",
             "description": "Emergency department attending coverage",
-            "status": "active"
-          }
-        ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "1748392056": {
-      "npi": "1748392056",
-      "employee_id": "EMP310555",
-      "first_name": "Maya",
-      "last_name": "Patel",
-      "facility_code": "BWH-02A",
-      "pin": "3174",
-      "phone_last_four": "7702",
-      "otp_code": "438210",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2017-04-10",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-310555",
-      "licenses": {
-        "MA-MD-310555": {
-          "state_license_number": "MA-MD-310555",
-          "license_type": "MD",
-          "state_code": "MA",
-          "expiration_date": "2027-11-30",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-SU3105",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 6000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BF2819044",
-        "facility_code": "BWH-02A",
-        "state_code": "MA",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV"
-        ],
-        "expiration_date": "2027-09-30",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-SURG-001",
-            "description": "General surgery privileges",
             "status": "active"
           }
         ],
@@ -167,13 +101,13 @@
       "employee_id": "EMP292401",
       "first_name": "Anh",
       "last_name": "Nguyen",
-      "date_of_birth": "1982-08-08",
-      "phone_last_four": "4821",
+      "date_of_birth": "1985-11-14",
+      "phone_last_four": "4417",
       "otp_code": "179046",
       "department_code": "EMERGENCY",
       "role_code": "MD",
       "unit_code": "4B-ICU",
-      "hire_date": "2018-09-17",
+      "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -183,8 +117,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 94,
-        "hours_worked_past_year": 1820,
+        "months_employed": 83,
+        "hours_worked_past_year": 1840,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -209,7 +143,7 @@
       "leave_records": [
         {
           "leave_type": "personal",
-          "start_date": "2026-05-15",
+          "start_date": "2026-05-01",
           "end_date": "2026-07-01",
           "status": "completed",
           "case_id": "CASE-LOA-292401"
@@ -221,17 +155,17 @@
       },
       "pto_requests": []
     },
-    "EMP310555": {
-      "employee_id": "EMP310555",
+    "EMP381552": {
+      "employee_id": "EMP381552",
       "first_name": "Maya",
       "last_name": "Patel",
-      "date_of_birth": "1979-11-14",
-      "phone_last_four": "7702",
-      "otp_code": "438210",
+      "date_of_birth": "1990-02-09",
+      "phone_last_four": "8824",
+      "otp_code": "604118",
       "department_code": "SURGERY",
-      "role_code": "MD",
+      "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2017-04-10",
+      "hire_date": "2021-04-05",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -239,8 +173,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 111,
-        "hours_worked_past_year": 1965,
+        "months_employed": 63,
+        "hours_worked_past_year": 1760,
         "fmla_weeks_remaining": 10,
         "reason": null
       },
@@ -264,8 +198,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
+        "pto": 12.0,
+        "sick": 4.0
       },
       "pto_requests": []
     }
@@ -292,6 +226,28 @@
       "pay_period_end_date": "2026-07-19",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
+    },
+    "SHF-20260709-0700": {
+      "shift_id": "SHF-20260709-0700",
+      "employee_id": "EMP381552",
+      "unit_code": "5A-SURG",
+      "date": "2026-07-09",
+      "start_time": "07:00",
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-07-19",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
     }
   },
   "notifications": [],
@@ -299,52 +255,54 @@
   "appointment_availability": {
     "orientation_followup": {
       "EMERGENCY": {
-        "2026-07-21": [
+        "2026-07-08": [
           "09:00",
-          "10:00"
+          "11:00",
+          "14:00"
         ],
-        "2026-07-22": [
-          "09:00",
-          "11:00"
+        "2026-07-09": [
+          "10:00",
+          "13:00",
+          "15:00"
+        ],
+        "2026-07-10": [
+          "09:30",
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-07-21": [
+        "2026-07-08": [
           "09:00",
           "10:00"
         ],
-        "2026-07-22": [
+        "2026-07-09": [
+          "11:00",
+          "14:00"
+        ],
+        "2026-07-10": [
           "09:00",
-          "11:00"
+          "15:00"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-07-21": [
-          "09:00",
+        "2026-07-08": [
+          "08:00",
           "10:00",
-          "11:00"
+          "14:00"
         ],
-        "2026-07-22": [
+        "2026-07-09": [
+          "09:00",
+          "13:00",
+          "15:00"
+        ],
+        "2026-07-10": [
           "08:30",
-          "09:30",
-          "10:30"
-        ],
-        "2026-07-24": [
-          "09:00",
-          "10:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-07-21": [
-          "09:00",
-          "10:00"
-        ],
-        "2026-07-22": [
-          "09:00"
+          "11:00",
+          "14:30"
         ]
       }
     }
@@ -356,10 +314,11 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "SURGERY": [],
+    "SURGERY": [
+      "2026-11-27"
+    ],
     "ONCOLOGY": [],
     "PEDIATRICS": [],
-    "CARDIOLOGY": [],
-    "RADIOLOGY": []
+    "CARDIOLOGY": []
   }
 }

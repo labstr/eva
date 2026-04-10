@@ -29,13 +29,13 @@
       "employee_id": "EMP897305",
       "first_name": "Mamadou",
       "last_name": "Diop",
-      "facility_code": "HR-01A",
+      "facility_code": "MGH-04B",
       "pin": "4821",
       "phone_last_four": "4418",
       "otp_code": "827712",
-      "role_code": "RN",
+      "role_code": "MD",
       "department_code": "RADIOLOGY",
-      "hire_date": "2019-03-11",
+      "hire_date": "2021-06-14",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -52,7 +52,7 @@
       },
       "dea_registration": {
         "dea_number": "BK4729183",
-        "facility_code": "HR-01A",
+        "facility_code": "MGH-04B",
         "state_code": "MA",
         "schedule_codes": [
           "CII",
@@ -60,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-06-30",
+        "expiration_date": "2027-05-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -77,23 +77,22 @@
       "employee_id": "EMP897305",
       "first_name": "Mamadou",
       "last_name": "Diop",
-      "date_of_birth": "1971-08-06",
+      "date_of_birth": "1994-04-12",
       "phone_last_four": "4418",
       "otp_code": "827712",
       "department_code": "RADIOLOGY",
-      "role_code": "RN",
+      "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2019-03-11",
+      "hire_date": "2021-06-14",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "ACLS"
       ],
-      "schedule_type": "standard",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 88,
-        "hours_worked_past_year": 1984,
+        "months_employed": 61,
+        "hours_worked_past_year": 1968,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -124,20 +123,20 @@
       },
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
+        "pto": 15.0,
         "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20261028-0900": {
-      "shift_id": "SHF-20261028-0900",
+    "SHF-20260826-0800": {
+      "shift_id": "SHF-20260826-0800",
       "employee_id": "EMP897305",
       "unit_code": "2A-MED",
-      "date": "2026-10-28",
-      "start_time": "09:00",
-      "end_time": "17:00",
+      "date": "2026-08-26",
+      "start_time": "08:00",
+      "end_time": "16:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -149,7 +148,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-10-31",
+      "pay_period_end_date": "2026-08-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -159,71 +158,66 @@
   "appointment_availability": {
     "orientation_followup": {
       "RADIOLOGY": {
-        "2026-07-20": [
+        "2026-07-21": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-21": [
-          "10:00",
-          "13:00"
-        ],
         "2026-07-22": [
-          "09:30",
+          "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-07-24": [
+          "09:30",
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "RADIOLOGY": {
-        "2026-07-20": [
+        "2026-07-28": [
           "09:00",
-          "11:00"
-        ],
-        "2026-07-21": [
-          "10:00",
+          "10:30",
           "14:00"
         ],
-        "2026-07-22": [
-          "09:30",
+        "2026-07-29": [
+          "11:00",
+          "13:30"
+        ],
+        "2026-07-31": [
+          "09:00",
           "15:00"
         ]
       }
     },
     "competency_review": {
       "RADIOLOGY": {
-        "2026-07-20": [
+        "2026-07-23": [
           "09:00",
-          "11:00"
-        ],
-        "2026-07-21": [
-          "10:00",
+          "11:00",
           "14:00"
         ],
-        "2026-07-22": [
+        "2026-07-27": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-07-30": [
           "09:30",
-          "15:00"
+          "15:30"
         ]
       }
     }
   },
   "org_holidays": [
+    "2026-07-03",
     "2026-09-07",
-    "2026-11-26",
-    "2026-12-25"
+    "2026-11-26"
   ],
   "department_blackout_dates": {
-    "RADIOLOGY": [],
-    "CARDIOLOGY": [
-      "2026-12-24"
-    ],
-    "EMERGENCY": [
-      "2026-11-27"
-    ],
-    "ONCOLOGY": [],
-    "SURGERY": [
-      "2026-10-30"
-    ],
-    "PEDIATRICS": []
+    "RADIOLOGY": [
+      "2026-07-20",
+      "2026-12-28"
+    ]
   }
 }

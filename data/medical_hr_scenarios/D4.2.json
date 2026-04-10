@@ -7,21 +7,21 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ONC"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -32,19 +32,19 @@
       "last_name": "Morales",
       "facility_code": "GCA-79B",
       "pin": "6733",
-      "phone_last_four": "0147",
+      "phone_last_four": "4819",
       "otp_code": "335113",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
-      "hire_date": "2019-09-16",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2018-09-17",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "AZ-MD-583920": {
-          "state_license_number": "AZ-MD-583920",
+        "CA-MD-458271": {
+          "state_license_number": "CA-MD-458271",
           "license_type": "MD",
-          "state_code": "AZ",
+          "state_code": "CA",
           "expiration_date": "2027-11-30",
           "status": "active",
           "investigation_hold": false,
@@ -57,11 +57,11 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2025-QM71RT",
+        "policy_number": "POL-2025-QM72L9",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-08-23",
-        "expiration_date": "2026-07-04",
+        "effective_date": "2025-07-01",
+        "expiration_date": "2026-06-30",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -75,7 +75,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-03-31",
+        "expiration_date": "2027-08-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -83,13 +83,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-EMERG-101",
-            "description": "Emergency department attending privileges",
+            "code": "PRV-CARD-001",
+            "description": "General cardiology admitting privileges",
             "status": "active"
           },
           {
-            "code": "PRV-PROC-204",
-            "description": "Moderate sedation oversight",
+            "code": "PRV-CARD-014",
+            "description": "Cardiac stress test supervision",
             "status": "active"
           }
         ],
@@ -97,27 +97,27 @@
       },
       "scheduled_appointments": []
     },
-    "4812203341": {
-      "npi": "4812203341",
-      "employee_id": "EMP771245",
+    "7814459021": {
+      "npi": "7814459021",
+      "employee_id": "EMP210443",
       "first_name": "Daniel",
-      "last_name": "Foster",
-      "facility_code": "RMC-12A",
-      "pin": "4182",
-      "phone_last_four": "6621",
-      "otp_code": "441902",
+      "last_name": "Kline",
+      "facility_code": "RVM-12A",
+      "pin": "4821",
+      "phone_last_four": "2204",
+      "otp_code": "771204",
       "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2017-04-10",
+      "department_code": "SURGERY",
+      "hire_date": "2016-04-11",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "CA-MD-221904": {
-          "state_license_number": "CA-MD-221904",
+        "AZ-MD-772104": {
+          "state_license_number": "AZ-MD-772104",
           "license_type": "MD",
-          "state_code": "CA",
-          "expiration_date": "2028-01-14",
+          "state_code": "AZ",
+          "expiration_date": "2028-02-28",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -129,7 +129,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-RT44LM",
+        "policy_number": "POL-2026-HJ38K2",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -138,21 +138,28 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BF4729183",
-        "facility_code": "RMC-12A",
-        "state_code": "CA",
+        "dea_number": "BK4729183",
+        "facility_code": "RVM-12A",
+        "state_code": "AZ",
         "schedule_codes": [
           "CII",
           "CIII",
-          "CIV"
+          "CIV",
+          "CV"
         ],
-        "expiration_date": "2027-09-30",
+        "expiration_date": "2028-01-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [],
+        "privilege_list": [
+          {
+            "code": "PRV-SURG-001",
+            "description": "General surgery privileges",
+            "status": "active"
+          }
+        ],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -163,22 +170,71 @@
       "employee_id": "EMP453894",
       "first_name": "Esperanza",
       "last_name": "Morales",
-      "date_of_birth": "1984-02-18",
-      "phone_last_four": "0147",
+      "date_of_birth": "1982-03-14",
+      "phone_last_four": "4819",
       "otp_code": "335113",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2019-09-16",
+      "hire_date": "2018-09-17",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS"
+        "ACLS",
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 81,
+        "months_employed": 93,
         "hours_worked_past_year": 1840,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP210443": {
+      "employee_id": "EMP210443",
+      "first_name": "Daniel",
+      "last_name": "Kline",
+      "date_of_birth": "1976-12-02",
+      "phone_last_four": "2204",
+      "otp_code": "771204",
+      "department_code": "SURGERY",
+      "role_code": "MD",
+      "unit_code": "5A-SURG",
+      "hire_date": "2016-04-11",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS",
+        "TNCC"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 122,
+        "hours_worked_past_year": 1960,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -206,66 +262,17 @@
         "sick": 6.0
       },
       "pto_requests": []
-    },
-    "EMP771245": {
-      "employee_id": "EMP771245",
-      "first_name": "Daniel",
-      "last_name": "Foster",
-      "date_of_birth": "1978-10-09",
-      "phone_last_four": "6621",
-      "otp_code": "441902",
-      "department_code": "CARDIOLOGY",
-      "role_code": "MD",
-      "unit_code": "4B-ICU",
-      "hire_date": "2017-04-10",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "CCRN"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 110,
-        "hours_worked_past_year": 1950,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 14.0,
-        "sick": 4.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260614-0700": {
-      "shift_id": "SHF-20260614-0700",
+    "SHF-20260614-0800": {
+      "shift_id": "SHF-20260614-0800",
       "employee_id": "EMP453894",
       "unit_code": "2A-MED",
       "date": "2026-06-14",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -276,7 +283,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-20",
+      "pay_period_end_date": "2026-06-27",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -285,52 +292,54 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
-        "2026-06-15": [
+      "CARDIOLOGY": {
+        "2026-06-16": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-16": [
+        "2026-06-18": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-06-18": [
+        "2026-06-22": [
           "09:30",
-          "12:30"
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
-        "2026-06-17": [
+      "CARDIOLOGY": {
+        "2026-06-23": [
           "09:00",
-          "11:00"
-        ],
-        "2026-06-19": [
-          "10:00",
+          "10:30",
           "14:00"
         ],
-        "2026-06-22": [
+        "2026-06-24": [
+          "11:00",
+          "15:00"
+        ],
+        "2026-06-26": [
           "09:30",
           "13:30"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
-        "2026-06-16": [
-          "08:00",
-          "10:00"
-        ],
-        "2026-06-18": [
+      "CARDIOLOGY": {
+        "2026-06-17": [
           "09:00",
+          "11:00",
+          "14:00"
+        ],
+        "2026-06-19": [
+          "10:00",
           "13:00"
         ],
-        "2026-06-23": [
-          "11:00",
-          "15:00"
+        "2026-06-25": [
+          "09:30",
+          "15:30"
         ]
       }
     }
@@ -341,12 +350,13 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
-    "CARDIOLOGY": [
+    "CARDIOLOGY": [],
+    "SURGERY": [
       "2026-07-06"
     ],
     "ONCOLOGY": [],
-    "SURGERY": [],
-    "PEDIATRICS": []
+    "EMERGENCY": [],
+    "PEDIATRICS": [],
+    "RADIOLOGY": []
   }
 }

@@ -11,12 +11,11 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
       "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -27,16 +26,16 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP900111",
-      "first_name": "Elena",
-      "last_name": "Markovic",
+      "employee_id": "EMP765822",
+      "first_name": "Dmitri",
+      "last_name": "Volkov",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "1188",
-      "otp_code": "483920",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2018-03-12",
+      "pin": "4821",
+      "phone_last_four": "6624",
+      "otp_code": "771088",
+      "role_code": "RN",
+      "department_code": "ORTHOPEDICS",
+      "hire_date": "2021-03-08",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -61,8 +60,8 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-08-31",
-        "status": "active",
+        "expiration_date": "2027-02-28",
+        "status": "inactive",
         "transfer_reason": null,
         "transfer_case_id": null
       },
@@ -78,72 +77,23 @@
       "employee_id": "EMP765822",
       "first_name": "Dmitri",
       "last_name": "Volkov",
-      "date_of_birth": "1994-07-09",
-      "phone_last_four": "4821",
+      "date_of_birth": "1990-11-22",
+      "phone_last_four": "6624",
       "otp_code": "771088",
       "department_code": "ORTHOPEDICS",
       "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2023-02-06",
+      "hire_date": "2021-03-08",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 40,
+        "months_employed": 63,
         "hours_worked_past_year": 1876,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 14.0,
-        "sick": 6.0
-      },
-      "pto_requests": []
-    },
-    "EMP441209": {
-      "employee_id": "EMP441209",
-      "first_name": "Nina",
-      "last_name": "Petrov",
-      "date_of_birth": "1989-11-21",
-      "phone_last_four": "2674",
-      "otp_code": "552901",
-      "department_code": "ONCOLOGY",
-      "role_code": "RN",
-      "unit_code": "3C-ONC",
-      "hire_date": "2021-09-13",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "ONC-CERT"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 57,
-        "hours_worked_past_year": 1720,
         "fmla_weeks_remaining": 8,
         "reason": null
       },
@@ -167,33 +117,33 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 11.0,
-        "sick": 4.0
+        "pto": 14.0,
+        "sick": 5.0
       },
       "pto_requests": []
     },
-    "EMP900111": {
-      "employee_id": "EMP900111",
+    "EMP431906": {
+      "employee_id": "EMP431906",
       "first_name": "Elena",
-      "last_name": "Markovic",
-      "date_of_birth": "1981-04-18",
-      "phone_last_four": "1188",
-      "otp_code": "483920",
-      "department_code": "SURGERY",
-      "role_code": "MD",
+      "last_name": "Markova",
+      "date_of_birth": "1988-07-14",
+      "phone_last_four": "3187",
+      "otp_code": "442901",
+      "department_code": "ORTHOPEDICS",
+      "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2018-03-12",
+      "hire_date": "2020-09-21",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 99,
-        "hours_worked_past_year": 1964,
-        "fmla_weeks_remaining": 10,
+        "months_employed": 69,
+        "hours_worked_past_year": 1810,
+        "fmla_weeks_remaining": 12,
         "reason": null
       },
       "onboarding_checklist": {
@@ -216,8 +166,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 7.0
+        "pto": 16.5,
+        "sick": 6.0
       },
       "pto_requests": []
     }
@@ -241,29 +191,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-28",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260622-0700": {
-      "shift_id": "SHF-20260622-0700",
-      "employee_id": "EMP900111",
-      "unit_code": "5A-SURG",
-      "date": "2026-06-22",
-      "start_time": "07:00",
-      "end_time": "17:00",
-      "hours_scheduled": 10.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-06-28",
+      "pay_period_end_date": "2026-06-27",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -273,85 +201,45 @@
   "appointment_availability": {
     "orientation_followup": {
       "ORTHOPEDICS": {
-        "2026-06-18": [
+        "2026-06-22": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-19": [
+        "2026-06-23": [
           "10:00",
+          "13:00",
           "15:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-06-18": [
-          "09:30",
-          "13:30"
-        ],
-        "2026-06-19": [
-          "10:30",
-          "14:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "ORTHOPEDICS": {
-        "2026-09-01": [
-          "09:00",
+        "2026-07-27": [
           "10:00",
           "11:00",
           "14:00"
         ],
-        "2026-09-02": [
-          "08:30",
-          "09:30",
-          "13:00"
-        ],
-        "2026-09-03": [
+        "2026-07-28": [
           "09:00",
+          "13:00",
           "15:00"
-        ]
-      },
-      "ONCOLOGY": {
-        "2026-09-01": [
-          "09:30",
-          "10:30"
         ],
-        "2026-09-02": [
-          "11:00",
-          "14:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-09-01": [
-          "08:30",
-          "09:30"
-        ],
-        "2026-09-02": [
+        "2026-07-29": [
           "10:00",
-          "13:30"
+          "14:00"
         ]
       }
     },
     "competency_review": {
       "ORTHOPEDICS": {
-        "2026-06-25": [
+        "2026-06-24": [
           "09:00",
-          "13:00"
-        ],
-        "2026-06-26": [
-          "10:00",
-          "14:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-06-25": [
-          "08:00",
           "11:00"
         ],
-        "2026-06-26": [
-          "09:00",
-          "15:00"
+        "2026-06-25": [
+          "10:00",
+          "14:00"
         ]
       }
     }
@@ -362,8 +250,6 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "ORTHOPEDICS": [],
-    "ONCOLOGY": [],
-    "SURGERY": []
+    "ORTHOPEDICS": []
   }
 }

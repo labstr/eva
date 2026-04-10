@@ -7,15 +7,13 @@
       "CCRN"
     ],
     "2A-MED": [
-      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ONC"
+      "ACLS"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
       "TNCC"
     ],
@@ -32,7 +30,7 @@
       "last_name": "Obi",
       "facility_code": "WDJU-85K",
       "pin": "1258",
-      "phone_last_four": "4821",
+      "phone_last_four": "4418",
       "otp_code": "282710",
       "role_code": "MD",
       "department_code": "PATHOLOGY",
@@ -41,8 +39,8 @@
       "ehr_access_case_id": null,
       "clearance_code": "CLR-OCC-378258",
       "licenses": {
-        "FL-MD-4821937": {
-          "state_license_number": "FL-MD-4821937",
+        "FL-MD-684219": {
+          "state_license_number": "FL-MD-684219",
           "license_type": "MD",
           "state_code": "FL",
           "expiration_date": "2027-11-30",
@@ -56,19 +54,19 @@
         }
       },
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2025-QM7R2A",
+        "carrier": "medpro",
+        "policy_number": "POL-2025-LK82Q9",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-09-01",
-        "expiration_date": "2026-09-01",
+        "effective_date": "2025-09-15",
+        "expiration_date": "2026-09-14",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
         "dea_number": "JP8583392",
         "facility_code": "WDJU-85K",
-        "state_code": "MA",
+        "state_code": "GA",
         "schedule_codes": [
           "CII",
           "CIII",
@@ -84,17 +82,17 @@
         "privilege_list": [
           {
             "code": "PRV-CARD-003",
-            "description": "Cardiovascular pathology consults",
+            "description": "Cardiac consult interpretation",
             "status": "suspended"
           },
           {
             "code": "PRV-ECHO-009",
-            "description": "Echocardiography interpretation support",
+            "description": "Echocardiography interpretation",
             "status": "suspended"
           },
           {
-            "code": "PRV-LAB-014",
-            "description": "Core pathology laboratory oversight",
+            "code": "PRV-PATH-014",
+            "description": "Surgical pathology sign-out",
             "status": "active"
           }
         ],
@@ -108,22 +106,22 @@
       "employee_id": "EMP937302",
       "first_name": "Adaeze",
       "last_name": "Obi",
-      "date_of_birth": "1976-10-11",
-      "phone_last_four": "4821",
+      "date_of_birth": "1988-02-14",
+      "phone_last_four": "4418",
       "otp_code": "282710",
       "department_code": "PATHOLOGY",
       "role_code": "MD",
       "unit_code": "2A-MED",
       "hire_date": "2018-07-16",
-      "employment_status": "on_leave",
+      "employment_status": "active",
       "certifications": [
-        "ACLS",
-        "BLS"
+        "BLS",
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 97,
-        "hours_worked_past_year": 1680,
+        "hours_worked_past_year": 1760,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -148,27 +146,27 @@
       "leave_records": [
         {
           "leave_type": "medical",
-          "start_date": "2026-06-15",
+          "start_date": "2026-05-01",
           "end_date": "2026-08-31",
           "status": "approved",
-          "case_id": "CASE-LOA-937302"
+          "case_id": "CASE-MLV-937302"
         }
       ],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
+        "pto": 14.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260820-0700": {
-      "shift_id": "SHF-20260820-0700",
+    "SHF-20260916-0800": {
+      "shift_id": "SHF-20260916-0800",
       "employee_id": "EMP937302",
       "unit_code": "2A-MED",
-      "date": "2026-08-20",
-      "start_time": "07:00",
-      "end_time": "15:00",
+      "date": "2026-09-16",
+      "start_time": "08:00",
+      "end_time": "16:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -180,7 +178,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
+      "pay_period_end_date": "2026-09-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -190,12 +188,12 @@
   "appointment_availability": {
     "orientation_followup": {
       "PATHOLOGY": {
-        "2026-09-10": [
+        "2026-08-20": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-09-12": [
+        "2026-08-21": [
           "10:00",
           "13:00"
         ]
@@ -203,31 +201,30 @@
     },
     "return_to_work_checkin": {
       "PATHOLOGY": {
-        "2026-09-02": [
+        "2026-09-01": [
           "09:00",
-          "10:00"
+          "11:00"
         ],
-        "2026-09-03": [
-          "11:00",
+        "2026-09-02": [
+          "10:00",
           "14:00"
         ]
       }
     },
     "competency_review": {
       "PATHOLOGY": {
-        "2026-09-25": [
-          "09:00",
-          "10:30",
-          "13:30"
+        "2026-09-03": [
+          "10:00",
+          "13:00",
+          "15:00"
         ],
-        "2026-09-26": [
-          "09:30",
+        "2026-09-04": [
+          "09:00",
           "11:00"
         ],
-        "2026-09-29": [
+        "2026-09-08": [
           "08:30",
-          "09:00",
-          "15:00"
+          "10:30"
         ]
       }
     }
@@ -238,17 +235,6 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "PATHOLOGY": [],
-    "CARDIOLOGY": [
-      "2026-09-14"
-    ],
-    "EMERGENCY": [
-      "2026-08-31"
-    ],
-    "ONCOLOGY": [],
-    "SURGERY": [
-      "2026-09-21"
-    ],
-    "PEDIATRICS": []
+    "PATHOLOGY": []
   }
 }

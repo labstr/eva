@@ -2,8 +2,8 @@
   "_current_date": "2026-06-03",
   "unit_cert_requirements": {
     "4B-ICU": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "CCRN"
     ],
     "2A-MED": [
@@ -11,11 +11,12 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
+      "BLS",
       "ACLS",
-      "BLS"
+      "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
@@ -29,9 +30,9 @@
       "first_name": "Ravi",
       "last_name": "Krishnamurthy",
       "facility_code": "MGH-04B",
-      "pin": "4829",
-      "phone_last_four": "4829",
-      "otp_code": "381642",
+      "pin": "7291",
+      "phone_last_four": "4821",
+      "otp_code": "483920",
       "role_code": "RN",
       "department_code": "RADIOLOGY",
       "hire_date": "2026-05-19",
@@ -41,7 +42,7 @@
       "licenses": {},
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-RV4829",
+        "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -59,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-04-30",
+        "expiration_date": "2027-10-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -76,9 +77,9 @@
       "employee_id": "EMP479580",
       "first_name": "Ravi",
       "last_name": "Krishnamurthy",
-      "date_of_birth": "1969-07-13",
-      "phone_last_four": "4829",
-      "otp_code": "381642",
+      "date_of_birth": "1994-08-21",
+      "phone_last_four": "4821",
+      "otp_code": "483920",
       "department_code": "RADIOLOGY",
       "role_code": "RN",
       "unit_code": "2A-MED",
@@ -95,7 +96,15 @@
         "reason": null
       },
       "onboarding_checklist": {
-        "tasks": {}
+        "tasks": {
+          "BGCK": {
+            "status": "complete"
+          },
+          "ORNT": {
+            "status": "pending",
+            "completion_code": "L5A4"
+          }
+        }
       },
       "oncall_schedule": {
         "registrations": []
@@ -119,26 +128,27 @@
       },
       "pto_requests": []
     },
-    "EMP248163": {
-      "employee_id": "EMP248163",
-      "first_name": "Elena",
-      "last_name": "Morris",
-      "date_of_birth": "1988-02-21",
-      "phone_last_four": "1634",
-      "otp_code": "624815",
-      "department_code": "SURGERY",
+    "EMP048271": {
+      "employee_id": "EMP048271",
+      "first_name": "Maya",
+      "last_name": "Lopez",
+      "date_of_birth": "1991-03-14",
+      "phone_last_four": "1734",
+      "otp_code": "551204",
+      "department_code": "EMERGENCY",
       "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2021-08-09",
+      "unit_code": "4B-ICU",
+      "hire_date": "2022-02-10",
       "employment_status": "active",
       "certifications": [
+        "BLS",
         "ACLS",
-        "BLS"
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 58,
-        "hours_worked_past_year": 1872,
+        "months_employed": 52,
+        "hours_worked_past_year": 1876,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -162,7 +172,7 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
+        "pto": 11.0,
         "sick": 4.0
       },
       "pto_requests": []
@@ -190,6 +200,28 @@
       "pay_period_end_date": "2026-06-14",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
+    },
+    "SHF-20260611-1900": {
+      "shift_id": "SHF-20260611-1900",
+      "employee_id": "EMP048271",
+      "unit_code": "4B-ICU",
+      "date": "2026-06-11",
+      "start_time": "19:00",
+      "end_time": "07:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-06-14",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
     }
   },
   "notifications": [],
@@ -197,32 +229,33 @@
   "appointment_availability": {
     "orientation_followup": {
       "RADIOLOGY": {
-        "2026-06-05": [
+        "2026-06-08": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-08": [
-          "10:00",
-          "13:00"
-        ],
         "2026-06-09": [
-          "09:30",
+          "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-06-10": [
+          "09:30",
+          "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "RADIOLOGY": {
-        "2026-06-12": [
+        "2026-06-15": [
           "09:00",
           "11:00"
         ],
-        "2026-06-15": [
+        "2026-06-16": [
           "10:00",
           "14:00"
         ],
-        "2026-06-16": [
+        "2026-06-17": [
           "09:30",
           "13:30"
         ]
@@ -230,17 +263,17 @@
     },
     "competency_review": {
       "RADIOLOGY": {
-        "2026-06-11": [
+        "2026-06-12": [
           "09:00",
           "11:00"
         ],
-        "2026-06-12": [
+        "2026-06-13": [
           "10:00",
-          "15:00"
+          "14:00"
         ],
-        "2026-06-17": [
-          "08:30",
-          "13:00"
+        "2026-06-14": [
+          "09:30",
+          "13:30"
         ]
       }
     }
@@ -252,8 +285,13 @@
   ],
   "department_blackout_dates": {
     "RADIOLOGY": [],
+    "EMERGENCY": [
+      "2026-07-04"
+    ],
+    "ONCOLOGY": [],
     "SURGERY": [
-      "2026-07-06"
-    ]
+      "2026-06-30"
+    ],
+    "PEDIATRICS": []
   }
 }

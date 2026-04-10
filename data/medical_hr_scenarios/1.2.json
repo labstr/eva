@@ -15,7 +15,6 @@
     ],
     "5A-SURG": [
       "BLS",
-      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -26,19 +25,19 @@
   "providers": {
     "3615507143": {
       "npi": "3615507143",
-      "employee_id": "EMP482931",
+      "employee_id": "EMP260263",
       "first_name": "Kwame",
       "last_name": "Asante",
       "facility_code": "TOU-77A",
       "pin": "6310",
-      "phone_last_four": "4829",
-      "otp_code": "418273",
+      "phone_last_four": "4821",
+      "otp_code": "417263",
       "role_code": "RN",
       "department_code": "EMERGENCY",
-      "hire_date": "2019-08-19",
+      "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-482931",
+      "clearance_code": null,
       "licenses": {
         "OH-RN-15114631": {
           "state_license_number": "OH-RN-15114631",
@@ -51,12 +50,12 @@
           "extension_type": "provisional",
           "extension_days": 30,
           "supervising_physician_npi": null,
-          "extension_case_id": "CASE-LIC-482931"
+          "extension_case_id": "CASE-LIC-260263"
         }
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-EM4829",
+        "policy_number": "POL-2026-EM4821",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -82,61 +81,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-ER-001",
-            "description": "Emergency nursing independent practice",
+            "code": "PRV-EMERG-001",
+            "description": "Emergency department triage",
             "status": "active"
-          }
-        ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "2485510021": {
-      "npi": "2485510021",
-      "employee_id": "EMP390114",
-      "first_name": "Laura",
-      "last_name": "Chen",
-      "facility_code": "TOU-12B",
-      "pin": "2744",
-      "phone_last_four": "7714",
-      "otp_code": "552901",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2017-04-10",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-390114",
-      "licenses": {},
-      "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-SU7714",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 6000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BM5520194",
-        "facility_code": "TOU-12B",
-        "state_code": "OH",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV",
-          "CV"
-        ],
-        "expiration_date": "2027-08-31",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [
+          },
           {
-            "code": "PRV-SURG-010",
-            "description": "General surgery",
+            "code": "PRV-EMERG-002",
+            "description": "Medication administration",
             "status": "active"
           }
         ],
@@ -146,27 +97,27 @@
     }
   },
   "employees": {
-    "EMP482931": {
-      "employee_id": "EMP482931",
+    "EMP260263": {
+      "employee_id": "EMP260263",
       "first_name": "Kwame",
       "last_name": "Asante",
-      "date_of_birth": "1987-11-03",
-      "phone_last_four": "4829",
-      "otp_code": "418273",
+      "date_of_birth": "1988-04-19",
+      "phone_last_four": "4821",
+      "otp_code": "417263",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "4B-ICU",
-      "hire_date": "2019-08-19",
+      "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
         "BLS",
+        "ACLS",
         "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 82,
-        "hours_worked_past_year": 1876,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -190,67 +141,18 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.5,
-        "sick": 5.0
-      },
-      "pto_requests": []
-    },
-    "EMP390114": {
-      "employee_id": "EMP390114",
-      "first_name": "Laura",
-      "last_name": "Chen",
-      "date_of_birth": "1979-02-14",
-      "phone_last_four": "7714",
-      "otp_code": "552901",
-      "department_code": "SURGERY",
-      "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2017-04-10",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 110,
-        "hours_worked_past_year": 2010,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
+        "pto": 14.0,
         "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260614-0700": {
-      "shift_id": "SHF-20260614-0700",
-      "employee_id": "EMP482931",
+    "SHF-20260615-0700": {
+      "shift_id": "SHF-20260615-0700",
+      "employee_id": "EMP260263",
       "unit_code": "4B-ICU",
-      "date": "2026-06-14",
+      "date": "2026-06-15",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -274,19 +176,18 @@
   "appointment_availability": {
     "orientation_followup": {
       "EMERGENCY": {
-        "2026-06-15": [
+        "2026-06-16": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-16": [
+        "2026-06-17": [
           "10:00",
-          "13:00",
-          "15:00"
+          "13:00"
         ],
         "2026-06-18": [
           "09:30",
-          "12:30"
+          "15:00"
         ]
       }
     },
@@ -294,8 +195,7 @@
       "EMERGENCY": {
         "2026-06-22": [
           "09:00",
-          "11:00",
-          "15:00"
+          "11:00"
         ],
         "2026-06-23": [
           "10:00",
@@ -309,18 +209,18 @@
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-06-17": [
+        "2026-06-25": [
           "09:00",
           "11:00",
+          "15:00"
+        ],
+        "2026-06-26": [
+          "10:00",
           "14:00"
         ],
-        "2026-06-19": [
-          "10:00",
-          "13:00"
-        ],
-        "2026-06-25": [
+        "2026-06-29": [
           "09:30",
-          "15:30"
+          "13:00"
         ]
       }
     }
@@ -332,12 +232,9 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "SURGERY": [
-      "2026-07-06"
-    ],
-    "ONCOLOGY": [],
-    "PEDIATRICS": [],
     "CARDIOLOGY": [],
-    "RADIOLOGY": []
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "PEDIATRICS": []
   }
 }

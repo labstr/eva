@@ -1,6 +1,10 @@
 {
   "_current_date": "2026-09-09",
   "unit_cert_requirements": {
+    "5A-SURG": [
+      "ACLS",
+      "BLS"
+    ],
     "4B-ICU": [
       "ACLS",
       "BLS",
@@ -11,14 +15,8 @@
       "BLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
-      "ONC-CERT"
-    ],
-    "5A-SURG": [
-      "ACLS",
-      "BLS",
-      "PALS"
+      "ONS"
     ],
     "1D-PEDS": [
       "BLS",
@@ -33,20 +31,20 @@
       "last_name": "Sato",
       "facility_code": "GAWO-88H",
       "pin": "2035",
-      "phone_last_four": "4821",
+      "phone_last_four": "4418",
       "otp_code": "766269",
-      "role_code": "RN",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2019-05-13",
+      "role_code": "MD",
+      "department_code": "SURGERY",
+      "hire_date": "2018-07-16",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
       "clearance_code": "CLR-OCC-963874",
       "licenses": {
-        "NY-RN-31614326": {
-          "state_license_number": "NY-RN-31614326",
-          "license_type": "RN",
+        "NY-MD-31614326": {
+          "state_license_number": "NY-MD-31614326",
+          "license_type": "MD",
           "state_code": "NY",
-          "expiration_date": "2026-09-18",
+          "expiration_date": "2026-09-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -57,12 +55,12 @@
         }
       },
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2025-KR72M1",
+        "carrier": "medpro",
+        "policy_number": "POL-2025-KD4418",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-08-21",
-        "expiration_date": "2026-06-26",
+        "effective_date": "2025-09-01",
+        "expiration_date": "2026-08-31",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -76,7 +74,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-11-30",
+        "expiration_date": "2027-06-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -84,84 +82,18 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-ECHO-005",
-            "description": "Transthoracic echocardiography interpretation",
+            "code": "PRV-OR-014",
+            "description": "Operating room anesthesia services",
             "status": "suspended"
           },
           {
-            "code": "PRV-ECHO-002",
-            "description": "Stress echocardiography supervision",
+            "code": "PRV-SED-006",
+            "description": "Procedural sedation administration",
             "status": "suspended"
           },
           {
-            "code": "PRV-CARD-011",
-            "description": "Holter monitor interpretation",
-            "status": "active"
-          }
-        ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "1487392045": {
-      "npi": "1487392045",
-      "employee_id": "EMP482190",
-      "first_name": "Neil",
-      "last_name": "Raman",
-      "facility_code": "BMC-12A",
-      "pin": "4418",
-      "phone_last_four": "1934",
-      "otp_code": "418552",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2017-02-06",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-551204",
-      "licenses": {
-        "MA-MD-30058838": {
-          "state_license_number": "MA-MD-30058838",
-          "license_type": "MD",
-          "state_code": "MA",
-          "expiration_date": "2027-03-31",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-LM55Q2",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 6000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BM5827419",
-        "facility_code": "BMC-12A",
-        "state_code": "MA",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV"
-        ],
-        "expiration_date": "2028-01-31",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-SURG-001",
-            "description": "General surgery admission privileges",
+            "code": "PRV-PAIN-011",
+            "description": "Acute pain management consults",
             "status": "active"
           }
         ],
@@ -175,13 +107,13 @@
       "employee_id": "EMP576877",
       "first_name": "Fumiko",
       "last_name": "Sato",
-      "date_of_birth": "1989-11-07",
-      "phone_last_four": "4821",
+      "date_of_birth": "1982-04-17",
+      "phone_last_four": "4418",
       "otp_code": "766269",
-      "department_code": "CARDIOLOGY",
-      "role_code": "RN",
-      "unit_code": "2A-MED",
-      "hire_date": "2019-05-13",
+      "department_code": "SURGERY",
+      "role_code": "MD",
+      "unit_code": "5A-SURG",
+      "hire_date": "2018-07-16",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -189,7 +121,7 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 88,
+        "months_employed": 98,
         "hours_worked_past_year": 1680,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -214,97 +146,26 @@
       "visa_record": null,
       "leave_records": [
         {
-          "leave_type": "medical",
+          "leave_type": "personal",
           "start_date": "2026-05-01",
           "end_date": "2026-08-31",
           "status": "completed",
-          "case_id": "CASE-MLV-576877"
+          "case_id": "CASE-LOA-576877"
         }
       ],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 6.0
-      },
-      "pto_requests": []
-    },
-    "EMP482190": {
-      "employee_id": "EMP482190",
-      "first_name": "Neil",
-      "last_name": "Raman",
-      "date_of_birth": "1978-04-18",
-      "phone_last_four": "1934",
-      "otp_code": "418552",
-      "department_code": "SURGERY",
-      "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2017-02-06",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS",
-        "PALS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 115,
-        "hours_worked_past_year": 2040,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 7.0
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260912-0700": {
-      "shift_id": "SHF-20260912-0700",
+    "SHF-20260922-0700": {
+      "shift_id": "SHF-20260922-0700",
       "employee_id": "EMP576877",
-      "unit_code": "2A-MED",
-      "date": "2026-09-12",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-09-20",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260914-0700": {
-      "shift_id": "SHF-20260914-0700",
-      "employee_id": "EMP482190",
       "unit_code": "5A-SURG",
-      "date": "2026-09-14",
+      "date": "2026-09-22",
       "start_time": "07:00",
       "end_time": "15:00",
       "hours_scheduled": 8.0,
@@ -318,7 +179,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-09-20",
+      "pay_period_end_date": "2026-09-26",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -327,77 +188,53 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "CARDIOLOGY": {
-        "2026-09-16": [
+      "SURGERY": {
+        "2026-09-15": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-09-17": [
-          "10:00",
-          "13:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-09-16": [
-          "09:00",
-          "11:00"
-        ],
         "2026-09-18": [
           "10:00",
+          "13:00"
+        ],
+        "2026-09-22": [
+          "09:00",
           "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "CARDIOLOGY": {
-        "2026-09-16": [
-          "09:00",
-          "10:30",
-          "13:30"
-        ],
-        "2026-09-17": [
-          "11:00",
-          "14:00"
-        ]
-      },
       "SURGERY": {
-        "2026-09-16": [
-          "09:30",
-          "14:30"
+        "2026-09-15": [
+          "09:00",
+          "11:00"
         ],
         "2026-09-18": [
-          "10:30",
-          "15:30"
+          "10:00",
+          "14:00"
+        ],
+        "2026-09-23": [
+          "09:00",
+          "13:00"
         ]
       }
     },
     "competency_review": {
-      "CARDIOLOGY": {
-        "2026-09-16": [
-          "09:00",
+      "SURGERY": {
+        "2026-09-18": [
           "10:00",
           "11:30",
           "14:00"
         ],
-        "2026-09-17": [
-          "09:30",
-          "12:00",
-          "15:00"
-        ],
-        "2026-09-18": [
-          "08:30",
-          "10:30"
-        ]
-      },
-      "SURGERY": {
-        "2026-09-16": [
+        "2026-09-19": [
           "09:00",
           "13:00"
         ],
-        "2026-09-17": [
-          "10:00",
-          "14:00"
+        "2026-09-21": [
+          "08:30",
+          "10:30",
+          "15:00"
         ]
       }
     }
@@ -408,13 +245,12 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "CARDIOLOGY": [],
-    "SURGERY": [
-      "2026-11-27"
+    "SURGERY": [],
+    "CARDIOLOGY": [
+      "2026-09-25"
     ],
     "EMERGENCY": [],
     "ONCOLOGY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "PEDIATRICS": []
   }
 }

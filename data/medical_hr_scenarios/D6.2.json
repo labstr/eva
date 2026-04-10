@@ -1,5 +1,5 @@
 {
-  "_current_date": "2026-06-20",
+  "_current_date": "2026-09-20",
   "unit_cert_requirements": {
     "4B-ICU": [
       "ACLS",
@@ -11,8 +11,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
-      "ONC"
+      "ACLS"
     ],
     "5A-SURG": [
       "BLS",
@@ -25,27 +24,27 @@
     ]
   },
   "providers": {
-    "4026113008": {
-      "npi": "4026113008",
-      "employee_id": "EMP148050",
-      "first_name": "Fatima",
-      "last_name": "Al-Rashidi",
-      "facility_code": "EJR-99V",
-      "pin": "2169",
-      "phone_last_four": "8421",
-      "otp_code": "738720",
+    "8528185058": {
+      "npi": "8528185058",
+      "employee_id": "EMP680238",
+      "first_name": "Padma",
+      "last_name": "Iyer",
+      "facility_code": "WO-70P",
+      "pin": "8216",
+      "phone_last_four": "4421",
+      "otp_code": "457256",
       "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2019-08-12",
+      "department_code": "NEUROLOGY",
+      "hire_date": "2026-09-15",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "AZ-MD-30058838": {
-          "state_license_number": "AZ-MD-30058838",
+        "TX-MD-680238": {
+          "state_license_number": "TX-MD-680238",
           "license_type": "MD",
-          "state_code": "AZ",
-          "expiration_date": "2027-09-30",
+          "state_code": "TX",
+          "expiration_date": "2027-06-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -57,17 +56,17 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-AX7731",
+        "policy_number": "POL-2026-NE6802",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
+        "effective_date": "2026-09-15",
+        "expiration_date": "2027-09-14",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "RU2338687",
-        "facility_code": "EJR-99V",
+        "dea_number": "VK2242893",
+        "facility_code": "WO-70P",
         "state_code": "TX",
         "schedule_codes": [
           "CII",
@@ -75,7 +74,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-11-30",
+        "expiration_date": "2028-04-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -83,13 +82,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-CARD-001",
-            "description": "Cardiology inpatient consults",
+            "code": "PRV-NEUR-001",
+            "description": "General neurology consults",
             "status": "active"
           },
           {
-            "code": "PRV-CARD-002",
-            "description": "Stress test interpretation",
+            "code": "PRV-NEUR-002",
+            "description": "Inpatient stroke evaluation",
             "status": "active"
           }
         ],
@@ -99,31 +98,44 @@
     }
   },
   "employees": {
-    "EMP148050": {
-      "employee_id": "EMP148050",
-      "first_name": "Fatima",
-      "last_name": "Al-Rashidi",
-      "date_of_birth": "1983-04-18",
-      "phone_last_four": "8421",
-      "otp_code": "738720",
-      "department_code": "CARDIOLOGY",
+    "EMP680238": {
+      "employee_id": "EMP680238",
+      "first_name": "Padma",
+      "last_name": "Iyer",
+      "date_of_birth": "1984-02-11",
+      "phone_last_four": "4421",
+      "otp_code": "457256",
+      "department_code": "NEUROLOGY",
       "role_code": "MD",
-      "unit_code": "4B-ICU",
-      "hire_date": "2019-08-12",
+      "unit_code": "2A-MED",
+      "hire_date": "2026-09-15",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "ACLS"
       ],
       "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 82,
-        "hours_worked_past_year": 1920,
-        "fmla_weeks_remaining": 12,
-        "reason": null
+        "eligible": false,
+        "months_employed": 0,
+        "hours_worked_past_year": 0,
+        "fmla_weeks_remaining": 0,
+        "reason": "New hire has not yet met minimum tenure requirements"
       },
       "onboarding_checklist": {
-        "tasks": {}
+        "tasks": {
+          "BLS_UPLOAD": {
+            "status": "pending",
+            "completion_code": "TMGE"
+          },
+          "HIPAA_TRAINING": {
+            "status": "pending",
+            "completion_code": "5W90"
+          },
+          "BADGE_PICKUP": {
+            "status": "complete",
+            "completion_code": "P1BX"
+          }
+        }
       },
       "oncall_schedule": {
         "registrations": []
@@ -149,25 +161,25 @@
     }
   },
   "shifts": {
-    "SHF-20260624-0700": {
-      "shift_id": "SHF-20260624-0700",
-      "employee_id": "EMP148050",
-      "unit_code": "4B-ICU",
-      "date": "2026-06-24",
-      "start_time": "07:00",
-      "end_time": "15:00",
+    "SHF-20260922-0800": {
+      "shift_id": "SHF-20260922-0800",
+      "employee_id": "EMP680238",
+      "unit_code": "2A-MED",
+      "date": "2026-09-22",
+      "start_time": "08:00",
+      "end_time": "16:00",
       "hours_scheduled": 8.0,
-      "hours_logged": 8.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-30",
+      "pay_period_end_date": "2026-09-30",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -176,73 +188,53 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "CARDIOLOGY": {
-        "2026-06-24": [
-          "09:00",
+      "NEUROLOGY": {
+        "2026-09-29": [
+          "10:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-26": [
-          "10:00",
-          "13:00",
-          "15:00"
+        "2026-09-30": [
+          "09:00",
+          "13:00"
         ],
-        "2026-06-29": [
-          "09:30",
-          "12:30"
+        "2026-10-01": [
+          "10:00",
+          "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
-      "CARDIOLOGY": {
-        "2026-07-07": [
+      "NEUROLOGY": {
+        "2026-09-29": [
           "09:00",
-          "11:00",
-          "14:00"
+          "11:00"
         ],
-        "2026-07-08": [
+        "2026-09-30": [
           "10:00",
-          "13:00"
-        ],
-        "2026-07-10": [
-          "09:30",
-          "15:00"
+          "14:00"
         ]
       }
     },
     "competency_review": {
-      "CARDIOLOGY": {
-        "2026-06-25": [
-          "09:00",
-          "11:00",
-          "14:00"
-        ],
-        "2026-06-27": [
-          "10:00",
+      "NEUROLOGY": {
+        "2026-09-29": [
+          "08:00",
           "13:00"
         ],
-        "2026-06-30": [
-          "09:30",
+        "2026-09-30": [
+          "09:00",
           "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-07-03",
-    "2026-09-07",
-    "2026-11-26"
+    "2026-11-26",
+    "2026-11-27",
+    "2026-12-25"
   ],
   "department_blackout_dates": {
-    "CARDIOLOGY": [],
-    "EMERGENCY": [
-      "2026-07-04"
-    ],
-    "ONCOLOGY": [],
-    "SURGERY": [
-      "2026-07-06"
-    ],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "NEUROLOGY": []
   }
 }

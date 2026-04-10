@@ -1,18 +1,18 @@
 {
   "_current_date": "2026-08-12",
   "unit_cert_requirements": {
-    "4B-ICU": [
-      "ACLS",
-      "BLS",
-      "CCRN"
-    ],
-    "2A-MED": [
-      "BLS"
-    ],
     "3C-ONC": [
       "BLS",
       "ACLS",
       "ONC-CHEMO"
+    ],
+    "4B-ICU": [
+      "BLS",
+      "ACLS",
+      "CCRN"
+    ],
+    "2A-MED": [
+      "BLS"
     ],
     "5A-SURG": [
       "BLS",
@@ -31,9 +31,9 @@
       "first_name": "Soraya",
       "last_name": "Khoury",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "0184",
-      "otp_code": "483920",
+      "pin": "4827",
+      "phone_last_four": "3814",
+      "otp_code": "654321",
       "role_code": "RN",
       "department_code": "ONCOLOGY",
       "hire_date": "2026-08-10",
@@ -62,7 +62,7 @@
           "CV"
         ],
         "expiration_date": "2029-08-10",
-        "status": "active",
+        "status": "inactive",
         "transfer_reason": null,
         "transfer_case_id": null
       },
@@ -78,9 +78,9 @@
       "employee_id": "EMP908977",
       "first_name": "Soraya",
       "last_name": "Khoury",
-      "date_of_birth": "1986-03-02",
-      "phone_last_four": "0184",
-      "otp_code": "483920",
+      "date_of_birth": "1997-04-18",
+      "phone_last_four": "3814",
+      "otp_code": "654321",
       "department_code": "ONCOLOGY",
       "role_code": "RN",
       "unit_code": "3C-ONC",
@@ -91,27 +91,26 @@
         "ACLS",
         "ONC-CHEMO"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": false,
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not met minimum tenure or hours requirements"
+        "reason": "New hire has not yet met FMLA tenure and hours requirements"
       },
       "onboarding_checklist": {
         "tasks": {
           "DRUG_SCREEN": {
             "status": "pending",
-            "completion_code": "47Q1"
+            "completion_code": "K4P2"
           },
           "TB_TEST": {
             "status": "pending",
-            "completion_code": "XXGL"
+            "completion_code": "M7Q9"
           },
-          "HIPAA_TRAINING": {
+          "BADGE_PHOTO": {
             "status": "complete",
-            "completion_code": "H9P2"
+            "completion_code": "Z1X8"
           }
         }
       },
@@ -120,45 +119,43 @@
       },
       "scheduled_appointments": [],
       "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "expired",
+        "verification_action": "initial_verification",
+        "document_list_type": "LIST_A",
+        "document_type_code": "EAD",
+        "document_number": "OLD9AA12",
+        "document_expiration_date": "2026-08-31",
+        "issuing_country_code": "US",
+        "verification_status": "pending",
         "case_id": null
       },
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 3.0,
-        "sick": 4.0
+        "pto": 4.0,
+        "sick": 2.0
       },
-      "pto_requests": []
+      "pto_requests": [],
+      "schedule_type": "standard"
     },
-    "EMP552211": {
-      "employee_id": "EMP552211",
-      "first_name": "Mina",
-      "last_name": "Dorsey",
-      "date_of_birth": "1991-11-14",
+    "EMP771245": {
+      "employee_id": "EMP771245",
+      "first_name": "Nina",
+      "last_name": "Patel",
+      "date_of_birth": "1990-02-11",
       "phone_last_four": "4421",
-      "otp_code": "551204",
-      "department_code": "SURGERY",
+      "otp_code": "112233",
+      "department_code": "MEDICINE",
       "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2022-04-18",
+      "unit_code": "2A-MED",
+      "hire_date": "2021-03-15",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS",
-        "TNCC"
+        "BLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 52,
-        "hours_worked_past_year": 1876,
+        "months_employed": 65,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -182,21 +179,21 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
-        "sick": 6.0
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260813-0700": {
-      "shift_id": "SHF-20260813-0700",
-      "employee_id": "EMP908977",
-      "unit_code": "3C-ONC",
-      "date": "2026-08-13",
+    "SHF-20260827-0700": {
+      "shift_id": "SHF-20260827-0700",
+      "employee_id": "EMP771245",
+      "unit_code": "2A-MED",
+      "date": "2026-08-27",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -207,51 +204,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-22",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260814-0700": {
-      "shift_id": "SHF-20260814-0700",
-      "employee_id": "EMP908977",
-      "unit_code": "3C-ONC",
-      "date": "2026-08-14",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-08-22",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260816-0700": {
-      "shift_id": "SHF-20260816-0700",
-      "employee_id": "EMP552211",
-      "unit_code": "5A-SURG",
-      "date": "2026-08-16",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-08-22",
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -261,46 +214,42 @@
   "appointment_availability": {
     "orientation_followup": {
       "ONCOLOGY": {
-        "2026-09-23": [
+        "2026-08-20": [
+          "09:00",
+          "10:00",
+          "11:30"
+        ],
+        "2026-08-21": [
+          "08:30",
+          "10:30"
+        ],
+        "2026-08-24": [
           "09:00",
           "14:00"
-        ],
-        "2026-09-24": [
-          "08:30",
-          "13:00"
-        ],
-        "2026-09-25": [
-          "15:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-09-23": [
-          "09:00",
-          "11:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "ONCOLOGY": {
         "2026-08-20": [
-          "09:00",
-          "11:00"
+          "13:00",
+          "15:00"
         ],
         "2026-08-21": [
-          "10:00",
-          "14:00"
+          "09:00",
+          "11:00"
         ]
       }
     },
     "competency_review": {
       "ONCOLOGY": {
         "2026-08-20": [
-          "09:00",
+          "08:00",
           "13:00"
         ],
         "2026-08-22": [
           "10:00",
-          "15:00"
+          "14:00"
         ]
       }
     }
@@ -312,12 +261,16 @@
   ],
   "department_blackout_dates": {
     "ONCOLOGY": [],
+    "MEDICINE": [
+      "2026-12-24"
+    ],
     "SURGERY": [
+      "2026-11-25",
       "2026-11-27"
     ],
-    "CARDIOLOGY": [],
-    "EMERGENCY": [],
     "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "EMERGENCY": [
+      "2026-12-31"
+    ]
   }
 }

@@ -7,21 +7,21 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -32,20 +32,20 @@
       "last_name": "Castillo",
       "facility_code": "WWJ-30O",
       "pin": "9900",
-      "phone_last_four": "4812",
+      "phone_last_four": "4821",
       "otp_code": "837715",
       "role_code": "NP",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2018-06-11",
+      "hire_date": "2019-03-18",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-956796",
+      "clearance_code": "CLR-OCC-111222",
       "licenses": {
         "FL-NP-87875215": {
           "state_license_number": "FL-NP-87875215",
           "license_type": "NP",
           "state_code": "FL",
-          "expiration_date": "2026-08-28",
+          "expiration_date": "2026-08-27",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -57,7 +57,7 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-AX7731",
+        "policy_number": "POL-2026-CA4821",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -84,84 +84,17 @@
         "privilege_list": [
           {
             "code": "PRV-SURG-002",
-            "description": "Procedural sedation and minor surgical assist",
+            "description": "Procedural sedation and invasive bedside procedures",
             "status": "suspended"
           },
           {
             "code": "PRV-ICU-005",
-            "description": "ICU admitting and management",
+            "description": "Critical care unit patient management",
             "status": "suspended"
           },
           {
             "code": "PRV-CARD-001",
-            "description": "General cardiology consults",
-            "status": "active"
-          }
-        ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "1487392045": {
-      "npi": "1487392045",
-      "employee_id": "EMP048271",
-      "first_name": "Alicia",
-      "last_name": "Morgan",
-      "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "2045",
-      "otp_code": "483920",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2016-03-14",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-048271",
-      "licenses": {
-        "MA-MD-004821": {
-          "state_license_number": "MA-MD-004821",
-          "license_type": "MD",
-          "state_code": "MA",
-          "expiration_date": "2027-03-31",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-MD2045",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 6000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BK1111222",
-        "facility_code": "MGH-04B",
-        "state_code": "MA",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV",
-          "CV"
-        ],
-        "expiration_date": "2027-07-31",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-SURG-101",
-            "description": "General surgery attending privileges",
+            "description": "General cardiology inpatient consults",
             "status": "active"
           }
         ],
@@ -175,23 +108,23 @@
       "employee_id": "EMP630458",
       "first_name": "Mateo",
       "last_name": "Castillo",
-      "date_of_birth": "1976-04-08",
-      "phone_last_four": "4812",
+      "date_of_birth": "1984-11-02",
+      "phone_last_four": "4821",
       "otp_code": "837715",
       "department_code": "CARDIOLOGY",
       "role_code": "NP",
       "unit_code": "4B-ICU",
-      "hire_date": "2018-06-11",
+      "hire_date": "2019-03-18",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 98,
-        "hours_worked_past_year": 1760,
+        "months_employed": 89,
+        "hours_worked_past_year": 1680,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -219,71 +152,22 @@
           "start_date": "2026-05-20",
           "end_date": "2026-08-19",
           "status": "completed",
-          "case_id": "CASE-MED-630458"
+          "case_id": "CASE-MLV-630458"
         }
       ],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 6.0
-      },
-      "pto_requests": []
-    },
-    "EMP048271": {
-      "employee_id": "EMP048271",
-      "first_name": "Alicia",
-      "last_name": "Morgan",
-      "date_of_birth": "1981-11-12",
-      "phone_last_four": "2045",
-      "otp_code": "483920",
-      "department_code": "SURGERY",
-      "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2016-03-14",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 125,
-        "hours_worked_past_year": 1920,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 7.0
+        "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260822-0700": {
-      "shift_id": "SHF-20260822-0700",
+    "SHF-20260824-0700": {
+      "shift_id": "SHF-20260824-0700",
       "employee_id": "EMP630458",
       "unit_code": "4B-ICU",
-      "date": "2026-08-22",
+      "date": "2026-08-24",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -297,7 +181,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
+      "pay_period_end_date": "2026-08-31",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -307,80 +191,52 @@
   "appointment_availability": {
     "orientation_followup": {
       "CARDIOLOGY": {
-        "2026-08-25": [
-          "09:00",
-          "11:00"
-        ],
         "2026-08-26": [
-          "10:00",
-          "14:00"
-        ],
-        "2026-08-27": [
-          "09:30",
-          "13:30"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-25": [
           "09:00",
-          "11:00"
-        ],
-        "2026-08-26": [
-          "10:00",
-          "14:00"
-        ]
-      }
-    },
-    "return_to_work_checkin": {
-      "CARDIOLOGY": {
-        "2026-08-25": [
-          "09:00",
-          "10:30"
-        ],
-        "2026-08-26": [
           "11:00",
+          "14:00"
+        ],
+        "2026-08-28": [
+          "10:00",
+          "13:00",
           "15:00"
         ],
-        "2026-08-27": [
-          "09:00",
-          "13:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-25": [
-          "08:30",
-          "10:00"
-        ],
-        "2026-08-26": [
+        "2026-09-01": [
           "09:30",
           "14:30"
         ]
       }
     },
-    "competency_review": {
+    "return_to_work_checkin": {
       "CARDIOLOGY": {
-        "2026-08-25": [
-          "08:00",
+        "2026-08-26": [
           "09:00",
+          "10:00"
+        ],
+        "2026-08-28": [
+          "10:00",
           "11:00"
         ],
-        "2026-08-26": [
+        "2026-09-02": [
+          "13:00",
+          "15:00"
+        ]
+      }
+    },
+    "competency_review": {
+      "CARDIOLOGY": {
+        "2026-08-28": [
+          "10:00",
+          "11:30",
+          "14:00"
+        ],
+        "2026-08-29": [
           "09:00",
           "13:00"
         ],
-        "2026-08-27": [
-          "08:30",
-          "10:30"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-25": [
-          "09:00",
-          "14:00"
-        ],
-        "2026-08-26": [
-          "08:00",
-          "11:00"
+        "2026-09-03": [
+          "10:30",
+          "15:00"
         ]
       }
     }
@@ -392,12 +248,9 @@
   ],
   "department_blackout_dates": {
     "CARDIOLOGY": [],
-    "SURGERY": [
-      "2026-08-31"
-    ],
     "EMERGENCY": [],
     "ONCOLOGY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "SURGERY": [],
+    "PEDIATRICS": []
   }
 }

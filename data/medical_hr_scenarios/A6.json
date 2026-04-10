@@ -11,9 +11,10 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ONS"
     ],
     "5A-SURG": [
+      "ACLS",
       "BLS",
       "TNCC"
     ],
@@ -25,12 +26,12 @@
   "providers": {
     "3225231724": {
       "npi": "3225231724",
-      "employee_id": "EMP337675",
+      "employee_id": "EMP418897",
       "first_name": "Kweku",
       "last_name": "Owusu",
       "facility_code": "EY-38L",
       "pin": "9501",
-      "phone_last_four": "3814",
+      "phone_last_four": "6142",
       "otp_code": "482913",
       "role_code": "RN",
       "department_code": "EMERGENCY",
@@ -43,7 +44,7 @@
           "state_license_number": "FL-RN-33735675",
           "license_type": "RN",
           "state_code": "FL",
-          "expiration_date": "2026-07-28",
+          "expiration_date": "2026-07-31",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -74,7 +75,7 @@
           "CV"
         ],
         "expiration_date": "2027-05-31",
-        "status": "active",
+        "status": "inactive",
         "transfer_reason": null,
         "transfer_case_id": null
       },
@@ -82,7 +83,12 @@
         "privilege_list": [
           {
             "code": "PRV-TRIAGE-001",
-            "description": "Emergency department triage",
+            "description": "Emergency department triage nursing",
+            "status": "active"
+          },
+          {
+            "code": "PRV-IV-002",
+            "description": "Peripheral IV insertion",
             "status": "active"
           }
         ],
@@ -90,24 +96,24 @@
       },
       "scheduled_appointments": []
     },
-    "5888812345": {
-      "npi": "5888812345",
-      "employee_id": "EMP112244",
-      "first_name": "Elena",
-      "last_name": "Ramirez",
-      "facility_code": "MGH-04B",
-      "pin": "2744",
-      "phone_last_four": "4408",
-      "otp_code": "731204",
+    "4112233445": {
+      "npi": "4112233445",
+      "employee_id": "EMP552201",
+      "first_name": "Helen",
+      "last_name": "Morrow",
+      "facility_code": "EY-21A",
+      "pin": "4412",
+      "phone_last_four": "2201",
+      "otp_code": "173044",
       "role_code": "MD",
       "department_code": "EMERGENCY",
       "hire_date": "2018-09-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-112244",
+      "clearance_code": null,
       "licenses": {
-        "FL-MD-77889911": {
-          "state_license_number": "FL-MD-77889911",
+        "FL-MD-30058838": {
+          "state_license_number": "FL-MD-30058838",
           "license_type": "MD",
           "state_code": "FL",
           "expiration_date": "2027-11-30",
@@ -122,7 +128,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-BX1188",
+        "policy_number": "POL-2026-BX5522",
         "per_occurrence_limit_usd": 2000000,
         "aggregate_limit_usd": 6000000,
         "effective_date": "2026-01-01",
@@ -131,8 +137,8 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BM5839201",
-        "facility_code": "MGH-04B",
+        "dea_number": "BM5522014",
+        "facility_code": "EY-21A",
         "state_code": "FL",
         "schedule_codes": [
           "CII",
@@ -140,7 +146,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-08-31",
+        "expiration_date": "2028-01-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -148,8 +154,8 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-EMER-010",
-            "description": "Emergency attending privileges",
+            "code": "PRV-EM-001",
+            "description": "Emergency medicine attending privileges",
             "status": "active"
           }
         ],
@@ -159,12 +165,12 @@
     }
   },
   "employees": {
-    "EMP337675": {
-      "employee_id": "EMP337675",
+    "EMP418897": {
+      "employee_id": "EMP418897",
       "first_name": "Kweku",
       "last_name": "Owusu",
       "date_of_birth": "1987-04-12",
-      "phone_last_four": "3814",
+      "phone_last_four": "6142",
       "otp_code": "482913",
       "department_code": "EMERGENCY",
       "role_code": "RN",
@@ -172,14 +178,14 @@
       "hire_date": "2021-03-15",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
+        "BLS",
         "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 64,
-        "hours_worked_past_year": 1872,
+        "hours_worked_past_year": 1880,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -203,27 +209,26 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
+        "pto": 15.0,
         "sick": 5.0
       },
       "pto_requests": []
     },
-    "EMP112244": {
-      "employee_id": "EMP112244",
-      "first_name": "Elena",
-      "last_name": "Ramirez",
-      "date_of_birth": "1979-11-03",
-      "phone_last_four": "4408",
-      "otp_code": "731204",
+    "EMP552201": {
+      "employee_id": "EMP552201",
+      "first_name": "Helen",
+      "last_name": "Morrow",
+      "date_of_birth": "1979-11-08",
+      "phone_last_four": "2201",
+      "otp_code": "173044",
       "department_code": "EMERGENCY",
       "role_code": "MD",
-      "unit_code": "4B-ICU",
+      "unit_code": "2A-MED",
       "hire_date": "2018-09-10",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
-        "CCRN"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
@@ -261,7 +266,7 @@
   "shifts": {
     "SHF-20260722-0700": {
       "shift_id": "SHF-20260722-0700",
-      "employee_id": "EMP337675",
+      "employee_id": "EMP418897",
       "unit_code": "4B-ICU",
       "date": "2026-07-22",
       "start_time": "07:00",
@@ -287,49 +292,52 @@
   "appointment_availability": {
     "orientation_followup": {
       "EMERGENCY": {
-        "2026-07-22": [
+        "2026-07-23": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-23": [
+        "2026-07-24": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-07-24": [
+        "2026-07-27": [
           "09:30",
-          "12:00"
+          "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-07-22": [
+        "2026-07-28": [
+          "09:00",
+          "11:00",
+          "15:00"
+        ],
+        "2026-07-29": [
           "10:00",
           "14:00"
         ],
-        "2026-07-23": [
-          "09:00",
-          "15:00"
-        ],
-        "2026-07-24": [
-          "11:00",
-          "16:00"
+        "2026-07-30": [
+          "09:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-07-22": [
+        "2026-07-23": [
           "08:00",
+          "10:00",
           "13:00"
         ],
-        "2026-07-23": [
+        "2026-07-24": [
           "09:00",
+          "11:00",
           "14:00"
         ],
-        "2026-07-24": [
+        "2026-07-27": [
           "10:00",
           "15:00"
         ]

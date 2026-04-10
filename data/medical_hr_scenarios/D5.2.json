@@ -2,25 +2,24 @@
   "_current_date": "2026-09-18",
   "unit_cert_requirements": {
     "1E-MED": [
-      "ACLS",
-      "BLS"
+      "BLS",
+      "ACLS"
     ],
     "4B-ICU": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "CCRN"
     ],
     "2A-MED": [
       "BLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -35,18 +34,18 @@
       "first_name": "Elena",
       "last_name": "Morris",
       "facility_code": "MGH-04B",
-      "pin": "4821",
-      "phone_last_four": "7310",
-      "otp_code": "481920",
-      "role_code": "NP",
+      "pin": "7291",
+      "phone_last_four": "2214",
+      "otp_code": "483920",
+      "role_code": "MD",
       "department_code": "EMERGENCY",
-      "hire_date": "2020-03-15",
+      "hire_date": "2018-06-11",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "coverys",
+        "carrier": "medpro",
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
@@ -82,23 +81,23 @@
       "employee_id": "EMP472060",
       "first_name": "Magnus",
       "last_name": "Eriksson",
-      "date_of_birth": "1981-06-09",
-      "phone_last_four": "4826",
-      "otp_code": "552104",
+      "date_of_birth": "1988-02-14",
+      "phone_last_four": "6048",
+      "otp_code": "581204",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "1E-MED",
       "hire_date": "2019-04-22",
       "employment_status": "on_leave",
       "certifications": [
-        "ACLS",
-        "BLS"
+        "BLS",
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 89,
-        "hours_worked_past_year": 1840,
-        "fmla_weeks_remaining": 6,
+        "hours_worked_past_year": 1872,
+        "fmla_weeks_remaining": 12,
         "reason": null
       },
       "onboarding_checklist": {
@@ -124,84 +123,36 @@
           "leave_type": "personal",
           "start_date": "2026-09-10",
           "end_date": "2026-10-05",
-          "status": "active",
+          "status": "approved",
           "case_id": "CASE-LEV-472060"
         }
       ],
       "pto_balances": {
-        "pto": 12.0,
+        "pto": 12.5,
         "sick": 4.0
       },
       "pto_requests": []
     },
     "EMP682789": {
       "employee_id": "EMP682789",
-      "first_name": "Sofia",
-      "last_name": "Lindberg",
-      "date_of_birth": "1987-11-14",
-      "phone_last_four": "1938",
-      "otp_code": "664281",
+      "first_name": "Tara",
+      "last_name": "Nguyen",
+      "date_of_birth": "1991-07-09",
+      "phone_last_four": "1187",
+      "otp_code": "304915",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "1E-MED",
-      "hire_date": "2021-08-09",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 61,
-        "hours_worked_past_year": 1768,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 15.0,
-        "sick": 5.0
-      },
-      "pto_requests": []
-    },
-    "EMP555333": {
-      "employee_id": "EMP555333",
-      "first_name": "Noah",
-      "last_name": "Patel",
-      "date_of_birth": "1990-02-02",
-      "phone_last_four": "2255",
-      "otp_code": "778201",
-      "department_code": "PEDIATRICS",
-      "role_code": "RN",
-      "unit_code": "1D-PEDS",
-      "hire_date": "2022-01-17",
+      "hire_date": "2020-01-13",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "PALS"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 56,
-        "hours_worked_past_year": 1720,
+        "months_employed": 80,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -225,8 +176,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 10.0,
-        "sick": 6.0
+        "pto": 16.0,
+        "sick": 5.5
       },
       "pto_requests": []
     },
@@ -234,22 +185,22 @@
       "employee_id": "EMP900111",
       "first_name": "Elena",
       "last_name": "Morris",
-      "date_of_birth": "1984-03-21",
-      "phone_last_four": "7310",
-      "otp_code": "481920",
+      "date_of_birth": "1980-11-03",
+      "phone_last_four": "2214",
+      "otp_code": "483920",
       "department_code": "EMERGENCY",
-      "role_code": "NP",
+      "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2020-03-15",
+      "hire_date": "2018-06-11",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
-        "BLS"
+        "BLS",
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 78,
-        "hours_worked_past_year": 1820,
+        "months_employed": 99,
+        "hours_worked_past_year": 2100,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -273,8 +224,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 7.0
+        "pto": 20.0,
+        "sick": 6.0
       },
       "pto_requests": []
     }
@@ -302,11 +253,11 @@
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260925-0700": {
-      "shift_id": "SHF-20260925-0700",
+    "SHF-20260921-0700": {
+      "shift_id": "SHF-20260921-0700",
       "employee_id": "EMP682789",
       "unit_code": "1E-MED",
-      "date": "2026-09-25",
+      "date": "2026-09-21",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -321,28 +272,6 @@
       "correction_case_id": null,
       "correction_status": null,
       "pay_period_end_date": "2026-09-26",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260928-0700": {
-      "shift_id": "SHF-20260928-0700",
-      "employee_id": "EMP555333",
-      "unit_code": "1D-PEDS",
-      "date": "2026-09-28",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-10-03",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -361,6 +290,10 @@
           "10:00",
           "13:00",
           "15:00"
+        ],
+        "2026-09-29": [
+          "09:30",
+          "12:30"
         ]
       }
     },
@@ -368,24 +301,31 @@
       "EMERGENCY": {
         "2026-10-06": [
           "09:00",
-          "11:00",
-          "14:00"
+          "11:00"
         ],
         "2026-10-07": [
           "10:00",
-          "13:00"
+          "14:00"
+        ],
+        "2026-10-08": [
+          "09:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-09-29": [
+        "2026-09-25": [
           "09:00",
           "11:00"
         ],
+        "2026-09-28": [
+          "10:00",
+          "14:00"
+        ],
         "2026-09-30": [
-          "13:00",
-          "15:00"
+          "09:30",
+          "13:30"
         ]
       }
     }
@@ -397,8 +337,15 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
+    "ONCOLOGY": [
+      "2026-11-25",
+      "2026-11-26"
+    ],
+    "SURGERY": [
+      "2026-12-24",
+      "2026-12-25"
+    ],
     "PEDIATRICS": [],
-    "ONCOLOGY": [],
-    "SURGERY": []
+    "RADIOLOGY": []
   }
 }

@@ -3,7 +3,8 @@
   "unit_cert_requirements": {
     "3E-SURG": [
       "BLS",
-      "ACLS"
+      "ACLS",
+      "TNCC"
     ],
     "4B-ICU": [
       "BLS",
@@ -11,11 +12,13 @@
       "CCRN"
     ],
     "2A-MED": [
-      "BLS"
+      "BLS",
+      "ACLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ACLS",
+      "ONC-CERT"
     ],
     "1D-PEDS": [
       "BLS",
@@ -23,18 +26,18 @@
     ]
   },
   "providers": {
-    "1000000001": {
-      "npi": "1000000001",
+    "1487392045": {
+      "npi": "1487392045",
       "employee_id": "EMP916332",
       "first_name": "Arjun",
       "last_name": "Mehta",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "4829",
-      "otp_code": "654321",
+      "phone_last_four": "2247",
+      "otp_code": "483920",
       "role_code": "RN",
       "department_code": "SURGERY",
-      "hire_date": "2021-03-15",
+      "hire_date": "2019-03-18",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -59,7 +62,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-12-31",
+        "expiration_date": "2027-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -76,21 +79,22 @@
       "employee_id": "EMP916332",
       "first_name": "Arjun",
       "last_name": "Mehta",
-      "date_of_birth": "1988-06-13",
-      "phone_last_four": "4829",
-      "otp_code": "654321",
+      "date_of_birth": "1991-02-11",
+      "phone_last_four": "2247",
+      "otp_code": "483920",
       "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "3E-SURG",
-      "hire_date": "2021-03-15",
+      "hire_date": "2019-03-18",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ACLS"
+        "ACLS",
+        "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 64,
+        "months_employed": 88,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -99,14 +103,7 @@
         "tasks": {}
       },
       "oncall_schedule": {
-        "registrations": [
-          {
-            "date": "2026-08-29",
-            "tier": "backup",
-            "unit_code": "3E-SURG",
-            "registration_id": "CASE-ONC-910210"
-          }
-        ]
+        "registrations": []
       },
       "scheduled_appointments": [],
       "i9_record": {
@@ -122,31 +119,32 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
+        "pto": 14.5,
         "sick": 5.0
       },
       "pto_requests": []
     },
     "EMP871411": {
       "employee_id": "EMP871411",
-      "first_name": "Lena",
-      "last_name": "Park",
-      "date_of_birth": "1990-11-02",
-      "phone_last_four": "7711",
-      "otp_code": "112233",
+      "first_name": "Leah",
+      "last_name": "Patel",
+      "date_of_birth": "1988-09-03",
+      "phone_last_four": "7718",
+      "otp_code": "551204",
       "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "3E-SURG",
-      "hire_date": "2020-08-24",
+      "hire_date": "2017-06-12",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ACLS"
+        "ACLS",
+        "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 71,
-        "hours_worked_past_year": 1920,
+        "months_employed": 109,
+        "hours_worked_past_year": 1820,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -171,56 +169,7 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 12.0,
-        "sick": 4.0
-      },
-      "pto_requests": []
-    },
-    "EMP552204": {
-      "employee_id": "EMP552204",
-      "first_name": "Mina",
-      "last_name": "Lopez",
-      "date_of_birth": "1985-04-09",
-      "phone_last_four": "2204",
-      "otp_code": "445566",
-      "department_code": "EMERGENCY",
-      "role_code": "RN",
-      "unit_code": "4B-ICU",
-      "hire_date": "2019-01-10",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "CCRN"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 90,
-        "hours_worked_past_year": 1980,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
+        "sick": 4.5
       },
       "pto_requests": []
     }
@@ -232,9 +181,9 @@
       "unit_code": "3E-SURG",
       "date": "2026-08-12",
       "start_time": "19:00",
-      "end_time": "03:00",
-      "hours_scheduled": 8.0,
-      "hours_logged": 6.0,
+      "end_time": "07:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": 12.0,
       "on_call": false,
       "on_call_tier": null,
       "status": "logged",
@@ -244,15 +193,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260604-0700": {
-      "shift_id": "SHF-20260604-0700",
+    "SHF-20260722-0700": {
+      "shift_id": "SHF-20260722-0700",
       "employee_id": "EMP916332",
       "unit_code": "3E-SURG",
-      "date": "2026-08-04",
+      "date": "2026-07-22",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -266,29 +215,29 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-15",
+      "pay_period_end_date": "2026-08-01",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260720-0700": {
-      "shift_id": "SHF-20260720-0700",
-      "employee_id": "EMP552204",
-      "unit_code": "4B-ICU",
-      "date": "2026-07-20",
+    "SHF-20260725-0700": {
+      "shift_id": "SHF-20260725-0700",
+      "employee_id": "EMP871411",
+      "unit_code": "3E-SURG",
+      "date": "2026-07-25",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
-      "hours_logged": 12.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-07-25",
+      "pay_period_end_date": "2026-08-01",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -298,66 +247,64 @@
   "appointment_availability": {
     "orientation_followup": {
       "SURGERY": {
-        "2026-07-20": [
+        "2026-07-21": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-21": [
+        "2026-07-24": [
           "10:00",
-          "13:00"
-        ],
-        "2026-07-22": [
-          "09:30",
+          "13:00",
           "15:00"
+        ],
+        "2026-07-28": [
+          "09:30",
+          "14:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "SURGERY": {
-        "2026-07-20": [
+        "2026-08-07": [
           "09:00",
-          "11:00"
+          "11:00",
+          "15:00"
         ],
-        "2026-07-21": [
+        "2026-08-10": [
           "10:00",
           "14:00"
         ],
-        "2026-07-22": [
+        "2026-08-12": [
           "09:30",
-          "15:00"
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "SURGERY": {
-        "2026-07-20": [
-          "08:00",
-          "10:00"
-        ],
-        "2026-07-21": [
+        "2026-07-23": [
           "09:00",
-          "13:00"
-        ],
-        "2026-07-22": [
           "11:00",
+          "14:00"
+        ],
+        "2026-07-27": [
+          "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-07-30": [
+          "09:30",
+          "14:30"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-07-04",
+    "2026-07-03",
     "2026-09-07",
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "SURGERY": [],
-    "EMERGENCY": [
-      "2026-07-18"
-    ],
-    "ONCOLOGY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "SURGERY": []
   }
 }

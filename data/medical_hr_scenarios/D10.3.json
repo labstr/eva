@@ -10,13 +10,12 @@
       "BLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
       "ONC-CERT"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -27,16 +26,16 @@
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP900001",
+      "employee_id": "EMP900111",
       "first_name": "Amina",
-      "last_name": "Okafor",
+      "last_name": "Cole",
       "facility_code": "MGH-04B",
-      "pin": "4821",
-      "phone_last_four": "1122",
-      "otp_code": "654321",
+      "pin": "7291",
+      "phone_last_four": "8821",
+      "otp_code": "483920",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2018-03-12",
+      "hire_date": "2018-06-11",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -61,7 +60,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2027-03-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -78,23 +77,21 @@
       "employee_id": "EMP211834",
       "first_name": "Chidi",
       "last_name": "Anyanwu",
-      "date_of_birth": "1980-07-19",
-      "phone_last_four": "4821",
+      "date_of_birth": "1992-09-03",
+      "phone_last_four": "6418",
       "otp_code": "476395",
       "department_code": "RADIOLOGY",
-      "role_code": "NP",
+      "role_code": "RN",
       "unit_code": "2A-MED",
       "hire_date": "2021-02-15",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS"
+        "BLS"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 65,
-        "hours_worked_past_year": 1860,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -116,7 +113,7 @@
         "case_id": null
       },
       "visa_record": {
-        "petition_number": "ABC9999999999",
+        "petition_number": "WAC2512045678",
         "visa_type": "H1B",
         "status": "approved",
         "expiration_date": "2027-11-30",
@@ -125,33 +122,32 @@
       },
       "leave_records": [],
       "pto_balances": {
-        "pto": 8.0,
-        "sick": 0.0
+        "pto": 2.0,
+        "sick": 6.0
       },
       "pto_requests": []
     },
-    "EMP900001": {
-      "employee_id": "EMP900001",
+    "EMP900111": {
+      "employee_id": "EMP900111",
       "first_name": "Amina",
-      "last_name": "Okafor",
-      "date_of_birth": "1979-04-22",
-      "phone_last_four": "1122",
-      "otp_code": "654321",
+      "last_name": "Cole",
+      "date_of_birth": "1981-04-12",
+      "phone_last_four": "8821",
+      "otp_code": "483920",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
       "unit_code": "4B-ICU",
-      "hire_date": "2018-03-12",
+      "hire_date": "2018-06-11",
       "employment_status": "active",
       "certifications": [
         "ACLS",
         "BLS",
         "CCRN"
       ],
-      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 100,
-        "hours_worked_past_year": 1920,
+        "months_employed": 96,
+        "hours_worked_past_year": 2040,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -175,42 +171,20 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 15.0,
-        "sick": 5.0
+        "pto": 18.0,
+        "sick": 7.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260722-0900": {
-      "shift_id": "SHF-20260722-0900",
-      "employee_id": "EMP211834",
-      "unit_code": "2A-MED",
-      "date": "2026-07-22",
-      "start_time": "09:00",
-      "end_time": "17:00",
-      "hours_scheduled": 8.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-07-31",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260724-0900": {
-      "shift_id": "SHF-20260724-0900",
+    "SHF-20260724-0700": {
+      "shift_id": "SHF-20260724-0700",
       "employee_id": "EMP211834",
       "unit_code": "2A-MED",
       "date": "2026-07-24",
-      "start_time": "09:00",
-      "end_time": "17:00",
+      "start_time": "07:00",
+      "end_time": "15:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -226,13 +200,13 @@
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260728-0900": {
-      "shift_id": "SHF-20260728-0900",
-      "employee_id": "EMP900001",
-      "unit_code": "4B-ICU",
-      "date": "2026-07-28",
-      "start_time": "09:00",
-      "end_time": "17:00",
+    "SHF-20260811-0700": {
+      "shift_id": "SHF-20260811-0700",
+      "employee_id": "EMP211834",
+      "unit_code": "2A-MED",
+      "date": "2026-08-11",
+      "start_time": "07:00",
+      "end_time": "15:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -244,7 +218,29 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-07-31",
+      "pay_period_end_date": "2026-08-15",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260813-0700": {
+      "shift_id": "SHF-20260813-0700",
+      "employee_id": "EMP211834",
+      "unit_code": "2A-MED",
+      "date": "2026-08-13",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-08-15",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -261,43 +257,77 @@
         ],
         "2026-07-24": [
           "10:00",
+          "13:00",
           "15:00"
         ],
         "2026-07-27": [
           "09:30",
-          "13:30"
+          "11:30"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-23": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-24": [
+          "13:00",
+          "15:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "RADIOLOGY": {
-        "2026-07-27": [
-          "09:00",
-          "11:00"
-        ],
         "2026-07-28": [
-          "10:00",
+          "09:00",
+          "10:30",
           "14:00"
         ],
         "2026-07-29": [
+          "11:00",
+          "15:00"
+        ],
+        "2026-07-30": [
           "09:30",
+          "13:30"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-28": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-29": [
+          "14:00",
           "15:30"
         ]
       }
     },
     "competency_review": {
-      "CARDIOLOGY": {
-        "2026-07-23": [
+      "RADIOLOGY": {
+        "2026-07-25": [
           "09:00",
-          "13:00"
+          "11:00"
         ],
-        "2026-07-24": [
-          "10:00",
+        "2026-07-26": [
+          "13:00",
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-25": [
+          "09:00",
+          "11:00",
           "14:00"
         ],
-        "2026-07-27": [
-          "11:00",
+        "2026-07-26": [
+          "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-07-27": [
+          "09:30",
+          "12:30"
         ]
       }
     }
@@ -309,6 +339,8 @@
   ],
   "department_blackout_dates": {
     "RADIOLOGY": [],
-    "CARDIOLOGY": []
+    "CARDIOLOGY": [
+      "2026-07-31"
+    ]
   }
 }
