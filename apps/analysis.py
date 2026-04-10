@@ -1885,7 +1885,7 @@ def record_detail():
 
 
 def main():
-    st.set_page_config(page_title="EVA Results Analysis", layout="wide")
+    st.set_page_config(page_title="EVA Results Analysis", layout="wide", page_icon="website/public/favicon.svg")
 
     pages = (
         st.Page(cross_run_comparison, title="Cross-Run Comparison", icon=":material/compare_arrows:"),
