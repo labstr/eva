@@ -484,6 +484,76 @@ with st.container(height=q_height):
     q_tabs = st.tabs(q_labels)
 
 
+# ── Rendering / data helpers (must be defined before any save buttons fire) ───
+
+
+def _auto_height(text: str, min_height: int = 68, chars_per_line: int = 65) -> int:
+    """Estimate the pixel height needed to display text without scrolling."""
+    if not text:
+        return min_height
+    lines = text.split("\n")
+    total_rows = sum(max(1, -(-len(line) // chars_per_line)) for line in lines)
+    return max(min_height, total_rows * 22 + 40)
+
+
+def _render_list_field(label: str, base_key: str):
+    """Render a list field as individually editable text areas, one per item."""
+    st.markdown(f"**{label}**")
+    count = st.session_state.get(f"{base_key}_count", 0)
+    for i in range(count):
+        item_key = f"{base_key}_{i}"
+        if item_key not in st.session_state:
+            st.session_state[item_key] = ""
+        text = st.session_state.get(item_key, "")
+        st.text_area(f"item {i + 1}", key=item_key, height=_auto_height(text), label_visibility="collapsed")
+
+
+def _get_list_values(base_key: str) -> list[str]:
+    """Read back edited list items from session state."""
+    count = st.session_state.get(f"{base_key}_count", 0)
+    return [v for i in range(count) if (v := st.session_state.get(f"{base_key}_{i}", "").strip())]
+
+
+def _render_diff_html(diff_lines: list[str]):
+    """Render unified diff lines as colored HTML."""
+    rows = []
+    for line in diff_lines:
+        escaped = line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        if line.startswith("@@"):
+            rows.append(
+                f'<div style="background:#1e3a5f;color:#58a6ff;'
+                f"padding:4px 12px;margin-top:8px;border-radius:3px;"
+                f'font-weight:600">{escaped}</div>'
+            )
+        elif line.startswith("+++") or line.startswith("---"):
+            rows.append(f'<div style="color:#8b949e;padding:2px 12px;font-weight:700">{escaped}</div>')
+        elif line.startswith("+"):
+            rows.append(
+                f'<div style="background:#0d2818;color:#56d364;'
+                f'padding:1px 12px;border-left:3px solid #2ea043">'
+                f"{escaped}</div>"
+            )
+        elif line.startswith("-"):
+            rows.append(
+                f'<div style="background:#2d1115;color:#f85149;'
+                f'padding:1px 12px;border-left:3px solid #da3633">'
+                f"{escaped}</div>"
+            )
+        else:
+            rows.append(f'<div style="color:#c9d1d9;padding:1px 12px">{escaped}</div>')
+    body = "\n".join(rows)
+    n_lines = len(diff_lines)
+    height = min(max(200, n_lines * 22), 600)
+    html = (
+        f'<div style="font-family:ui-monospace,SFMono-Regular,'
+        f"'SF Mono',Menlo,Consolas,monospace;font-size:12px;"
+        f"line-height:1.5;background:#0d1117;border:1px solid #30363d;"
+        f'border-radius:6px;padding:8px 0;overflow-x:auto">'
+        f"{body}</div>"
+    )
+    components.html(html, height=height, scrolling=True)
+
+
 # ── Helper: build feedback dict and validate required fields ─────────────────
 def _build_and_save_feedback(save_key: str):
     required_checks = [
