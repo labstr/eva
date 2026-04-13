@@ -422,8 +422,12 @@ if f"edit_high_level_goal_{_eid}" not in st.session_state:
     _fb = load_feedback(current_id) or {}
     _eug = _fb.get("edited_user_goal", {})
     _edt = _eug.get("decision_tree", dt)
-    st.session_state[f"edit_high_level_goal_{_eid}"] = _eug.get("high_level_user_goal", goal.get("high_level_user_goal", ""))
-    st.session_state[f"edit_starting_utterance_{_eid}"] = _eug.get("starting_utterance", goal.get("starting_utterance", ""))
+    st.session_state[f"edit_high_level_goal_{_eid}"] = _eug.get(
+        "high_level_user_goal", goal.get("high_level_user_goal", "")
+    )
+    st.session_state[f"edit_starting_utterance_{_eid}"] = _eug.get(
+        "starting_utterance", goal.get("starting_utterance", "")
+    )
     for _fkey, _items in [
         (f"edit_must_have_{_eid}", _edt.get("must_have_criteria", dt.get("must_have_criteria", []))),
         (f"edit_nice_to_have_{_eid}", _edt.get("nice_to_have_criteria", dt.get("nice_to_have_criteria", []))),
@@ -478,6 +482,7 @@ q_labels = [q["label"] for q in QUESTIONS] + ["Acceptability"]
 st.markdown("**Review Questions** — questions marked \\* are required")
 with st.container(height=q_height):
     q_tabs = st.tabs(q_labels)
+
 
 # ── Helper: build feedback dict and validate required fields ─────────────────
 def _build_and_save_feedback(save_key: str):
@@ -805,78 +810,17 @@ st.markdown(
 # ── Side-by-side: User Goal | Trace ──────────────────────────────────────────
 col_goal, col_trace = st.columns(2)
 
-def _auto_height(text: str, min_height: int = 68, chars_per_line: int = 65) -> int:
-    """Estimate the pixel height needed to display text without scrolling."""
-    if not text:
-        return min_height
-    lines = text.split("\n")
-    total_rows = sum(max(1, -(-len(line) // chars_per_line)) for line in lines)
-    return max(min_height, total_rows * 22 + 40)
-
-
-def _render_list_field(label: str, base_key: str):
-    """Render a list field as individually editable text areas, one per item."""
-    st.markdown(f"**{label}**")
-    count = st.session_state.get(f"{base_key}_count", 0)
-    for i in range(count):
-        item_key = f"{base_key}_{i}"
-        if item_key not in st.session_state:
-            st.session_state[item_key] = ""
-        text = st.session_state.get(item_key, "")
-        st.text_area(f"item {i + 1}", key=item_key, height=_auto_height(text), label_visibility="collapsed")
-
-
-def _get_list_values(base_key: str) -> list[str]:
-    """Read back edited list items from session state."""
-    count = st.session_state.get(f"{base_key}_count", 0)
-    return [v for i in range(count) if (v := st.session_state.get(f"{base_key}_{i}", "").strip())]
-
-
-def _render_diff_html(diff_lines: list[str]):
-    """Render unified diff lines as colored HTML (reused for user goal and scenario DB diffs)."""
-    rows = []
-    for line in diff_lines:
-        escaped = line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        if line.startswith("@@"):
-            rows.append(
-                f'<div style="background:#1e3a5f;color:#58a6ff;'
-                f"padding:4px 12px;margin-top:8px;border-radius:3px;"
-                f'font-weight:600">{escaped}</div>'
-            )
-        elif line.startswith("+++") or line.startswith("---"):
-            rows.append(f'<div style="color:#8b949e;padding:2px 12px;font-weight:700">{escaped}</div>')
-        elif line.startswith("+"):
-            rows.append(
-                f'<div style="background:#0d2818;color:#56d364;'
-                f'padding:1px 12px;border-left:3px solid #2ea043">'
-                f"{escaped}</div>"
-            )
-        elif line.startswith("-"):
-            rows.append(
-                f'<div style="background:#2d1115;color:#f85149;'
-                f'padding:1px 12px;border-left:3px solid #da3633">'
-                f"{escaped}</div>"
-            )
-        else:
-            rows.append(f'<div style="color:#c9d1d9;padding:1px 12px">{escaped}</div>')
-    body = "\n".join(rows)
-    n_lines = len(diff_lines)
-    height = min(max(200, n_lines * 22), 600)
-    html = (
-        f'<div style="font-family:ui-monospace,SFMono-Regular,'
-        f"'SF Mono',Menlo,Consolas,monospace;font-size:12px;"
-        f"line-height:1.5;background:#0d1117;border:1px solid #30363d;"
-        f'border-radius:6px;padding:8px 0;overflow-x:auto">'
-        f"{body}</div>"
-    )
-    components.html(html, height=height, scrolling=True)
-
 
 # Estimate total pixel height of the user goal column so the trace container matches
 _goal_height = 60  # title + top padding
 _goal_height += _auto_height(st.session_state.get(f"edit_high_level_goal_{_eid}", "")) + 48
 _goal_height += _auto_height(st.session_state.get(f"edit_starting_utterance_{_eid}", "")) + 48
-for _lkey in [f"edit_must_have_{_eid}", f"edit_nice_to_have_{_eid}", f"edit_negotiation_{_eid}", f"edit_edge_cases_{_eid}"]:
+for _lkey in [
+    f"edit_must_have_{_eid}",
+    f"edit_nice_to_have_{_eid}",
+    f"edit_negotiation_{_eid}",
+    f"edit_edge_cases_{_eid}",
+]:
     _cnt = st.session_state.get(f"{_lkey}_count", 0)
     _goal_height += 32  # bold label
     for _li in range(_cnt):
@@ -888,23 +832,39 @@ _goal_height += _auto_height(st.session_state.get(f"edit_info_required_{_eid}", 
 
 with col_goal:
     st.markdown("##### User Goal")
-    st.text_area("High-level Goal", key=f"edit_high_level_goal_{_eid}",
-                 height=_auto_height(st.session_state.get(f"edit_high_level_goal_{_eid}", "")))
-    st.text_area("Starting Utterance", key=f"edit_starting_utterance_{_eid}",
-                 height=_auto_height(st.session_state.get(f"edit_starting_utterance_{_eid}", "")))
+    st.text_area(
+        "High-level Goal",
+        key=f"edit_high_level_goal_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_high_level_goal_{_eid}", "")),
+    )
+    st.text_area(
+        "Starting Utterance",
+        key=f"edit_starting_utterance_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_starting_utterance_{_eid}", "")),
+    )
     _render_list_field("Must-Have Criteria", f"edit_must_have_{_eid}")
     _render_list_field("Nice-to-Have Criteria", f"edit_nice_to_have_{_eid}")
     _render_list_field("Negotiation Behavior", f"edit_negotiation_{_eid}")
-    st.text_area("Resolution Condition", key=f"edit_resolution_{_eid}",
-                 height=_auto_height(st.session_state.get(f"edit_resolution_{_eid}", "")))
-    st.text_area("Failure Condition", key=f"edit_failure_{_eid}",
-                 height=_auto_height(st.session_state.get(f"edit_failure_{_eid}", "")))
-    st.text_area("Escalation Behavior", key=f"edit_escalation_{_eid}",
-                 height=_auto_height(st.session_state.get(f"edit_escalation_{_eid}", "")))
+    st.text_area(
+        "Resolution Condition",
+        key=f"edit_resolution_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_resolution_{_eid}", "")),
+    )
+    st.text_area(
+        "Failure Condition",
+        key=f"edit_failure_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_failure_{_eid}", "")),
+    )
+    st.text_area(
+        "Escalation Behavior",
+        key=f"edit_escalation_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_escalation_{_eid}", "")),
+    )
     _render_list_field("Edge Cases", f"edit_edge_cases_{_eid}")
     _info_text = st.session_state.get(f"edit_info_required_{_eid}", "")
-    st.text_area("Information Required (JSON)", key=f"edit_info_required_{_eid}",
-                 height=_auto_height(_info_text, min_height=100))
+    st.text_area(
+        "Information Required (JSON)", key=f"edit_info_required_{_eid}", height=_auto_height(_info_text, min_height=100)
+    )
 
     # ── Diff: original vs edited ──────────────────────────────────────────────
     try:
