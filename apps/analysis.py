@@ -1076,41 +1076,46 @@ def render_cross_run_comparison(run_dirs: list[Path], output_dir_str: str = ""):
         )
         st.plotly_chart(bar_fig)
 
-    # Metrics table: EVA composites first, then all individual metrics
-    table_composites = [c for c in _EVA_BAR_COMPOSITES if c in summary_df.columns]
-    display_cols = ["system_name", "run_timestamp", "records"] + table_composites + ordered_metrics
-    display_df = summary_df[display_cols].copy()
+    # Split metrics into three groups by category
+    eva_a_composites = [c for c in ["EVA-A_pass", "EVA-A_mean"] if c in summary_df.columns]
+    eva_x_composites = [c for c in ["EVA-X_pass", "EVA-X_mean"] if c in summary_df.columns]
+    accuracy_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) == "Accuracy"]
+    experience_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) == "Experience"]
+    other_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) not in {"Accuracy", "Experience"}]
 
-    # Add link column to navigate to Run Overview (use per-run output dir to support multiple output dirs)
-    display_df.insert(
-        0,
-        "link",
-        summary_df.apply(lambda row: f"?output_dir={row['run_output_dir']}&view=Run+Overview&run={row['run']}", axis=1),
+    id_cols = ["system_name", "run_timestamp", "run_output_dir", "records"]
+    id_rename = {
+        "system_name": "System",
+        "run_timestamp": "Timestamp",
+        "run_output_dir": "Output Dir",
+        "records": "# Records",
+    }
+    link_series = summary_df.apply(
+        lambda row: f"?output_dir={row['run_output_dir']}&view=Run+Overview&run={row['run']}",
+        axis=1,
     )
 
-    composite_rename = {c: f"[EVA] {_EVA_COMPOSITE_DISPLAY[c]}" for c in table_composites}
-    display_df = display_df.rename(
-        columns={
-            "system_name": "System",
-            "run_timestamp": "Timestamp",
-            "records": "# Records",
-            **composite_rename,
-            **col_rename,
-        }
-    )
-    renamed_composites = [composite_rename[c] for c in table_composites]
-    renamed_metrics = [col_rename[m] for m in ordered_metrics]
-    all_score_cols = renamed_composites + renamed_metrics
+    def _show_subtable(heading: str, composites: list, metrics: list) -> None:
+        if not composites and not metrics:
+            return
+        st.markdown(f"#### {heading}")
+        composite_rename = {c: f"[EVA] {_EVA_COMPOSITE_DISPLAY[c]}" for c in composites}
+        cols = id_cols + composites + metrics
+        sub_df = summary_df[cols].copy()
+        sub_df.insert(0, "link", link_series)
+        sub_df = sub_df.rename(columns={**id_rename, **composite_rename, **col_rename})
+        score_cols = [composite_rename[c] for c in composites] + [col_rename[m] for m in metrics]
+        styled = sub_df.style.map(_color_cell, subset=score_cols)
+        styled = styled.format(dict.fromkeys(score_cols, "{:.3f}"), na_rep="—")
+        st.dataframe(
+            styled,
+            hide_index=True,
+            column_config={"link": st.column_config.LinkColumn(" ", display_text="🔍", width=40)},
+        )
 
-    styled = display_df.style.map(_color_cell, subset=all_score_cols)
-    styled = styled.format(dict.fromkeys(all_score_cols, "{:.3f}"), na_rep="—")
-    st.dataframe(
-        styled,
-        hide_index=True,
-        column_config={
-            "link": st.column_config.LinkColumn(" ", display_text="🔍", width=40),
-        },
-    )
+    _show_subtable("Accuracy Metrics", eva_a_composites, accuracy_metrics)
+    _show_subtable("EVA-X Metrics", eva_x_composites, experience_metrics)
+    _show_subtable("Diagnostic & Other Metrics", [], other_metrics)
 
     csv = summary_df.drop(columns=["label"]).to_csv(index=False)
     st.download_button("Download CSV", csv, file_name="cross_run_comparison.csv", mime="text/csv")
