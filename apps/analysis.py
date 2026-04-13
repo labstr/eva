@@ -506,13 +506,18 @@ def _color_cell(val):
 
 
 def _collect_run_metrics(run_dir: Path) -> tuple[list[dict], list[str]]:
-    """Collect all metrics rows for a run. Returns (rows, metric_names)."""
+    """Collect all metrics rows for a run. Returns (rows, metric_names).
+
+    Rows for failed attempts (directories named *_failed_attempt_*) are marked
+    with ``_is_failed_attempt=True`` so the caller can filter them.
+    """
     record_dirs = get_record_directories(run_dir)
     rows: list[dict] = []
     all_metric_names: set[str] = set()
 
     for record_dir in record_dirs:
         record_id = record_dir.name
+        is_failed_attempt = "_failed_attempt_" in record_id
         data_dirs = _get_record_data_dirs(record_dir)
 
         for trial_label, data_path in data_dirs:
@@ -520,7 +525,7 @@ def _collect_run_metrics(run_dir: Path) -> tuple[list[dict], list[str]]:
             if not metrics:
                 continue
 
-            row: dict = {"record": record_id}
+            row: dict = {"record": record_id, "_is_failed_attempt": is_failed_attempt}
             if trial_label:
                 row["trial"] = trial_label
 
@@ -1264,12 +1269,19 @@ def render_run_overview(run_dir: Path):
     # --- Per-record table ---
     st.markdown("### Per-Record Metrics")
 
+    has_failed_attempts = df["_is_failed_attempt"].any()
+    show_failed = False
+    if has_failed_attempts:
+        show_failed = st.toggle("Show failed attempts", value=False)
+
+    table_df = df if show_failed else df[~df["_is_failed_attempt"]]
+
     run_name = run_dir.name
     leading_cols = ["record"]
     if has_trials:
         leading_cols.append("trial")
-    ordered_metrics = [m for m in metric_names if m in df.columns]
-    df = df[leading_cols + ordered_metrics]
+    ordered_metrics = [m for m in metric_names if m in table_df.columns]
+    table_df = table_df[leading_cols + ordered_metrics]
 
     # Add link column to navigate to Record Detail
     def _record_link(row):
@@ -1278,12 +1290,12 @@ def render_run_overview(run_dir: Path):
             params += f"&trial={row['trial']}"
         return params
 
-    df = df.copy()
-    df.insert(0, "link", df.apply(_record_link, axis=1))
-    df = df.rename(columns=col_rename)
+    table_df = table_df.copy()
+    table_df.insert(0, "link", table_df.apply(_record_link, axis=1))
+    table_df = table_df.rename(columns=col_rename)
 
     renamed_metrics = [col_rename[m] for m in ordered_metrics]
-    styled = df.style.map(_color_cell, subset=renamed_metrics)
+    styled = table_df.style.map(_color_cell, subset=renamed_metrics)
     styled = styled.format(dict.fromkeys(renamed_metrics, "{:.3f}"), na_rep="—")
     st.dataframe(
         styled,
@@ -1293,7 +1305,7 @@ def render_run_overview(run_dir: Path):
         },
     )
 
-    csv = df.drop(columns=["link"]).to_csv(index=False)
+    csv = table_df.drop(columns=["link"]).to_csv(index=False)
     st.download_button("Download CSV", csv, file_name=f"{run_dir.name}_metrics.csv", mime="text/csv")
 
 
