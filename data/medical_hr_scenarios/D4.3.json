@@ -7,7 +7,6 @@
       "CCRN"
     ],
     "2A-MED": [
-      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
@@ -33,19 +32,19 @@
       "last_name": "Moyo",
       "facility_code": "RQCU-97T",
       "pin": "2983",
-      "phone_last_four": "4421",
+      "phone_last_four": "4821",
       "otp_code": "934904",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
-      "hire_date": "2021-07-12",
+      "department_code": "ONCOLOGY",
+      "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "OH-MD-781245": {
-          "state_license_number": "OH-MD-781245",
+        "MA-MD-515922": {
+          "state_license_number": "MA-MD-515922",
           "license_type": "MD",
-          "state_code": "OH",
+          "state_code": "MA",
           "expiration_date": "2027-06-30",
           "status": "active",
           "investigation_hold": false,
@@ -58,83 +57,33 @@
       },
       "malpractice": {},
       "dea_registration": {
-        "dea_number": "AB1234567",
-        "facility_code": "RQCU-97T",
-        "state_code": "OH",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV",
-          "CV"
-        ],
-        "expiration_date": "2027-11-30",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "1447305582": {
-      "npi": "1447305582",
-      "employee_id": "EMP220481",
-      "first_name": "Elena",
-      "last_name": "Park",
-      "facility_code": "HMC-12A",
-      "pin": "5518",
-      "phone_last_four": "1184",
-      "otp_code": "481220",
-      "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2019-03-04",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": null,
-      "licenses": {
-        "MI-MD-443210": {
-          "state_license_number": "MI-MD-443210",
-          "license_type": "MD",
-          "state_code": "MI",
-          "expiration_date": "2028-01-31",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-KL82Q1",
-        "per_occurrence_limit_usd": 1000000,
-        "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2027-01-01",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
         "dea_number": "BK4729183",
-        "facility_code": "HMC-12A",
-        "state_code": "MI",
+        "facility_code": "RQCU-97T",
+        "state_code": "MA",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-08-31",
+        "expiration_date": "2028-05-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [],
+        "privilege_list": [
+          {
+            "code": "PRV-ONC-001",
+            "description": "General oncology attending privileges",
+            "status": "active"
+          },
+          {
+            "code": "PRV-ONC-002",
+            "description": "Chemotherapy ordering privileges",
+            "status": "active"
+          }
+        ],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -145,71 +94,23 @@
       "employee_id": "EMP515922",
       "first_name": "Tendai",
       "last_name": "Moyo",
-      "date_of_birth": "1983-04-19",
-      "phone_last_four": "4421",
+      "date_of_birth": "1987-04-19",
+      "phone_last_four": "4821",
       "otp_code": "934904",
-      "department_code": "EMERGENCY",
+      "department_code": "ONCOLOGY",
       "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2021-07-12",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 62,
-        "hours_worked_past_year": 1840,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 15.0,
-        "sick": 5.0
-      },
-      "pto_requests": []
-    },
-    "EMP220481": {
-      "employee_id": "EMP220481",
-      "first_name": "Elena",
-      "last_name": "Park",
-      "date_of_birth": "1979-11-08",
-      "phone_last_four": "1184",
-      "otp_code": "481220",
-      "department_code": "CARDIOLOGY",
-      "role_code": "MD",
-      "unit_code": "4B-ICU",
-      "hire_date": "2019-03-04",
+      "unit_code": "3C-ONC",
+      "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
         "ACLS",
         "BLS",
-        "CCRN"
+        "ONC-CERT"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 90,
-        "hours_worked_past_year": 1920,
+        "months_employed": 85,
+        "hours_worked_past_year": 1864,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -233,21 +134,21 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
+        "pto": 14.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20261002-0700": {
-      "shift_id": "SHF-20261002-0700",
+    "SHF-20261002-0800": {
+      "shift_id": "SHF-20261002-0800",
       "employee_id": "EMP515922",
-      "unit_code": "2A-MED",
+      "unit_code": "3C-ONC",
       "date": "2026-10-02",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -267,55 +168,53 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
+      "ONCOLOGY": {
         "2026-10-06": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-10-07": [
+        "2026-10-08": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-10-09": [
+        "2026-10-12": [
           "09:30",
-          "12:30"
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
+      "ONCOLOGY": {
         "2026-10-20": [
           "09:00",
-          "11:00",
+          "10:00",
           "14:00"
         ],
         "2026-10-21": [
-          "10:00",
-          "13:00"
+          "11:00",
+          "15:00"
         ],
-        "2026-10-22": [
+        "2026-10-23": [
           "09:30",
-          "15:30"
+          "13:30"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
-        "2026-10-08": [
+      "ONCOLOGY": {
+        "2026-10-14": [
           "09:00",
-          "11:00",
+          "11:00"
+        ],
+        "2026-10-16": [
+          "10:00",
           "14:00"
         ],
-        "2026-10-10": [
-          "10:00",
-          "13:00",
-          "15:00"
-        ],
-        "2026-10-13": [
+        "2026-10-19": [
           "08:30",
-          "12:00"
+          "13:00"
         ]
       }
     }
@@ -326,9 +225,6 @@
     "2027-01-01"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
-    "CARDIOLOGY": [
-      "2026-10-14"
-    ]
+    "ONCOLOGY": []
   }
 }

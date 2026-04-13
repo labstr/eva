@@ -3,8 +3,7 @@
   "unit_cert_requirements": {
     "5B-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ],
     "4B-ICU": [
       "BLS",
@@ -12,13 +11,11 @@
       "CCRN"
     ],
     "2A-MED": [
-      "BLS",
-      "ACLS"
+      "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
       "BLS",
@@ -34,11 +31,11 @@
       "last_name": "Nwosu",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "4418",
+      "phone_last_four": "4821",
       "otp_code": "483920",
       "role_code": "RN",
       "department_code": "PEDIATRICS",
-      "hire_date": "2021-06-14",
+      "hire_date": "2020-06-15",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -64,7 +61,7 @@
           "CV"
         ],
         "expiration_date": "2027-05-31",
-        "status": "inactive",
+        "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
@@ -80,22 +77,21 @@
       "employee_id": "EMP824156",
       "first_name": "Chioma",
       "last_name": "Nwosu",
-      "date_of_birth": "1991-04-22",
-      "phone_last_four": "4418",
+      "date_of_birth": "1992-04-11",
+      "phone_last_four": "4821",
       "otp_code": "483920",
       "department_code": "PEDIATRICS",
       "role_code": "RN",
       "unit_code": "5B-PEDS",
-      "hire_date": "2021-06-14",
+      "hire_date": "2020-06-15",
       "employment_status": "on_leave",
       "certifications": [
         "BLS",
-        "PALS",
-        "NRP"
+        "PALS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 63,
+        "months_employed": 75,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 8,
         "reason": null
@@ -122,13 +118,13 @@
         {
           "leave_type": "medical",
           "start_date": "2026-09-10",
-          "end_date": "2026-09-30",
-          "status": "active",
-          "case_id": "CASE-LEA-824156"
+          "end_date": "2026-09-24",
+          "status": "approved",
+          "case_id": "CASE-LOA-824156"
         }
       ],
       "pto_balances": {
-        "pto": 12.5,
+        "pto": 12.0,
         "sick": 4.0
       },
       "pto_requests": []
@@ -136,24 +132,23 @@
     "EMP197573": {
       "employee_id": "EMP197573",
       "first_name": "Maya",
-      "last_name": "Ibarra",
-      "date_of_birth": "1988-11-09",
-      "phone_last_four": "7724",
-      "otp_code": "615204",
+      "last_name": "Ellison",
+      "date_of_birth": "1988-11-03",
+      "phone_last_four": "7719",
+      "otp_code": "651204",
       "department_code": "PEDIATRICS",
       "role_code": "RN",
       "unit_code": "5B-PEDS",
-      "hire_date": "2019-02-18",
+      "hire_date": "2019-03-11",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "PALS",
-        "NRP"
+        "PALS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 91,
-        "hours_worked_past_year": 1950,
+        "months_employed": 90,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -178,19 +173,19 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 16.0,
-        "sick": 5.0
+        "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260919-0700": {
-      "shift_id": "SHF-20260919-0700",
+    "SHF-20260919-0100": {
+      "shift_id": "SHF-20260919-0100",
       "employee_id": "EMP824156",
       "unit_code": "5B-PEDS",
       "date": "2026-09-19",
-      "start_time": "07:00",
-      "end_time": "19:00",
+      "start_time": "01:00",
+      "end_time": "13:00",
       "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
@@ -206,13 +201,13 @@
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260928-1900": {
-      "shift_id": "SHF-20260928-1900",
+    "SHF-20260922-0700": {
+      "shift_id": "SHF-20260922-0700",
       "employee_id": "EMP197573",
       "unit_code": "5B-PEDS",
-      "date": "2026-09-28",
-      "start_time": "19:00",
-      "end_time": "07:00",
+      "date": "2026-09-22",
+      "start_time": "07:00",
+      "end_time": "19:00",
       "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
@@ -224,7 +219,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-10-10",
+      "pay_period_end_date": "2026-09-26",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -239,53 +234,48 @@
           "11:00",
           "14:00"
         ],
-        "2026-09-24": [
+        "2026-09-23": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-09-29": [
+        "2026-09-24": [
           "09:30",
-          "12:00",
+          "12:30",
           "16:00"
         ]
       }
     },
     "return_to_work_checkin": {
       "PEDIATRICS": {
-        "2026-10-01": [
+        "2026-09-24": [
           "09:00",
-          "11:00",
+          "11:00"
+        ],
+        "2026-09-25": [
+          "10:00",
           "14:00"
         ],
-        "2026-10-02": [
-          "10:00",
-          "13:00",
-          "15:00"
-        ],
-        "2026-10-05": [
+        "2026-09-28": [
           "09:30",
-          "12:00",
-          "16:00"
+          "13:30"
         ]
       }
     },
     "competency_review": {
       "PEDIATRICS": {
-        "2026-09-23": [
+        "2026-09-29": [
           "09:00",
           "11:00",
-          "14:00"
-        ],
-        "2026-09-25": [
-          "10:00",
-          "13:00",
           "15:00"
         ],
         "2026-09-30": [
+          "10:00",
+          "13:00"
+        ],
+        "2026-10-01": [
           "09:30",
-          "12:00",
-          "16:00"
+          "14:30"
         ]
       }
     }
@@ -296,13 +286,6 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "PEDIATRICS": [],
-    "EMERGENCY": [
-      "2026-11-27"
-    ],
-    "ONCOLOGY": [],
-    "SURGERY": [
-      "2026-12-24"
-    ]
+    "PEDIATRICS": []
   }
 }

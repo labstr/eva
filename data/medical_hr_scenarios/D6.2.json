@@ -11,7 +11,8 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS"
+      "ACLS",
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "BLS",
@@ -31,7 +32,7 @@
       "last_name": "Iyer",
       "facility_code": "WO-70P",
       "pin": "8216",
-      "phone_last_four": "4421",
+      "phone_last_four": "4821",
       "otp_code": "457256",
       "role_code": "MD",
       "department_code": "NEUROLOGY",
@@ -44,7 +45,7 @@
           "state_license_number": "TX-MD-680238",
           "license_type": "MD",
           "state_code": "TX",
-          "expiration_date": "2027-06-30",
+          "expiration_date": "2028-06-30",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -65,33 +66,22 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "VK2242893",
+        "dea_number": "BK4729183",
         "facility_code": "WO-70P",
-        "state_code": "TX",
+        "state_code": "MA",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-04-30",
+        "expiration_date": "2027-12-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-NEUR-001",
-            "description": "General neurology consults",
-            "status": "active"
-          },
-          {
-            "code": "PRV-NEUR-002",
-            "description": "Inpatient stroke evaluation",
-            "status": "active"
-          }
-        ],
+        "privilege_list": [],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -102,8 +92,8 @@
       "employee_id": "EMP680238",
       "first_name": "Padma",
       "last_name": "Iyer",
-      "date_of_birth": "1984-02-11",
-      "phone_last_four": "4421",
+      "date_of_birth": "1990-04-12",
+      "phone_last_four": "4821",
       "otp_code": "457256",
       "department_code": "NEUROLOGY",
       "role_code": "MD",
@@ -119,21 +109,17 @@
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "New hire has not yet met minimum tenure requirements"
+        "reason": "New hire in first week; not relevant to this call."
       },
       "onboarding_checklist": {
         "tasks": {
           "BLS_UPLOAD": {
             "status": "pending",
-            "completion_code": "TMGE"
+            "completion_code": "8UNI"
           },
-          "HIPAA_TRAINING": {
-            "status": "pending",
-            "completion_code": "5W90"
-          },
-          "BADGE_PICKUP": {
+          "ID_BADGE": {
             "status": "complete",
-            "completion_code": "P1BX"
+            "completion_code": "DONE"
           }
         }
       },
@@ -161,13 +147,13 @@
     }
   },
   "shifts": {
-    "SHF-20260922-0800": {
-      "shift_id": "SHF-20260922-0800",
+    "SHF-20260922-0700": {
+      "shift_id": "SHF-20260922-0700",
       "employee_id": "EMP680238",
       "unit_code": "2A-MED",
       "date": "2026-09-22",
-      "start_time": "08:00",
-      "end_time": "16:00",
+      "start_time": "07:00",
+      "end_time": "15:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -199,18 +185,18 @@
           "13:00"
         ],
         "2026-10-01": [
-          "10:00",
-          "15:00"
+          "08:30",
+          "10:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "NEUROLOGY": {
-        "2026-09-29": [
+        "2026-10-05": [
           "09:00",
           "11:00"
         ],
-        "2026-09-30": [
+        "2026-10-06": [
           "10:00",
           "14:00"
         ]
@@ -218,21 +204,21 @@
     },
     "competency_review": {
       "NEUROLOGY": {
-        "2026-09-29": [
-          "08:00",
-          "13:00"
-        ],
         "2026-09-30": [
           "09:00",
           "15:00"
+        ],
+        "2026-10-02": [
+          "10:00",
+          "13:00"
         ]
       }
     }
   },
   "org_holidays": [
     "2026-11-26",
-    "2026-11-27",
-    "2026-12-25"
+    "2026-12-25",
+    "2027-01-01"
   ],
   "department_blackout_dates": {
     "NEUROLOGY": []

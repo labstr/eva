@@ -11,12 +11,11 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
-      "ONCC"
+      "ONC-CERT"
     ],
     "5A-SURG": [
-      "BLS",
       "ACLS",
+      "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
@@ -32,10 +31,10 @@
       "last_name": "Jovanovic",
       "facility_code": "KQHK-51F",
       "pin": "8538",
-      "phone_last_four": "4418",
+      "phone_last_four": "4821",
       "otp_code": "972442",
       "role_code": "MD",
-      "department_code": "ONCOLOGY",
+      "department_code": "CARDIOLOGY",
       "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
@@ -45,7 +44,7 @@
           "state_license_number": "FL-MD-23386644",
           "license_type": "MD",
           "state_code": "FL",
-          "expiration_date": "2026-06-30",
+          "expiration_date": "2026-06-28",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -60,8 +59,8 @@
         "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-07-01",
-        "expiration_date": "2026-06-30",
+        "effective_date": "2025-06-24",
+        "expiration_date": "2026-06-23",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -75,7 +74,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-03-31",
+        "expiration_date": "2027-11-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -83,13 +82,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-ONC-001",
-            "description": "Medical oncology consults",
+            "code": "PRV-CARD-001",
+            "description": "General cardiology consults",
             "status": "active"
           },
           {
-            "code": "PRV-INFUS-002",
-            "description": "Chemotherapy infusion oversight",
+            "code": "PRV-CARD-002",
+            "description": "Stress test interpretation",
             "status": "active"
           }
         ],
@@ -103,18 +102,17 @@
       "employee_id": "EMP428267",
       "first_name": "Mira",
       "last_name": "Jovanovic",
-      "date_of_birth": "1983-11-14",
-      "phone_last_four": "4418",
+      "date_of_birth": "1987-09-14",
+      "phone_last_four": "4821",
       "otp_code": "972442",
-      "department_code": "ONCOLOGY",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "3C-ONC",
+      "unit_code": "4B-ICU",
       "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
-        "BLS",
         "ACLS",
-        "ONCC"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
@@ -143,32 +141,32 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260610-0800": {
-      "shift_id": "SHF-20260610-0800",
+    "SHF-20260610-0700": {
+      "shift_id": "SHF-20260610-0700",
       "employee_id": "EMP428267",
-      "unit_code": "3C-ONC",
+      "unit_code": "4B-ICU",
       "date": "2026-06-10",
-      "start_time": "08:00",
-      "end_time": "16:00",
+      "start_time": "07:00",
+      "end_time": "15:00",
       "hours_scheduled": 8.0,
-      "hours_logged": null,
+      "hours_logged": 8.0,
       "on_call": false,
       "on_call_tier": null,
-      "status": "scheduled",
+      "status": "logged",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-13",
+      "pay_period_end_date": "2026-06-14",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -177,56 +175,52 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "ONCOLOGY": {
-        "2026-06-12": [
+      "CARDIOLOGY": {
+        "2026-06-16": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-15": [
+        "2026-06-18": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-06-18": [
+        "2026-06-22": [
           "09:30",
-          "12:00",
-          "14:30"
+          "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "ONCOLOGY": {
-        "2026-06-12": [
+      "CARDIOLOGY": {
+        "2026-06-16": [
           "09:00",
           "11:00"
         ],
-        "2026-06-16": [
+        "2026-06-18": [
           "10:00",
           "14:00"
         ],
-        "2026-06-19": [
+        "2026-06-22": [
           "09:30",
-          "13:30"
+          "15:30"
         ]
       }
     },
     "competency_review": {
-      "ONCOLOGY": {
-        "2026-06-17": [
+      "CARDIOLOGY": {
+        "2026-06-16": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-06-18": [
           "09:00",
-          "11:00",
-          "14:00"
+          "13:00"
         ],
         "2026-06-22": [
-          "10:00",
-          "13:00",
+          "11:00",
           "15:00"
-        ],
-        "2026-06-24": [
-          "09:30",
-          "12:30",
-          "14:30"
         ]
       }
     }
@@ -237,10 +231,6 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "ONCOLOGY": [],
-    "CARDIOLOGY": [],
-    "EMERGENCY": [],
-    "SURGERY": [],
-    "PEDIATRICS": []
+    "CARDIOLOGY": []
   }
 }

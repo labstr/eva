@@ -7,11 +7,12 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ONS"
+      "ONC"
     ],
     "5A-SURG": [
       "ACLS",
@@ -20,7 +21,8 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS"
+      "PALS",
+      "NRP"
     ]
   },
   "providers": {
@@ -31,11 +33,11 @@
       "last_name": "Owusu",
       "facility_code": "EY-38L",
       "pin": "9501",
-      "phone_last_four": "6142",
-      "otp_code": "482913",
+      "phone_last_four": "4821",
+      "otp_code": "482193",
       "role_code": "RN",
       "department_code": "EMERGENCY",
-      "hire_date": "2021-03-15",
+      "hire_date": "2019-03-11",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -44,7 +46,7 @@
           "state_license_number": "FL-RN-33735675",
           "license_type": "RN",
           "state_code": "FL",
-          "expiration_date": "2026-07-31",
+          "expiration_date": "2026-07-28",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -56,7 +58,7 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-AX7731",
+        "policy_number": "POL-2026-EM4821",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -75,20 +77,20 @@
           "CV"
         ],
         "expiration_date": "2027-05-31",
-        "status": "inactive",
+        "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
       },
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-TRIAGE-001",
-            "description": "Emergency department triage nursing",
+            "code": "PRV-EMERG-001",
+            "description": "Emergency triage nursing",
             "status": "active"
           },
           {
-            "code": "PRV-IV-002",
-            "description": "Peripheral IV insertion",
+            "code": "PRV-EMERG-002",
+            "description": "Medication administration",
             "status": "active"
           }
         ],
@@ -96,26 +98,26 @@
       },
       "scheduled_appointments": []
     },
-    "4112233445": {
-      "npi": "4112233445",
-      "employee_id": "EMP552201",
-      "first_name": "Helen",
-      "last_name": "Morrow",
-      "facility_code": "EY-21A",
-      "pin": "4412",
-      "phone_last_four": "2201",
-      "otp_code": "173044",
+    "4556612390": {
+      "npi": "4556612390",
+      "employee_id": "EMP552301",
+      "first_name": "Elaine",
+      "last_name": "Porter",
+      "facility_code": "MG-12A",
+      "pin": "1844",
+      "phone_last_four": "7712",
+      "otp_code": "771244",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
-      "hire_date": "2018-09-10",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2016-08-22",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
-      "clearance_code": null,
+      "clearance_code": "CLR-OCC-552301",
       "licenses": {
-        "FL-MD-30058838": {
-          "state_license_number": "FL-MD-30058838",
+        "MA-MD-55230144": {
+          "state_license_number": "MA-MD-55230144",
           "license_type": "MD",
-          "state_code": "FL",
+          "state_code": "MA",
           "expiration_date": "2027-11-30",
           "status": "active",
           "investigation_hold": false,
@@ -128,7 +130,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-BX5522",
+        "policy_number": "POL-2026-CD7712",
         "per_occurrence_limit_usd": 2000000,
         "aggregate_limit_usd": 6000000,
         "effective_date": "2026-01-01",
@@ -137,9 +139,9 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BM5522014",
-        "facility_code": "EY-21A",
-        "state_code": "FL",
+        "dea_number": "BM5523014",
+        "facility_code": "MG-12A",
+        "state_code": "MA",
         "schedule_codes": [
           "CII",
           "CIII",
@@ -154,8 +156,8 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-EM-001",
-            "description": "Emergency medicine attending privileges",
+            "code": "PRV-CARD-001",
+            "description": "Cardiac catheterization",
             "status": "active"
           }
         ],
@@ -169,23 +171,22 @@
       "employee_id": "EMP418897",
       "first_name": "Kweku",
       "last_name": "Owusu",
-      "date_of_birth": "1987-04-12",
-      "phone_last_four": "6142",
-      "otp_code": "482913",
+      "date_of_birth": "1989-11-08",
+      "phone_last_four": "4821",
+      "otp_code": "482193",
       "department_code": "EMERGENCY",
       "role_code": "RN",
-      "unit_code": "4B-ICU",
-      "hire_date": "2021-03-15",
+      "unit_code": "2A-MED",
+      "hire_date": "2019-03-11",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS",
-        "CCRN"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 64,
-        "hours_worked_past_year": 1880,
+        "months_employed": 88,
+        "hours_worked_past_year": 1876,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -214,26 +215,27 @@
       },
       "pto_requests": []
     },
-    "EMP552201": {
-      "employee_id": "EMP552201",
-      "first_name": "Helen",
-      "last_name": "Morrow",
-      "date_of_birth": "1979-11-08",
-      "phone_last_four": "2201",
-      "otp_code": "173044",
-      "department_code": "EMERGENCY",
+    "EMP552301": {
+      "employee_id": "EMP552301",
+      "first_name": "Elaine",
+      "last_name": "Porter",
+      "date_of_birth": "1978-04-16",
+      "phone_last_four": "7712",
+      "otp_code": "771244",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2018-09-10",
+      "unit_code": "4B-ICU",
+      "hire_date": "2016-08-22",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "BLS"
+        "BLS",
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 94,
-        "hours_worked_past_year": 1960,
+        "months_employed": 119,
+        "hours_worked_past_year": 1920,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -258,7 +260,7 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 18.0,
-        "sick": 6.0
+        "sick": 7.0
       },
       "pto_requests": []
     }
@@ -267,7 +269,7 @@
     "SHF-20260722-0700": {
       "shift_id": "SHF-20260722-0700",
       "employee_id": "EMP418897",
-      "unit_code": "4B-ICU",
+      "unit_code": "2A-MED",
       "date": "2026-07-22",
       "start_time": "07:00",
       "end_time": "19:00",
@@ -292,17 +294,17 @@
   "appointment_availability": {
     "orientation_followup": {
       "EMERGENCY": {
-        "2026-07-23": [
+        "2026-07-22": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-24": [
+        "2026-07-23": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-07-27": [
+        "2026-07-24": [
           "09:30",
           "12:30"
         ]
@@ -310,34 +312,41 @@
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-07-28": [
-          "09:00",
-          "11:00",
-          "15:00"
-        ],
         "2026-07-29": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-07-30": [
           "10:00",
           "14:00"
         ],
-        "2026-07-30": [
+        "2026-07-31": [
           "09:30",
-          "13:30"
+          "15:00"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-07-23": [
+        "2026-07-22": [
           "08:00",
-          "10:00",
+          "10:00"
+        ],
+        "2026-07-23": [
+          "09:00",
           "13:00"
         ],
         "2026-07-24": [
-          "09:00",
           "11:00",
+          "15:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-22": [
+          "09:00",
           "14:00"
         ],
-        "2026-07-27": [
+        "2026-07-23": [
           "10:00",
           "15:00"
         ]
@@ -351,10 +360,8 @@
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],
-    "CARDIOLOGY": [],
-    "ONCOLOGY": [],
-    "SURGERY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "CARDIOLOGY": [
+      "2026-07-27"
+    ]
   }
 }

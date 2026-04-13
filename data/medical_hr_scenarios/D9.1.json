@@ -14,34 +14,36 @@
       "ONC-CERT"
     ],
     "5A-SURG": [
+      "ACLS",
       "BLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS"
+      "PALS",
+      "NRP"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP900111",
-      "first_name": "Ava",
-      "last_name": "Reynolds",
+      "employee_id": "EMP901122",
+      "first_name": "Alana",
+      "last_name": "Brooks",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "5512",
-      "otp_code": "483920",
-      "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2020-06-15",
+      "pin": "4821",
+      "phone_last_four": "1134",
+      "otp_code": "482913",
+      "role_code": "RN",
+      "department_code": "SURGERY",
+      "hire_date": "2021-06-14",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-AX7731",
+        "carrier": "coverys",
+        "policy_number": "POL-2026-AX1134",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -59,7 +61,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2027-08-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -77,41 +79,36 @@
       "first_name": "Mirembe",
       "last_name": "Nakato",
       "date_of_birth": "1998-04-22",
-      "phone_last_four": "1846",
-      "otp_code": "618204",
+      "phone_last_four": "4826",
+      "otp_code": "561204",
       "department_code": "ORTHOPEDICS",
       "role_code": "RN",
       "unit_code": "5A-SURG",
       "hire_date": "2026-09-08",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "TNCC"
+        "BLS"
       ],
       "fmla_eligibility": {
         "eligible": false,
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not been employed for 12 months"
+        "reason": "New hire has not met FMLA tenure or hours requirements"
       },
       "onboarding_checklist": {
         "tasks": {
           "ORIENTATION": {
             "status": "pending",
-            "completion_code": "A1B2"
+            "completion_code": "Q7M2"
           },
           "BADGE_PICKUP": {
             "status": "pending",
-            "completion_code": "C3D4"
+            "completion_code": "B4K9"
           },
           "TB_TEST": {
             "status": "pending",
-            "completion_code": "E5F6"
-          },
-          "DIRECT_DEPOSIT": {
-            "status": "complete",
-            "completion_code": "Z9Y8"
+            "completion_code": "T8P3"
           }
         }
       },
@@ -137,25 +134,26 @@
       },
       "pto_requests": []
     },
-    "EMP112244": {
-      "employee_id": "EMP112244",
-      "first_name": "Jordan",
-      "last_name": "Lee",
-      "date_of_birth": "1991-02-13",
-      "phone_last_four": "6721",
-      "otp_code": "240681",
-      "department_code": "ORTHOPEDICS",
+    "EMP901122": {
+      "employee_id": "EMP901122",
+      "first_name": "Alana",
+      "last_name": "Brooks",
+      "date_of_birth": "1990-02-17",
+      "phone_last_four": "1134",
+      "otp_code": "482913",
+      "department_code": "SURGERY",
       "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2023-04-10",
+      "hire_date": "2021-06-14",
       "employment_status": "active",
       "certifications": [
+        "ACLS",
         "BLS",
         "TNCC"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 36,
+        "months_employed": 63,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -184,54 +182,6 @@
         "sick": 4.0
       },
       "pto_requests": []
-    },
-    "EMP900111": {
-      "employee_id": "EMP900111",
-      "first_name": "Ava",
-      "last_name": "Reynolds",
-      "date_of_birth": "1984-07-19",
-      "phone_last_four": "5512",
-      "otp_code": "483920",
-      "department_code": "CARDIOLOGY",
-      "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2020-06-15",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 74,
-        "hours_worked_past_year": 1960,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
@@ -241,51 +191,7 @@
       "unit_code": "5A-SURG",
       "date": "2026-09-15",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-09-26",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260916-0700": {
-      "shift_id": "SHF-20260916-0700",
-      "employee_id": "EMP112244",
-      "unit_code": "5A-SURG",
-      "date": "2026-09-16",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-09-26",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260917-0800": {
-      "shift_id": "SHF-20260917-0800",
-      "employee_id": "EMP900111",
-      "unit_code": "2A-MED",
-      "date": "2026-09-17",
-      "start_time": "08:00",
-      "end_time": "16:00",
+      "end_time": "15:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -307,26 +213,27 @@
   "appointment_availability": {
     "orientation_followup": {
       "ORTHOPEDICS": {
-        "2026-09-21": [
+        "2026-09-18": [
           "10:00",
           "11:00",
           "14:00"
         ],
-        "2026-09-22": [
+        "2026-09-19": [
           "09:00",
           "13:00"
         ],
-        "2026-09-24": [
-          "10:00",
+        "2026-09-22": [
+          "08:30",
+          "10:30",
           "15:00"
         ]
       },
-      "CARDIOLOGY": {
-        "2026-09-21": [
+      "SURGERY": {
+        "2026-09-18": [
           "09:00",
           "13:00"
         ],
-        "2026-09-23": [
+        "2026-09-19": [
           "10:00",
           "14:00"
         ]
@@ -334,23 +241,13 @@
     },
     "return_to_work_checkin": {
       "ORTHOPEDICS": {
-        "2026-09-28": [
+        "2026-09-25": [
           "09:00",
           "11:00"
         ],
-        "2026-09-29": [
+        "2026-09-28": [
           "10:00",
           "14:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-09-28": [
-          "08:30",
-          "13:30"
-        ],
-        "2026-09-30": [
-          "09:30",
-          "15:00"
         ]
       }
     },
@@ -360,37 +257,22 @@
           "09:00",
           "13:00"
         ],
-        "2026-09-25": [
+        "2026-09-24": [
           "10:00",
           "15:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-09-24": [
-          "09:00",
-          "11:00"
-        ],
-        "2026-09-26": [
-          "10:00",
-          "14:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-09-07",
     "2026-11-26",
-    "2026-12-25"
+    "2026-12-25",
+    "2027-01-01"
   ],
   "department_blackout_dates": {
     "ORTHOPEDICS": [],
-    "CARDIOLOGY": [
+    "SURGERY": [
       "2026-11-27"
-    ],
-    "ONCOLOGY": [],
-    "SURGERY": [],
-    "PEDIATRICS": [],
-    "EMERGENCY": [],
-    "RADIOLOGY": []
+    ]
   }
 }

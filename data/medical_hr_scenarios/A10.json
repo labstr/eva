@@ -12,7 +12,7 @@
     "3C-ONC": [
       "ACLS",
       "BLS",
-      "ONC-CERT"
+      "ONC"
     ],
     "5A-SURG": [
       "ACLS",
@@ -21,27 +21,22 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
-    ],
-    "6R-RAD": [
-      "BLS",
-      "ARRT"
+      "PALS"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
-      "employee_id": "EMP908476",
-      "first_name": "Lina",
-      "last_name": "Moreau",
+      "employee_id": "EMP220001",
+      "first_name": "Nora",
+      "last_name": "Levin",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "6621",
-      "otp_code": "551902",
+      "phone_last_four": "7712",
+      "otp_code": "551208",
       "role_code": "MD",
-      "department_code": "RADIOLOGY",
-      "hire_date": "2019-03-11",
+      "department_code": "CARDIOLOGY",
+      "hire_date": "2018-09-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -66,7 +61,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2027-03-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -83,22 +78,119 @@
       "employee_id": "EMP908475",
       "first_name": "Amadou",
       "last_name": "Keita",
-      "date_of_birth": "1991-11-08",
-      "phone_last_four": "1847",
+      "date_of_birth": "1991-02-14",
+      "phone_last_four": "4827",
       "otp_code": "904214",
       "department_code": "RADIOLOGY",
       "role_code": "RN",
-      "unit_code": "6R-RAD",
-      "hire_date": "2023-04-17",
+      "unit_code": "2A-MED",
+      "hire_date": "2022-04-18",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ARRT"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 39,
-        "hours_worked_past_year": 1876,
+        "months_employed": 51,
+        "hours_worked_past_year": 1864,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 14.0,
+        "sick": 6.0
+      },
+      "pto_requests": []
+    },
+    "EMP774122": {
+      "employee_id": "EMP774122",
+      "first_name": "Janelle",
+      "last_name": "Morris",
+      "date_of_birth": "1988-11-09",
+      "phone_last_four": "1194",
+      "otp_code": "318552",
+      "department_code": "EMERGENCY",
+      "role_code": "RN",
+      "unit_code": "4B-ICU",
+      "hire_date": "2020-06-01",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS",
+        "CCRN"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 73,
+        "hours_worked_past_year": 1920,
+        "fmla_weeks_remaining": 8,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 10.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    },
+    "EMP220001": {
+      "employee_id": "EMP220001",
+      "first_name": "Nora",
+      "last_name": "Levin",
+      "date_of_birth": "1980-07-11",
+      "phone_last_four": "7712",
+      "otp_code": "551208",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2018-09-10",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ACLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 94,
+        "hours_worked_past_year": 1760,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -126,65 +218,17 @@
         "sick": 5.0
       },
       "pto_requests": []
-    },
-    "EMP908476": {
-      "employee_id": "EMP908476",
-      "first_name": "Lina",
-      "last_name": "Moreau",
-      "date_of_birth": "1984-06-14",
-      "phone_last_four": "6621",
-      "otp_code": "551902",
-      "department_code": "RADIOLOGY",
-      "role_code": "MD",
-      "unit_code": "6R-RAD",
-      "hire_date": "2019-03-11",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ARRT"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 88,
-        "hours_worked_past_year": 1964,
-        "fmla_weeks_remaining": 10,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
     "SHF-20260728-0700": {
       "shift_id": "SHF-20260728-0700",
       "employee_id": "EMP908475",
-      "unit_code": "6R-RAD",
+      "unit_code": "2A-MED",
       "date": "2026-07-28",
       "start_time": "07:00",
-      "end_time": "15:00",
-      "hours_scheduled": 8.0,
+      "end_time": "19:00",
+      "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -205,26 +249,7 @@
   "appointment_availability": {
     "orientation_followup": {
       "RADIOLOGY": {
-        "2026-07-27": [
-          "09:00",
-          "11:00",
-          "14:00"
-        ],
         "2026-07-29": [
-          "10:00",
-          "13:00",
-          "15:00"
-        ],
-        "2026-08-03": [
-          "09:30",
-          "11:30",
-          "14:30"
-        ]
-      }
-    },
-    "return_to_work_checkin": {
-      "RADIOLOGY": {
-        "2026-07-27": [
           "09:00",
           "11:00",
           "14:00"
@@ -234,29 +259,84 @@
           "13:00",
           "15:00"
         ],
-        "2026-08-04": [
+        "2026-08-03": [
           "09:30",
-          "11:30",
-          "14:30"
+          "11:30"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-29": [
+          "09:00",
+          "13:00"
+        ],
+        "2026-07-31": [
+          "10:00",
+          "15:00"
+        ],
+        "2026-08-04": [
+          "11:00",
+          "14:00"
+        ]
+      }
+    },
+    "return_to_work_checkin": {
+      "RADIOLOGY": {
+        "2026-08-21": [
+          "09:00",
+          "11:00"
+        ],
+        "2026-08-24": [
+          "10:00",
+          "14:00",
+          "15:30"
+        ],
+        "2026-08-26": [
+          "09:30",
+          "13:30"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-08-21": [
+          "09:00",
+          "10:30"
+        ],
+        "2026-08-24": [
+          "11:00",
+          "14:00"
+        ],
+        "2026-08-27": [
+          "09:30",
+          "13:00"
         ]
       }
     },
     "competency_review": {
       "RADIOLOGY": {
-        "2026-07-28": [
+        "2026-07-29": [
           "09:00",
-          "11:00",
-          "14:00"
+          "13:00"
         ],
         "2026-07-31": [
           "10:00",
-          "13:00",
           "15:00"
         ],
-        "2026-08-05": [
+        "2026-08-04": [
+          "11:00",
+          "14:00"
+        ]
+      },
+      "CARDIOLOGY": {
+        "2026-07-29": [
+          "08:30",
+          "12:30"
+        ],
+        "2026-07-31": [
           "09:30",
-          "11:30",
           "14:30"
+        ],
+        "2026-08-05": [
+          "10:00",
+          "15:00"
         ]
       }
     }
@@ -269,16 +349,10 @@
   "department_blackout_dates": {
     "RADIOLOGY": [],
     "CARDIOLOGY": [
-      "2026-08-14"
+      "2026-08-10"
     ],
     "EMERGENCY": [
-      "2026-08-01",
-      "2026-08-02"
-    ],
-    "ONCOLOGY": [],
-    "SURGERY": [
-      "2026-07-31"
-    ],
-    "PEDIATRICS": []
+      "2026-08-14"
+    ]
   }
 }

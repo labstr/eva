@@ -11,8 +11,9 @@
       "BLS"
     ],
     "3C-ONC": [
+      "ACLS",
       "BLS",
-      "ONC-CERT"
+      "ONC"
     ],
     "5A-SURG": [
       "ACLS",
@@ -21,8 +22,7 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -33,11 +33,11 @@
       "last_name": "Petrov",
       "facility_code": "ULZD-83G",
       "pin": "5173",
-      "phone_last_four": "4421",
-      "otp_code": "381642",
+      "phone_last_four": "2841",
+      "otp_code": "482731",
       "role_code": "PA",
-      "department_code": "EMERGENCY",
-      "hire_date": "2021-03-15",
+      "department_code": "SURGERY",
+      "hire_date": "2026-05-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -46,7 +46,7 @@
           "state_license_number": "NC-PA-89138359",
           "license_type": "PA",
           "state_code": "NC",
-          "expiration_date": "2026-09-02",
+          "expiration_date": "2026-09-15",
           "status": "active",
           "investigation_hold": false,
           "extension_status": "pending",
@@ -56,7 +56,7 @@
           "extension_case_id": "CASE-LIC-725550"
         }
       },
-      "malpractice": {},
+      "malpractice": null,
       "dea_registration": {
         "dea_number": "BK4729183",
         "facility_code": "ULZD-83G",
@@ -67,7 +67,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2028-05-31",
+        "expiration_date": "2028-03-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -75,80 +75,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-EM-001",
-            "description": "Emergency medicine evaluation and treatment",
+            "code": "PRV-SURG-101",
+            "description": "First assist in general surgery",
             "status": "active"
           },
           {
-            "code": "PRV-EM-002",
-            "description": "Minor procedures in emergency department",
-            "status": "active"
-          }
-        ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "9183402751": {
-      "npi": "9183402751",
-      "employee_id": "EMP882144",
-      "first_name": "Maya",
-      "last_name": "Srinivasan",
-      "facility_code": "NCH-12A",
-      "pin": "2648",
-      "phone_last_four": "1884",
-      "otp_code": "194520",
-      "role_code": "MD",
-      "department_code": "CARDIOLOGY",
-      "hire_date": "2018-07-09",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": "CLR-OCC-882144",
-      "licenses": {
-        "NC-MD-55428173": {
-          "state_license_number": "NC-MD-55428173",
-          "license_type": "MD",
-          "state_code": "NC",
-          "expiration_date": "2027-06-30",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2026-QM5521",
-        "per_occurrence_limit_usd": 1000000,
-        "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BS5839201",
-        "facility_code": "NCH-12A",
-        "state_code": "NC",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV",
-          "CV"
-        ],
-        "expiration_date": "2027-11-30",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-CARD-001",
-            "description": "Cardiac catheterization",
+            "code": "PRV-SURG-205",
+            "description": "Minor bedside procedures",
             "status": "active"
           }
         ],
@@ -162,13 +95,13 @@
       "employee_id": "EMP725550",
       "first_name": "Aleksandr",
       "last_name": "Petrov",
-      "date_of_birth": "1987-11-24",
-      "phone_last_four": "4421",
-      "otp_code": "381642",
-      "department_code": "EMERGENCY",
+      "date_of_birth": "1988-04-22",
+      "phone_last_four": "2841",
+      "otp_code": "482731",
+      "department_code": "SURGERY",
       "role_code": "PA",
       "unit_code": "5A-SURG",
-      "hire_date": "2021-03-15",
+      "hire_date": "2026-05-12",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -177,8 +110,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 65,
-        "hours_worked_past_year": 1884,
+        "months_employed": 15,
+        "hours_worked_past_year": 1560,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -206,90 +139,20 @@
         "sick": 5.0
       },
       "pto_requests": []
-    },
-    "EMP882144": {
-      "employee_id": "EMP882144",
-      "first_name": "Maya",
-      "last_name": "Srinivasan",
-      "date_of_birth": "1980-05-18",
-      "phone_last_four": "1884",
-      "otp_code": "194520",
-      "department_code": "CARDIOLOGY",
-      "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2018-07-09",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 97,
-        "hours_worked_past_year": 2012,
-        "fmla_weeks_remaining": 10,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260820-0700": {
-      "shift_id": "SHF-20260820-0700",
+    "SHF-20260821-0700": {
+      "shift_id": "SHF-20260821-0700",
       "employee_id": "EMP725550",
       "unit_code": "5A-SURG",
-      "date": "2026-08-20",
+      "date": "2026-08-21",
       "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260822-1900": {
-      "shift_id": "SHF-20260822-1900",
-      "employee_id": "EMP882144",
-      "unit_code": "2A-MED",
-      "date": "2026-08-22",
-      "start_time": "19:00",
-      "end_time": "07:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": true,
-      "on_call_tier": "secondary",
       "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
@@ -306,8 +169,8 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
-        "2026-08-20": [
+      "SURGERY": {
+        "2026-08-19": [
           "09:00",
           "11:00",
           "14:00"
@@ -319,88 +182,40 @@
         ],
         "2026-08-24": [
           "09:30",
-          "12:30",
+          "12:00",
           "16:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-08-20": [
-          "09:00",
-          "11:00"
-        ],
-        "2026-08-21": [
-          "10:00",
-          "14:00"
-        ],
-        "2026-08-24": [
-          "09:30",
-          "15:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
+      "SURGERY": {
         "2026-08-20": [
           "09:00",
-          "11:00",
-          "14:00"
+          "11:30"
         ],
-        "2026-08-21": [
-          "10:00",
-          "13:00",
-          "15:00"
-        ],
-        "2026-08-24": [
-          "09:30",
-          "12:30",
-          "16:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-08-20": [
-          "09:00",
-          "11:00"
-        ],
-        "2026-08-21": [
+        "2026-08-25": [
           "10:00",
           "14:00"
         ],
-        "2026-08-24": [
-          "09:30",
-          "15:30"
+        "2026-08-28": [
+          "08:30",
+          "13:30"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
-        "2026-08-20": [
+      "SURGERY": {
+        "2026-08-22": [
           "09:00",
-          "11:00",
-          "14:00"
+          "13:00"
         ],
-        "2026-08-21": [
+        "2026-08-26": [
           "10:00",
-          "13:00",
           "15:00"
         ],
-        "2026-08-24": [
-          "09:30",
-          "12:30",
-          "16:00"
-        ]
-      },
-      "CARDIOLOGY": {
-        "2026-08-20": [
-          "09:00",
-          "11:00"
-        ],
-        "2026-08-21": [
-          "10:00",
-          "14:00"
-        ],
-        "2026-08-24": [
-          "09:30",
-          "15:30"
+        "2026-08-29": [
+          "11:00",
+          "14:30"
         ]
       }
     }
@@ -411,9 +226,6 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
-    "CARDIOLOGY": [
-      "2026-08-31"
-    ]
+    "SURGERY": []
   }
 }

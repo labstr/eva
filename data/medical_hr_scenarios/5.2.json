@@ -7,22 +7,22 @@
       "CCRN"
     ],
     "2A-MED": [
-      "BLS"
+      "BLS",
+      "ACLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "ONC-CERT"
     ],
     "5A-SURG": [
-      "ACLS",
       "BLS",
+      "ACLS",
       "TNCC"
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -33,20 +33,20 @@
       "last_name": "Baptiste",
       "facility_code": "QFXW-19Q",
       "pin": "4899",
-      "phone_last_four": "4418",
+      "phone_last_four": "4821",
       "otp_code": "392004",
       "role_code": "MD",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "NY-MD-482761": {
-          "state_license_number": "NY-MD-482761",
+        "NY-MD-584219": {
+          "state_license_number": "NY-MD-584219",
           "license_type": "MD",
           "state_code": "NY",
-          "expiration_date": "2027-09-30",
+          "expiration_date": "2027-03-31",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -58,7 +58,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2026-EM4418",
+        "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -67,16 +67,16 @@
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "RF0000000",
+        "dea_number": "RF9988776",
         "facility_code": "QFXW-19Q",
-        "state_code": "NJ",
+        "state_code": "MA",
         "schedule_codes": [
           "CII",
           "CIII",
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-04-30",
+        "expiration_date": "2027-09-30",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -84,13 +84,13 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-EM-001",
-            "description": "Emergency department attending privileges",
+            "code": "PRV-CARD-001",
+            "description": "General cardiology consults",
             "status": "active"
           },
           {
-            "code": "PRV-EM-002",
-            "description": "Controlled substance prescribing privileges",
+            "code": "PRV-CARD-014",
+            "description": "Stress test interpretation",
             "status": "active"
           }
         ],
@@ -104,23 +104,22 @@
       "employee_id": "EMP174441",
       "first_name": "Andre",
       "last_name": "Baptiste",
-      "date_of_birth": "1981-04-18",
-      "phone_last_four": "4418",
+      "date_of_birth": "1987-11-14",
+      "phone_last_four": "4821",
       "otp_code": "392004",
-      "department_code": "EMERGENCY",
+      "department_code": "CARDIOLOGY",
       "role_code": "MD",
-      "unit_code": "5A-SURG",
+      "unit_code": "2A-MED",
       "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
-        "ACLS",
         "BLS",
-        "TNCC"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
         "months_employed": 82,
-        "hours_worked_past_year": 1876,
+        "hours_worked_past_year": 1840,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -151,14 +150,14 @@
     }
   },
   "shifts": {
-    "SHF-20260625-0700": {
-      "shift_id": "SHF-20260625-0700",
+    "SHF-20260625-0800": {
+      "shift_id": "SHF-20260625-0800",
       "employee_id": "EMP174441",
-      "unit_code": "5A-SURG",
+      "unit_code": "2A-MED",
       "date": "2026-06-25",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
+      "start_time": "08:00",
+      "end_time": "16:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -178,53 +177,52 @@
   "session": {},
   "appointment_availability": {
     "orientation_followup": {
-      "EMERGENCY": {
+      "CARDIOLOGY": {
         "2026-06-24": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-26": [
+        "2026-06-25": [
           "10:00",
           "13:00",
           "15:00"
         ],
         "2026-06-29": [
           "09:30",
-          "12:00",
-          "14:30"
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
-      "EMERGENCY": {
+      "CARDIOLOGY": {
         "2026-06-24": [
           "09:00",
-          "10:30"
+          "10:00"
         ],
         "2026-06-26": [
           "11:00",
           "14:00"
         ],
-        "2026-06-29": [
+        "2026-06-30": [
           "09:00",
           "15:00"
         ]
       }
     },
     "competency_review": {
-      "EMERGENCY": {
-        "2026-06-24": [
-          "08:30",
+      "CARDIOLOGY": {
+        "2026-06-25": [
+          "09:00",
           "13:00"
         ],
-        "2026-06-26": [
-          "09:00",
-          "14:30"
-        ],
-        "2026-06-29": [
+        "2026-06-27": [
           "10:00",
-          "15:30"
+          "14:00"
+        ],
+        "2026-07-01": [
+          "11:00",
+          "15:00"
         ]
       }
     }
@@ -235,10 +233,14 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "EMERGENCY": [],
     "CARDIOLOGY": [],
+    "EMERGENCY": [
+      "2026-07-04"
+    ],
     "ONCOLOGY": [],
-    "SURGERY": [],
+    "SURGERY": [
+      "2026-07-06"
+    ],
     "PEDIATRICS": []
   }
 }

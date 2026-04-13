@@ -11,7 +11,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONCCHEMO"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -20,22 +20,23 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS"
+      "PALS",
+      "NRP"
     ]
   },
   "providers": {
     "1487392045": {
       "npi": "1487392045",
       "employee_id": "EMP900111",
-      "first_name": "Ava",
-      "last_name": "Morrison",
+      "first_name": "Avery",
+      "last_name": "Cole",
       "facility_code": "MGH-04B",
-      "pin": "4821",
-      "phone_last_four": "7712",
+      "pin": "7291",
+      "phone_last_four": "1188",
       "otp_code": "483920",
       "role_code": "MD",
       "department_code": "EMERGENCY",
-      "hire_date": "2018-03-12",
+      "hire_date": "2018-09-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -60,7 +61,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2027-08-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -77,22 +78,23 @@
       "employee_id": "EMP821590",
       "first_name": "Yuki",
       "last_name": "Tanaka",
-      "date_of_birth": "1991-11-22",
-      "phone_last_four": "1842",
-      "otp_code": "612804",
+      "date_of_birth": "1991-02-14",
+      "phone_last_four": "4821",
+      "otp_code": "631204",
       "department_code": "EMERGENCY",
       "role_code": "RN",
-      "unit_code": "2A-MED",
-      "hire_date": "2021-04-19",
+      "unit_code": "4B-ICU",
+      "hire_date": "2021-05-17",
       "employment_status": "active",
       "certifications": [
+        "ACLS",
         "BLS",
-        "ACLS"
+        "CCRN"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 62,
-        "hours_worked_past_year": 1876,
+        "months_employed": 61,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -117,21 +119,21 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 5.0
+        "sick": 4.0
       },
       "pto_requests": []
     },
     "EMP900111": {
       "employee_id": "EMP900111",
-      "first_name": "Ava",
-      "last_name": "Morrison",
-      "date_of_birth": "1984-02-13",
-      "phone_last_four": "7712",
+      "first_name": "Avery",
+      "last_name": "Cole",
+      "date_of_birth": "1980-11-03",
+      "phone_last_four": "1188",
       "otp_code": "483920",
       "department_code": "EMERGENCY",
       "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2018-03-12",
+      "hire_date": "2018-09-10",
       "employment_status": "active",
       "certifications": [
         "BLS",
@@ -139,8 +141,8 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 99,
-        "hours_worked_past_year": 2104,
+        "months_employed": 93,
+        "hours_worked_past_year": 1980,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -164,22 +166,22 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260616-1900": {
-      "shift_id": "SHF-20260616-1900",
+    "SHF-20260610-1900": {
+      "shift_id": "SHF-20260610-1900",
       "employee_id": "EMP821590",
-      "unit_code": "2A-MED",
-      "date": "2026-06-16",
+      "unit_code": "4B-ICU",
+      "date": "2026-06-10",
       "start_time": "19:00",
       "end_time": "07:00",
       "hours_scheduled": 12.0,
-      "hours_logged": 8.0,
+      "hours_logged": 0.0,
       "on_call": true,
       "on_call_tier": "primary",
       "status": "logged",
@@ -189,29 +191,51 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-20",
+      "pay_period_end_date": "2026-06-21",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260620-0700": {
-      "shift_id": "SHF-20260620-0700",
+    "SHF-20260614-0700": {
+      "shift_id": "SHF-20260614-0700",
       "employee_id": "EMP821590",
-      "unit_code": "2A-MED",
-      "date": "2026-06-20",
+      "unit_code": "4B-ICU",
+      "date": "2026-06-14",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
-      "hours_logged": null,
+      "hours_logged": 12.0,
       "on_call": false,
       "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
+      "status": "logged",
+      "swap_locked": true,
       "pay_period_closed": false,
       "corrected_hours": null,
       "correction_type": null,
       "correction_case_id": null,
+      "correction_status": "pending",
+      "pay_period_end_date": "2026-06-21",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260528-1900": {
+      "shift_id": "SHF-20260528-1900",
+      "employee_id": "EMP821590",
+      "unit_code": "4B-ICU",
+      "date": "2026-05-28",
+      "start_time": "19:00",
+      "end_time": "07:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": 12.0,
+      "on_call": true,
+      "on_call_tier": "secondary",
+      "status": "logged",
+      "swap_locked": true,
+      "pay_period_closed": true,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-06-20",
+      "pay_period_end_date": "2026-06-07",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -233,8 +257,8 @@
         ],
         "2026-06-24": [
           "09:30",
-          "11:30",
-          "14:30"
+          "12:30",
+          "16:00"
         ]
       }
     },
@@ -242,18 +266,15 @@
       "EMERGENCY": {
         "2026-06-22": [
           "09:00",
+          "11:00"
+        ],
+        "2026-06-23": [
           "10:00",
           "14:00"
         ],
-        "2026-06-23": [
-          "11:00",
-          "13:00",
-          "15:00"
-        ],
         "2026-06-24": [
           "09:00",
-          "12:00",
-          "16:00"
+          "15:00"
         ]
       }
     },
@@ -261,26 +282,23 @@
       "EMERGENCY": {
         "2026-06-22": [
           "08:00",
-          "10:00",
-          "15:00"
+          "10:00"
         ],
         "2026-06-23": [
           "09:00",
-          "11:00",
-          "14:00"
+          "13:00"
         ],
         "2026-06-24": [
-          "10:00",
-          "13:00",
-          "15:30"
+          "11:00",
+          "15:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-05-25",
     "2026-07-03",
-    "2026-09-07"
+    "2026-09-07",
+    "2026-11-26"
   ],
   "department_blackout_dates": {
     "EMERGENCY": [],

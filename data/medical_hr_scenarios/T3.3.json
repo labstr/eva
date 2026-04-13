@@ -12,7 +12,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ONC"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -32,11 +32,11 @@
       "last_name": "Boateng",
       "facility_code": "ILMQ-45S",
       "pin": "1920",
-      "phone_last_four": "4418",
+      "phone_last_four": "4821",
       "otp_code": "469038",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2019-08-12",
+      "hire_date": "2018-09-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -57,7 +57,7 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2025-AX77K2",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2025-07-01",
@@ -75,7 +75,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-11-30",
+        "expiration_date": "2027-03-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -99,25 +99,25 @@
     },
     "8891474909": {
       "npi": "8891474909",
-      "employee_id": "EMP441205",
-      "first_name": "Mina",
-      "last_name": "Rahal",
-      "facility_code": "AZMC-12Q",
-      "pin": "5541",
-      "phone_last_four": "7782",
-      "otp_code": "118204",
+      "employee_id": "EMP410275",
+      "first_name": "Elena",
+      "last_name": "Morris",
+      "facility_code": "AZPH-22A",
+      "pin": "4432",
+      "phone_last_four": "1178",
+      "otp_code": "551204",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2016-03-21",
+      "hire_date": "2016-02-01",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "AZ-MD-5521048": {
-          "state_license_number": "AZ-MD-5521048",
+        "AZ-MD-552201": {
+          "state_license_number": "AZ-MD-552201",
           "license_type": "MD",
           "state_code": "AZ",
-          "expiration_date": "2027-10-31",
+          "expiration_date": "2027-12-31",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -129,17 +129,17 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-BN41D8",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 4000000,
+        "policy_number": "POL-2026-CV1188",
+        "per_occurrence_limit_usd": 1000000,
+        "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
+        "expiration_date": "2027-01-01",
         "recredential_required": false,
         "update_case_id": null
       },
       "dea_registration": {
-        "dea_number": "BK4729183",
-        "facility_code": "AZMC-12Q",
+        "dea_number": "BM5522014",
+        "facility_code": "AZPH-22A",
         "state_code": "AZ",
         "schedule_codes": [
           "CII",
@@ -156,7 +156,7 @@
         "privilege_list": [
           {
             "code": "PRV-CARD-010",
-            "description": "Electrophysiology consults",
+            "description": "Echocardiogram interpretation",
             "status": "active"
           }
         ],
@@ -170,13 +170,13 @@
       "employee_id": "EMP586490",
       "first_name": "Kwesi",
       "last_name": "Boateng",
-      "date_of_birth": "1981-04-22",
-      "phone_last_four": "4418",
+      "date_of_birth": "1987-11-22",
+      "phone_last_four": "4821",
       "otp_code": "469038",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2019-08-12",
+      "hire_date": "2018-09-10",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -184,8 +184,56 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 82,
-        "hours_worked_past_year": 1876,
+        "months_employed": 93,
+        "hours_worked_past_year": 1840,
+        "fmla_weeks_remaining": 12,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 15.0,
+        "sick": 5.0
+      },
+      "pto_requests": []
+    },
+    "EMP410275": {
+      "employee_id": "EMP410275",
+      "first_name": "Elena",
+      "last_name": "Morris",
+      "date_of_birth": "1979-04-18",
+      "phone_last_four": "1178",
+      "otp_code": "551204",
+      "department_code": "CARDIOLOGY",
+      "role_code": "MD",
+      "unit_code": "2A-MED",
+      "hire_date": "2016-02-01",
+      "employment_status": "active",
+      "certifications": [
+        "ACLS",
+        "BLS"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 124,
+        "hours_worked_past_year": 1760,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -210,67 +258,19 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 14.0,
-        "sick": 5.0
-      },
-      "pto_requests": []
-    },
-    "EMP441205": {
-      "employee_id": "EMP441205",
-      "first_name": "Mina",
-      "last_name": "Rahal",
-      "date_of_birth": "1978-09-13",
-      "phone_last_four": "7782",
-      "otp_code": "118204",
-      "department_code": "CARDIOLOGY",
-      "role_code": "MD",
-      "unit_code": "2A-MED",
-      "hire_date": "2016-03-21",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 123,
-        "hours_worked_past_year": 1920,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
         "sick": 6.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260620-0700": {
-      "shift_id": "SHF-20260620-0700",
+    "SHF-20260620-0800": {
+      "shift_id": "SHF-20260620-0800",
       "employee_id": "EMP586490",
       "unit_code": "2A-MED",
       "date": "2026-06-20",
-      "start_time": "07:00",
-      "end_time": "15:00",
+      "start_time": "08:00",
+      "end_time": "16:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -302,9 +302,10 @@
           "13:00",
           "15:00"
         ],
-        "2026-06-29": [
+        "2026-06-26": [
           "09:30",
-          "11:30"
+          "12:00",
+          "14:30"
         ]
       }
     },
@@ -312,32 +313,34 @@
       "CARDIOLOGY": {
         "2026-06-24": [
           "09:00",
-          "10:30"
+          "11:00"
+        ],
+        "2026-06-25": [
+          "10:00",
+          "14:00"
         ],
         "2026-06-26": [
-          "13:00",
+          "09:30",
           "15:00"
-        ],
-        "2026-06-30": [
-          "09:00",
-          "14:00"
         ]
       }
     },
     "competency_review": {
       "CARDIOLOGY": {
-        "2026-06-23": [
+        "2026-06-24": [
+          "08:30",
+          "10:30",
+          "13:30"
+        ],
+        "2026-06-25": [
+          "09:00",
+          "11:30",
+          "14:30"
+        ],
+        "2026-06-26": [
           "08:00",
           "10:00",
-          "14:00"
-        ],
-        "2026-06-27": [
-          "09:00",
-          "11:00"
-        ],
-        "2026-07-02": [
-          "13:00",
-          "15:00"
+          "13:00"
         ]
       }
     }
@@ -356,6 +359,7 @@
     "SURGERY": [
       "2026-06-30"
     ],
-    "PEDIATRICS": []
+    "PEDIATRICS": [],
+    "RADIOLOGY": []
   }
 }

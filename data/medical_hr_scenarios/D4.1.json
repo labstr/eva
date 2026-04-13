@@ -11,9 +11,8 @@
       "BLS"
     ],
     "3C-ONC": [
-      "ACLS",
       "BLS",
-      "ONCC"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -22,8 +21,7 @@
     ],
     "1D-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ]
   },
   "providers": {
@@ -34,20 +32,20 @@
       "last_name": "Park",
       "facility_code": "AJT-63R",
       "pin": "9947",
-      "phone_last_four": "4418",
+      "phone_last_four": "4829",
       "otp_code": "938722",
       "role_code": "MD",
       "department_code": "CARDIOLOGY",
-      "hire_date": "2019-09-16",
+      "hire_date": "2019-08-12",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {
-        "NY-MD-582941": {
-          "state_license_number": "NY-MD-582941",
+        "NY-MD-482193": {
+          "state_license_number": "NY-MD-482193",
           "license_type": "MD",
           "state_code": "NY",
-          "expiration_date": "2027-11-30",
+          "expiration_date": "2027-03-31",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -59,11 +57,11 @@
       },
       "malpractice": {
         "carrier": "medpro",
-        "policy_number": "POL-2025-QX7M11",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-08-01",
-        "expiration_date": "2026-08-01",
+        "effective_date": "2025-08-10",
+        "expiration_date": "2026-08-09",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -77,7 +75,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-10-31",
+        "expiration_date": "2028-01-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -90,71 +88,11 @@
             "status": "active"
           },
           {
-            "code": "PRV-CARD-014",
+            "code": "PRV-CARD-002",
             "description": "Stress test supervision",
             "status": "active"
           }
         ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "4459821630": {
-      "npi": "4459821630",
-      "employee_id": "EMP221104",
-      "first_name": "Alicia",
-      "last_name": "Mendez",
-      "facility_code": "QRM-12B",
-      "pin": "4821",
-      "phone_last_four": "8831",
-      "otp_code": "517204",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2018-03-12",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": null,
-      "licenses": {
-        "MA-MD-448219": {
-          "state_license_number": "MA-MD-448219",
-          "license_type": "MD",
-          "state_code": "MA",
-          "expiration_date": "2028-02-28",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2026-HJ82KL",
-        "per_occurrence_limit_usd": 1000000,
-        "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2027-01-01",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BM4729183",
-        "facility_code": "QRM-12B",
-        "state_code": "MA",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV"
-        ],
-        "expiration_date": "2027-06-30",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [],
         "reactivation_case_id": null
       },
       "scheduled_appointments": []
@@ -165,13 +103,13 @@
       "employee_id": "EMP998348",
       "first_name": "Jin-Ho",
       "last_name": "Park",
-      "date_of_birth": "1981-04-22",
-      "phone_last_four": "4418",
+      "date_of_birth": "1988-11-02",
+      "phone_last_four": "4829",
       "otp_code": "938722",
       "department_code": "CARDIOLOGY",
       "role_code": "MD",
       "unit_code": "2A-MED",
-      "hire_date": "2019-09-16",
+      "hire_date": "2019-08-12",
       "employment_status": "active",
       "certifications": [
         "ACLS",
@@ -179,7 +117,7 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 82,
+        "months_employed": 83,
         "hours_worked_past_year": 1840,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -208,70 +146,21 @@
         "sick": 5.0
       },
       "pto_requests": []
-    },
-    "EMP221104": {
-      "employee_id": "EMP221104",
-      "first_name": "Alicia",
-      "last_name": "Mendez",
-      "date_of_birth": "1979-12-09",
-      "phone_last_four": "8831",
-      "otp_code": "517204",
-      "department_code": "SURGERY",
-      "role_code": "MD",
-      "unit_code": "5A-SURG",
-      "hire_date": "2018-03-12",
-      "employment_status": "active",
-      "certifications": [
-        "ACLS",
-        "BLS",
-        "TNCC"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 100,
-        "hours_worked_past_year": 1768,
-        "fmla_weeks_remaining": 8,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260720-0800": {
-      "shift_id": "SHF-20260720-0800",
+    "SHF-20260722-0800": {
+      "shift_id": "SHF-20260722-0800",
       "employee_id": "EMP998348",
       "unit_code": "2A-MED",
-      "date": "2026-07-20",
+      "date": "2026-07-22",
       "start_time": "08:00",
       "end_time": "16:00",
       "hours_scheduled": 8.0,
-      "hours_logged": 8.0,
+      "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
-      "status": "logged",
+      "status": "scheduled",
       "swap_locked": false,
       "pay_period_closed": false,
       "corrected_hours": null,
@@ -300,69 +189,43 @@
         ],
         "2026-07-24": [
           "09:30",
-          "12:30"
-        ]
-      },
-      "SURGERY": {
-        "2026-07-21": [
-          "09:00",
-          "11:00"
-        ],
-        "2026-07-23": [
-          "10:00",
-          "14:00"
+          "12:00",
+          "14:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "CARDIOLOGY": {
-        "2026-08-10": [
+        "2026-07-28": [
           "09:00",
-          "11:00"
+          "11:00",
+          "15:00"
         ],
-        "2026-08-12": [
+        "2026-07-30": [
           "10:00",
           "14:00"
         ],
-        "2026-08-14": [
+        "2026-08-03": [
           "09:30",
           "13:30"
-        ]
-      },
-      "SURGERY": {
-        "2026-08-11": [
-          "09:00",
-          "11:30"
-        ],
-        "2026-08-13": [
-          "10:00",
-          "15:00"
         ]
       }
     },
     "competency_review": {
       "CARDIOLOGY": {
-        "2026-07-21": [
+        "2026-07-27": [
           "09:00",
-          "13:00"
-        ],
-        "2026-07-23": [
-          "10:00",
+          "10:30",
           "14:00"
         ],
-        "2026-07-28": [
+        "2026-07-29": [
           "11:00",
+          "13:00",
           "15:00"
-        ]
-      },
-      "SURGERY": {
-        "2026-07-22": [
+        ],
+        "2026-08-04": [
           "09:00",
           "12:00"
-        ],
-        "2026-07-24": [
-          "10:00",
-          "14:00"
         ]
       }
     }
@@ -374,12 +237,13 @@
   ],
   "department_blackout_dates": {
     "CARDIOLOGY": [],
-    "SURGERY": [
-      "2026-08-17"
+    "EMERGENCY": [
+      "2026-07-04"
     ],
     "ONCOLOGY": [],
-    "EMERGENCY": [],
-    "PEDIATRICS": [],
-    "RADIOLOGY": []
+    "SURGERY": [
+      "2026-08-01"
+    ],
+    "PEDIATRICS": []
   }
 }

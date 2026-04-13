@@ -11,13 +11,11 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
       "ONC-CERT"
     ],
     "5A-SURG": [
       "BLS",
-      "ACLS",
-      "TNCC"
+      "ACLS"
     ],
     "1D-PEDS": [
       "BLS",
@@ -31,12 +29,12 @@
       "first_name": "Sakura",
       "last_name": "Kimura",
       "facility_code": "MGH-04B",
-      "pin": "7291",
-      "phone_last_four": "4418",
+      "pin": "4821",
+      "phone_last_four": "4821",
       "otp_code": "382602",
       "role_code": "RN",
       "department_code": "PATHOLOGY",
-      "hire_date": "2025-09-15",
+      "hire_date": "2026-02-10",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
@@ -46,8 +44,8 @@
         "policy_number": "POL-2026-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2026-12-31",
+        "effective_date": "2026-02-10",
+        "expiration_date": "2027-02-09",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -61,7 +59,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-05-31",
+        "expiration_date": "2028-02-09",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -78,24 +76,24 @@
       "employee_id": "EMP340044",
       "first_name": "Sakura",
       "last_name": "Kimura",
-      "date_of_birth": "1994-11-08",
-      "phone_last_four": "4418",
+      "date_of_birth": "1998-04-22",
+      "phone_last_four": "4821",
       "otp_code": "382602",
       "department_code": "PATHOLOGY",
       "role_code": "RN",
       "unit_code": "2A-MED",
-      "hire_date": "2025-09-15",
+      "hire_date": "2026-02-10",
       "employment_status": "active",
       "certifications": [
-        "BLS",
-        "ACLS"
+        "BLS"
       ],
+      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": false,
-        "months_employed": 11,
-        "hours_worked_past_year": 1124,
+        "months_employed": 6,
+        "hours_worked_past_year": 920,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not worked the required 1,250 hours in the past year to qualify for FMLA"
+        "reason": "Employee has been employed less than 12 months and has not worked 1,250 hours in the past year"
       },
       "onboarding_checklist": {
         "tasks": {}
@@ -122,27 +120,27 @@
       },
       "pto_requests": []
     },
-    "EMP551210": {
-      "employee_id": "EMP551210",
-      "first_name": "Noah",
-      "last_name": "Bennett",
-      "date_of_birth": "1988-03-22",
-      "phone_last_four": "1187",
-      "otp_code": "148233",
-      "department_code": "SURGERY",
+    "EMP771122": {
+      "employee_id": "EMP771122",
+      "first_name": "Avery",
+      "last_name": "Mills",
+      "date_of_birth": "1989-09-17",
+      "phone_last_four": "6612",
+      "otp_code": "551204",
+      "department_code": "PATHOLOGY",
       "role_code": "RN",
-      "unit_code": "5A-SURG",
-      "hire_date": "2021-06-10",
+      "unit_code": "2A-MED",
+      "hire_date": "2022-05-02",
       "employment_status": "active",
       "certifications": [
         "BLS",
-        "ACLS",
-        "TNCC"
+        "ACLS"
       ],
+      "schedule_type": "shift",
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 62,
-        "hours_worked_past_year": 1872,
+        "months_employed": 51,
+        "hours_worked_past_year": 1880,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -167,12 +165,34 @@
       "leave_records": [],
       "pto_balances": {
         "pto": 12.0,
-        "sick": 6.0
+        "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
+    "SHF-20260824-0700": {
+      "shift_id": "SHF-20260824-0700",
+      "employee_id": "EMP340044",
+      "unit_code": "2A-MED",
+      "date": "2026-08-24",
+      "start_time": "07:00",
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-08-28",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
     "SHF-20260825-0700": {
       "shift_id": "SHF-20260825-0700",
       "employee_id": "EMP340044",
@@ -191,7 +211,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
+      "pay_period_end_date": "2026-08-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -213,15 +233,15 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
+      "pay_period_end_date": "2026-08-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260827-0700": {
-      "shift_id": "SHF-20260827-0700",
-      "employee_id": "EMP340044",
+    "SHF-20260818-0700": {
+      "shift_id": "SHF-20260818-0700",
+      "employee_id": "EMP771122",
       "unit_code": "2A-MED",
-      "date": "2026-08-27",
+      "date": "2026-08-18",
       "start_time": "07:00",
       "end_time": "15:00",
       "hours_scheduled": 8.0,
@@ -235,29 +255,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260828-0700": {
-      "shift_id": "SHF-20260828-0700",
-      "employee_id": "EMP551210",
-      "unit_code": "5A-SURG",
-      "date": "2026-08-28",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": false,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": "2026-08-29",
+      "pay_period_end_date": "2026-08-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -279,37 +277,37 @@
         ],
         "2026-08-24": [
           "09:30",
-          "11:30"
+          "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "PATHOLOGY": {
-        "2026-10-12": [
+        "2026-10-09": [
           "09:00",
           "11:00"
         ],
-        "2026-10-13": [
+        "2026-10-12": [
           "10:00",
           "14:00"
         ],
-        "2026-10-14": [
+        "2026-10-13": [
           "09:30",
-          "13:30"
+          "15:00"
         ]
       }
     },
     "competency_review": {
       "PATHOLOGY": {
-        "2026-08-20": [
-          "08:30",
-          "10:30"
-        ],
-        "2026-08-22": [
+        "2026-08-19": [
           "09:00",
           "13:00"
         ],
-        "2026-08-25": [
+        "2026-08-20": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-08-21": [
           "11:00",
           "15:00"
         ]
@@ -323,9 +321,11 @@
   ],
   "department_blackout_dates": {
     "PATHOLOGY": [],
-    "SURGERY": [
-      "2026-11-25",
-      "2026-11-27"
-    ]
+    "CARDIOLOGY": [],
+    "EMERGENCY": [],
+    "ONCOLOGY": [],
+    "SURGERY": [],
+    "PEDIATRICS": [],
+    "RADIOLOGY": []
   }
 }

@@ -11,8 +11,7 @@
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
-      "ONC-CHEMO"
+      "ACLS"
     ],
     "5A-SURG": [
       "BLS",
@@ -32,7 +31,7 @@
       "last_name": "Hofer",
       "facility_code": "WZH-89B",
       "pin": "2625",
-      "phone_last_four": "4412",
+      "phone_last_four": "4821",
       "otp_code": "899787",
       "role_code": "MD",
       "department_code": "NEUROLOGY",
@@ -56,8 +55,8 @@
         }
       },
       "malpractice": {
-        "carrier": "coverys",
-        "policy_number": "POL-2026-AX7731",
+        "carrier": "medpro",
+        "policy_number": "POL-2026-NE4821",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-08-18",
@@ -75,7 +74,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-12-31",
+        "expiration_date": "2028-05-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -83,13 +82,8 @@
       "privileges": {
         "privilege_list": [
           {
-            "code": "PRV-NEUR-001",
+            "code": "PRV-NEURO-001",
             "description": "General neurology consults",
-            "status": "active"
-          },
-          {
-            "code": "PRV-NEUR-002",
-            "description": "Inpatient neurology service",
             "status": "active"
           }
         ],
@@ -103,8 +97,8 @@
       "employee_id": "EMP913373",
       "first_name": "Lukas",
       "last_name": "Hofer",
-      "date_of_birth": "1984-03-17",
-      "phone_last_four": "4412",
+      "date_of_birth": "1990-04-17",
+      "phone_last_four": "4821",
       "otp_code": "899787",
       "department_code": "NEUROLOGY",
       "role_code": "MD",
@@ -120,9 +114,9 @@
         "months_employed": 0,
         "hours_worked_past_year": 0,
         "fmla_weeks_remaining": 0,
-        "reason": "Employee has not yet met FMLA tenure and hours requirements"
+        "reason": "New hire has not yet met FMLA tenure requirements"
       },
-      "onboarding_checklist": null,
+      "onboarding_checklist": {},
       "oncall_schedule": {
         "registrations": []
       },
@@ -144,65 +138,16 @@
         "sick": 5.0
       },
       "pto_requests": []
-    },
-    "EMP204581": {
-      "employee_id": "EMP204581",
-      "first_name": "Mina",
-      "last_name": "Patel",
-      "date_of_birth": "1990-11-02",
-      "phone_last_four": "2281",
-      "otp_code": "551204",
-      "department_code": "EMERGENCY",
-      "role_code": "RN",
-      "unit_code": "4B-ICU",
-      "hire_date": "2021-04-12",
-      "employment_status": "active",
-      "certifications": [
-        "BLS",
-        "ACLS",
-        "CCRN"
-      ],
-      "fmla_eligibility": {
-        "eligible": true,
-        "months_employed": 64,
-        "hours_worked_past_year": 1872,
-        "fmla_weeks_remaining": 12,
-        "reason": null
-      },
-      "onboarding_checklist": {
-        "tasks": {}
-      },
-      "oncall_schedule": {
-        "registrations": []
-      },
-      "scheduled_appointments": [],
-      "i9_record": {
-        "verification_action": null,
-        "document_list_type": null,
-        "document_type_code": null,
-        "document_number": null,
-        "document_expiration_date": null,
-        "issuing_country_code": null,
-        "verification_status": "verified",
-        "case_id": null
-      },
-      "visa_record": null,
-      "leave_records": [],
-      "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
-      },
-      "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260828-0800": {
-      "shift_id": "SHF-20260828-0800",
+    "SHF-20260825-0700": {
+      "shift_id": "SHF-20260825-0700",
       "employee_id": "EMP913373",
       "unit_code": "2A-MED",
-      "date": "2026-08-28",
-      "start_time": "08:00",
-      "end_time": "16:00",
+      "date": "2026-08-25",
+      "start_time": "07:00",
+      "end_time": "15:00",
       "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
@@ -214,7 +159,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-31",
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -224,42 +169,43 @@
   "appointment_availability": {
     "orientation_followup": {
       "NEUROLOGY": {
-        "2026-09-02": [
-          "10:00",
+        "2026-08-26": [
+          "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-09-03": [
-          "09:00",
-          "13:00"
-        ],
-        "2026-09-05": [
+        "2026-08-27": [
           "10:00",
+          "13:00",
           "15:00"
+        ],
+        "2026-08-28": [
+          "09:30",
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "NEUROLOGY": {
-        "2026-09-10": [
+        "2026-08-26": [
           "09:00",
           "11:00"
         ],
-        "2026-09-11": [
-          "10:00",
-          "14:00"
+        "2026-08-27": [
+          "13:00",
+          "15:00"
         ]
       }
     },
     "competency_review": {
       "NEUROLOGY": {
-        "2026-09-08": [
+        "2026-08-26": [
+          "10:00",
+          "14:00"
+        ],
+        "2026-08-27": [
           "09:00",
           "13:00"
-        ],
-        "2026-09-09": [
-          "10:00",
-          "15:00"
         ]
       }
     }
@@ -270,9 +216,6 @@
     "2026-12-25"
   ],
   "department_blackout_dates": {
-    "NEUROLOGY": [],
-    "EMERGENCY": [
-      "2026-09-07"
-    ]
+    "NEUROLOGY": []
   }
 }

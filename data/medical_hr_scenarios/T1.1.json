@@ -7,12 +7,13 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "ACLS",
       "BLS",
-      "ONC-CERT"
+      "CHEMO_CERT"
     ],
     "5A-SURG": [
       "ACLS",
@@ -32,11 +33,11 @@
       "last_name": "Lindgren",
       "facility_code": "AJD-47K",
       "pin": "7807",
-      "phone_last_four": "6621",
+      "phone_last_four": "2481",
       "otp_code": "284171",
-      "role_code": "PA",
+      "role_code": "MD",
       "department_code": "ONCOLOGY",
-      "hire_date": "2018-06-11",
+      "hire_date": "2016-07-11",
       "ehr_access_status": "suspended",
       "ehr_access_case_id": null,
       "clearance_code": "CLR-OCC-310548",
@@ -45,7 +46,7 @@
           "state_license_number": "OH-PA-45561591",
           "license_type": "PA",
           "state_code": "OH",
-          "expiration_date": "2026-08-29",
+          "expiration_date": "2026-09-10",
           "status": "active",
           "investigation_hold": false,
           "extension_status": null,
@@ -57,11 +58,11 @@
       },
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2025-QX77L1",
+        "policy_number": "POL-2025-AX7731",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
-        "effective_date": "2025-08-20",
-        "expiration_date": "2026-08-19",
+        "effective_date": "2025-08-15",
+        "expiration_date": "2026-08-14",
         "recredential_required": false,
         "update_case_id": null
       },
@@ -75,7 +76,7 @@
           "CIV",
           "CV"
         ],
-        "expiration_date": "2027-11-30",
+        "expiration_date": "2027-12-31",
         "status": "active",
         "transfer_reason": null,
         "transfer_case_id": null
@@ -84,84 +85,17 @@
         "privilege_list": [
           {
             "code": "PRV-ICU-009",
-            "description": "ICU procedural and inpatient critical care privileges",
+            "description": "ICU admitting and management",
             "status": "suspended"
           },
           {
             "code": "PRV-SURG-009",
-            "description": "Surgical operating room privileges",
+            "description": "Operative surgical privileges",
             "status": "suspended"
           },
           {
             "code": "PRV-ONC-004",
-            "description": "General oncology consult privileges",
-            "status": "active"
-          }
-        ],
-        "reactivation_case_id": null
-      },
-      "scheduled_appointments": []
-    },
-    "1203347788": {
-      "npi": "1203347788",
-      "employee_id": "EMP440122",
-      "first_name": "Mina",
-      "last_name": "Chao",
-      "facility_code": "BVT-22Q",
-      "pin": "4412",
-      "phone_last_four": "1184",
-      "otp_code": "551903",
-      "role_code": "MD",
-      "department_code": "SURGERY",
-      "hire_date": "2016-03-14",
-      "ehr_access_status": "active",
-      "ehr_access_case_id": null,
-      "clearance_code": null,
-      "licenses": {
-        "OH-MD-30058838": {
-          "state_license_number": "OH-MD-30058838",
-          "license_type": "MD",
-          "state_code": "OH",
-          "expiration_date": "2027-05-31",
-          "status": "active",
-          "investigation_hold": false,
-          "extension_status": null,
-          "extension_type": null,
-          "extension_days": null,
-          "supervising_physician_npi": null,
-          "extension_case_id": null
-        }
-      },
-      "malpractice": {
-        "carrier": "medpro",
-        "policy_number": "POL-2026-ZP18K2",
-        "per_occurrence_limit_usd": 2000000,
-        "aggregate_limit_usd": 6000000,
-        "effective_date": "2026-01-01",
-        "expiration_date": "2027-01-01",
-        "recredential_required": false,
-        "update_case_id": null
-      },
-      "dea_registration": {
-        "dea_number": "BM5512044",
-        "facility_code": "BVT-22Q",
-        "state_code": "OH",
-        "schedule_codes": [
-          "CII",
-          "CIII",
-          "CIV",
-          "CV"
-        ],
-        "expiration_date": "2028-01-31",
-        "status": "active",
-        "transfer_reason": null,
-        "transfer_case_id": null
-      },
-      "privileges": {
-        "privilege_list": [
-          {
-            "code": "PRV-SURG-001",
-            "description": "General surgery privileges",
+            "description": "Oncology consult privileges",
             "status": "active"
           }
         ],
@@ -175,25 +109,25 @@
       "employee_id": "EMP751051",
       "first_name": "Oscar",
       "last_name": "Lindgren",
-      "date_of_birth": "1981-11-14",
-      "phone_last_four": "6621",
+      "date_of_birth": "1978-11-06",
+      "phone_last_four": "2481",
       "otp_code": "284171",
       "department_code": "ONCOLOGY",
-      "role_code": "PA",
+      "role_code": "MD",
       "unit_code": "3C-ONC",
-      "hire_date": "2018-06-11",
-      "employment_status": "on_leave",
+      "hire_date": "2016-07-11",
+      "employment_status": "active",
       "certifications": [
         "ACLS",
-        "ATLS",
         "BLS",
-        "ONC-CERT"
+        "CHEMO_CERT",
+        "ATLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 98,
-        "hours_worked_past_year": 1320,
-        "fmla_weeks_remaining": 4,
+        "months_employed": 121,
+        "hours_worked_past_year": 1340,
+        "fmla_weeks_remaining": 0,
         "reason": null
       },
       "onboarding_checklist": {
@@ -217,39 +151,39 @@
       "leave_records": [
         {
           "leave_type": "fmla",
-          "start_date": "2026-05-01",
-          "end_date": "2026-08-26",
-          "status": "active",
+          "start_date": "2026-04-20",
+          "end_date": "2026-08-31",
+          "status": "approved",
           "case_id": "CASE-FMLA-751051"
         }
       ],
       "pto_balances": {
-        "pto": 12.0,
-        "sick": 4.0
+        "pto": 15.0,
+        "sick": 5.0
       },
       "pto_requests": []
     },
-    "EMP440122": {
-      "employee_id": "EMP440122",
+    "EMP882144": {
+      "employee_id": "EMP882144",
       "first_name": "Mina",
-      "last_name": "Chao",
-      "date_of_birth": "1979-04-22",
-      "phone_last_four": "1184",
-      "otp_code": "551903",
+      "last_name": "Patel",
+      "date_of_birth": "1984-03-22",
+      "phone_last_four": "9914",
+      "otp_code": "611204",
       "department_code": "SURGERY",
-      "role_code": "MD",
+      "role_code": "RN",
       "unit_code": "5A-SURG",
-      "hire_date": "2016-03-14",
+      "hire_date": "2019-02-04",
       "employment_status": "active",
       "certifications": [
         "ACLS",
-        "ATLS",
-        "BLS"
+        "BLS",
+        "ATLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 125,
-        "hours_worked_past_year": 1880,
+        "months_employed": 90,
+        "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -273,21 +207,21 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 18.0,
-        "sick": 6.0
+        "pto": 12.0,
+        "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260830-0700": {
-      "shift_id": "SHF-20260830-0700",
+    "SHF-20260821-0700": {
+      "shift_id": "SHF-20260821-0700",
       "employee_id": "EMP751051",
       "unit_code": "3C-ONC",
-      "date": "2026-08-30",
+      "date": "2026-08-21",
       "start_time": "07:00",
-      "end_time": "17:00",
-      "hours_scheduled": 10.0,
+      "end_time": "15:00",
+      "hours_scheduled": 8.0,
       "hours_logged": null,
       "on_call": false,
       "on_call_tier": null,
@@ -298,7 +232,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-08-31",
+      "pay_period_end_date": "2026-08-29",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -308,7 +242,7 @@
   "appointment_availability": {
     "orientation_followup": {
       "ONCOLOGY": {
-        "2026-08-25": [
+        "2026-08-26": [
           "09:00",
           "11:00",
           "14:00"
@@ -325,17 +259,17 @@
     },
     "return_to_work_checkin": {
       "ONCOLOGY": {
-        "2026-08-27": [
+        "2026-09-01": [
           "09:00",
           "11:00"
         ],
-        "2026-08-28": [
+        "2026-09-02": [
           "10:00",
           "14:00"
         ],
-        "2026-08-31": [
-          "09:00",
-          "13:00"
+        "2026-09-03": [
+          "09:30",
+          "13:30"
         ]
       }
     },
@@ -348,11 +282,11 @@
         ],
         "2026-08-28": [
           "09:00",
-          "13:30"
+          "13:00"
         ],
         "2026-08-29": [
-          "10:30",
-          "15:00"
+          "08:30",
+          "10:30"
         ]
       }
     }
@@ -367,6 +301,9 @@
     "SURGERY": [
       "2026-11-25",
       "2026-11-27"
-    ]
+    ],
+    "EMERGENCY": [],
+    "PEDIATRICS": [],
+    "RADIOLOGY": []
   }
 }

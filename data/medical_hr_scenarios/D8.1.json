@@ -3,8 +3,7 @@
   "unit_cert_requirements": {
     "6A-PEDS": [
       "BLS",
-      "PALS",
-      "NRP"
+      "PALS"
     ],
     "4B-ICU": [
       "BLS",
@@ -12,13 +11,11 @@
       "CCRN"
     ],
     "2A-MED": [
-      "BLS",
-      "ACLS"
+      "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ACLS",
-      "ONC-CERT"
+      "ACLS"
     ],
     "5A-SURG": [
       "BLS",
@@ -34,18 +31,18 @@
       "last_name": "Okoro",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "6531",
-      "otp_code": "418275",
+      "phone_last_four": "4821",
+      "otp_code": "731842",
       "role_code": "RN",
       "department_code": "PEDIATRICS",
-      "hire_date": "2021-03-15",
+      "hire_date": "2019-03-18",
       "ehr_access_status": "active",
       "ehr_access_case_id": null,
       "clearance_code": null,
       "licenses": {},
       "malpractice": {
         "carrier": "coverys",
-        "policy_number": "POL-2026-AX7731",
+        "policy_number": "POL-2026-RN4821",
         "per_occurrence_limit_usd": 1000000,
         "aggregate_limit_usd": 3000000,
         "effective_date": "2026-01-01",
@@ -81,21 +78,21 @@
       "first_name": "Emeka",
       "last_name": "Okoro",
       "date_of_birth": "1991-11-08",
-      "phone_last_four": "6531",
-      "otp_code": "418275",
+      "phone_last_four": "4821",
+      "otp_code": "731842",
       "department_code": "PEDIATRICS",
       "role_code": "RN",
       "unit_code": "6A-PEDS",
-      "hire_date": "2021-03-15",
+      "hire_date": "2019-03-18",
       "employment_status": "active",
       "certifications": [
         "BLS",
         "PALS",
-        "NRP"
+        "ACLS"
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 63,
+        "months_employed": 87,
         "hours_worked_past_year": 1872,
         "fmla_weeks_remaining": 12,
         "reason": null
@@ -120,8 +117,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
-        "sick": 6.0
+        "pto": 14.5,
+        "sick": 5.0
       },
       "pto_requests": []
     },
@@ -129,13 +126,13 @@
       "employee_id": "EMP364659",
       "first_name": "Lena",
       "last_name": "Martinez",
-      "date_of_birth": "1990-04-19",
-      "phone_last_four": "4428",
-      "otp_code": "772614",
+      "date_of_birth": "1988-02-14",
+      "phone_last_four": "6592",
+      "otp_code": "184275",
       "department_code": "PEDIATRICS",
       "role_code": "RN",
       "unit_code": "6A-PEDS",
-      "hire_date": "2019-09-02",
+      "hire_date": "2018-07-09",
       "employment_status": "active",
       "certifications": [
         "BLS",
@@ -144,9 +141,9 @@
       ],
       "fmla_eligibility": {
         "eligible": true,
-        "months_employed": 81,
-        "hours_worked_past_year": 1920,
-        "fmla_weeks_remaining": 10,
+        "months_employed": 95,
+        "hours_worked_past_year": 1804,
+        "fmla_weeks_remaining": 12,
         "reason": null
       },
       "onboarding_checklist": {
@@ -169,18 +166,18 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 11.0,
+        "pto": 12.0,
         "sick": 4.0
       },
       "pto_requests": []
     }
   },
   "shifts": {
-    "SHF-20260722-2300": {
-      "shift_id": "SHF-20260722-2300",
+    "SHF-20260615-2300": {
+      "shift_id": "SHF-20260615-2300",
       "employee_id": "EMP436653",
       "unit_code": "6A-PEDS",
-      "date": "2026-07-22",
+      "date": "2026-06-15",
       "start_time": "23:00",
       "end_time": "11:00",
       "hours_scheduled": 12.0,
@@ -194,7 +191,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": "2026-07-31",
+      "pay_period_end_date": "2026-06-28",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
@@ -216,39 +213,17 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-09",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260710-0700": {
-      "shift_id": "SHF-20260710-0700",
-      "employee_id": "EMP436653",
-      "unit_code": "6A-PEDS",
-      "date": "2026-07-10",
-      "start_time": "07:00",
-      "end_time": "19:00",
-      "hours_scheduled": 12.0,
-      "hours_logged": null,
-      "on_call": false,
-      "on_call_tier": null,
-      "status": "scheduled",
-      "swap_locked": true,
-      "pay_period_closed": false,
-      "corrected_hours": null,
-      "correction_type": null,
-      "correction_case_id": null,
-      "correction_status": null,
-      "pay_period_end_date": null,
-      "swapped_to_employee_id": null,
-      "swap_confirmation_id": null
-    },
-    "SHF-20260705-1900": {
-      "shift_id": "SHF-20260705-1900",
+    "SHF-20260728-0700": {
+      "shift_id": "SHF-20260728-0700",
       "employee_id": "EMP364659",
       "unit_code": "6A-PEDS",
-      "date": "2026-07-05",
-      "start_time": "19:00",
-      "end_time": "07:00",
+      "date": "2026-07-28",
+      "start_time": "07:00",
+      "end_time": "19:00",
       "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
@@ -260,7 +235,7 @@
       "correction_type": null,
       "correction_case_id": null,
       "correction_status": null,
-      "pay_period_end_date": null,
+      "pay_period_end_date": "2026-08-02",
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     }
@@ -270,30 +245,29 @@
   "appointment_availability": {
     "orientation_followup": {
       "PEDIATRICS": {
-        "2026-06-25": [
+        "2026-06-24": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-06-26": [
+        "2026-06-25": [
           "10:00",
           "13:00",
           "15:00"
         ],
         "2026-06-29": [
           "09:30",
-          "11:30",
-          "14:30"
+          "11:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "PEDIATRICS": {
-        "2026-06-25": [
+        "2026-06-24": [
           "09:00",
           "10:00"
         ],
-        "2026-06-26": [
+        "2026-06-25": [
           "13:00",
           "15:00"
         ],
@@ -305,15 +279,15 @@
     },
     "competency_review": {
       "PEDIATRICS": {
-        "2026-06-25": [
-          "08:30",
-          "10:30"
+        "2026-06-24": [
+          "08:00",
+          "10:00"
         ],
         "2026-06-26": [
           "09:00",
           "14:00"
         ],
-        "2026-06-29": [
+        "2026-06-30": [
           "11:00",
           "15:00"
         ]
@@ -326,15 +300,6 @@
     "2026-11-26"
   ],
   "department_blackout_dates": {
-    "PEDIATRICS": [],
-    "EMERGENCY": [
-      "2026-07-04"
-    ],
-    "SURGERY": [
-      "2026-07-01",
-      "2026-07-02"
-    ],
-    "ONCOLOGY": [],
-    "CARDIOLOGY": []
+    "PEDIATRICS": []
   }
 }

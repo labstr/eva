@@ -12,33 +12,29 @@
       "CCRN"
     ],
     "2A-MED": [
+      "ACLS",
       "BLS"
     ],
     "3C-ONC": [
       "BLS",
-      "ONC-CHEMO"
+      "ONC-CERT"
     ],
     "5A-SURG": [
       "ACLS",
       "BLS",
       "TNCC"
-    ],
-    "1D-PEDS": [
-      "BLS",
-      "PALS",
-      "NRP"
     ]
   },
   "providers": {
-    "1487392045": {
-      "npi": "1487392045",
+    "1111111111": {
+      "npi": "1111111111",
       "employee_id": "EMP437960",
       "first_name": "Liora",
       "last_name": "Goldstein",
       "facility_code": "MGH-04B",
       "pin": "4821",
-      "phone_last_four": "2714",
-      "otp_code": "483920",
+      "phone_last_four": "4421",
+      "otp_code": "654321",
       "role_code": "RN",
       "department_code": "EMERGENCY",
       "hire_date": "2019-03-11",
@@ -83,9 +79,9 @@
       "employee_id": "EMP437960",
       "first_name": "Liora",
       "last_name": "Goldstein",
-      "date_of_birth": "1991-02-14",
-      "phone_last_four": "2714",
-      "otp_code": "483920",
+      "date_of_birth": "1991-04-22",
+      "phone_last_four": "4421",
+      "otp_code": "654321",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "7C-ICU",
@@ -123,18 +119,18 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 14.0,
+        "pto": 15.0,
         "sick": 5.0
       },
       "pto_requests": []
     },
     "EMP697530": {
       "employee_id": "EMP697530",
-      "first_name": "Noah",
-      "last_name": "Levin",
-      "date_of_birth": "1988-09-22",
-      "phone_last_four": "8841",
-      "otp_code": "517204",
+      "first_name": "Maya",
+      "last_name": "Kessler",
+      "date_of_birth": "1988-09-14",
+      "phone_last_four": "7712",
+      "otp_code": "112233",
       "department_code": "EMERGENCY",
       "role_code": "RN",
       "unit_code": "7C-ICU",
@@ -149,6 +145,54 @@
         "eligible": true,
         "months_employed": 97,
         "hours_worked_past_year": 1920,
+        "fmla_weeks_remaining": 10,
+        "reason": null
+      },
+      "onboarding_checklist": {
+        "tasks": {}
+      },
+      "oncall_schedule": {
+        "registrations": []
+      },
+      "scheduled_appointments": [],
+      "i9_record": {
+        "verification_action": null,
+        "document_list_type": null,
+        "document_type_code": null,
+        "document_number": null,
+        "document_expiration_date": null,
+        "issuing_country_code": null,
+        "verification_status": "verified",
+        "case_id": null
+      },
+      "visa_record": null,
+      "leave_records": [],
+      "pto_balances": {
+        "pto": 12.0,
+        "sick": 4.0
+      },
+      "pto_requests": []
+    },
+    "EMP552341": {
+      "employee_id": "EMP552341",
+      "first_name": "Daniel",
+      "last_name": "Price",
+      "date_of_birth": "1993-02-08",
+      "phone_last_four": "6630",
+      "otp_code": "445566",
+      "department_code": "ONCOLOGY",
+      "role_code": "RN",
+      "unit_code": "3C-ONC",
+      "hire_date": "2021-01-19",
+      "employment_status": "active",
+      "certifications": [
+        "BLS",
+        "ONC-CERT"
+      ],
+      "fmla_eligibility": {
+        "eligible": true,
+        "months_employed": 66,
+        "hours_worked_past_year": 1804,
         "fmla_weeks_remaining": 12,
         "reason": null
       },
@@ -172,8 +216,8 @@
       "visa_record": null,
       "leave_records": [],
       "pto_balances": {
-        "pto": 11.0,
-        "sick": 4.0
+        "pto": 14.0,
+        "sick": 6.0
       },
       "pto_requests": []
     }
@@ -201,11 +245,33 @@
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260720-0700": {
-      "shift_id": "SHF-20260720-0700",
+    "SHF-20260729-1900": {
+      "shift_id": "SHF-20260729-1900",
       "employee_id": "EMP437960",
       "unit_code": "7C-ICU",
-      "date": "2026-07-20",
+      "date": "2026-07-29",
+      "start_time": "19:00",
+      "end_time": "07:00",
+      "hours_scheduled": 12.0,
+      "hours_logged": null,
+      "on_call": false,
+      "on_call_tier": null,
+      "status": "scheduled",
+      "swap_locked": false,
+      "pay_period_closed": false,
+      "corrected_hours": null,
+      "correction_type": null,
+      "correction_case_id": null,
+      "correction_status": null,
+      "pay_period_end_date": "2026-07-31",
+      "swapped_to_employee_id": null,
+      "swap_confirmation_id": null
+    },
+    "SHF-20260722-0700": {
+      "shift_id": "SHF-20260722-0700",
+      "employee_id": "EMP697530",
+      "unit_code": "7C-ICU",
+      "date": "2026-07-22",
       "start_time": "07:00",
       "end_time": "19:00",
       "hours_scheduled": 12.0,
@@ -223,13 +289,13 @@
       "swapped_to_employee_id": null,
       "swap_confirmation_id": null
     },
-    "SHF-20260728-1900": {
-      "shift_id": "SHF-20260728-1900",
-      "employee_id": "EMP697530",
-      "unit_code": "7C-ICU",
-      "date": "2026-07-28",
-      "start_time": "19:00",
-      "end_time": "07:00",
+    "SHF-20260724-0700": {
+      "shift_id": "SHF-20260724-0700",
+      "employee_id": "EMP552341",
+      "unit_code": "3C-ONC",
+      "date": "2026-07-24",
+      "start_time": "07:00",
+      "end_time": "19:00",
       "hours_scheduled": 12.0,
       "hours_logged": null,
       "on_call": false,
@@ -251,64 +317,57 @@
   "appointment_availability": {
     "orientation_followup": {
       "EMERGENCY": {
-        "2026-07-21": [
+        "2026-07-20": [
           "09:00",
           "11:00",
           "14:00"
         ],
-        "2026-07-22": [
+        "2026-07-21": [
           "10:00",
           "13:00",
           "15:00"
         ],
-        "2026-07-24": [
+        "2026-07-23": [
           "09:30",
-          "12:30",
-          "16:00"
+          "12:30"
         ]
       }
     },
     "return_to_work_checkin": {
       "EMERGENCY": {
-        "2026-07-29": [
+        "2026-07-20": [
           "09:00",
-          "11:00",
+          "11:00"
+        ],
+        "2026-07-21": [
+          "10:00",
           "14:00"
         ],
-        "2026-07-30": [
-          "10:00",
+        "2026-07-23": [
           "13:00",
           "15:00"
-        ],
-        "2026-08-03": [
-          "09:30",
-          "12:30",
-          "16:00"
         ]
       }
     },
     "competency_review": {
       "EMERGENCY": {
-        "2026-07-23": [
+        "2026-07-20": [
+          "08:00",
+          "10:00"
+        ],
+        "2026-07-22": [
           "09:00",
+          "13:00"
+        ],
+        "2026-07-24": [
           "11:00",
-          "14:00"
-        ],
-        "2026-07-27": [
-          "10:00",
-          "13:00",
           "15:00"
-        ],
-        "2026-07-31": [
-          "09:30",
-          "12:30",
-          "16:00"
         ]
       }
     }
   },
   "org_holidays": [
-    "2026-07-04",
+    "2026-07-03",
     "2026-09-07",
     "2026-11-26"
   ],
@@ -316,12 +375,6 @@
     "EMERGENCY": [],
     "ONCOLOGY": [
       "2026-07-31"
-    ],
-    "SURGERY": [
-      "2026-08-14"
-    ],
-    "PEDIATRICS": [],
-    "RADIOLOGY": [],
-    "CARDIOLOGY": []
+    ]
   }
 }
