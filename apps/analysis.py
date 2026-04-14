@@ -472,6 +472,7 @@ def _model_suffix_from_config(run_config: dict) -> str:
 
 
 _TIMESTAMP_RUN_RE = re.compile(r"^(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.\d+)_(.+)$")
+_TIMESTAMP_ONLY_RE = re.compile(r"^(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.\d+)$")
 
 
 def _get_system_and_timestamp(run_name: str, run_config: dict) -> tuple[str, str]:
@@ -479,6 +480,11 @@ def _get_system_and_timestamp(run_name: str, run_config: dict) -> tuple[str, str
     m = _TIMESTAMP_RUN_RE.match(run_name)
     if m:
         return m.group(2), m.group(1)
+    # Timestamp-only directory (no system name suffix) — still extract the timestamp
+    m = _TIMESTAMP_ONLY_RE.match(run_name)
+    if m:
+        suffix = _model_suffix_from_config(run_config)
+        return suffix or "", m.group(1)
     suffix = _model_suffix_from_config(run_config)
     if suffix and suffix not in run_name:
         return f"{suffix} ({run_name})", ""
