@@ -1,10 +1,50 @@
 """Tests for the ResponseSpeedMetric."""
 
+import json
+
 import pytest
 
-from eva.metrics.diagnostic.response_speed import ResponseSpeedMetric
+from eva.metrics.diagnostic.response_speed import (
+    ResponseSpeedMetric,
+    ResponseSpeedNoToolCallsMetric,
+    ResponseSpeedWithToolCallsMetric,
+)
 
 from .conftest import make_metric_context
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _write_metrics_json(tmp_path, per_turn_latency: dict) -> None:
+    """Write a minimal metrics.json with turn_taking per_turn_latency data."""
+    data = {
+        "metrics": {
+            "turn_taking": {
+                "details": {
+                    "per_turn_latency": per_turn_latency,
+                }
+            }
+        }
+    }
+    (tmp_path / "metrics.json").write_text(json.dumps(data))
+
+
+def _make_trace(tool_call_turn_ids: set[int], all_turn_ids: set[int]) -> list[dict]:
+    """Build a minimal conversation_trace with the given turn structure."""
+    trace = []
+    for tid in sorted(all_turn_ids):
+        trace.append({"turn_id": tid, "type": "transcribed", "content": "user utterance"})
+        if tid in tool_call_turn_ids:
+            trace.append({"turn_id": tid, "type": "tool_call", "tool_name": "some_tool"})
+            trace.append({"turn_id": tid, "type": "tool_response", "tool_name": "some_tool"})
+    return trace
+
+
+# ---------------------------------------------------------------------------
+# ResponseSpeedMetric
+# ---------------------------------------------------------------------------
 
 
 class TestResponseSpeedMetric:
@@ -91,3 +131,193 @@ class TestResponseSpeedMetric:
         assert result.details["max_speed_seconds"] == pytest.approx(0.75)
         assert result.details["num_turns"] == 1
         assert result.details["per_turn_speeds"] == [0.75]
+
+
+# ---------------------------------------------------------------------------
+# ResponseSpeedWithToolCallsMetric
+# ---------------------------------------------------------------------------
+
+
+class TestResponseSpeedWithToolCallsMetric:
+    @pytest.mark.asyncio
+    async def test_no_output_dir(self):
+        """Missing output_dir returns error."""
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context()
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+
+    @pytest.mark.asyncio
+    async def test_missing_metrics_json(self, tmp_path):
+        """output_dir exists but has no metrics.json — returns error."""
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path)
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+
+    @pytest.mark.asyncio
+    async def test_missing_turn_taking_data(self, tmp_path):
+        """metrics.json exists but has no turn_taking entry — returns error."""
+        (tmp_path / "metrics.json").write_text(json.dumps({"metrics": {}}))
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path)
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+
+    @pytest.mark.asyncio
+    async def test_no_turns_with_tool_calls(self, tmp_path):
+        """Record has no tool-call turns — returns 'not found' error."""
+        _write_metrics_json(tmp_path, {"1": 1.0, "2": 2.0, "3": 3.0})
+        trace = _make_trace(tool_call_turn_ids=set(), all_turn_ids={1, 2, 3})
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+        assert "No turns with tool calls" in result.error
+
+    @pytest.mark.asyncio
+    async def test_mixed_turns(self, tmp_path):
+        """Correctly includes only tool-call turn latencies."""
+        _write_metrics_json(tmp_path, {"1": 1.0, "2": 5.0, "3": 3.0, "4": 7.0})
+        # Turns 2 and 4 have tool calls
+        trace = _make_trace(tool_call_turn_ids={2, 4}, all_turn_ids={1, 2, 3, 4})
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.error is None
+        assert result.details["num_turns"] == 2
+        assert result.score == pytest.approx((5.0 + 7.0) / 2)
+        assert result.details["max_speed_seconds"] == pytest.approx(7.0)
+        assert result.details["per_turn_speeds"] == [5.0, 7.0]
+
+    @pytest.mark.asyncio
+    async def test_all_turns_have_tool_calls(self, tmp_path):
+        """When every turn has a tool call, all latencies are included."""
+        _write_metrics_json(tmp_path, {"1": 2.0, "2": 4.0})
+        trace = _make_trace(tool_call_turn_ids={1, 2}, all_turn_ids={1, 2})
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.error is None
+        assert result.details["num_turns"] == 2
+        assert result.score == pytest.approx(3.0)
+
+    @pytest.mark.asyncio
+    async def test_filters_invalid_latency_values(self, tmp_path):
+        """Sanity filter (0 < x < 1000) applies to per_turn_latency values."""
+        _write_metrics_json(tmp_path, {"1": -1.0, "2": 5.0, "3": 2000.0, "4": 3.0})
+        trace = _make_trace(tool_call_turn_ids={1, 2, 3, 4}, all_turn_ids={1, 2, 3, 4})
+        metric = ResponseSpeedWithToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.error is None
+        assert result.details["num_turns"] == 2  # only 5.0 and 3.0 pass
+        assert result.score == pytest.approx((5.0 + 3.0) / 2)
+
+
+# ---------------------------------------------------------------------------
+# ResponseSpeedNoToolCallsMetric
+# ---------------------------------------------------------------------------
+
+
+class TestResponseSpeedNoToolCallsMetric:
+    @pytest.mark.asyncio
+    async def test_no_output_dir(self):
+        """Missing output_dir returns error."""
+        metric = ResponseSpeedNoToolCallsMetric()
+        ctx = make_metric_context()
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+
+    @pytest.mark.asyncio
+    async def test_missing_metrics_json(self, tmp_path):
+        """output_dir exists but has no metrics.json — returns error."""
+        metric = ResponseSpeedNoToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path)
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+
+    @pytest.mark.asyncio
+    async def test_all_turns_have_tool_calls(self, tmp_path):
+        """Every turn has a tool call — no-tool bucket is empty."""
+        _write_metrics_json(tmp_path, {"1": 2.0, "2": 4.0})
+        trace = _make_trace(tool_call_turn_ids={1, 2}, all_turn_ids={1, 2})
+        metric = ResponseSpeedNoToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.score == 0.0
+        assert result.error is not None
+        assert "No turns without tool calls" in result.error
+
+    @pytest.mark.asyncio
+    async def test_mixed_turns(self, tmp_path):
+        """Correctly includes only non-tool-call turn latencies."""
+        _write_metrics_json(tmp_path, {"1": 1.0, "2": 5.0, "3": 3.0, "4": 7.0})
+        # Turns 2 and 4 have tool calls; turns 1 and 3 do not
+        trace = _make_trace(tool_call_turn_ids={2, 4}, all_turn_ids={1, 2, 3, 4})
+        metric = ResponseSpeedNoToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.error is None
+        assert result.details["num_turns"] == 2
+        assert result.score == pytest.approx((1.0 + 3.0) / 2)
+        assert result.details["max_speed_seconds"] == pytest.approx(3.0)
+        assert result.details["per_turn_speeds"] == [1.0, 3.0]
+
+    @pytest.mark.asyncio
+    async def test_no_turns_with_tool_calls(self, tmp_path):
+        """Record with no tool-call turns — all latencies included."""
+        _write_metrics_json(tmp_path, {"1": 1.0, "2": 2.0, "3": 3.0})
+        trace = _make_trace(tool_call_turn_ids=set(), all_turn_ids={1, 2, 3})
+        metric = ResponseSpeedNoToolCallsMetric()
+        ctx = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result = await metric.compute(ctx)
+
+        assert result.error is None
+        assert result.details["num_turns"] == 3
+        assert result.score == pytest.approx(2.0)
+
+    @pytest.mark.asyncio
+    async def test_with_and_no_tool_split_is_exhaustive(self, tmp_path):
+        """with_tool + no_tool latencies together cover all per_turn_latency values."""
+        per_turn = {"1": 1.0, "2": 5.0, "3": 3.0, "4": 7.0, "5": 2.0}
+        _write_metrics_json(tmp_path, per_turn)
+        trace = _make_trace(tool_call_turn_ids={2, 4}, all_turn_ids={1, 2, 3, 4, 5})
+
+        ctx_with = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+        ctx_no = make_metric_context(output_dir=tmp_path, conversation_trace=trace)
+
+        result_with = await ResponseSpeedWithToolCallsMetric().compute(ctx_with)
+        result_no = await ResponseSpeedNoToolCallsMetric().compute(ctx_no)
+
+        combined = result_with.details["per_turn_speeds"] + result_no.details["per_turn_speeds"]
+        assert sorted(combined) == sorted(per_turn.values())
