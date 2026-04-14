@@ -350,7 +350,10 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
         _in_model_turn = False
         _user_speaking = False
         _user_speech_start_ts: str | None = None  # Timestamp from audio_interface
-        _next_chunk_send_time: float = 0.0  # Absolute monotonic time for next paced chunk
+
+        # Queue for outbound mulaw chunks; the pacer task drains it at real-time rate
+        # so _process_gemini_events never sleeps and keeps reading Gemini events promptly.
+        audio_output_queue: asyncio.Queue[bytes] = asyncio.Queue()
 
         try:
             async with client.aio.live.connect(model=self._model, config=live_config) as session:
@@ -425,11 +428,43 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                     finally:
                         twilio_connected = False
 
+                async def _pace_audio_output() -> None:
+                    """Drain audio_output_queue and forward chunks at real-time rate.
+
+                    Runs as its own task so _process_gemini_events never blocks on
+                    sleep and can read the next Gemini event immediately.
+                    """
+                    nonlocal twilio_connected
+                    next_send_time = time.monotonic()
+                    try:
+                        while self._running:
+                            try:
+                                chunk = await asyncio.wait_for(audio_output_queue.get(), timeout=1.0)
+                            except TimeoutError:
+                                continue
+
+                            twilio_msg = create_twilio_media_message(stream_sid, chunk)
+                            try:
+                                await websocket.send_text(twilio_msg)
+                            except Exception:
+                                twilio_connected = False
+                                return
+
+                            now = time.monotonic()
+                            if next_send_time <= now:
+                                next_send_time = now
+                            next_send_time += MULAW_CHUNK_DURATION_S
+                            sleep_duration = next_send_time - time.monotonic()
+                            if sleep_duration > 0:
+                                await asyncio.sleep(sleep_duration)
+                    except asyncio.CancelledError:
+                        pass
+
                 async def _process_gemini_events() -> None:
                     """Consume events from the Gemini Live session."""
                     nonlocal _assistant_turn_text, _user_turn_text
                     nonlocal _in_model_turn, _user_speaking, _user_speech_start_ts
-                    nonlocal twilio_connected, _next_chunk_send_time
+                    nonlocal twilio_connected
 
                     logger.info("Gemini event processor started")
                     event_count = 0
@@ -487,24 +522,11 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                                     )
                                                     continue
 
-                                                now = time.monotonic()
-                                                if _next_chunk_send_time <= now:
-                                                    _next_chunk_send_time = now
-
                                                 offset = 0
                                                 while offset < len(mulaw):
                                                     chunk = mulaw[offset : offset + MULAW_CHUNK_SIZE]
                                                     offset += MULAW_CHUNK_SIZE
-                                                    twilio_msg = create_twilio_media_message(stream_sid, chunk)
-                                                    try:
-                                                        await websocket.send_text(twilio_msg)
-                                                    except Exception:
-                                                        twilio_connected = False
-                                                        break
-                                                    _next_chunk_send_time += MULAW_CHUNK_DURATION_S
-                                                    sleep_duration = _next_chunk_send_time - time.monotonic()
-                                                    if sleep_duration > 0:
-                                                        await asyncio.sleep(sleep_duration)
+                                                    await audio_output_queue.put(chunk)
 
                                 # Turn complete
                                 if sc.turn_complete:
@@ -560,7 +582,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
 
                                     # Execute tool
                                     result = await self.tool_handler.execute(tool_name, tool_args)
-                                    logger.info(f"Tool result: {tool_name} -> {json.dumps(result)}")
+                                    logger.debug(f"Tool result: {tool_name} -> {json.dumps(result)}")
                                     self.audit_log.append_tool_response(tool_name, result)
 
                                     # Send result back to Gemini
@@ -592,27 +614,33 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                     except Exception as e:
                         logger.error(f"Error in Gemini event processor: {e}", exc_info=True)
 
-                # Run both tasks; when either exits, cancel the other
+                # Run all three tasks; when any exits, cancel the others
                 user_task = asyncio.create_task(_forward_user_audio())
                 gemini_task = asyncio.create_task(_process_gemini_events())
+                pacer_task = asyncio.create_task(_pace_audio_output())
 
                 done, pending = await asyncio.wait(
-                    [user_task, gemini_task],
+                    [user_task, gemini_task, pacer_task],
                     return_when=asyncio.FIRST_COMPLETED,
                 )
 
+                def _task_name(t: asyncio.Task) -> str:
+                    if t is user_task:
+                        return "user_audio"
+                    if t is gemini_task:
+                        return "gemini_events"
+                    return "audio_pacer"
+
                 # Log which task finished first
                 for task in done:
-                    task_name = "user_audio" if task is user_task else "gemini_events"
                     exc = task.exception()
                     if exc:
-                        logger.error(f"Task '{task_name}' failed: {exc}", exc_info=exc)
+                        logger.error(f"Task '{_task_name(task)}' failed: {exc}", exc_info=exc)
                     else:
-                        logger.info(f"Task '{task_name}' completed normally")
+                        logger.info(f"Task '{_task_name(task)}' completed normally")
 
                 for task in pending:
-                    task_name = "user_audio" if task is user_task else "gemini_events"
-                    logger.info(f"Cancelling pending task '{task_name}'")
+                    logger.info(f"Cancelling pending task '{_task_name(task)}'")
                     task.cancel()
                     try:
                         await task

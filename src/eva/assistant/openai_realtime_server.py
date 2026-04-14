@@ -111,9 +111,6 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         # User speech start timestamp from audio_interface (source of truth)
         self._audio_interface_speech_start_ts: str | None = None
 
-        # Audio output pacing: absolute time target for next chunk send
-        self._next_chunk_send_time: float = 0.0
-
         self._model: str = self.pipeline_config.s2s
 
     async def start(self) -> None:
@@ -263,12 +260,14 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                 )
                 await conn.response.create()
 
-                # Run forwarding tasks concurrently
+                # Run all three tasks; when any exits, cancel the others
+                audio_output_queue: asyncio.Queue[bytes] = asyncio.Queue()
                 forward_task = asyncio.create_task(self._forward_user_audio(websocket, conn))
-                receive_task = asyncio.create_task(self._process_openai_events(conn, websocket))
+                receive_task = asyncio.create_task(self._process_openai_events(conn, websocket, audio_output_queue))
+                pacer_task = asyncio.create_task(self._pace_audio_output(websocket, audio_output_queue))
 
                 done, pending = await asyncio.wait(
-                    [forward_task, receive_task],
+                    [forward_task, receive_task, pacer_task],
                     return_when=asyncio.FIRST_COMPLETED,
                 )
                 for task in pending:
@@ -287,6 +286,39 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             logger.error(f"OpenAI Realtime session error: {e}", exc_info=True)
         finally:
             logger.info("Client disconnected from OpenAI Realtime server")
+
+    # ── Audio output pacer (OpenAI -> Twilio WS at real-time rate) ───
+
+    async def _pace_audio_output(self, websocket: WebSocket, audio_output_queue: asyncio.Queue[bytes]) -> None:
+        """Drain audio_output_queue and forward chunks at real-time rate.
+
+        Runs as its own task so _process_openai_events never blocks on sleep
+        and can read the next OpenAI event immediately.
+        """
+        next_send_time = time.monotonic()
+        try:
+            while True:
+                try:
+                    chunk = await asyncio.wait_for(audio_output_queue.get(), timeout=1.0)
+                except TimeoutError:
+                    continue
+
+                twilio_msg = create_twilio_media_message(self._stream_sid, chunk)
+                try:
+                    await websocket.send_text(twilio_msg)
+                except Exception as e:
+                    logger.error(f"Error sending audio to Twilio WS: {e}")
+                    return
+
+                now = time.monotonic()
+                if next_send_time <= now:
+                    next_send_time = now
+                next_send_time += MULAW_CHUNK_DURATION_S
+                sleep_duration = next_send_time - time.monotonic()
+                if sleep_duration > 0:
+                    await asyncio.sleep(sleep_duration)
+        except asyncio.CancelledError:
+            pass
 
     # ── User audio forwarding (Twilio WS -> OpenAI) ──────────────────
 
@@ -356,12 +388,14 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
     # ── OpenAI event processing ───────────────────────────────────────
 
-    async def _process_openai_events(self, conn: Any, websocket: WebSocket) -> None:
+    async def _process_openai_events(
+        self, conn: Any, websocket: WebSocket, audio_output_queue: asyncio.Queue[bytes]
+    ) -> None:
         """Process events from the OpenAI Realtime connection."""
         try:
             async for event in conn:
                 try:
-                    await self._handle_openai_event(event, conn, websocket)
+                    await self._handle_openai_event(event, conn, websocket, audio_output_queue)
                 except Exception as e:
                     logger.error(f"Error handling event {getattr(event, 'type', '?')}: {e}", exc_info=True)
         except asyncio.CancelledError:
@@ -369,7 +403,9 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         except Exception as e:
             logger.error(f"Error in OpenAI event loop: {e}", exc_info=True)
 
-    async def _handle_openai_event(self, event: Any, conn: Any, websocket: WebSocket) -> None:
+    async def _handle_openai_event(
+        self, event: Any, conn: Any, websocket: WebSocket, audio_output_queue: asyncio.Queue[bytes]
+    ) -> None:
         """Dispatch a single OpenAI Realtime event."""
         event_type = getattr(event, "type", "")
 
@@ -407,7 +443,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                     self._user_turn.flushed = True
 
             case "response.output_audio.delta":
-                await self._on_audio_delta(event, websocket)
+                await self._on_audio_delta(event, audio_output_queue)
 
             case "response.output_audio_transcript.delta":
                 self._on_transcript_delta(event)
@@ -507,7 +543,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         self.audit_log.append_user_input(transcript, timestamp_ms=timestamp_ms)
         logger.debug(f"User transcription: {transcript}...")
 
-    async def _on_audio_delta(self, event: Any, websocket: WebSocket) -> None:
+    async def _on_audio_delta(self, event: Any, audio_output_queue: asyncio.Queue[bytes]) -> None:
         """Handle response.audio.delta - assistant audio chunk."""
         delta_b64 = getattr(event, "delta", "") or ""
         if not delta_b64:
@@ -537,32 +573,18 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                 f"usr_spk={self._user_speaking} added={len(pcm16_bytes)} synced_user={synced}"
             )
 
-        # Convert 24kHz PCM16 -> 8kHz mulaw and send in real-time-paced chunks.
-        # Each 160-byte chunk = 20ms of audio at 8kHz. We sleep between sends
-        # so the user simulator receives audio at playback rate, which ensures
-        # its silence-based audio_start/audio_end detection works correctly.
+        # Convert 24kHz PCM16 -> 8kHz mulaw and enqueue for real-time pacing.
+        # _pace_audio_output owns the timing loop so this method returns immediately,
+        # allowing the OpenAI event loop to process the next event without delay.
         try:
             mulaw_bytes = pcm16_24k_to_mulaw_8k(pcm16_bytes)
-            now = time.monotonic()
-
-            # Initialize pacing clock on first chunk of a new response
-            if self._next_chunk_send_time <= now:
-                self._next_chunk_send_time = now
-
             offset = 0
             while offset < len(mulaw_bytes):
                 chunk = mulaw_bytes[offset : offset + MULAW_CHUNK_SIZE]
                 offset += MULAW_CHUNK_SIZE
-                twilio_msg = create_twilio_media_message(self._stream_sid, chunk)
-                await websocket.send_text(twilio_msg)
-
-                # Advance absolute clock and sleep until next send time
-                self._next_chunk_send_time += MULAW_CHUNK_DURATION_S
-                sleep_duration = self._next_chunk_send_time - time.monotonic()
-                if sleep_duration > 0:
-                    await asyncio.sleep(sleep_duration)
+                await audio_output_queue.put(chunk)
         except Exception as e:
-            logger.error(f"Error sending audio to Twilio WS: {e}")
+            logger.error(f"Error converting audio for output queue: {e}")
 
     def _on_transcript_delta(self, event: Any) -> None:
         """Handle response.audio_transcript.delta - incremental assistant text."""
