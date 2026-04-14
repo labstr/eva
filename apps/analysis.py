@@ -1638,7 +1638,7 @@ def render_conversation_trace_tab(metrics: RecordMetrics | None, record_dir: Pat
                         else:
                             color = "#f44336"
                         st.html(
-                            f'<div style="margin-bottom:8px; padding:6px 10px; background:#fafafa; border-radius:6px; border-left:3px solid {color};">'
+                            f'<div style="margin-bottom:8px; padding:6px 10px; background:rgba(128,128,128,0.1); border-radius:6px; border-left:3px solid {color};">'
                             f"<strong>Turn {tid_str}</strong> — "
                             f'<span style="color:{color}; font-weight:600;">{label}</span> '
                             f'<span style="opacity:0.6;">(latency: {latency_str})</span>'
@@ -1661,7 +1661,7 @@ def render_conversation_trace_tab(metrics: RecordMetrics | None, record_dir: Pat
                         color = _score_color(rating)
                         rating_str = f"{rating:.2f}" if isinstance(rating, (int, float)) else str(rating)
                         st.html(
-                            f'<div style="margin-bottom:8px; padding:6px 10px; background:#fafafa; border-radius:6px; border-left:3px solid {color};">'
+                            f'<div style="margin-bottom:8px; padding:6px 10px; background:rgba(128,128,128,0.1); border-radius:6px; border-left:3px solid {color};">'
                             f"<strong>Turn {tid_str}</strong> — "
                             f'<span style="color:{color}; font-weight:600;">{rating_str}</span>'
                             f"{'<br><span style=font-size:0.88em;opacity:0.75;>' + html.escape(str(explanation)) + '</span>' if explanation else ''}"
