@@ -108,6 +108,9 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         self._user_frame_count: int = 0
         self._delta_count: int = 0
 
+        # User speech start timestamp from audio_interface (source of truth)
+        self._audio_interface_speech_start_ts: str | None = None
+
         # Audio output pacing: absolute time target for next chunk send
         self._next_chunk_send_time: float = 0.0
 
@@ -305,6 +308,12 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                     logger.debug("Twilio stream stopped")
                     break
 
+                if event_type == "user_speech_start":
+                    # Timestamp from audio_interface when user audio actually started
+                    self._audio_interface_speech_start_ts = data.get("timestamp_ms")
+                    logger.debug(f"User speech start timestamp received: {self._audio_interface_speech_start_ts}")
+                    continue
+
                 if event_type != "media":
                     continue
 
@@ -450,10 +459,15 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         # This preserves the original timestamp when VAD fires multiple speech_started
         # events during a single logical user utterance (due to brief pauses)
         if not self._user_turn or self._user_turn.flushed:
-            self._user_turn = _UserTurnRecord(speech_started_wall_ms=wall)
+            # Use timestamp from audio_interface if available (source of truth)
+            start_ts = self._audio_interface_speech_start_ts or wall
+            self._user_turn = _UserTurnRecord(speech_started_wall_ms=start_ts)
             if self._fw_log:
-                self._fw_log.turn_start(timestamp_ms=int(wall))
-            logger.debug(f"Speech started at {wall} (new turn)")
+                self._fw_log.turn_start(timestamp_ms=int(start_ts))
+            logger.debug(
+                f"Speech started at {start_ts} (new turn, from_audio_interface={self._audio_interface_speech_start_ts is not None})"
+            )
+            self._audio_interface_speech_start_ts = None  # Reset for next turn
         else:
             logger.debug(f"Speech started at {wall} (continuing existing turn)")
 
@@ -473,8 +487,6 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
         else:
             self._user_turn = _UserTurnRecord(speech_stopped_wall_ms=wall)
 
-        # Record latency measurement start
-        self._speech_stopped_time = time.time()
         logger.debug(f"Speech stopped at {wall}")
 
     async def _on_transcription_completed(self, event: Any) -> None:
@@ -502,23 +514,11 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             return
 
         pcm16_bytes = base64.b64decode(delta_b64)
-        now = time.time()
 
         if self._assistant_state.first_audio_wall_ms is None:
             self._assistant_state.first_audio_wall_ms = _wall_ms()
             self._assistant_state.responding = True
             self._bot_speaking = True
-
-            if hasattr(self, "_speech_stopped_time"):
-                latency = now - self._speech_stopped_time
-                self._latency_measurements.append(latency)
-                if self._metrics_log:
-                    self._metrics_log.write_ttfb_metric(
-                        processor="openai_realtime",
-                        value_seconds=latency,
-                        model=self._model,
-                    )
-                logger.debug(f"Response latency: {latency:.3f}s")
 
         user_before = len(self.user_audio_buffer)
         synced = 0

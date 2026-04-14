@@ -47,6 +47,11 @@ logger = get_logger(__name__)
 # Default recording sample rate (Gemini outputs 24 kHz PCM)
 _RECORDING_SAMPLE_RATE = 24000
 
+# Audio output pacing: send 160-byte mulaw chunks (20ms at 8kHz) at real-time rate
+# so the user simulator's silence detection works correctly.
+MULAW_CHUNK_SIZE = 160  # bytes per chunk (20ms at 8kHz, 1 byte per sample)
+MULAW_CHUNK_DURATION_S = 0.02  # 20ms per chunk
+
 
 # ---------------------------------------------------------------------------
 # Tool schema helpers
@@ -181,11 +186,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
         s2s_params: dict[str, Any] = {}
         if isinstance(self.pipeline_config, SpeechToSpeechConfig):
             s2s_params = self.pipeline_config.s2s_params or {}
-        self._model = (
-            self.pipeline_config.s2s
-            if isinstance(self.pipeline_config, SpeechToSpeechConfig)
-            else s2s_params.get("model", "gemini-2.0-flash-live-001")
-        )
+        self._model = s2s_params.get("model", "gemini-3.1-flash-live-preview")
         self._voice = s2s_params.get("voice", "Kore")
         self._language_code = s2s_params.get("language_code", "en-US")
 
@@ -348,9 +349,8 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
 
         _in_model_turn = False
         _user_speaking = False
-
-        _user_speech_end_ts: float | None = None
-        _first_audio_in_turn = False
+        _user_speech_start_ts: str | None = None  # Timestamp from audio_interface
+        _next_chunk_send_time: float = 0.0  # Absolute monotonic time for next paced chunk
 
         try:
             async with client.aio.live.connect(model=self._model, config=live_config) as session:
@@ -389,6 +389,11 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                 logger.info("Twilio stream stopped")
                                 twilio_connected = False
                                 break
+                            elif event == "user_speech_start":
+                                nonlocal _user_speech_start_ts
+                                _user_speech_start_ts = msg.get("timestamp_ms")
+                                logger.debug(f"User speech start timestamp received: {_user_speech_start_ts}")
+                                continue
                             elif event == "media":
                                 # Extract raw mulaw bytes
                                 mulaw_bytes = parse_twilio_media_message(raw)
@@ -423,8 +428,8 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                 async def _process_gemini_events() -> None:
                     """Consume events from the Gemini Live session."""
                     nonlocal _assistant_turn_text, _user_turn_text
-                    nonlocal _in_model_turn, _user_speaking, _user_speech_end_ts, _first_audio_in_turn
-                    nonlocal twilio_connected
+                    nonlocal _in_model_turn, _user_speaking, _user_speech_start_ts
+                    nonlocal twilio_connected, _next_chunk_send_time
 
                     logger.info("Gemini event processor started")
                     event_count = 0
@@ -453,7 +458,6 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                 if sc.model_turn:
                                     if not _in_model_turn:
                                         _in_model_turn = True
-                                        _first_audio_in_turn = True
                                         _assistant_turn_text = []
                                         self._fw_log.turn_start()
 
@@ -464,18 +468,6 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                             # Skip tiny chunks that can't be resampled
                                             if len(pcm_24k) < 6:
                                                 continue
-
-                                            # Measure latency: time from user speech end
-                                            # to first assistant audio chunk
-                                            if _first_audio_in_turn and _user_speech_end_ts is not None:
-                                                latency = time.time() - _user_speech_end_ts
-                                                self._latency_measurements.append(latency)
-                                                self._metrics_log.write_ttfb_metric(
-                                                    "gemini_live", latency, component="e2e_ttfb"
-                                                )
-                                                logger.debug(f"Response latency: {latency:.3f}s")
-                                                _user_speech_end_ts = None
-                                                _first_audio_in_turn = False
 
                                             if not _user_speaking:
                                                 sync_buffer_to_position(
@@ -494,17 +486,25 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                                         f"Audio conversion error ({len(pcm_24k)} bytes): {conv_err}"
                                                     )
                                                     continue
-                                                _MULAW_CHUNK = 160
+
+                                                now = time.monotonic()
+                                                if _next_chunk_send_time <= now:
+                                                    _next_chunk_send_time = now
+
                                                 offset = 0
                                                 while offset < len(mulaw):
-                                                    chunk = mulaw[offset : offset + _MULAW_CHUNK]
-                                                    offset += _MULAW_CHUNK
+                                                    chunk = mulaw[offset : offset + MULAW_CHUNK_SIZE]
+                                                    offset += MULAW_CHUNK_SIZE
                                                     twilio_msg = create_twilio_media_message(stream_sid, chunk)
                                                     try:
                                                         await websocket.send_text(twilio_msg)
                                                     except Exception:
                                                         twilio_connected = False
                                                         break
+                                                    _next_chunk_send_time += MULAW_CHUNK_DURATION_S
+                                                    sleep_duration = _next_chunk_send_time - time.monotonic()
+                                                    if sleep_duration > 0:
+                                                        await asyncio.sleep(sleep_duration)
 
                                 # Turn complete
                                 if sc.turn_complete:
@@ -536,8 +536,10 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                     text = sc.input_transcription.text or ""
                                     if text.strip():
                                         logger.info(f"User transcription: {text.strip()}")
-                                        self.audit_log.append_user_input(text.strip())
-                                        _user_speech_end_ts = time.time()
+                                        self.audit_log.append_user_input(
+                                            text.strip(), timestamp_ms=_user_speech_start_ts
+                                        )
+                                        _user_speech_start_ts = None  # Reset for next turn
 
                                 # Output transcription (model speech)
                                 if sc.output_transcription:

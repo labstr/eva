@@ -104,7 +104,7 @@ class ElevenLabsEventLogger:
         """Log when audio starts for a given role.
 
         Args:
-            role: Either 'elevenlabs_user' or 'pipecat_agent'
+            role: Either 'elevenlabs_user' or 'framework_agent'
         """
         # Use Unix timestamp in seconds (as float)
         audio_timestamp = time.time()
@@ -125,7 +125,7 @@ class ElevenLabsEventLogger:
         """Log when audio ends for a given role.
 
         Args:
-            role: Either 'elevenlabs_user' or 'pipecat_agent'
+            role: Either 'elevenlabs_user' or 'framework_agent'
         """
         # Use Unix timestamp in seconds (as float)
         audio_timestamp = time.time()

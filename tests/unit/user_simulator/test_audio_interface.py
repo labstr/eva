@@ -198,7 +198,7 @@ class TestReceiveFromAssistant:
         # _on_assistant_audio_start was called (audio_start logged)
         # Note: _assistant_audio_active is reset in the finally block on disconnect,
         # so we verify the start event was logged instead
-        event_logger.log_audio_start.assert_called_once_with("pipecat_agent")
+        event_logger.log_audio_start.assert_called_once_with("framework_agent")
 
     @pytest.mark.asyncio
     async def test_empty_payload_ignored(self):
@@ -279,7 +279,7 @@ class TestReceiveFromAssistant:
         await iface._receive_from_assistant()
 
         assert iface._assistant_audio_active is False
-        event_logger.log_audio_end.assert_called_once_with("pipecat_agent")
+        event_logger.log_audio_end.assert_called_once_with("framework_agent")
 
 
 class TestSendAudioFrame:

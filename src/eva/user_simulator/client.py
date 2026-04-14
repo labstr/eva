@@ -242,6 +242,24 @@ class UserSimulator:
             self._end_reason = "error"
             raise
         finally:
+            # Save response latencies from audio interface before cleanup
+            if self._audio_interface:
+                latencies = self._audio_interface.get_latencies()
+                if latencies:
+                    latency_file = self.output_dir / "response_latencies.json"
+                    with open(latency_file, "w") as f:
+                        json.dump(
+                            {
+                                "latencies": latencies,
+                                "mean": sum(latencies) / len(latencies),
+                                "max": max(latencies),
+                                "count": len(latencies),
+                            },
+                            f,
+                            indent=2,
+                        )
+                    logger.info(f"Saved {len(latencies)} response latencies to {latency_file}")
+
             # Grace period: keep the WebSocket open so the assistant pipeline
             # (Pipecat STT) can finish processing the last user utterance.
             # Observed delay from "User audio END" to "UserStoppedSpeaking"

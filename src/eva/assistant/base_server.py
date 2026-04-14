@@ -81,9 +81,6 @@ class AbstractAssistantServer(ABC):
         self.assistant_audio_buffer = bytearray()
         self._audio_sample_rate: int = 24000  # Subclasses can override
 
-        # Latency tracking
-        self._latency_measurements: list[float] = []
-
     @abstractmethod
     async def start(self) -> None:
         """Start the server.
@@ -144,9 +141,6 @@ class AbstractAssistantServer(ABC):
 
         # Save scenario database states (REQUIRED for deterministic metrics)
         self._save_scenario_dbs()
-
-        # Save response latencies
-        self._save_response_latencies()
 
         logger.info(f"Outputs saved to {self.output_dir}")
 
@@ -215,18 +209,3 @@ class AbstractAssistantServer(ABC):
         except Exception as e:
             logger.error(f"Error saving scenario database states: {e}", exc_info=True)
             raise
-
-    def _save_response_latencies(self) -> None:
-        """Save response latency measurements."""
-        if not self._latency_measurements:
-            return
-
-        latency_data = {
-            "latencies": self._latency_measurements,
-            "mean": sum(self._latency_measurements) / len(self._latency_measurements),
-            "max": max(self._latency_measurements),
-            "count": len(self._latency_measurements),
-        }
-        latency_path = self.output_dir / "response_latencies.json"
-        with open(latency_path, "w") as f:
-            json.dump(latency_data, f, indent=2)
