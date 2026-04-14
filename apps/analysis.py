@@ -1322,54 +1322,64 @@ def render_metrics_tab(metrics: RecordMetrics | None):
 
     st.markdown("### Metrics")
 
+    # Group metrics by category, preserving insertion order within each group
+    grouped: dict[str, list[tuple[str, object]]] = {}
     for metric_name, metric_score in metrics.metrics.items():
-        with st.expander(
-            f"**{metric_name}**: {metric_score.normalized_score:.3f}"
-            if metric_score.normalized_score is not None
-            else f"**{metric_name}**"
-        ):
-            col1, col2 = st.columns([1, 3])
+        cat = _METRIC_GROUP.get(metric_name, "Other")
+        grouped.setdefault(cat, []).append((metric_name, metric_score))
 
-            with col1:
-                st.metric("Score", f"{metric_score.score:.3f}" if metric_score.score is not None else "N/A")
-                st.metric(
-                    "Normalized",
-                    f"{metric_score.normalized_score:.3f}" if metric_score.normalized_score is not None else "N/A",
-                )
-                if metric_score.error:
-                    st.error(f"Error: {metric_score.error}")
+    for cat in _CATEGORY_ORDER + [c for c in grouped if c not in _CATEGORY_ORDER]:
+        if cat not in grouped:
+            continue
+        st.markdown(f"#### {cat}")
+        for metric_name, metric_score in grouped[cat]:
+            with st.expander(
+                f"**{metric_name}**: {metric_score.normalized_score:.3f}"
+                if metric_score.normalized_score is not None
+                else f"**{metric_name}**"
+            ):
+                col1, col2 = st.columns([1, 3])
 
-            with col2:
-                if metric_score.details:
-                    st.markdown("**Details:**")
-                    if "explanation" in metric_score.details:
-                        st.write(metric_score.details["explanation"])
+                with col1:
+                    st.metric("Score", f"{metric_score.score:.3f}" if metric_score.score is not None else "N/A")
+                    st.metric(
+                        "Normalized",
+                        f"{metric_score.normalized_score:.3f}" if metric_score.normalized_score is not None else "N/A",
+                    )
+                    if metric_score.error:
+                        st.error(f"Error: {metric_score.error}")
 
-                    if "judge_prompt" in metric_score.details:
-                        with st.expander("View Judge Prompt"):
-                            prompt = metric_score.details["judge_prompt"]
-                            if isinstance(prompt, str):
-                                st.text(prompt)
-                            else:
-                                st.json(prompt)
-                    elif "judge_prompts" in metric_score.details:
-                        with st.expander("View Judge Prompts"):
-                            prompts = metric_score.details["judge_prompts"]
-                            if isinstance(prompts, list):
-                                for i, prompt in enumerate(prompts):
-                                    st.markdown(f"**Turn {i + 1}:**")
+                with col2:
+                    if metric_score.details:
+                        st.markdown("**Details:**")
+                        if "explanation" in metric_score.details:
+                            st.write(metric_score.details["explanation"])
+
+                        if "judge_prompt" in metric_score.details:
+                            with st.expander("View Judge Prompt"):
+                                prompt = metric_score.details["judge_prompt"]
+                                if isinstance(prompt, str):
                                     st.text(prompt)
-                                    st.divider()
-                            else:
-                                st.json(prompts)
+                                else:
+                                    st.json(prompt)
+                        elif "judge_prompts" in metric_score.details:
+                            with st.expander("View Judge Prompts"):
+                                prompts = metric_score.details["judge_prompts"]
+                                if isinstance(prompts, list):
+                                    for i, prompt in enumerate(prompts):
+                                        st.markdown(f"**Turn {i + 1}:**")
+                                        st.text(prompt)
+                                        st.divider()
+                                else:
+                                    st.json(prompts)
 
-                    details_to_show = {
-                        k: v
-                        for k, v in metric_score.details.items()
-                        if k not in ["explanation", "judge_prompt", "judge_prompts"]
-                    }
-                    if details_to_show:
-                        st.json(details_to_show)
+                        details_to_show = {
+                            k: v
+                            for k, v in metric_score.details.items()
+                            if k not in ["explanation", "judge_prompt", "judge_prompts"]
+                        }
+                        if details_to_show:
+                            st.json(details_to_show)
 
 
 def render_processed_data_tab(metrics: RecordMetrics | None):
