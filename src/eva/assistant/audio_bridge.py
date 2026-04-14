@@ -14,7 +14,6 @@ import json
 import struct
 import time
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
 import soxr
@@ -106,7 +105,7 @@ def pcm16_mix(track_a: bytes, track_b: bytes) -> bytes:
 # ── Twilio WebSocket Protocol ────────────────────────────────────────
 
 
-def parse_twilio_media_message(message: str) -> Optional[bytes]:
+def parse_twilio_media_message(message: str) -> bytes | None:
     """Parse a Twilio media WebSocket message and extract raw audio bytes.
 
     Returns None if the message is not a media message.
@@ -167,7 +166,7 @@ class FrameworkLogWriter:
         self.log_file = output_dir / "framework_logs.jsonl"
         output_dir.mkdir(parents=True, exist_ok=True)
 
-    def write(self, event_type: str, data: dict, timestamp_ms: Optional[int] = None) -> None:
+    def write(self, event_type: str, data: dict, timestamp_ms: int | None = None) -> None:
         """Write a single log entry.
 
         Args:
@@ -189,19 +188,19 @@ class FrameworkLogWriter:
         except Exception as e:
             logger.error(f"Error writing framework log: {e}")
 
-    def turn_start(self, timestamp_ms: Optional[int] = None) -> None:
+    def turn_start(self, timestamp_ms: int | None = None) -> None:
         """Log a turn start event."""
         self.write("turn_start", {"frame": "turn_start"}, timestamp_ms)
 
-    def turn_end(self, was_interrupted: bool = False, timestamp_ms: Optional[int] = None) -> None:
+    def turn_end(self, was_interrupted: bool = False, timestamp_ms: int | None = None) -> None:
         """Log a turn end event."""
         self.write("turn_end", {"frame": "turn_end", "was_interrupted": was_interrupted}, timestamp_ms)
 
-    def tts_text(self, text: str, timestamp_ms: Optional[int] = None) -> None:
+    def tts_text(self, text: str, timestamp_ms: int | None = None) -> None:
         """Log TTS text (what was actually spoken)."""
         self.write("tts_text", {"frame": text}, timestamp_ms)
 
-    def llm_response(self, text: str, timestamp_ms: Optional[int] = None) -> None:
+    def llm_response(self, text: str, timestamp_ms: int | None = None) -> None:
         """Log LLM response text (full intended response)."""
         self.write("llm_response", {"frame": text}, timestamp_ms)
 

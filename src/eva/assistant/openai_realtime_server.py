@@ -11,7 +11,7 @@ import base64
 import json
 import time
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -62,7 +62,7 @@ class _AssistantResponseState:
 
     transcript_parts: list[str] = field(default_factory=list)
     transcript_done_text: str = ""  # Final text from response.audio_transcript.done
-    first_audio_wall_ms: Optional[str] = None
+    first_audio_wall_ms: str | None = None
     responding: bool = False
     has_function_calls: bool = False
 
@@ -81,13 +81,13 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
         self._audio_sample_rate = OPENAI_SAMPLE_RATE
 
-        self._app: Optional[FastAPI] = None
-        self._server: Optional[uvicorn.Server] = None
-        self._server_task: Optional[asyncio.Task] = None
+        self._app: FastAPI | None = None
+        self._server: uvicorn.Server | None = None
+        self._server_task: asyncio.Task | None = None
         self._running: bool = False
 
-        self._fw_log: Optional[FrameworkLogWriter] = None
-        self._metrics_log: Optional[MetricsLogWriter] = None
+        self._fw_log: FrameworkLogWriter | None = None
+        self._metrics_log: MetricsLogWriter | None = None
 
         prompt_manager = PromptManager()
         self._system_prompt: str = prompt_manager.get_prompt(
@@ -99,7 +99,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
 
         self._realtime_tools: list[dict] = self._build_realtime_tools()
 
-        self._user_turn: Optional[_UserTurnRecord] = None
+        self._user_turn: _UserTurnRecord | None = None
         self._assistant_state = _AssistantResponseState()
         self._stream_sid: str = ""
 
@@ -163,7 +163,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
             if self._server_task:
                 try:
                     await asyncio.wait_for(self._server_task, timeout=5.0)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     self._server_task.cancel()
                     try:
                         await self._server_task

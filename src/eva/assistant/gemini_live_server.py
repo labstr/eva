@@ -15,20 +15,17 @@ from Gemini populate the audit log.
 from __future__ import annotations
 
 import asyncio
-import audioop
 import json
 import os
 import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-
 from google import genai
 from google.genai import types
 
-from eva.assistant.agentic.audit_log import current_timestamp_ms
 from eva.assistant.audio_bridge import (
     FrameworkLogWriter,
     MetricsLogWriter,
@@ -40,8 +37,8 @@ from eva.assistant.audio_bridge import (
     sync_buffer_to_position,
 )
 from eva.assistant.base_server import INITIAL_MESSAGE, AbstractAssistantServer
-from eva.models.agents import AgentConfig, AgentTool
-from eva.models.config import PipelineConfig, SpeechToSpeechConfig, AudioLLMConfig
+from eva.models.agents import AgentConfig
+from eva.models.config import AudioLLMConfig, PipelineConfig, SpeechToSpeechConfig
 from eva.utils.logging import get_logger
 from eva.utils.prompt_manager import PromptManager
 
@@ -54,6 +51,7 @@ _RECORDING_SAMPLE_RATE = 24000
 # ---------------------------------------------------------------------------
 # Tool schema helpers
 # ---------------------------------------------------------------------------
+
 
 def _json_schema_type(python_type: str) -> str:
     """Map Python/EVA type names to JSON Schema / Gemini type strings."""
@@ -123,7 +121,7 @@ def _agent_tools_to_gemini(agent: AgentConfig) -> list[types.Tool] | None:
         params_schema = types.Schema(
             type="OBJECT",
             properties=properties,
-            required=required if required else None,
+            required=required or None,
         )
 
         declarations.append(
@@ -143,6 +141,7 @@ def _agent_tools_to_gemini(agent: AgentConfig) -> list[types.Tool] | None:
 # ---------------------------------------------------------------------------
 # Gemini Live AssistantServer
 # ---------------------------------------------------------------------------
+
 
 class GeminiLiveAssistantServer(AbstractAssistantServer):
     """Bridges Twilio WebSocket <-> Gemini Live API for EVA-Bench evaluation."""
@@ -173,16 +172,20 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
         self._audio_sample_rate = _RECORDING_SAMPLE_RATE
 
         # Server state
-        self._app: Optional[FastAPI] = None
-        self._server: Optional[uvicorn.Server] = None
-        self._server_task: Optional[asyncio.Task] = None
+        self._app: FastAPI | None = None
+        self._server: uvicorn.Server | None = None
+        self._server_task: asyncio.Task | None = None
         self._running = False
 
         # Gemini model name from s2s_params or default
         s2s_params: dict[str, Any] = {}
         if isinstance(self.pipeline_config, SpeechToSpeechConfig):
             s2s_params = self.pipeline_config.s2s_params or {}
-        self._model = self.pipeline_config.s2s if isinstance(self.pipeline_config, SpeechToSpeechConfig) else s2s_params.get("model", "gemini-2.0-flash-live-001")
+        self._model = (
+            self.pipeline_config.s2s
+            if isinstance(self.pipeline_config, SpeechToSpeechConfig)
+            else s2s_params.get("model", "gemini-2.0-flash-live-001")
+        )
         self._voice = s2s_params.get("voice", "Kore")
         self._language_code = s2s_params.get("language_code", "en-US")
 
@@ -199,8 +202,8 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
         self._gemini_tools = _agent_tools_to_gemini(agent)
 
         # Framework log writers
-        self._fw_log: Optional[FrameworkLogWriter] = None
-        self._metrics_log: Optional[MetricsLogWriter] = None
+        self._fw_log: FrameworkLogWriter | None = None
+        self._metrics_log: MetricsLogWriter | None = None
 
     # ------------------------------------------------------------------
     # Server lifecycle
@@ -255,7 +258,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
             if self._server_task:
                 try:
                     await asyncio.wait_for(self._server_task, timeout=5.0)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     self._server_task.cancel()
                     try:
                         await self._server_task
@@ -346,13 +349,11 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
         _in_model_turn = False
         _user_speaking = False
 
-        _user_speech_end_ts: Optional[float] = None
+        _user_speech_end_ts: float | None = None
         _first_audio_in_turn = False
 
         try:
-            async with client.aio.live.connect(
-                model=self._model, config=live_config
-            ) as session:
+            async with client.aio.live.connect(model=self._model, config=live_config) as session:
                 logger.info(f"Gemini Live session connected (model={self._model})")
 
                 # Trigger the initial greeting using realtime text input.
@@ -369,10 +370,8 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                     try:
                         while twilio_connected and self._running:
                             try:
-                                raw = await asyncio.wait_for(
-                                    websocket.receive_text(), timeout=1.0
-                                )
-                            except asyncio.TimeoutError:
+                                raw = await asyncio.wait_for(websocket.receive_text(), timeout=1.0)
+                            except TimeoutError:
                                 continue
 
                             # Parse Twilio JSON envelope
@@ -437,7 +436,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                         while self._running:
                             try:
                                 response = await asyncio.wait_for(session._receive(), timeout=2.0)
-                            except asyncio.TimeoutError:
+                            except TimeoutError:
                                 continue
                             if response is None:
                                 continue
@@ -479,7 +478,9 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                                 _first_audio_in_turn = False
 
                                             if not _user_speaking:
-                                                sync_buffer_to_position(self.user_audio_buffer, len(self.assistant_audio_buffer))
+                                                sync_buffer_to_position(
+                                                    self.user_audio_buffer, len(self.assistant_audio_buffer)
+                                                )
                                             self.assistant_audio_buffer.extend(pcm_24k)
 
                                             # Convert to 8 kHz mulaw and send in
@@ -489,16 +490,16 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                                 try:
                                                     mulaw = pcm16_24k_to_mulaw_8k(pcm_24k)
                                                 except Exception as conv_err:
-                                                    logger.warning(f"Audio conversion error ({len(pcm_24k)} bytes): {conv_err}")
+                                                    logger.warning(
+                                                        f"Audio conversion error ({len(pcm_24k)} bytes): {conv_err}"
+                                                    )
                                                     continue
                                                 _MULAW_CHUNK = 160
                                                 offset = 0
                                                 while offset < len(mulaw):
-                                                    chunk = mulaw[offset:offset + _MULAW_CHUNK]
+                                                    chunk = mulaw[offset : offset + _MULAW_CHUNK]
                                                     offset += _MULAW_CHUNK
-                                                    twilio_msg = create_twilio_media_message(
-                                                        stream_sid, chunk
-                                                    )
+                                                    twilio_msg = create_twilio_media_message(stream_sid, chunk)
                                                     try:
                                                         await websocket.send_text(twilio_msg)
                                                     except Exception:
@@ -523,9 +524,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                     logger.debug("Gemini turn interrupted (barge-in)")
                                     full_text = " ".join(_assistant_turn_text).strip()
                                     if full_text:
-                                        self.audit_log.append_assistant_output(
-                                            full_text + " [interrupted]"
-                                        )
+                                        self.audit_log.append_assistant_output(full_text + " [interrupted]")
                                         self._fw_log.tts_text(full_text)
                                     self._fw_log.turn_end(was_interrupted=True)
                                     _in_model_turn = False
@@ -555,14 +554,10 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                     logger.info(f"Tool call: {tool_name}({json.dumps(tool_args)})")
 
                                     # Record in audit log
-                                    self.audit_log.append_realtime_tool_call(
-                                        tool_name, tool_args
-                                    )
+                                    self.audit_log.append_realtime_tool_call(tool_name, tool_args)
 
                                     # Execute tool
-                                    result = await self.tool_handler.execute(
-                                        tool_name, tool_args
-                                    )
+                                    result = await self.tool_handler.execute(tool_name, tool_args)
                                     logger.info(f"Tool result: {tool_name} -> {json.dumps(result)}")
                                     self.audit_log.append_tool_response(tool_name, result)
 
@@ -581,9 +576,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                             if response.usage_metadata:
                                 um = response.usage_metadata
                                 prompt_tokens = getattr(um, "prompt_token_count", 0) or 0
-                                completion_tokens = (
-                                    getattr(um, "candidates_token_count", 0) or 0
-                                )
+                                completion_tokens = getattr(um, "candidates_token_count", 0) or 0
                                 if prompt_tokens or completion_tokens:
                                     self._metrics_log.write_token_usage(
                                         processor="gemini_live",
