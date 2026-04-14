@@ -801,6 +801,6 @@ def render_audio_analysis_tab(record_dir: Path) -> None:
 
     try:
         fig = _cached(str(record_dir), show_mixed_spec, show_el_spec)
-        st.plotly_chart(fig, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig, width="stretch", theme="streamlit")
     except Exception as exc:
         st.error(f"Could not render audio plot: {exc}")
