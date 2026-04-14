@@ -1543,10 +1543,34 @@ def render_conversation_trace_tab(metrics: RecordMetrics | None, record_dir: Pat
             group = _METRIC_GROUP.get(name, "Other")
             grouped.setdefault(group, []).append(name)
 
-        for group in ["Accuracy", "Experience", "Validation", "Other"]:
-            names_in_group = grouped.get(group)
-            if not names_in_group:
-                continue
+        # Accuracy / Experience / Diagnostic / Validation side by side in 4 columns
+        col_groups = ["Accuracy", "Experience", "Diagnostic", "Validation"]
+        present_col_groups = [g for g in col_groups if grouped.get(g)]
+        if present_col_groups:
+            outer_cols = st.columns(len(present_col_groups))
+            for outer_col, group in zip(outer_cols, present_col_groups):
+                names_in_group = grouped[group]
+                with outer_col:
+                    st.caption(group)
+                    for name in names_in_group:
+                        m = all_top_metrics[name]
+                        score = m["normalized_score"]
+                        display_name = _format_metric_name(name)
+                        score_str = f"{score:.3f}" if score is not None else "N/A"
+                        icon = None if score is None else "🟢" if score >= 0.8 else "🟡" if score >= 0.4 else "🔴"
+                        st.button(
+                            f"{display_name}\n{score_str}",
+                            key=f"metric_btn_{name}",
+                            on_click=st.session_state.update,
+                            kwargs={"selected_metric": None if selected == name else name},
+                            type="primary" if selected == name else "secondary",
+                            icon=icon,
+                            width="stretch",
+                        )
+
+        # Any remaining groups (Other, Conversation Quality, etc.) rendered below
+        for group in [g for g in grouped if g not in col_groups]:
+            names_in_group = grouped[group]
             st.caption(group)
             cols = st.columns(min(len(names_in_group), 5))
             for i, name in enumerate(names_in_group):
