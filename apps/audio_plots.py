@@ -389,7 +389,9 @@ def _load_pydub(path: Path) -> tuple:
                     divisor = 32768.0 if sw == 2 else 2_147_483_648.0
                     with open(path, "rb") as f:
                         # Re-seek to the data chunk start
-                        f.read(4); f.read(4); f.read(4)  # RIFF + size + WAVE
+                        f.read(4)
+                        f.read(4)
+                        f.read(4)  # RIFF + size + WAVE
                         while True:
                             hdr = f.read(8)
                             if len(hdr) < 8:
@@ -1144,7 +1146,6 @@ def render_audio_analysis_tab(record_dir: Path) -> None:
         show_mixed_spec = st.checkbox("Show Mixed Audio Spectrogram", value=False)
         show_el_spec = False
         st.info("ElevenLabs audio recording is not available for this record.")
-
 
     try:
         fig = _build_figure(data, show_mixed_spec=show_mixed_spec, show_el_spec=show_el_spec)
