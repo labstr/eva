@@ -4,9 +4,9 @@ Creates Pipecat services with proper configuration.
 """
 
 import datetime
-from typing import Any, AsyncGenerator, Optional
+from collections.abc import AsyncGenerator
+from typing import Any
 
-from deepgram import LiveOptions
 from openai import AsyncAzureOpenAI, BadRequestError
 from pipecat.frames.frames import (
     ErrorFrame,
@@ -51,11 +51,14 @@ from eva.models.agents import AgentConfig
 
 # Conditional Gemini imports - may fail if google-genai package version is incompatible
 try:
+    from pipecat.services.google.gemini_live.llm import GeminiLiveLLMService, GeminiVADParams
     from pipecat.services.google.tts import GeminiTTSService
 
     GEMINI_AVAILABLE = True
 except ImportError:
     # Gemini services unavailable - will fail at runtime if requested
+    GeminiLiveLLMService = None
+    GeminiVADParams = None
     GeminiTTSService = None
     GEMINI_AVAILABLE = False
 from pipecat.adapters.schemas.function_schema import FunctionSchema
@@ -82,8 +85,8 @@ _audio_llm_url_counter: int = 0
 
 
 def create_stt_service(
-    model: Optional[str],
-    params: Optional[dict[str, Any]] = None,
+    model: str | None,
+    params: dict[str, Any] | None = None,
     language_code: str = "en",
 ) -> STTService | None:
     """Create speech-to-text service.
@@ -146,11 +149,9 @@ def create_stt_service(
         logger.info(f"Using Deepgram STT: {params['model']}")
         return DeepgramSTTService(
             api_key=api_key,
-            live_options=LiveOptions(
+            settings=DeepgramSTTService.Settings(
                 language=language_code,
                 model=params["model"],
-                encoding="linear16",
-                sample_rate=SAMPLE_RATE,
                 interim_results=True,
             ),
             sample_rate=SAMPLE_RATE,
@@ -212,8 +213,8 @@ def create_stt_service(
 
 
 def create_tts_service(
-    model: Optional[str],
-    params: Optional[dict[str, Any]] = None,
+    model: str | None,
+    params: dict[str, Any] | None = None,
     language_code: str = "en",
 ) -> TTSService | None:
     """Create text-to-speech service.
@@ -360,11 +361,11 @@ def create_tts_service(
 
 
 def create_realtime_llm_service(
-    model: Optional[str],
-    params: Optional[dict[str, Any]] = None,
-    agent: Optional[AgentConfig] = None,
-    audit_log: Optional[AuditLog] = None,
-    current_date_time: Optional[str] = None,
+    model: str | None,
+    params: dict[str, Any] | None = None,
+    agent: AgentConfig | None = None,
+    audit_log: AuditLog | None = None,
+    current_date_time: str | None = None,
 ) -> LLMService:
     """Create realtime LLM service.
 
@@ -412,19 +413,22 @@ def create_realtime_llm_service(
     if model_lower.startswith("openai"):
         session_properties = get_openai_session_properties(system_prompt, params, pipecat_tools)
         if audit_log is not None:
-            logger.info(
-                f"Using InstrumentedRealtimeLLMService for audit log interception: openai: {params.get('model')}"
-            )
+            logger.info(f"Using InstrumentedRealtimeLLMService for audit log interception: openai: {params['model']}")
             return InstrumentedRealtimeLLMService(
-                model=params.get("model"),
+                settings=OpenAIRealtimeLLMService.Settings(
+                    model=params["model"],
+                    session_properties=session_properties,
+                ),
                 audit_log=audit_log,
                 api_key=params["api_key"],
-                session_properties=session_properties,
             )
 
         return OpenAIRealtimeLLMService(
             api_key=params["api_key"],
-            session_properties=session_properties,
+            settings=OpenAIRealtimeLLMService.Settings(
+                model=params["model"],
+                session_properties=session_properties,
+            ),
         )
     elif model_lower.startswith("azure") or model_lower.startswith("gpt-realtime"):
         #
@@ -438,17 +442,21 @@ def create_realtime_llm_service(
         if audit_log is not None:
             logger.info("Using InstrumentedRealtimeLLMService for audit log interception")
             service = InstrumentedRealtimeLLMService(
-                model=params.get("model"),
                 audit_log=audit_log,
                 api_key=params["api_key"],
                 base_url=url,
                 session_properties=session_properties,
+                settings=OpenAIRealtimeLLMService.Settings(
+                    model=params["model"],
+                    session_properties=session_properties,
+                ),
             )
             InstrumentedRealtimeLLMService._connect = override__connect  # azure realtime connect
             return service
 
         return OpenAIRealtimeLLMService(
             api_key=params["api_key"],
+            model=params["model"],
             base_url=url,
             session_properties=session_properties,
         )
@@ -461,12 +469,34 @@ def create_realtime_llm_service(
                 temperature=0.3,
                 max_duration=datetime.timedelta(minutes=6),
                 voice=params.get("voice", "03e20d03-35e4-43c4-bb18-9b18a2cd3086"),
+                model=params["model"],
             ),
             one_shot_selected_tools=pipecat_tools,
         )
 
+    elif model_lower == "gemini-live":
+        if not GEMINI_AVAILABLE:
+            raise ValueError(
+                "Gemini Live requested but Gemini services are unavailable. "
+                "Check google-genai package installation and version compatibility."
+            )
+
+        gemini_model = params.get("model")
+        logger.info(f"Using Gemini Live LLM: {gemini_model}")
+
+        return GeminiLiveLLMService(
+            api_key=params["api_key"],
+            tools=pipecat_tools,
+            settings=GeminiLiveLLMService.Settings(
+                model=gemini_model,
+                system_instruction=system_prompt,
+                voice=params.get("voice", "Puck"),  # Aoede, Charon, Fenrir, Kore, Puck
+                vad=GeminiVADParams(disabled=params.get("vad_disabled", True)),
+            ),
+        )
+
     else:
-        raise ValueError(f"Unknown realtime model: {model}. Available: gpt-realtime, ultravox")
+        raise ValueError(f"Unknown realtime model: {model}. Available: gpt-realtime, ultravox, gemini-live")
 
 
 def get_openai_session_properties(system_prompt: str, params: dict, pipecat_tools) -> SessionProperties:
