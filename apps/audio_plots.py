@@ -370,7 +370,6 @@ def _load_pydub(path: Path) -> tuple:
     if n_channels > 1:
         seg = seg.set_channels(1)
     sr = seg.frame_rate
-    sample_width = seg.sample_width
     y = np.array(seg.get_array_of_samples()).astype(np.float32) / 32768.0
 
     # WAV files from some recorders have an incorrect data-chunk size in the
@@ -388,8 +387,10 @@ def _load_pydub(path: Path) -> tuple:
                     dtype = np.int16 if sw == 2 else np.int32
                     divisor = 32768.0 if sw == 2 else 2_147_483_648.0
                     with open(path, "rb") as f:
-                        # Re-seek to the data chunk start
-                        f.read(4); f.read(4); f.read(4)  # RIFF + size + WAVE
+                        # Re-seek to the data chunk start (RIFF + size + WAVE)
+                        f.read(4)
+                        f.read(4)
+                        f.read(4)
                         while True:
                             hdr = f.read(8)
                             if len(hdr) < 8:
@@ -1144,7 +1145,6 @@ def render_audio_analysis_tab(record_dir: Path) -> None:
         show_mixed_spec = st.checkbox("Show Mixed Audio Spectrogram", value=False)
         show_el_spec = False
         st.info("ElevenLabs audio recording is not available for this record.")
-
 
     try:
         fig = _build_figure(data, show_mixed_spec=show_mixed_spec, show_el_spec=show_el_spec)
