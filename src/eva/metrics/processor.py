@@ -356,6 +356,11 @@ def _handle_audio_start(
         state.last_assistant_audio_turn = state.turn_num
         if not state.user_audio_open:
             state.assistant_responded_since_user_ended = True
+            # For S2S pipelines, mark that the assistant spoke as soon as audio starts.
+            # EL assistant_speech transcripts arrive late (often at the same timestamp as
+            # the next user's audio_start) and can't be relied on for turn boundary detection.
+            if pipeline_type == PipelineType.S2S:
+                state.assistant_spoke_in_turn = True
         # Interruption: assistant starts speaking while user is still speaking. Only count if (a) user
         # audio started in the current turn (not lingering from a previous turn's delayed delivery) and
         # (b) no tool calls happened yet — tool calls mean the assistant is responding to the user's
@@ -405,8 +410,9 @@ def _handle_elevenlabs_event(
         # arrive after a user audio_start has already advanced the turn.
         turn = state.last_assistant_audio_turn
         # Only mark "assistant spoke" if the speech belongs to the current turn; late transcripts from a
-        # previous turn must not trigger a spurious turn advance.
-        if turn == state.turn_num or pipeline_type == PipelineType.S2S:
+        # previous turn must not trigger a spurious turn advance.  For S2S pipelines, audio_start(framework_agent)
+        # already sets assistant_spoke_in_turn, so the S2S-specific override here is no longer needed.
+        if turn == state.turn_num:
             state.assistant_spoke_in_turn = True
         existing = context.transcribed_assistant_turns.get(turn, "")
         sep = _assistant_speech_separator(existing, turn, state)
