@@ -203,12 +203,16 @@ def is_audio_native_pipeline(model_data: dict | Any) -> bool:
     return False
 
 
-def _strip_other_mode_fields(data: dict) -> dict:
+def _strip_other_mode_fields(data: dict, strict: bool = True) -> dict:
     """Validate pipeline mode exclusivity, then strip irrelevant shared fields.
 
-    Raises ``ValueError`` if multiple pipeline modes are specified.
+    Raises ``ValueError`` if multiple pipeline modes are specified (when strict=True).
     Then strips shared fields (e.g. ``tts`` from S2S mode) so that
     ``extra="forbid"`` on each config class doesn't reject them.
+
+    Args:
+        strict: If False, skip the conflict error (used for metrics-only re-runs
+            where the model config is not needed).
     """
     # --- Mutual exclusivity: only one pipeline mode allowed ---
     has_llm = bool(data.get("llm") or data.get("llm_model"))
@@ -223,7 +227,7 @@ def _strip_other_mode_fields(data: dict) -> dict:
         ]
         if flag
     ]
-    if len(active) > 1:
+    if len(active) > 1 and strict:
         raise ValueError(
             f"Multiple pipeline modes set: {', '.join(active)}. "
             f"Set exactly one of: EVA_MODEL__LLM (ASR-LLM-TTS), "
@@ -483,8 +487,10 @@ class RunConfig(BaseSettings):
             raise ValueError("Deprecated environment variables detected:\n" + "\n".join(found))
 
         # Strip env-var fields from other pipeline modes so extra="forbid" doesn't reject them.
+        # For metrics-only re-runs, skip the strict conflict check — the model isn't used.
         if isinstance(data.get("model"), dict):
-            data["model"] = _strip_other_mode_fields(data["model"])
+            force_rerun = bool(data.get("force_rerun_metrics"))
+            data["model"] = _strip_other_mode_fields(data["model"], strict=not force_rerun)
 
         return data
 
