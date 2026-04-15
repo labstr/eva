@@ -10,13 +10,11 @@ Layout (dynamic — spectrograms are optional):
   Row 5        : Speaker Turn Timeline
 
 Waveform rendering:
-  • Full recording is always shown as a light gray base trace so the true audio
-    duration is visible even in regions where no speaker turn is active.
-  • Speaker segments are overlaid in colour: blue = user, orange-red = assistant.
+  • Speaker segments are drawn in colour: blue = user, orange-red = assistant.
+    Toggling a legend item hides all traces in that group.
   • Pause regions (speaker-change gaps) are drawn as shaded bands linked to the
     "Pause" legend item so they can be toggled on/off.
-  • Silence between same-speaker consecutive segments is not marked separately —
-    only speaker-transition gaps are treated as pauses (consistent with turn_taking.py).
+  • Only speaker-transition gaps are treated as pauses (consistent with turn_taking.py).
 
 Turn data source (primary → fallback):
   1. metrics.json context  — the same MetricContext fields that turn_taking.py uses:
@@ -636,22 +634,6 @@ def _build_figure(
             )
             fig.update_yaxes(title_text="Amplitude", range=[-1.0, 1.0], row=row, col=1)
             return
-
-        # Base trace — full recording at low opacity so gaps between turns
-        # are still visible and the x-axis always reflects the true duration.
-        fig.add_trace(
-            go.Scatter(
-                x=t.tolist(),
-                y=y.tolist(),
-                mode="lines",
-                line={"width": 0.8, "color": "rgba(160,160,160,0.35)"},
-                showlegend=False,
-                hoverinfo="skip",
-                name="",
-            ),
-            row=row,
-            col=1,
-        )
 
         # Flat list of speaker audio segments, sorted by start time.
         visible_turns = [turn for turn in turns_rel if speaker_filter is None or turn["speaker"] in speaker_filter]

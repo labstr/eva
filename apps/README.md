@@ -66,11 +66,10 @@ When `elevenlabs_audio_recording.mp3` is not found, rows 3 and 4 are hidden and 
 
 ### Waveform Rendering
 
-Each waveform subplot is drawn in three layers:
+Each waveform subplot is drawn in two layers:
 
-1. **Base trace** — the complete audio file rendered as a light gray line so the full recording duration is always visible, including regions between turns.
-2. **Speaker segments** — overlaid in colour on top of the base trace for each active turn window.
-3. **Pause bands** — semi-transparent gray rectangles over speaker-transition gaps, linked to the **Pause** legend item so they can be toggled on/off.
+1. **Speaker segments** — drawn in colour for each active turn window. Clicking a legend item (User or Assistant) hides all traces for that speaker.
+2. **Pause bands** — semi-transparent gray rectangles over speaker-transition gaps, linked to the **Pause** legend item so they can be toggled on/off.
 
 ### Colour Coding
 
