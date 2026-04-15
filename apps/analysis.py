@@ -75,7 +75,7 @@ _CATEGORY_COLORS = {
     "Other": "#AAAAAA",
 }
 
-_NON_NORMALIZED_METRICS = {"response_speed", "response_speed_with_tool_calls", "response_speed_no_tool_calls"}
+_NON_NORMALIZED_METRICS = {"response_speed"}
 
 # EVA composite scores to show in the bar chart
 _EVA_BAR_COMPOSITES = ["EVA-A_pass", "EVA-X_pass", "EVA-A_mean", "EVA-X_mean"]
