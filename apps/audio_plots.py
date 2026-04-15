@@ -1,24 +1,30 @@
 """Interactive audio visualization for the EVA Streamlit app.
 
-Adapted from EVA-Bench/downloads/plot_script/plot_timestamp.py.
 Renders a Plotly figure directly into a Streamlit tab without writing files.
 
 Layout (dynamic — spectrograms are optional):
   Row 1        : audio_mixed waveform, colour-coded by speaker turn
   Row 2 (opt)  : audio_mixed spectrogram
-  Row 3        : ElevenLabs waveform, colour-coded by speaker turn
+  Row 3        : ElevenLabs waveform, colour-coded by speaker turn (only when
+                 elevenlabs_audio_recording.mp3 exists in the record directory)
   Row 4 (opt)  : ElevenLabs spectrogram
   Row 5        : Speaker Turn Timeline
 
-Turn data is loaded from metrics.json (same source as the turn_taking metric):
-  context.audio_timestamps_user_turns / audio_timestamps_assistant_turns
-    → dict[turn_id → list[(abs_start, abs_end)]] — may have multiple segments per turn
-  context.transcribed_*_turns / intended_*_turns
-    → dict[turn_id → str] — keyed by the same turn IDs
-  metrics.turn_taking.details.per_turn_latency
-    → dict[turn_id → seconds] — user_last_seg_end → asst_first_seg_start
+Turn data source (primary → fallback):
+  1. metrics.json context  — the same MetricContext fields that turn_taking.py uses:
+       context.audio_timestamps_user_turns / audio_timestamps_assistant_turns
+         → dict[turn_id → list[[abs_start, abs_end]]]  (may be multi-segment)
+       context.transcribed_*/intended_*_turns → dict[turn_id → str]
+       latency_s = asst.segments[0][0] − user.segments[-1][1]  (per turn_id, same formula)
+  2. elevenlabs_events.jsonl  — used when metrics.json is absent or has no timestamps:
+       one turn per completed audio_start/audio_end session
+       latency_s computed by temporal proximity (next assistant after this user)
 
-Falls back to parsing elevenlabs_events.jsonl directly when metrics.json is absent.
+Spectrograms use a 4 kHz intermediate sample rate (_SPEC_SR) via librosa.resample so that:
+  • frequency content up to 2 kHz (Nyquist) is preserved — representative of speech
+  • heatmap size stays bounded (~60–250 K cells for 5–90 s recordings)
+  • time axis (librosa.frames_to_time, t=0 origin) aligns with the waveform time axis
+    (np.linspace(0, duration, n_samples), also t=0 origin)
 """
 
 import json
@@ -45,7 +51,9 @@ PAUSE_FILL = "rgba(140,140,140,0.18)"
 
 
 # =============================================================================
-# Turn data loading — metrics.json first, elevenlabs_events.jsonl fallback
+# Turn data loading
+# Primary: metrics.json context (MetricContext fields, same as turn_taking.py)
+# Fallback: elevenlabs_events.jsonl (when metrics.json absent or has no timestamps)
 # =============================================================================
 
 
@@ -59,14 +67,20 @@ def _load_metrics_context(record_dir: Path) -> dict | None:
 
 
 def _build_turns_from_metrics(metrics_data: dict) -> list[dict] | None:
-    """Build a turns list from metrics.json using the same timestamps the turn_taking metric uses.
+    """Build a turns list from MetricContext fields stored in metrics.json.
 
-    Each turn dict has:
-      turn_id, speaker ("user"|"assistant"),
-      segments [(rel_start, rel_end), ...],  ← may be >1 for interrupted turns
-      start, end, duration,
-      transcript_heard, transcript_intended,
-      latency_s (user→assistant gap, user turns only), timing_label.
+    Uses the exact same fields that turn_taking.py operates on:
+      context.audio_timestamps_user_turns / audio_timestamps_assistant_turns
+        → dict[turn_id → list[[abs_start, abs_end]]] — may have multiple
+          segments per turn (e.g. interrupted turns)
+      context.transcribed_*/intended_*_turns
+        → dict[turn_id → str]
+
+    Latency is computed directly from the timestamps using the same formula
+    as turn_taking.py: asst.segments[0][0] − user.segments[-1][1]
+    (first assistant segment start − last user segment end, per turn_id).
+
+    Returns None when no timestamp data is present (falls back to EL log).
     """
     ctx = metrics_data.get("context") or {}
     user_ts = ctx.get("audio_timestamps_user_turns") or {}
@@ -79,13 +93,7 @@ def _build_turns_from_metrics(metrics_data: dict) -> list[dict] | None:
     intended_user = ctx.get("intended_user_turns") or {}
     intended_asst = ctx.get("intended_assistant_turns") or {}
 
-    # Per-turn latency / timing label from turn_taking metric (if already computed)
-    metrics = metrics_data.get("metrics") or {}
-    tt_details = (metrics.get("turn_taking") or {}).get("details") or {}
-    per_turn_latency = {int(k): v for k, v in (tt_details.get("per_turn_latency") or {}).items()}
-    per_turn_labels = {int(k): v for k, v in (tt_details.get("per_turn_judge_timing_ratings") or {}).items()}
-
-    # Reference time: earliest timestamp across all turns
+    # Reference time: earliest timestamp across all turns (same as turn_taking.py)
     all_starts = [segs[0][0] for segs in list(user_ts.values()) + list(asst_ts.values()) if segs]
     t0 = min(all_starts) if all_starts else 0.0
 
@@ -97,11 +105,10 @@ def _build_turns_from_metrics(metrics_data: dict) -> list[dict] | None:
     for tid_str, segs in asst_ts.items():
         if not segs:
             continue
-        tid = int(tid_str)
         rel = _rel(segs)
         turns.append(
             {
-                "turn_id": tid,
+                "turn_id": int(tid_str),
                 "speaker": "assistant",
                 "segments": rel,
                 "start": rel[0][0],
@@ -110,18 +117,20 @@ def _build_turns_from_metrics(metrics_data: dict) -> list[dict] | None:
                 "transcript_heard": transcribed_asst.get(tid_str, ""),
                 "transcript_intended": intended_asst.get(tid_str, ""),
                 "latency_s": None,
-                "timing_label": None,
             }
         )
 
     for tid_str, segs in user_ts.items():
         if not segs:
             continue
-        tid = int(tid_str)
         rel = _rel(segs)
+        # Latency: same formula as turn_taking.py — asst first-seg start − user last-seg end.
+        # Uses the matching assistant turn (same turn_id); None if no assistant turn exists.
+        a_segs = asst_ts.get(tid_str)
+        latency_s = round(a_segs[0][0] - segs[-1][1], 6) if a_segs else None
         turns.append(
             {
-                "turn_id": tid,
+                "turn_id": int(tid_str),
                 "speaker": "user",
                 "segments": rel,
                 "start": rel[0][0],
@@ -129,8 +138,7 @@ def _build_turns_from_metrics(metrics_data: dict) -> list[dict] | None:
                 "duration": rel[-1][1] - rel[0][0],
                 "transcript_heard": transcribed_user.get(tid_str, ""),
                 "transcript_intended": intended_user.get(tid_str, ""),
-                "latency_s": per_turn_latency.get(tid),
-                "timing_label": per_turn_labels.get(tid),
+                "latency_s": latency_s,
             }
         )
 
@@ -139,7 +147,21 @@ def _build_turns_from_metrics(metrics_data: dict) -> list[dict] | None:
 
 
 def _parse_elevenlabs_events(events_file: Path) -> list[dict]:
-    """Fallback: parse elevenlabs_events.jsonl into a flat turns list (no turn IDs)."""
+    """Parse elevenlabs_events.jsonl into a flat list of audio-session turns.
+
+    Each completed audio_start/audio_end pair for a participant becomes one
+    turn dict.  Turn IDs are sequential integers across all participants (not
+    per-speaker).  Transcripts and latencies are left empty here and filled in
+    by _patch_fallback_transcripts and _compute_and_patch_latencies.
+
+    Speaker assignment:
+      event["user"] == "pipecat_agent"  → speaker = "assistant"
+      anything else                     → speaker = "user" (EL user-simulator)
+
+    Time reference:
+      t0 = earliest audio_timestamp across all completed sessions.
+      All start/end values stored as relative seconds from t0.
+    """
     events = []
     with open(events_file) as f:
         for line in f:
@@ -185,7 +207,6 @@ def _parse_elevenlabs_events(events_file: Path) -> list[dict]:
                 "transcript_heard": "",
                 "transcript_intended": "",
                 "latency_s": None,
-                "timing_label": None,
                 "_seq_idx": asst_idx if is_asst else user_idx,
             }
         )
@@ -197,7 +218,12 @@ def _parse_elevenlabs_events(events_file: Path) -> list[dict]:
 
 
 def _patch_fallback_transcripts(turns: list[dict], transcript_file: Path) -> None:
-    """Fill transcript fields in fallback turns from transcript.jsonl using sequential order."""
+    """Fill transcript fields in EL-log turns from transcript.jsonl.
+
+    Matches transcripts to turns by sequential order per speaker role
+    (first user turn gets user transcript[0], second gets [1], etc.).
+    Called after _parse_elevenlabs_events, before _compute_and_patch_latencies.
+    """
     tx: dict[str, list[str]] = {"user": [], "assistant": []}
     if transcript_file.exists():
         with open(transcript_file) as f:
@@ -216,22 +242,56 @@ def _patch_fallback_transcripts(turns: list[dict], transcript_file: Path) -> Non
         turn["transcript_intended"] = text
 
 
+def _compute_and_patch_latencies(turns: list[dict]) -> None:
+    """Compute per-user-turn response latency and patch in-place.
+
+    Formula (identical to turn_taking.py _compute_per_turn_latency_and_timing_labels):
+      latency_s = asst.segments[0][0] - user.segments[-1][1]
+                  (first assistant segment start − last user segment end)
+
+    Matching: turn_taking.py matches by shared turn_id; here we match by
+    temporal proximity (next assistant turn after this user turn in time order)
+    — equivalent for linear conversations.
+    """
+    sorted_turns = sorted(turns, key=lambda t: t["start"])
+    for i, turn in enumerate(sorted_turns):
+        if turn["speaker"] != "user":
+            continue
+        for j in range(i + 1, len(sorted_turns)):
+            if sorted_turns[j]["speaker"] == "assistant":
+                latency_s = sorted_turns[j]["segments"][0][0] - turn["segments"][-1][1]
+                turn["latency_s"] = round(latency_s, 6)
+                break
+
+
 def _calculate_pauses(turns_rel: list[dict]) -> list[dict]:
-    """Compute pause gaps between consecutive audio segments across all turns."""
+    """Compute speaker-transition gaps, consistent with turn_taking.py.
+
+    Only gaps where the speaker changes (user→assistant or assistant→user)
+    are counted — mirroring the `if prev_role != next_role` guard in
+    turn_taking.py _format_conversation_context (lines 81-86).
+
+    Same-speaker consecutive segments (e.g. two user audio sessions back to
+    back) are ignored, as turn_taking.py does not treat these as pauses.
+    """
     all_segs = sorted(
         [(s, e, turn["speaker"]) for turn in turns_rel for s, e in turn["segments"]],
         key=lambda x: x[0],
     )
     pauses = []
     for i in range(len(all_segs) - 1):
+        from_spk = all_segs[i][2]
+        to_spk = all_segs[i + 1][2]
+        if from_spk == to_spk:
+            continue  # same-speaker gap — not a turn-taking transition
         cur_end = all_segs[i][1]
         nxt_start = all_segs[i + 1][0]
         gap = nxt_start - cur_end
         if gap > 0.001:
             pauses.append(
                 {
-                    "from_speaker": all_segs[i][2],
-                    "to_speaker": all_segs[i + 1][2],
+                    "from_speaker": from_spk,
+                    "to_speaker": to_spk,
                     "start": cur_end,
                     "end": nxt_start,
                     "duration_seconds": gap,
@@ -311,7 +371,11 @@ def _prepare_data(record_dir: Path) -> dict:
     events_file = record_dir / "elevenlabs_events.jsonl"
     transcript = record_dir / "transcript.jsonl"
 
-    # --- Turn data: prefer metrics.json (same source as turn_taking metric) ---
+    # --- Turn data ---
+    # Primary: metrics.json context — same fields turn_taking.py uses, with
+    # multi-segment turns, matched transcripts, and turn_id-based latency.
+    # Fallback: elevenlabs_events.jsonl — one entry per audio session, latency
+    # computed by temporal proximity when metrics.json is absent.
     turns_rel: list[dict] = []
     metrics_data = _load_metrics_context(record_dir)
     if metrics_data:
@@ -319,10 +383,10 @@ def _prepare_data(record_dir: Path) -> dict:
         if built:
             turns_rel = built
 
-    # Fallback: parse ElevenLabs event log directly
     if not turns_rel and events_file.exists():
         turns_rel = _parse_elevenlabs_events(events_file)
         _patch_fallback_transcripts(turns_rel, transcript)
+        _compute_and_patch_latencies(turns_rel)
 
     pauses_rel = _calculate_pauses(turns_rel)
 
@@ -513,9 +577,7 @@ def _build_figure(
 
             latency_line = ""
             if turn["speaker"] == "user" and turn.get("latency_s") is not None:
-                latency_line = f"<br>Response latency:\u00a0{turn['latency_s'] * 1000:.0f}\u00a0ms" + (
-                    f"\u00a0({turn['timing_label']})" if turn.get("timing_label") else ""
-                )
+                latency_line = f"<br>Response latency:\u00a0{turn['latency_s'] * 1000:.0f}\u00a0ms"
 
             hover = (
                 f"<b>Turn\u00a0{turn['turn_id']}\u00a0\u2014\u00a0{speaker}</b><br>"
@@ -703,13 +765,14 @@ def _build_figure(
             fig.update_yaxes(title_text="Freq (Hz)", row=row_of["mixed_spec"], col=1)
 
     # ---- ElevenLabs waveform (only present when el_loaded=True) ----
-    # speaker_filter={"user"}: the EL recording captures the ElevenLabs user-simulator's
-    # outgoing audio (user speech sent to the assistant).  Assistant-turn time ranges
-    # are silent in this file and should not be coloured as "Assistant".
+    # No speaker_filter: turn times from the EL log cover both user and assistant,
+    # so both get colour-coded identically to the mixed waveform.  Assistant
+    # regions will show a flat/silent waveform since the EL file only captures
+    # the user-simulator's outgoing audio, which is expected.
     if "el_waveform" in row_of:
         if len(data["el_y_ds"]) > 0:
             el_range = [float(data["el_y_ds"].min() * 1.1), float(data["el_y_ds"].max() * 1.1)]
-            _colored_waveform(row_of["el_waveform"], data["el_y_ds"], data["el_t"], el_range, speaker_filter={"user"})
+            _colored_waveform(row_of["el_waveform"], data["el_y_ds"], data["el_t"], el_range)
         else:
             _no_file(row_of["el_waveform"])
             fig.update_yaxes(title_text="Amplitude", range=[-1.0, 1.0], row=row_of["el_waveform"], col=1)
@@ -717,7 +780,7 @@ def _build_figure(
     # ---- ElevenLabs spectrogram (optional) ----
     if "el_spec" in row_of:
         if data["el_spec"]:
-            _spec_row(row_of["el_spec"], data["el_spec"], "EL Spec", speaker_filter={"user"})
+            _spec_row(row_of["el_spec"], data["el_spec"], "EL Spec")
         else:
             _no_file(row_of["el_spec"])
             fig.update_yaxes(title_text="Freq (Hz)", row=row_of["el_spec"], col=1)
@@ -737,9 +800,7 @@ def _build_figure(
         transcript = turn["transcript_heard"] or turn["transcript_intended"] or "(no transcript)"
         latency_line = ""
         if not is_asst and turn.get("latency_s") is not None:
-            latency_line = f"<br>Response latency:\u00a0{turn['latency_s'] * 1000:.0f}\u00a0ms" + (
-                f"\u00a0({turn['timing_label']})" if turn.get("timing_label") else ""
-            )
+            latency_line = f"<br>Response latency:\u00a0{turn['latency_s'] * 1000:.0f}\u00a0ms"
 
         hover = (
             f"<b>Turn\u00a0{turn['turn_id']}\u00a0\u2014\u00a0{speaker}</b><br>"

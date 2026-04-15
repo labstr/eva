@@ -1824,7 +1824,7 @@ def render_record_detail(selected_run_dir: Path):
             "Transcript",
             "Metrics Detail",
             "Processed Data",
-            "Audio Analysis",
+            "Turn Taking Analysis",
         ]
     )
 
