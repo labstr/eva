@@ -9,13 +9,13 @@ Interactive dashboard for visualizing and comparing results.
 ### Usage
 
 ```bash
-uv run streamlit run apps/analysis.py
+streamlit run apps/analysis.py
 ```
 
 By default, the app looks for runs in the `output/` directory. You can change this in the sidebar or by setting the `EVA_OUTPUT_DIR` environment variable:
 
 ```bash
-EVA_OUTPUT_DIR=path/to/results uv run streamlit run apps/analysis.py
+EVA_OUTPUT_DIR=path/to/results streamlit run apps/analysis.py
 ```
 
 ### Views

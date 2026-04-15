@@ -1056,7 +1056,8 @@ def render_cross_run_comparison(run_dirs: list[Path]):
     experience_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) == "Experience"]
     other_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) not in {"Accuracy", "Experience"}]
 
-    id_cols = ["system_name", "run_timestamp", "run_output_dir", "records"]
+    multiple_output_dirs = summary_df["run_output_dir"].nunique() > 1
+    id_cols = ["system_name", "run_timestamp"] + (["run_output_dir"] if multiple_output_dirs else []) + ["records"]
     id_rename = {
         "system_name": "System",
         "run_timestamp": "Timestamp",
