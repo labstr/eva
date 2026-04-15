@@ -620,6 +620,32 @@ class MetricsRunner:
                         "count": count,
                     }
 
+        # Nest with/without tool call breakdowns inside the response_speed aggregate
+        if "response_speed" in metric_names and "response_speed" in metric_aggregates:
+            for sub_key in ("with_tool_calls", "no_tool_calls"):
+                sub_scores: list[float] = []
+                sub_missing = 0
+                for record_metrics in all_metrics.values():
+                    rs = record_metrics.metrics.get("response_speed")
+                    if rs is None or rs.error is not None:
+                        sub_missing += 1
+                        continue
+                    sub_details = (rs.details or {}).get(sub_key)
+                    if sub_details and sub_details.get("mean_speed_seconds") is not None:
+                        sub_scores.append(sub_details["mean_speed_seconds"])
+                    else:
+                        sub_missing += 1
+                if sub_scores or sub_missing > 0:
+                    metric_aggregates["response_speed"][sub_key] = {
+                        "mean": round(sum(sub_scores) / len(sub_scores), 4) if sub_scores else None,
+                        "min": round(min(sub_scores), 4) if sub_scores else None,
+                        "max": round(max(sub_scores), 4) if sub_scores else None,
+                        "count": len(sub_scores),
+                        "none_count": sub_missing,
+                        "missing_count": sub_missing,
+                        "total_records": total_records,
+                    }
+
         return metric_aggregates
 
     @staticmethod

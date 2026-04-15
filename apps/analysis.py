@@ -44,6 +44,9 @@ def _build_metric_group_map() -> dict[str, str]:
 
 
 _METRIC_GROUP: dict[str, str] = _build_metric_group_map()
+# Synthetic columns derived from response_speed details sub-fields
+_METRIC_GROUP["response_speed_with_tool_calls"] = "Diagnostic"
+_METRIC_GROUP["response_speed_no_tool_calls"] = "Diagnostic"
 
 # Ordered categories for display; anything not listed sorts to the end
 _CATEGORY_ORDER = ["Accuracy", "Experience", "Conversation Quality", "Diagnostic", "Validation"]
@@ -76,7 +79,7 @@ _CATEGORY_COLORS = {
     "Other": "#AAAAAA",
 }
 
-_NON_NORMALIZED_METRICS = {"response_speed"}
+_NON_NORMALIZED_METRICS = {"response_speed", "response_speed_with_tool_calls", "response_speed_no_tool_calls"}
 
 # EVA composite scores to show in the bar chart
 _EVA_BAR_COMPOSITES = ["EVA-A_pass", "EVA-X_pass", "EVA-A_mean", "EVA-X_mean"]
@@ -545,6 +548,15 @@ def _collect_run_metrics(run_dir: Path) -> tuple[list[dict], list[str]]:
                     else metric_score.score
                 )
 
+                if metric_name == "response_speed" and metric_score.details:
+                    details = metric_score.details
+                    with_tc = details.get("with_tool_calls") or {}
+                    no_tc = details.get("no_tool_calls") or {}
+                    row["response_speed_with_tool_calls"] = with_tc.get("mean_speed_seconds")
+                    row["response_speed_no_tool_calls"] = no_tc.get("mean_speed_seconds")
+                    all_metric_names.add("response_speed_with_tool_calls")
+                    all_metric_names.add("response_speed_no_tool_calls")
+
             rows.append(row)
 
     return rows, sorted(all_metric_names)
@@ -970,6 +982,13 @@ def render_cross_run_comparison(run_dirs: list[Path]):
             for m, stats in per_metric.items():
                 if stats.get("mean") is not None:
                     summary[m] = stats["mean"]
+                # Expose response_speed sub-field means as synthetic columns
+                for sub_key in ("with_tool_calls", "no_tool_calls"):
+                    sub = stats.get(sub_key)
+                    if sub and sub.get("mean") is not None:
+                        col = f"{m}_{sub_key}"
+                        summary[col] = sub["mean"]
+                        all_metric_names.add(col)
             # Add EVA composite scores from overall_scores
             overall = metrics_summary.get("overall_scores", {})
             for composite in _EVA_BAR_COMPOSITES:
