@@ -48,9 +48,7 @@ def create_vad_analyzer(vad_type: str, vad_params: dict[str, Any]) -> VADAnalyze
         params = VADParams(**vad_params) if vad_params else None
         return SileroVADAnalyzer(params=params)
     else:
-        raise ValueError(
-            f"Unsupported VAD type: {vad_type}. Supported types: 'silero'"
-        )
+        raise ValueError(f"Unsupported VAD type: {vad_type}. Supported types: 'silero'")
 
 
 def create_turn_start_strategy(
@@ -82,8 +80,7 @@ def create_turn_start_strategy(
         return ExternalUserTurnStartStrategy(**strategy_params)
     else:
         raise ValueError(
-            f"Unsupported turn start strategy: {strategy_type}. "
-            f"Supported types: 'vad', 'transcription', 'external'"
+            f"Unsupported turn start strategy: {strategy_type}. Supported types: 'vad', 'transcription', 'external'"
         )
 
 

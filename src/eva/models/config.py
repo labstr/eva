@@ -97,17 +97,12 @@ class PipelineConfig(BaseModel):
     # VAD configuration
     vad: str = Field(
         "silero",
-        description=(
-            "VAD analyzer type: 'silero'. "
-            "Defaults to 'silero' (SileroVADAnalyzer). "
-            "Set via EVA_MODEL__VAD."
-        ),
+        description=("VAD analyzer type: 'silero'. Defaults to 'silero' (SileroVADAnalyzer). Set via EVA_MODEL__VAD."),
     )
     vad_params: dict[str, Any] = Field(
         {},
         description=(
-            "VAD parameters (JSON): confidence, start_secs, stop_secs, min_volume. "
-            "Set via EVA_MODEL__VAD_PARAMS."
+            "VAD parameters (JSON): confidence, start_secs, stop_secs, min_volume. Set via EVA_MODEL__VAD_PARAMS."
         ),
     )
 
@@ -183,17 +178,12 @@ class SpeechToSpeechConfig(BaseModel):
     # VAD configuration
     vad: str = Field(
         "silero",
-        description=(
-            "VAD analyzer type: 'silero'. "
-            "Defaults to 'silero' (SileroVADAnalyzer). "
-            "Set via EVA_MODEL__VAD."
-        ),
+        description=("VAD analyzer type: 'silero'. Defaults to 'silero' (SileroVADAnalyzer). Set via EVA_MODEL__VAD."),
     )
     vad_params: dict[str, Any] = Field(
         {},
         description=(
-            "VAD parameters (JSON): confidence, start_secs, stop_secs, min_volume. "
-            "Set via EVA_MODEL__VAD_PARAMS."
+            "VAD parameters (JSON): confidence, start_secs, stop_secs, min_volume. Set via EVA_MODEL__VAD_PARAMS."
         ),
     )
 
@@ -265,17 +255,12 @@ class AudioLLMConfig(BaseModel):
     # VAD configuration
     vad: str = Field(
         "silero",
-        description=(
-            "VAD analyzer type: 'silero'. "
-            "Defaults to 'silero' (SileroVADAnalyzer). "
-            "Set via EVA_MODEL__VAD."
-        ),
+        description=("VAD analyzer type: 'silero'. Defaults to 'silero' (SileroVADAnalyzer). Set via EVA_MODEL__VAD."),
     )
     vad_params: dict[str, Any] = Field(
         {},
         description=(
-            "VAD parameters (JSON): confidence, start_secs, stop_secs, min_volume. "
-            "Set via EVA_MODEL__VAD_PARAMS."
+            "VAD parameters (JSON): confidence, start_secs, stop_secs, min_volume. Set via EVA_MODEL__VAD_PARAMS."
         ),
     )
 

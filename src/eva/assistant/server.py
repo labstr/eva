@@ -12,10 +12,6 @@ from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, WebSocket
-from pipecat.audio.turn.smart_turn.base_smart_turn import SmartTurnParams
-from pipecat.audio.turn.smart_turn.local_smart_turn_v3 import LocalSmartTurnAnalyzerV3
-from pipecat.audio.vad.silero import SileroVADAnalyzer
-from pipecat.audio.vad.vad_analyzer import VADParams
 from pipecat.frames.frames import (
     CancelFrame,
     LLMRunFrame,
@@ -40,7 +36,6 @@ from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketParams,
     FastAPIWebsocketTransport,
 )
-from pipecat.turns.user_start import VADUserTurnStartStrategy
 from pipecat.turns.user_stop import TurnAnalyzerUserTurnStopStrategy
 from pipecat.turns.user_turn_strategies import UserTurnStrategies
 from pipecat.utils.time import time_now_iso8601
@@ -352,9 +347,7 @@ class AssistantServer:
             logger.info(f"Using turn start strategy: {turn_start_cfg}")
 
             # Create turn stop strategy using factory function
-            turn_stop_strategy = create_turn_stop_strategy(
-                turn_stop_cfg, turn_stop_params, smart_turn_stop_secs
-            )
+            turn_stop_strategy = create_turn_stop_strategy(turn_stop_cfg, turn_stop_params, smart_turn_stop_secs)
             logger.info(f"Using turn stop strategy: {turn_stop_cfg}")
 
             user_turn_strategies = UserTurnStrategies(
