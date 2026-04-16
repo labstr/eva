@@ -12,21 +12,13 @@ from eva.models.results import MetricScore
 def _split_by_tool_calls(
     context: MetricContext,
 ) -> tuple[list[float], list[float]]:
-    """Partition per_turn_latency values into (with_tool_calls, no_tool_calls).
-
-    Checks conversation_trace to determine which turn_ids had at least one tool call.
-    """
+    """Partition per_turn_latency values into (with_tool_calls, no_tool_calls)."""
     tool_call_turn_ids = {
         entry["turn_id"] for entry in (context.conversation_trace or []) if entry.get("type") == "tool_call"
     }
 
-    with_tool: list[float] = []
-    no_tool: list[float] = []
-    for turn_id, latency in context.latency_assistant_turns.items():
-        if turn_id in tool_call_turn_ids:
-            with_tool.append(latency)
-        else:
-            no_tool.append(latency)
+    with_tool = [v for k, v in context.latency_assistant_turns.items() if k in tool_call_turn_ids]
+    no_tool = [v for k, v in context.latency_assistant_turns.items() if k not in tool_call_turn_ids]
 
     return with_tool, no_tool
 
