@@ -231,6 +231,11 @@ def format_transcript(transcript_path: Path) -> pd.DataFrame:
 # ============================================================================
 
 
+def _is_sub_metric(name: str) -> bool:
+    """Return True if the metric name is a sub-metric (contains __ separator)."""
+    return "__" in name
+
+
 def _sort_metrics_by_category(metric_names: list[str]) -> list[str]:
     """Sort metric names grouped by category."""
 
@@ -1037,6 +1042,9 @@ def render_cross_run_comparison(run_dirs: list[Path]):
         return
 
     metric_names = _sort_metrics_by_category(sorted(all_metric_names))
+    if not st.session_state.get("show_sub_metrics"):
+        metric_names = [m for m in metric_names if not _is_sub_metric(m)]
+
     col_rename = _make_category_header_rename(metric_names)
     summary_df = pd.DataFrame(run_summaries)
 
@@ -1137,6 +1145,9 @@ def render_run_overview(run_dir: Path):
     has_trials = "trial" in rows[0]
     df = pd.DataFrame(rows)
     metric_names = _sort_metrics_by_category(metric_names)
+    if not st.session_state.get("show_sub_metrics"):
+        metric_names = [m for m in metric_names if not _is_sub_metric(m)]
+
     col_rename = _make_category_header_rename(metric_names)
 
     # --- Aggregate summary ---
@@ -1863,6 +1874,8 @@ def _get_run_dirs():
     latest_only = st.sidebar.toggle("Latest run per system only", value=True)
     if latest_only:
         run_dirs = filter_latest_runs(run_dirs)
+
+    st.sidebar.toggle("Show sub-metrics", value=False, key="show_sub_metrics")
 
     if not run_dirs:
         st.error(f"No run directories found in: {', '.join(str(d) for d in output_dirs)}")
