@@ -143,7 +143,7 @@ class TestResponseSpeedMetric:
 
     @pytest.mark.asyncio
     async def test_no_tool_call_breakdown_without_trace(self, tmp_path):
-        """with_tool_calls is None and no_tool_calls covers all turns when trace is absent."""
+        """with_tool_calls absent and no_tool_calls covers all turns when trace is absent."""
         _write_metrics_json(tmp_path, {"1": 1.0, "2": 2.0})
         metric = ResponseSpeedMetric()
         ctx = make_metric_context(output_dir=tmp_path)
@@ -152,13 +152,14 @@ class TestResponseSpeedMetric:
 
         assert result.error is None
         # No trace → no tool call turn ids → all turns go into no_tool bucket
-        assert result.details["with_tool_calls"] is None
-        assert result.details["no_tool_calls"] is not None
-        assert result.details["no_tool_calls"]["num_turns"] == 2
+        assert result.sub_metrics is not None
+        assert "with_tool_calls" not in result.sub_metrics
+        no_tc = result.sub_metrics["no_tool_calls"]
+        assert no_tc.details["num_turns"] == 2
 
     @pytest.mark.asyncio
     async def test_tool_call_breakdown_mixed_turns(self, tmp_path):
-        """with_tool_calls and no_tool_calls sub-fields reflect the correct split."""
+        """with_tool_calls and no_tool_calls sub-metrics reflect the correct split."""
         _write_metrics_json(tmp_path, {"1": 1.0, "2": 5.0, "3": 3.0, "4": 7.0})
         trace = _make_trace(tool_call_turn_ids={2, 4}, all_turn_ids={1, 2, 3, 4})
         metric = ResponseSpeedMetric()
@@ -167,20 +168,21 @@ class TestResponseSpeedMetric:
         result = await metric.compute(ctx)
 
         assert result.error is None
-        with_tc = result.details["with_tool_calls"]
-        no_tc = result.details["no_tool_calls"]
-        assert with_tc is not None
-        assert no_tc is not None
-        assert with_tc["num_turns"] == 2
-        assert with_tc["mean_speed_seconds"] == pytest.approx((5.0 + 7.0) / 2)
-        assert with_tc["max_speed_seconds"] == pytest.approx(7.0)
-        assert no_tc["num_turns"] == 2
-        assert no_tc["mean_speed_seconds"] == pytest.approx((1.0 + 3.0) / 2)
-        assert no_tc["max_speed_seconds"] == pytest.approx(3.0)
+        assert result.sub_metrics is not None
+        with_tc = result.sub_metrics["with_tool_calls"]
+        no_tc = result.sub_metrics["no_tool_calls"]
+        assert with_tc.details["num_turns"] == 2
+        assert with_tc.details["mean_speed_seconds"] == pytest.approx((5.0 + 7.0) / 2)
+        assert with_tc.details["max_speed_seconds"] == pytest.approx(7.0)
+        assert with_tc.score == pytest.approx((5.0 + 7.0) / 2)
+        assert no_tc.details["num_turns"] == 2
+        assert no_tc.details["mean_speed_seconds"] == pytest.approx((1.0 + 3.0) / 2)
+        assert no_tc.details["max_speed_seconds"] == pytest.approx(3.0)
+        assert no_tc.score == pytest.approx((1.0 + 3.0) / 2)
 
     @pytest.mark.asyncio
     async def test_tool_call_breakdown_all_tool_turns(self, tmp_path):
-        """no_tool_calls is None when every turn has a tool call."""
+        """no_tool_calls absent when every turn has a tool call."""
         _write_metrics_json(tmp_path, {"1": 2.0, "2": 4.0})
         trace = _make_trace(tool_call_turn_ids={1, 2}, all_turn_ids={1, 2})
         metric = ResponseSpeedMetric()
@@ -189,13 +191,13 @@ class TestResponseSpeedMetric:
         result = await metric.compute(ctx)
 
         assert result.error is None
-        assert result.details["with_tool_calls"] is not None
-        assert result.details["with_tool_calls"]["num_turns"] == 2
-        assert result.details["no_tool_calls"] is None
+        assert result.sub_metrics is not None
+        assert result.sub_metrics["with_tool_calls"].details["num_turns"] == 2
+        assert "no_tool_calls" not in result.sub_metrics
 
     @pytest.mark.asyncio
     async def test_tool_call_breakdown_filters_invalid_latencies(self, tmp_path):
-        """Sanity filter (0 < x < 1000) applies within the breakdown sub-fields."""
+        """Sanity filter (0 < x < 1000) applies within the breakdown sub-metrics."""
         _write_metrics_json(tmp_path, {"1": -1.0, "2": 5.0, "3": 2000.0, "4": 3.0})
         trace = _make_trace(tool_call_turn_ids={1, 2, 3, 4}, all_turn_ids={1, 2, 3, 4})
         metric = ResponseSpeedMetric()
@@ -204,9 +206,9 @@ class TestResponseSpeedMetric:
         result = await metric.compute(ctx)
 
         assert result.error is None
-        with_tc = result.details["with_tool_calls"]
-        assert with_tc is not None
-        assert with_tc["num_turns"] == 2  # only 5.0 and 3.0 pass the filter
+        assert result.sub_metrics is not None
+        with_tc = result.sub_metrics["with_tool_calls"]
+        assert with_tc.details["num_turns"] == 2  # only 5.0 and 3.0 pass the filter
 
     @pytest.mark.asyncio
     async def test_with_and_no_tool_split_is_exhaustive(self, tmp_path):
@@ -220,7 +222,9 @@ class TestResponseSpeedMetric:
         result = await metric.compute(ctx)
 
         assert result.error is None
+        assert result.sub_metrics is not None
         combined = (
-            result.details["with_tool_calls"]["per_turn_speeds"] + result.details["no_tool_calls"]["per_turn_speeds"]
+            result.sub_metrics["with_tool_calls"].details["per_turn_speeds"]
+            + result.sub_metrics["no_tool_calls"].details["per_turn_speeds"]
         )
         assert sorted(combined) == sorted(per_turn.values())

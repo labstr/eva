@@ -126,6 +126,17 @@ class ResponseSpeedMetric(CodeMetric):
 
             with_tool, no_tool = _split_by_tool_calls(per_turn_latency, context)
 
+            sub_metrics: dict[str, MetricScore] = {}
+            for key, latencies in (("with_tool_calls", with_tool), ("no_tool_calls", no_tool)):
+                stats = _compute_speed_stats(latencies)
+                if stats is not None:
+                    sub_metrics[key] = MetricScore(
+                        name=f"{self.name}.{key}",
+                        score=stats["mean_speed_seconds"],
+                        normalized_score=None,
+                        details=stats,
+                    )
+
             return MetricScore(
                 name=self.name,
                 score=round(mean_speed, 3),
@@ -135,9 +146,8 @@ class ResponseSpeedMetric(CodeMetric):
                     "max_speed_seconds": round(max(speeds), 3),
                     "num_turns": len(speeds),
                     "per_turn_speeds": per_turn_speeds,
-                    "with_tool_calls": _compute_speed_stats(with_tool),
-                    "no_tool_calls": _compute_speed_stats(no_tool),
                 },
+                sub_metrics=sub_metrics or None,
             )
 
         except Exception as e:
