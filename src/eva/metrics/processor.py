@@ -887,7 +887,7 @@ class MetricsContextProcessor:
         history = self._load_audit_log_transcript(output_dir)
         if context.pipeline_type != PipelineType.S2S and pipecat_path:
             history.extend(self._load_pipecat_logs(pipecat_path))
-        if elevenlabs_path:    
+        if elevenlabs_path:
             history.extend(self._load_elevenlabs_logs(elevenlabs_path))
 
         history.sort(key=lambda e: e["timestamp_ms"])
