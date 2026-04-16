@@ -1067,6 +1067,7 @@ def _build_figure(
             showgrid=True,
             gridcolor="rgba(128,128,128,0.15)",
             showticklabels=True,
+            nticks=20,
             row=r,
             col=1,
         )
