@@ -658,12 +658,10 @@ class RunConfig(BaseSettings):
             if not has_redacted:
                 continue
             if name not in live_by_name:
-                logger.warning(
-                    f"Cannot restore secrets for deployment {name}: not found in "
-                    f"current EVA_MODEL_LIST (available: {list(live_by_name)}). Skipping — this is "
-                    "only a problem if this deployment is needed for the current run.",
+                raise ValueError(
+                    f"Cannot restore secrets: deployment {name!r} not found in "
+                    f"current EVA_MODEL_LIST (available: {list(live_by_name)})"
                 )
-                continue
             live_params = live_by_name[name].get("litellm_params", {})
             for key, value in saved_params.items():
                 if value == "***" and key in live_params:
