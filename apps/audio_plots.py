@@ -1058,9 +1058,18 @@ def _build_figure(
     )
     fig.update_xaxes(title_text="Time (seconds)", row=tl_row, col=1)
 
-    # Shared x-range + grid for all rows
+    # Shared x-range + grid for all rows.
+    # showticklabels=True is required on every row because shared_xaxes=True
+    # hides tick labels on all but the bottom subplot by default.
     for r in range(1, n_rows + 1):
-        fig.update_xaxes(range=plot_xlim, showgrid=True, gridcolor="rgba(128,128,128,0.15)", row=r, col=1)
+        fig.update_xaxes(
+            range=plot_xlim,
+            showgrid=True,
+            gridcolor="rgba(128,128,128,0.15)",
+            showticklabels=True,
+            row=r,
+            col=1,
+        )
         fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)", row=r, col=1)
 
     return fig
