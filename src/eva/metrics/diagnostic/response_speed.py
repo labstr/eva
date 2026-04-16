@@ -106,7 +106,7 @@ class ResponseSpeedMetric(CodeMetric):
             speeds = []
             per_turn_speeds = []
             for latency in all_latencies:
-                if 0 < latency < 1000:
+                if latency is not None and 0 < latency < 1000:
                     speeds.append(latency)
                     per_turn_speeds.append(round(latency, 3))
                 else:
