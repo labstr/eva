@@ -25,16 +25,19 @@ from eva.utils.logging import get_logger
 logger = get_logger(__name__)
 
 
-def _resolve_path(stored: str | None, fallback: Path) -> str | Path:
-    """Return *stored* if it exists on disk, otherwise *fallback*.
+def _resolve_path(stored: str | None, output_dir: Path) -> str | None:
+    """Return *stored* if it exists on disk, otherwise ``output_dir / basename(stored)``.
 
     Allows metrics to re-run correctly when a run directory has been moved:
-    the stored path reflects the original location, but the file is now at
-    *fallback* (i.e. output_dir / filename).
+    *stored* reflects the original location, but the file is now under *output_dir*
+    with the same filename. Returns ``None`` when *stored* is ``None`` so callers
+    can treat ``None`` as "feature disabled" (e.g. audio recording was off).
     """
-    if stored and Path(stored).exists():
+    if stored is None:
+        return None
+    if Path(stored).exists():
         return stored
-    return fallback
+    return str(output_dir / Path(stored).name)
 
 
 # Elevenlabs audio user field → _ProcessorContext attribute name
@@ -746,13 +749,16 @@ class MetricsContextProcessor:
         """
         context = _ProcessorContext()
         context.record_id = result.record_id
-        context.audio_assistant_path = result.audio_assistant_path
-        context.audio_user_path = result.audio_user_path
-        context.audio_mixed_path = result.audio_mixed_path
+        context.audio_assistant_path = _resolve_path(result.audio_assistant_path, output_dir)
+        context.audio_user_path = _resolve_path(result.audio_user_path, output_dir)
+        context.audio_mixed_path = _resolve_path(result.audio_mixed_path, output_dir)
         context.is_audio_native = is_audio_native
 
+        pipecat_path = _resolve_path(result.pipecat_logs_path, output_dir)
+        elevenlabs_path = _resolve_path(result.elevenlabs_logs_path, output_dir)
+
         try:
-            self._build_history(context, output_dir, result)
+            self._build_history(context, output_dir, pipecat_path, elevenlabs_path)
             self._extract_turns_from_history(context)
             self._compute_per_turn_latency(context)
             self._reconcile_transcript_with_tools(context)
@@ -846,17 +852,18 @@ class MetricsContextProcessor:
         self,
         context: _ProcessorContext,
         output_dir: Path,
-        result: ConversationResult,
+        pipecat_path: str | None,
+        elevenlabs_path: str | None,
     ) -> None:
         """Merge audit log, pipecat, and ElevenLabs logs into a timestamp-sorted context.history.
 
         Each entry: {timestamp_ms, source, event_type, data}.
         """
         history = self._load_audit_log_transcript(output_dir)
-        pipecat_path = _resolve_path(result.pipecat_logs_path, output_dir / "pipecat_logs.jsonl")
-        history.extend(self._load_pipecat_logs(pipecat_path))
-        elevenlabs_path = _resolve_path(result.elevenlabs_logs_path, output_dir / "elevenlabs_events.jsonl")
-        history.extend(self._load_elevenlabs_logs(elevenlabs_path))
+        if pipecat_path:
+            history.extend(self._load_pipecat_logs(pipecat_path))
+        if elevenlabs_path:
+            history.extend(self._load_elevenlabs_logs(elevenlabs_path))
 
         history.sort(key=lambda e: e["timestamp_ms"])
         context.history = history
