@@ -551,8 +551,9 @@ def _collect_run_metrics(run_dir: Path) -> tuple[list[dict], list[str]]:
                     else metric_score.score
                 )
 
-                if metric_score.sub_metrics:
-                    for sub_key, sub_ms in metric_score.sub_metrics.items():
+                sub_metrics = getattr(metric_score, "sub_metrics", None)
+                if sub_metrics:
+                    for sub_key, sub_ms in sub_metrics.items():
                         col = f"{metric_name}__{sub_key}"
                         row[col] = (
                             None
