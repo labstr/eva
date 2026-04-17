@@ -104,9 +104,17 @@ def get_run_directories(output_dir: Path) -> list[Path]:
 
 
 def _system_name_from_run(run_dir: Path) -> str:
-    """Extract the system name from a run folder name (<timestamp>_<system_name>)."""
+    """Extract the system name from a run folder, matching the display name used in the app.
+
+    For suffixed folders (<timestamp>_<system>) returns the suffix. For timestamp-only
+    folders, derives the system name from config.json (same logic as _get_system_and_timestamp)
+    so that filtering and display stay consistent.
+    """
     m = re.match(r"^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.\d+_(.+)$", run_dir.name)
-    return m.group(1) if m else run_dir.name
+    if m:
+        return m.group(1)
+    config = _load_run_config(run_dir)
+    return _model_suffix_from_config(config) or run_dir.name
 
 
 def filter_latest_runs(run_dirs: list[Path]) -> list[Path]:
@@ -1872,7 +1880,11 @@ def _get_run_dirs():
     )
     output_dirs = [Path(stripped) for p in output_dirs_input.splitlines() if (stripped := p.strip())]
 
-    run_dirs = [rd for od in output_dirs for rd in get_run_directories(od)]
+    run_dirs = sorted(
+        [rd for od in output_dirs for rd in get_run_directories(od)],
+        key=lambda d: d.name,
+        reverse=True,
+    )
 
     latest_only = st.sidebar.toggle("Latest run per system only", value=True, key="latest_only", bind="query-params")
     if latest_only:
