@@ -926,7 +926,7 @@ def _render_eva_scatter_plot(scatter_data: list[dict]):
 # ============================================================================
 
 
-def render_cross_run_comparison(run_dirs: list[Path]):
+def render_cross_run_comparison(run_dirs: list[Path], latest_only: bool = True):
     """Render a comparison view across multiple runs."""
     st.markdown("### Cross-Run Comparison")
     st.caption("Compare aggregate metrics across all runs that have metrics data.")
@@ -1099,6 +1099,8 @@ def render_cross_run_comparison(run_dirs: list[Path]):
         "records": "# Records",
     }
     link_series = "/run_overview?output_dir=" + summary_df["run_output_dir"] + "&run=" + summary_df["run"]
+    if not latest_only:
+        link_series = link_series + "&latest_only=false"
 
     def _show_subtable(heading: str, composites: list, metrics: list) -> None:
         if not composites and not metrics:
@@ -1872,7 +1874,7 @@ def _get_run_dirs():
 
     run_dirs = [rd for od in output_dirs for rd in get_run_directories(od)]
 
-    latest_only = st.sidebar.toggle("Latest run per system only", value=True)
+    latest_only = st.sidebar.toggle("Latest run per system only", value=True, key="latest_only", bind="query-params")
     if latest_only:
         run_dirs = filter_latest_runs(run_dirs)
 
@@ -1882,7 +1884,7 @@ def _get_run_dirs():
         st.error(f"No run directories found in: {', '.join(str(d) for d in output_dirs)}")
         st.stop()
 
-    return run_dirs
+    return run_dirs, latest_only
 
 
 def _select_run(run_dirs: list[Path]):
@@ -2054,15 +2056,18 @@ def render_record_detail(selected_run_dir: Path):
 
 
 def cross_run_comparison():
-    render_cross_run_comparison(_get_run_dirs())
+    run_dirs, latest_only = _get_run_dirs()
+    render_cross_run_comparison(run_dirs, latest_only)
 
 
 def run_overview():
-    render_run_overview(_select_run(_get_run_dirs()))
+    run_dirs, _ = _get_run_dirs()
+    render_run_overview(_select_run(run_dirs))
 
 
 def record_detail():
-    render_record_detail(_select_run(_get_run_dirs()))
+    run_dirs, _ = _get_run_dirs()
+    render_record_detail(_select_run(run_dirs))
 
 
 def main():
