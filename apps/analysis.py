@@ -551,8 +551,9 @@ def _collect_run_metrics(run_dir: Path) -> tuple[list[dict], list[str]]:
                     else metric_score.score
                 )
 
-                if metric_score.sub_metrics:
-                    for sub_key, sub_ms in metric_score.sub_metrics.items():
+                sub_metrics = getattr(metric_score, "sub_metrics", None)
+                if sub_metrics:
+                    for sub_key, sub_ms in sub_metrics.items():
                         col = f"{metric_name}__{sub_key}"
                         row[col] = (
                             None
@@ -1298,7 +1299,7 @@ def render_run_overview(run_dir: Path):
 
     # Add link column to navigate to Record Detail
     def _record_link(row):
-        params = f"?view=Record+Detail&run={run_name}&record={row['record']}"
+        params = f"/record_detail?output_dir={run_dir.parent}&run={run_name}&record={row['record']}"
         if "trial" in row and pd.notna(row.get("trial")):
             params += f"&trial={row['trial']}"
         return params
