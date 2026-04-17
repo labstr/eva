@@ -126,9 +126,14 @@ class AbstractAssistantServer(ABC):
     async def execute_tool(self, tool_name: str, arguments: dict) -> Any:
         """Execute a tool call and record it in the audit log.
 
-        For s2s/realtime servers where tool calls arrive as events from the
-        model API.  Cascade pipelines use AgenticSystem which manages its own
-        tool execution and logging internally.
+        Logs the call and response as separate timestamped entries so latency
+        between them is preserved.  Use this whenever the server handles tool
+        calls directly (s2s/realtime events, or any custom cascade that
+        doesn't delegate to AgenticSystem).
+
+        Note: AgenticSystem has its own tool execution + logging loop
+        (``append_tool_call``), so Pipecat cascade pipelines that use
+        AgenticSystem should *not* also call this method.
         """
         self.audit_log.append_realtime_tool_call(tool_name, arguments)
         result = await self.tool_handler.execute(tool_name, arguments)
