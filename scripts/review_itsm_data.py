@@ -238,18 +238,18 @@ def render_trace(trace: list[dict], tool_type_map: dict[str, str]):
 
         if event == "user_utterance":
             st.markdown(
-                f'<div style="background:#1a2733;border-left:3px solid #2196F3;'
+                f'<div style="background:rgba(33,150,243,0.10);border-left:3px solid #2196F3;'
                 f'padding:8px 12px;margin:4px 0;border-radius:4px">'
-                f'<strong style="color:#64B5F6">User:</strong> '
+                f'<strong style="color:#2196F3">User:</strong> '
                 f"{msg.get('utterance', '')}</div>",
                 unsafe_allow_html=True,
             )
 
         elif event == "agent_utterance":
             st.markdown(
-                f'<div style="background:#1a1a2e;border-left:3px solid #9C27B0;'
+                f'<div style="background:rgba(156,39,176,0.10);border-left:3px solid #9C27B0;'
                 f'padding:8px 12px;margin:4px 0;border-radius:4px">'
-                f'<strong style="color:#CE93D8">Agent:</strong> '
+                f'<strong style="color:#9C27B0">Agent:</strong> '
                 f"{msg.get('utterance', '')}</div>",
                 unsafe_allow_html=True,
             )
@@ -264,7 +264,7 @@ def render_trace(trace: list[dict], tool_type_map: dict[str, str]):
                 f'border-radius:4px;font-size:0.75em;font-weight:bold">{label}</span>'
             )
             st.markdown(
-                f'<div style="background:#1c1c1c;border-left:3px solid {color};'
+                f'<div style="background:rgba(128,128,128,0.08);border-left:3px solid {color};'
                 f'padding:8px 12px;margin:4px 0;border-radius:4px">'
                 f"{badge} <code>{name}</code></div>",
                 unsafe_allow_html=True,
@@ -283,7 +283,7 @@ def render_trace(trace: list[dict], tool_type_map: dict[str, str]):
                 f'border-radius:4px;font-size:0.75em;font-weight:bold">{label}</span>'
             )
             st.markdown(
-                f'<div style="background:#111;border-left:3px solid #666;'
+                f'<div style="background:rgba(128,128,128,0.05);border-left:3px solid #999;'
                 f'padding:8px 12px;margin:4px 0;border-radius:4px">'
                 f"{badge} <code>{name}</code> — <strong>{status}</strong></div>",
                 unsafe_allow_html=True,
