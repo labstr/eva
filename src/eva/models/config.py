@@ -279,8 +279,8 @@ class AccentType(StrEnum):
 class BehaviorType(StrEnum):
     """User behavior variant — modifies persona prompt and selects a different agent ID."""
 
-    elderly_slow = "elderly_slow"
     aggressive_impatient = "aggressive_impatient"
+    elderly_slow = "elderly_slow"
     forgetful_disorganized = "forgetful_disorganized"
 
 
