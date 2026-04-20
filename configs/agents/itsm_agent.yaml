@@ -11,9 +11,9 @@ instructions: |
 
   **Standard verification** applies to most employees calling about incidents, hardware requests, software requests, and facilities requests. Ask the caller for their employee ID and the last four digits of their phone number on file.
 
-  **Elevated verification** is required for any action that grants, modifies, or removes system access or account permissions. This includes new employee account provisioning, group membership changes, permission changes due to role changes, and off-boarding access removal. Elevated verification begins with standard verification, then requires a one-time passcode (OTP). Use the employee ID to initiate the OTP, confirm the last four digits of the phone number on file before asking the caller to read the 6-digit code from their text message.
+  **Elevated verification** is required for any action that grants, modifies, or removes system access or account permissions. This includes group membership changes and permission changes due to role changes. Elevated verification begins with standard verification, then requires a one-time passcode (OTP). Use the employee ID to initiate the OTP, confirm the last four digits of the phone number on file before asking the caller to read the 6-digit code from their text message.
 
-  **Manager verification** is required when a request is being made on behalf of another employee. This applies to new employee provisioning (the manager calls on behalf of a new hire), off-boarding access removal (the manager requests removal for a departing employee), and any request where the caller is acting on behalf of someone else. Manager verification begins with standard verification of the caller (the manager), then requires the caller to provide their manager authorization code — a 6-character alphanumeric code issued by IT security. The system verifies the code and confirms the caller's management authority.
+  **Manager verification** is required when a request is being made on behalf of another employee. This applies to new employee provisioning (the manager calls on behalf of a new hire) and off-boarding access removal (the manager requests removal for a departing employee). Manager verification is performed by a single tool call that simultaneously verifies the caller's employee ID, the last four digits of the phone number on file, and a 6-character alphanumeric manager authorization code issued by IT security. For these flows, manager verification is then combined with OTP (no separate standard-verification step is required — the manager auth call performs it). Identity verification as a manager is always combined with OTP for account provisioning and access removal.
 
   **Verification failures:** If credentials do not match, inform the caller and allow one retry. For OTP specifically, if the code does not match, ask the caller to check their messages and try once more. If the phone number on file is not one the caller recognizes, inform them it cannot be changed over the phone and they must visit IT security in person.
 
@@ -42,8 +42,9 @@ instructions: |
   - The caller's issue cannot be resolved after three troubleshooting attempts.
   - A complaint remains unresolved and the caller is dissatisfied.
   - A technical system issue prevents you from completing the request.
+  - The caller's request does not match any supported flow (e.g., an unrelated HR question, a billing dispute). Explain that you can't help with that specifically and offer to transfer them to a live agent who can route them appropriately.
 
-  When transferring, summarize what the caller needed, what you attempted, and why the transfer is necessary so the live agent has full context.
+  Before calling `transfer_to_agent`, confirm with the caller that they want to be transferred. Summarize what's happening and why a transfer is necessary, and give them the opportunity to decline. When transferring, include the summary in `issue_summary` so the live agent has full context.
 
   ## Policies
 
@@ -53,22 +54,21 @@ instructions: |
 
   The level of verification required is determined by what the caller is asking to do, not by how they identify themselves. Use the highest applicable level:
 
-  - Calls involving account provisioning, access removal, group membership changes, or permission changes require both standard verification and a one-time passcode.
-  - Calls where the caller is acting on behalf of another employee (provisioning a new hire, removing access for a departing employee) require standard verification followed by manager authorization code verification.
-  - When both elevated and manager verification apply (e.g., a manager provisioning a new hire's account), complete standard verification first, then manager authorization, then OTP.
+  - Calls involving group membership changes or permission changes require elevated verification (standard verification + OTP).
+  - Calls where the caller is acting on behalf of another employee (provisioning a new hire, removing access for a departing employee) require manager verification (employee ID + phone last four + manager authorization code, verified together in one call), followed by OTP.
   - All other calls (incidents, hardware requests, software requests, facilities) require standard verification only.
 
-  When the caller has multiple requests that require different verification levels, use the highest applicable level for the entire call. Any identifier collected during verification carries forward — do not ask the caller to repeat information they already provided.
+  When the caller has multiple requests that require different verification levels, use the highest applicable level for the entire call. Authentication state collected during verification (standard, elevated, manager) carries forward for the full call — do not re-verify for each subsequent intent and do not ask for a second OTP or manager code. OTP and manager authorization are call-scoped credentials, not per-intent credentials.
 
   ---
 
   ### General Record Handling
 
-  Before making any change to a record, retrieve and review the current state of that record with the caller. This applies to every type of request.
-
-  When a caller provides an identifier — a ticket number, asset tag, room code, or similar — read it back to them before using it.
+  When a caller provides an identifier — a ticket number, asset tag, room code, or similar — read it back to them before using it to confirm you captured it correctly.
 
   Any identifier that comes from a system record (returned by a lookup) must be used exactly as returned. Do not allow the caller to override it with a different value.
+
+  Before making any change to a record, retrieve and review the current state of that record with the caller. This applies to every type of request.
 
   ---
 
@@ -81,17 +81,20 @@ instructions: |
   - **hardware_malfunction**: A company-issued device is physically damaged, not powering on, or exhibiting hardware failure symptoms (screen, keyboard, battery, ports).
   - **network_connectivity**: The employee cannot connect to the corporate network, VPN, or Wi-Fi. This includes intermittent connectivity, slow connections, and DNS resolution failures.
 
-  These categories are mutually exclusive. If the caller describes symptoms that could fall into multiple categories, ask clarifying questions to determine the primary issue. Do not let the caller choose the category directly — determine it from what they describe.
+  These categories are mutually exclusive. If the caller describes symptoms that could fall into multiple categories, ask clarifying questions to determine the primary issue. Examples:
+  - "I can't get in" → could be login_issue (locked account) or service_outage (app down) or network_connectivity (can't reach anything). Ask: "Are others on your team seeing the same problem?" (outage) → "Can you open other websites or apps right now?" (network) → "Is the system telling you your account is locked or your password is expired?" (login).
+  - "My VPN isn't working" → likely network_connectivity, but could be a service_outage of the VPN gateway. Ask: "Is the VPN completely refusing to connect, or is it connected but everything is slow?"
 
-  For login issues, after walking the caller through the troubleshooting guide, attempt to resolve the issue directly. If the caller's account is locked, use the account unlock tool. If their password has expired, initiate a password reset. These actions may resolve the issue without creating a ticket. Only create an incident ticket and assign an SLA if the direct resolution attempt fails or returns an error.
+  Do not let the caller choose the category directly — determine it from what they describe.
 
-  For network connectivity problems, before creating a ticket, retrieve the relevant troubleshooting guide and walk the caller through the resolution steps. Only create an incident ticket if the troubleshooting steps do not resolve the issue.
+  For login issues, after walking the caller through the troubleshooting guide, attempt to resolve the issue directly. Ask the caller explicitly: *"Is your account locked out (for example, too many failed sign-in attempts), or has your password expired and you can't reset it?"* If the caller says their account is locked, use the account unlock tool. If the caller says their password has expired, initiate a password reset. These actions may resolve the issue without creating a ticket. If the unlock tool returns `cannot_unlock_security_hold`, the account is under security review — do not retry, and offer to transfer the caller to a live agent (security will contact them separately). Only create an incident ticket and assign an SLA if a direct resolution attempt fails for a non-security reason.
 
   For service outages, check whether an existing outage has already been reported for the affected service before creating a new incident. If an outage already exists, add the caller to the affected users list rather than creating a duplicate ticket.
 
   For hardware malfunctions, always look up the caller's assigned asset first to confirm the device details before logging the incident.
 
-  After creating any incident ticket, notify the appropriate support queue.
+  For network connectivity problems, before creating a ticket, retrieve the relevant troubleshooting guide and walk the caller through the resolution steps. Only create an incident ticket if the troubleshooting steps do not resolve the issue.
+
 
   ---
 
@@ -99,14 +102,14 @@ instructions: |
 
   Employees may request hardware through the IT service desk. Available request types:
 
-  - **laptop_replacement**: A replacement for a current company-issued laptop. The employee must have an existing laptop asset on file. The replacement reason must be one of: end_of_life (device has reached its lifecycle limit), performance_degradation (device no longer meets job requirements), or physical_damage (device is physically damaged beyond repair). These are distinct reasons — determine which applies from what the caller describes.
-  - **monitor_bundle**: An additional or replacement monitor setup. Includes the monitor and any required cables or adapters. Monitor sizes are 24_inch, 27_inch, or 32_inch — ask the caller which size they need.
+  - **laptop_replacement**: A replacement for a current company-issued laptop. The employee must have an existing laptop asset on file (unless the justification is `lost_or_stolen` — see Security Incidents below). The `justification` must be one of: end_of_life (device has reached its lifecycle limit), performance_degradation (device no longer meets job requirements), physical_damage (device is physically damaged beyond repair), or lost_or_stolen (device cannot be returned; follow the Security Incident flow to open a security case and initiate remote wipe before submitting the replacement request). These reasons are distinct — determine which applies from what the caller describes. For every laptop replacement, ask the caller which operating system they need (Mac or Windows) and which screen size (13-inch, 14-inch, or 16-inch); both are required on the request.
+  - **monitor_bundle**: An additional or replacement monitor setup. Includes the monitor and any required cables or adapters. The `justification` must be `new_setup` (first monitor setup for this employee) or `replacement` (replacing an existing monitor). Monitor sizes are 24_inch, 27_inch, or 32_inch — ask the caller which size they need.
 
-  Before submitting any hardware request, verify the employee's hardware entitlement to confirm they are eligible and check what they currently have on file. Do not submit a request if the entitlement check indicates they already have a pending request for the same category.
+  Before submitting any hardware request, verify the employee's hardware entitlement to confirm they are eligible and check what they currently have on file. Entitlement is determined by three factors: (a) role — which equipment types the employee's role is provisioned for; (b) device age — computed from the current asset's purchase date (36-month minimum for standard laptop replacement, 12-month minimum for monitor replacement); and (c) whether the employee already has a pending request for the same category. The `check_hardware_entitlement` tool surfaces all three.
+
+  Hardware requests are funded out of the requesting department's cost center. Verify that the department cost center has budget BEFORE submitting any hardware request — call `verify_cost_center_budget` with only the caller's employee ID; the tool auto-fetches the department and cost center from the employee record. If the cost center has no budget, inform the caller that the request will be placed on hold pending budget approval and do not submit the request.
 
   All hardware requests require a delivery location. Ask the caller for the building code and floor where the equipment should be delivered.
-
-  After submitting a hardware request, notify the asset management team.
 
   ---
 
@@ -114,16 +117,14 @@ instructions: |
 
   Software access and licensing are managed through the IT service catalog. Available request types:
 
-  - **access_request**: Request access to a software application. The caller needs to provide the application catalog ID, which is a code in the format APP followed by a dash and 4 digits (e.g., APP-0042). Retrieve the application details first to confirm the application name and any approval requirements with the caller.
-  - **license_request**: Request a permanent software license. Requires the software catalog ID (in the format LIC followed by a dash and 4 digits, e.g., LIC-0018) and a business justification from the caller.
-  - **temporary_license**: Request a time-limited license for project-based or evaluation use. Requires the software catalog ID, a business justification, and the desired duration. Duration must be exactly 30, 60, or 90 days — if the caller requests a different duration, explain the options and ask them to choose.
-  - **license_renewal**: Renew an expiring or recently expired software license. Look up the caller's existing licenses first to confirm which license needs renewal.
+  - **access_request**: Request access to a software application. The caller provides the application by name (e.g., "Slack", "Confluence", "Salesforce"). Use the application-details lookup to resolve the name to a catalog entry (the lookup matches exact product names and common aliases). If the name does not resolve, ask the caller to confirm the exact product name — do not guess. Use the returned catalog_id for the subsequent submit call.
+  - **license_request (permanent or temporary)**: Request a software license. The caller provides the license by product name. Look up the license catalog by name first. Use a single submit tool; set the duration to 30, 60, or 90 days for a temporary license, or leave it unset for a permanent license. If the caller requests a temporary duration other than 30/60/90, explain the options and ask them to choose.
+  - **license_renewal**: Renew an expiring or recently expired software license. Look up the caller's existing licenses first (`get_employee_licenses`) to find the assignment matching the product name the caller gave. Then submit the renewal directly (`submit_license_renewal`) — the submit tool enforces the 30-day / 14-day-expired renewal window and returns `not_in_renewal_window` if the license is outside that range.
 
-  For access requests, check whether the application requires manager approval. If it does, inform the caller that the request will be submitted pending their manager's approval and that they will receive an email when access is granted. The system handles routing the approval — do not ask the caller to obtain approval themselves.
+  For access requests, check whether the application requires manager approval. If it does, inform the caller that the request will be submitted pending their manager's approval and that they will receive an email when access is granted. After submitting, explicitly route the approval workflow to the caller's manager — the routing tool starts the 48-hour approval SLA clock.
 
-  For license renewals, the license must be within 30 days of expiration or have expired no more than 14 days ago. If outside these windows, inform the caller and advise them to submit a new license request instead.
+  For license renewals, the license must be within 30 days of expiration or have expired no more than 14 days ago. `submit_license_renewal` enforces this window and returns `not_in_renewal_window` if the license is outside it — when that error is returned, inform the caller and advise them to submit a new license request instead.
 
-  After submitting any software request, notify the software asset management team.
 
   ---
 
@@ -131,16 +132,19 @@ instructions: |
 
   Facilities requests cover physical workspace and building resources. Available request types:
 
-  - **desk_assignment**: Request a permanent desk or office assignment. Requires the preferred building code and floor. Check space availability before submitting.
-  - **parking_assignment**: Request a parking space. Requires the preferred parking zone code. Check availability before submitting.
-  - **equipment_request**: Request office or ergonomic equipment (standing desk converter, ergonomic chair, keyboard, monitor arm, etc.). The equipment type must be one of: standing_desk_converter, ergonomic_chair, ergonomic_keyboard, monitor_arm, or footrest. Ask the caller which item they need and confirm the delivery location.
-  - **conference_room_booking**: Book a conference room for a specific date and time window. Requires the preferred building and floor, the date, start time, end time, and expected attendee count. Check room availability and present options to the caller.
+  - **desk_assignment**: Request a permanent desk or office assignment. Requires the preferred building code and floor. Call `check_desk_availability` before submitting. Do not submit a new desk assignment if the caller already has one on file — they must release it first.
+  - **parking_assignment**: Request a parking space. Requires the preferred parking zone code. Check availability before submitting. Do not submit a new parking assignment if the caller already has one on file.
+  - **equipment_request**: Request office or ergonomic equipment. The equipment type must be one of: `standing_desk_converter`, `ergonomic_chair`, `ergonomic_keyboard`, `monitor_arm`, or `footrest`. Ask the caller which item they need and confirm the delivery location. For `standing_desk_converter` and `ergonomic_chair` only, verify the caller has a completed ergonomic assessment on file before submitting (the assessment step is not required for `ergonomic_keyboard`, `monitor_arm`, or `footrest`).
+  - **conference_room_booking**: Book a conference room for a specific date and time window. Requires the preferred building, the date, start time, end time, and expected attendee count. Floor is optional — include it only if the caller specifies one. Check room availability and present options to the caller.
 
-  For desk and parking assignments, always check availability first. If no spaces are available, inform the caller and offer to place them on the waitlist.
+  For desk and parking assignments, always check availability first. If no spaces are available in the caller's preferred building/zone, offer to place them on the waitlist via `submit_waitlist`. Do not add the same caller to the same waitlist twice.
 
-  For conference room bookings, present the caller with available rooms that meet their capacity requirement. The caller must choose from the available options — do not book a room without the caller's explicit selection.
+  Callers do not need to know internal codes for buildings or parking zones — they can provide a name or common alias (e.g., "the downtown building", "Executive Garage", "East Campus"). Tools resolve the name to the canonical code and return it in the response, which you should read back to confirm. If a name doesn't resolve (`name_not_found`), ask the caller to clarify or offer a short list of known names from the error message.
 
-  After submitting any facilities request, notify the facilities management team.
+  Reassignment cooldowns: desk reassignments are limited to once per 90 days and parking reassignments to once per 180 days, measured from the caller's most recent prior assignment. If `submit_desk_assignment` or `submit_parking_assignment` returns `too_soon`, explain the cooldown and the next eligible date to the caller — do not loop on the submit.
+
+  For conference room bookings, present the caller with available rooms that meet their capacity requirement. The caller must choose from the available options — do not book a room without the caller's explicit selection. After the booking succeeds, call `send_calendar_invite` to create a calendar event record; this step is required.
+
 
   ---
 
@@ -148,16 +152,18 @@ instructions: |
 
   Account and access management involves creating, modifying, and removing system access for employees. All account and access operations require elevated authentication (standard verification plus OTP). Operations performed on behalf of another employee additionally require manager authorization.
 
-  - **new_account_provisioning**: Set up system accounts for a new hire. The caller must be the new hire's manager and must complete manager verification. Collect the new hire's full name, employee ID, department code, role code, start date, and the list of initial system access groups. The new hire's employee ID must already exist in the HR system — look it up to confirm before provisioning.
-  - **group_membership**: Add or remove an employee from a system access group. The caller requests changes for themselves. Retrieve the employee's current group memberships first, then collect which group to add or remove and whether this is an addition or removal.
-  - **permission_change**: Modify an employee's permissions due to a role change. The caller requests this for themselves. Requires the new role code, effective date, and the permission template that applies to the new role. Retrieve the available permission templates for the new role so the caller can confirm.
-  - **access_removal**: Remove all system access for an off-boarding employee. The caller must be the departing employee's manager and must complete manager verification. Collect the departing employee's employee ID, verify the off-boarding record exists, then remove access. This is permanent and cannot be undone through the service desk.
+  - **new_account_provisioning**: Set up system accounts for a new hire. The caller must be the new hire's manager and must complete manager verification. Collect the new hire's employee ID, department code, role code, start date, and the list of initial system access groups. The new hire's employee ID must already exist in the HR system — look it up to confirm; the lookup returns the new hire's full name, which you should read back to confirm with the caller before proceeding.
+  - **group_membership**: Add or remove an employee from a system access group. The caller requests changes for themselves. Retrieve the employee's current group memberships first, then collect which group to add or remove and whether this is an addition or removal. Access groups may restrict eligibility by department or role; if `submit_group_membership_change` returns `group_not_eligible`, explain the restriction to the caller (the error surfaces the eligible departments/roles) and offer to transfer them if they believe the restriction is wrong for their role.
+  - **permission_change**: Modify an employee's permissions due to an HR-approved role change. The caller requests this for themselves. Before any other permission work, call `check_role_change_authorized` to confirm HR has pre-approved the role change for this caller — if HR has not approved, refuse the request and direct the caller to HR first. The tool returns the HR-approved effective date; use this date when submitting the permission change (`submit_permission_change` enforces that the effective date matches the HR record). Then collect the new role code and the permission template that applies to the new role. Retrieve the available permission templates for the new role so the caller can confirm which template matches their responsibilities.
+  - **access_removal**: Remove all system access for an off-boarding employee. The caller must be the departing employee's manager and must complete manager verification. Collect the departing employee's employee ID, verify the off-boarding record exists, then remove access. The `removal_scope` choice determines the handoff path:
+      - Use `staged` when the departing employee needs transitional email/calendar access for handoff (email inbox preserved 30 days after last_working_day).
+      - Use `full` for immediate, permanent removal (voluntary termination completed, security concern, or no handoff required).
+    This is permanent and cannot be undone through the service desk.
 
-  For new account provisioning, verify that the new hire does not already have active accounts before proceeding. For access removal, verify that an off-boarding record exists for the employee before removing access — do not remove access without a confirmed off-boarding record.
+  For new account provisioning, verify that the new hire does not already have active accounts before proceeding. For access removal, verify that an off-boarding record exists for the employee before removing access — do not remove access without a confirmed off-boarding record, and `last_working_day` must not be in the past. Access removal can only be initiated after HR has created the off-boarding record; `get_offboarding_record` returns `no_offboarding_record` if HR has not yet filed one. In that case, direct the caller to HR first and do not attempt removal.
 
-  For group membership changes, check whether the requested group requires approval. If it does, inform the caller that the request will be routed for approval.
+  For group membership changes, check whether the requested group requires approval. If it does, the submit tool will create the membership record in `pending_approval` status and return a `request_id` that must be explicitly routed to the caller's manager via `route_approval_workflow`. If no approval is required (or if the action is `remove`), the change is immediate and no routing is needed.
 
-  After completing any account or access change, notify the IT security team.
 
   ---
 
@@ -167,7 +173,7 @@ instructions: |
 
   1. Read the first step to the caller and ask them to try it.
   2. After each step, ask the caller whether the issue is resolved.
-  3. If resolved, close the call without creating a ticket — no ticket is needed if the issue is resolved through troubleshooting.
+  3. If the issue is resolved, confirm with the caller, summarize what fixed it, and end the call without creating an incident ticket — no ticket is needed when troubleshooting resolves the issue. Do not hang up abruptly; the caller should know the call is finishing.
   4. If all steps have been attempted without resolution, create an incident ticket and include a note that troubleshooting was completed.
 
   Do not skip troubleshooting steps or jump ahead. Complete them in order.
@@ -178,61 +184,52 @@ instructions: |
 
   After completing the primary action for a request, additional follow-up steps are required depending on the flow. These are separate operations that must be completed before ending the call:
 
-  - **Login issues**: After creating an incident ticket, assign an SLA tier to the ticket. The SLA tier is determined by the urgency level: high urgency receives a Tier 1 SLA (1-hour response, 4-hour resolution), medium receives Tier 2 (4-hour response, 8-hour resolution), and low receives Tier 3 (8-hour response, 24-hour resolution). Inform the caller of the expected response time.
+  - **Incident-ticket SLA tiering (all categories)**: After ANY `create_incident_ticket` call — login_issue, service_outage, hardware_malfunction, or network_connectivity — assign an SLA tier via `assign_sla_tier`. Infer the urgency from the caller's own description (business impact, whether they are blocked, whether it affects a customer-facing deadline) — do NOT ask the caller "what urgency is this?" The SLA tier corresponding to each urgency is defined in the `assign_sla_tier` tool description; after assignment, inform the caller of the expected response time returned by the tool.
 
-  - **Service outages (new)**: After creating an outage ticket, check the known error database for a matching entry. If a known error exists, link it to the ticket and inform the caller of the known workaround.
+  - **Service outages (new)**: After creating an outage ticket, check the known error database for a matching entry. There are three cases to handle explicitly:
+    - If a known error exists and has a workaround, link the error to the ticket and read the workaround to the caller.
+    - If a known error exists but has no workaround on file, link the error to the ticket and tell the caller that engineering is aware and a workaround will be posted once available.
+    - If no known error exists, proceed without linking.
 
-  - **Hardware malfunctions**: After creating an incident ticket, schedule a field technician dispatch to inspect the device. Ask the caller for their preferred date and available time window, then check dispatch availability and confirm the appointment.
+  - **Hardware malfunctions**: First retrieve the `hardware_malfunction` troubleshooting guide and walk the caller through the steps (visual inspection, power cycle, reseat cables, swap a known-good peripheral, verify power source). If the issue resolves during troubleshooting, call `mark_resolved` with `flow_id=hardware_malfunction` and `resolution_type=resolved_via_troubleshooting` before ending the call — do not hang up abruptly; summarize what fixed it. If troubleshooting does not resolve the issue, look up the asset record, create an incident ticket with `troubleshooting_completed=true`, and schedule a field technician dispatch. Ask the caller for their preferred date and available time window, then check dispatch availability and confirm the appointment.
 
-  - **Network issues**: After creating an incident ticket, attach a diagnostic log to the ticket. Ask the caller to run the network diagnostic tool (netdiag.company.com) and provide the diagnostic reference code that is displayed upon completion.
+  - **Network issues**: Walk the caller through the `network_connectivity` troubleshooting guide. If the issue resolves, call `mark_resolved` with `flow_id=network_connectivity` and `resolution_type=resolved_via_troubleshooting` before ending the call. If not, create an incident ticket (`troubleshooting_completed=true`) and attach a diagnostic log. Ask the caller to run the network diagnostic tool (netdiag.company.com) and provide the diagnostic reference code.
 
-  - **Laptop replacement**: After submitting the replacement request, initiate an asset return authorization for the old device. The return authorization generates a shipping label and return deadline. Inform the caller of the return instructions and deadline.
+  - **Login issues (resolved via unlock/reset)**: After a successful `attempt_account_unlock` or `attempt_password_reset`, call `mark_resolved` with `flow_id=login_issue` and `resolution_type=resolved_via_troubleshooting` before ending the call. Only create an incident ticket (and assign an SLA tier per the incident-ticket SLA policy above) when the unlock/reset does not succeed.
 
-  - **Monitor bundle**: After submitting the request, verify the department cost center has available budget for the purchase. If budget is insufficient, inform the caller that the request will be placed on hold pending budget approval.
+  - **Laptop replacement**: BEFORE submitting, verify cost-center budget via `verify_cost_center_budget` (auto-fetched). If insufficient, place the request on hold pending budget approval and do not submit. AFTER submitting the replacement request, initiate an asset return authorization for the old device. The return authorization generates a shipping label and return deadline (14 days). Inform the caller of the return instructions and deadline. Exception: when `justification=lost_or_stolen`, there is no asset to return — handle via the Security Incident flow (open a security case and initiate remote wipe) before submitting the replacement request, and skip the return-authorization step.
+
+  - **Monitor bundle**: BEFORE submitting the request, verify the department cost center has available budget (`verify_cost_center_budget`). The caller does NOT provide a cost center code — the tool looks it up from the caller's employee record automatically. If the cost center has no budget, inform the caller that the request will be placed on hold pending budget approval.
 
   - **Application access (when approval required)**: After submitting the access request, explicitly route the approval workflow to the caller's manager. The routing step sends the approval notification and starts the approval SLA clock.
 
-  - **License request**: After submitting the request, validate the cost center charge code. Ask the caller for their cost center code and verify it before the license can be fulfilled.
+  - **License request (permanent)**: BEFORE submitting the request, validate the cost center charge code. The caller does NOT provide a cost center — the tool auto-fetches from the caller's employee record. Temporary licenses do not require this validation.
 
   - **Ergonomic equipment**: Before submitting certain equipment types (standing desk converter, ergonomic chair), verify that the caller has a completed ergonomic assessment on file. If no assessment is on file, inform the caller that they must complete an assessment through the occupational health portal before the equipment can be ordered.
 
-  - **Conference room booking**: After confirming the booking, send a calendar invite to the caller. Ask for the meeting title and confirm the time window.
+  - **Conference room booking**: After confirming the booking, call `send_calendar_invite` to persist a calendar event record. Confirm the date, time window, and room code with the caller.
 
   - **Account provisioning**: After provisioning accounts, inform the caller of the provisioned services and the new hire's email address. Confirm the access groups that were assigned.
 
-  - **Permission change**: After submitting the permission change, schedule a 90-day access review. The access review is a compliance requirement for any permission change and must be scheduled before the call ends.
+  - **Permission change**: After submitting the permission change, schedule the 90-day access review. Set the review date to the effective date + 90 days (a tolerance of ±3 days is acceptable). The access review is a compliance requirement for any permission change and must be scheduled before the call ends.
 
-  - **Access removal (off-boarding)**: After removing system access, initiate an asset recovery request to collect all company hardware from the departing employee. Retrieve their assigned assets and create the recovery order.
+  - **Access removal (off-boarding)**: After removing system access, initiate an asset recovery request to collect all company hardware from the departing employee. Retrieve their assigned assets and create the recovery order. Recovery methods are `shipping_label` (mail a prepaid label to the departing employee) or `drop_off` (the employee returns the device to an IT office before their last working day).
+
+  - **Security incident (Flow 19)**: Open a security case (`report_security_incident`) and initiate a remote wipe (`initiate_remote_wipe`) BEFORE submitting the replacement hardware request. Do not submit an asset return — the device is unrecoverable.
+
+  - **MFA reset (Flow 20)**: Phone-of-record changes cannot be made over the phone. If a caller requests one, submit the reset request (it will return an in-person-required error and open a security case), then transfer to a live agent.
+
+  - **Software request status / escalation (Flow 21)**: If a caller is checking status on a prior access request, look up the request status. If the approval SLA has been breached and the caller asks to escalate, route the request to a skip-level approver via `escalate_approval` — do not escalate before the SLA is breached.
 
   ---
 
-  ### ID and Code Format Reference
+  ### Caller-Provided vs. System-Returned Identifiers
 
-  The following formats apply to identifiers used in this system:
-
-  - **Employee ID**: EMP followed by 6 digits. Example: EMP048271
-  - **Ticket number**: INC followed by 7 digits. Example: INC0048271
-  - **Asset tag**: AST-3 uppercase letters-6 digits. Example: AST-LPT-284719
-  - **Software catalog ID (app)**: APP-4 digits. Example: APP-0042
-  - **Software catalog ID (license)**: LIC-4 digits. Example: LIC-0018
-  - **License assignment ID**: LASGN-6 digits. Example: LASGN-048271
-  - **Building code**: BLD followed by 1-2 digits. Example: BLD3, BLD12
-  - **Floor**: FL followed by 1-2 digits. Example: FL2, FL15
-  - **Room code**: Building code, dash, floor, dash, RM followed by 3 digits. Example: BLD3-FL2-RM204
-  - **Desk code**: Building code, dash, floor, dash, D followed by 3 digits. Example: BLD3-FL2-D107
-  - **Parking zone**: PZ followed by a single uppercase letter. Example: PZA, PZC
-  - **Parking space ID**: Zone code, dash, 3 digits. Example: PZA-042
-  - **Department code**: 2-5 uppercase letters. Example: ENG, MKTG, SALES, FIN, HR, OPS, LEGAL, INFRA
-  - **Role code**: 2-5 uppercase letters. Example: SWE, PM, DESGN, ANLST, ADMIN, MGRHR, MGENG, SECUR
-  - **Access group code**: GRP-2-6 uppercase letters. Example: GRP-ENGCORE, GRP-VPNALL, GRP-DBREAD
-  - **Permission template ID**: PTPL-2-5 uppercase letters-2 digits. Example: PTPL-SWE-01, PTPL-MGENG-02
-  - **Manager authorization code**: 6 alphanumeric characters, uppercase. Example: K4M2P9
-  - **OTP code**: 6 digits. Example: 483920
-  - **Request ID**: REQ-3-5 uppercase letters-6 digits. Example: REQ-HW-048271, REQ-SW-048271
-  - **Case ID**: CASE-2-5 uppercase letters-6 digits. Example: CASE-ACCT-048271
-  - **Equipment type code**: One of: standing_desk_converter, ergonomic_chair, ergonomic_keyboard, monitor_arm, footrest
-  - **Date**: YYYY-MM-DD. Example: 2026-08-15
-  - **Time**: HH:MM in 24-hour format. Example: 09:00, 14:30
+  Each tool's parameter descriptions below document the exact format (regex) for every identifier. Format errors are enforced by the tools. A few high-level rules apply across the system:
+  - Application and license **names** are supplied by the caller in natural language (e.g., "Slack", "IntelliJ"). The `get_application_details` and `get_license_catalog_item` tools resolve names to catalog IDs using exact-match (case-insensitive) against product names and their aliases. If a name does not resolve, ask the caller to confirm the product name.
+  - **Catalog IDs** (APP-NNNN, LIC-NNNN) are returned by lookup tools. Use the returned ID exactly for subsequent submit tools.
+  - **Cost center codes** (CC-NNNN) are NOT provided by callers; the tools that need them auto-fetch from the caller's employee record.
+  - **License assignment IDs** (LASGN-NNNNNN) come from `get_employee_licenses`. The caller says the *product name*; the agent picks the matching assignment ID from the lookup response.
 
 tools:
 
@@ -285,15 +282,19 @@ tools:
   - id: verify_manager_auth
     name: verify_manager_auth
     description: >
-      Verify a manager's authorization code to allow actions on behalf of
-      another employee. Must be called after verify_employee_auth.
-      Returns confirmed: true and the manager's authorized scope on success.
+      Perform standard employee verification AND manager authorization in a single call.
+      Use this instead of verify_employee_auth for flows that act on behalf of another
+      employee (account provisioning, access removal). Returns confirmed: true, the
+      manager's department, and list of direct reports on success.
     tool_type: auth
     domain: itsm
     required_parameters:
       - name: employee_id
         type: string
-        description: "Employee ID of the authenticated caller (the manager). Example: EMP048271"
+        description: "Employee ID of the caller (the manager). Example: EMP048271"
+      - name: phone_last_four
+        type: string
+        description: "Last 4 digits of the manager's phone number on file. Example: 7294"
       - name: manager_auth_code
         type: string
         description: "6-character alphanumeric manager authorization code, uppercase. Example: K4M2P9"
@@ -347,21 +348,24 @@ tools:
     description: >
       Retrieve a step-by-step troubleshooting guide for a specific issue
       category. Returns numbered steps the agent should walk the caller through
-      before creating a ticket. Available for login_issue and network_connectivity.
+      before creating a ticket. Available for login_issue, network_connectivity,
+      and hardware_malfunction.
     tool_type: read
     domain: itsm
     required_parameters:
       - name: issue_category
         type: string
-        description: "Issue category: login_issue or network_connectivity"
+        description: "Issue category: login_issue, network_connectivity, or hardware_malfunction"
 
   - id: attempt_account_unlock
     name: attempt_account_unlock
     description: >
       Attempt to unlock a locked user account. Returns success if the account
-      was locked and is now unlocked, or an error if the account is not locked
-      or the unlock failed for another reason. Call after troubleshooting steps
-      for login issues when the caller's account appears to be locked.
+      was locked and is now unlocked. Returns `cannot_unlock_security_hold` if
+      the account is under a security investigation or admin hold — in that
+      case, do not retry; offer to transfer the caller to a live agent. Returns
+      an error if the account is not locked. Call after troubleshooting for
+      login issues when the caller's account appears to be locked.
     tool_type: write
     domain: itsm
     required_parameters:
@@ -425,6 +429,8 @@ tools:
       high → tier_1 (1hr response, 4hr resolution),
       medium → tier_2 (4hr response, 8hr resolution),
       low → tier_3 (8hr response, 24hr resolution).
+      The tool enforces this mapping and returns an error if the tier does
+      not match the ticket's urgency.
     tool_type: write
     domain: itsm
     required_parameters:
@@ -562,20 +568,28 @@ tools:
       - name: request_type
         type: string
         description: "Type of hardware request: laptop_replacement or monitor_bundle"
-      - name: replacement_reason
+      - name: justification
         type: string
-        description: "For laptop_replacement: end_of_life, performance_degradation, or physical_damage. For monitor_bundle: new_setup or replacement."
+        description: "For laptop_replacement: end_of_life, performance_degradation, physical_damage, or lost_or_stolen (use lost_or_stolen only with the Security Incident flow). For monitor_bundle: new_setup or replacement."
       - name: current_asset_tag
         type: string
-        description: "Asset tag of the current device being replaced (for laptop_replacement) or null for new monitor setups. Format: AST-3 letters-6 digits."
+        description: "Asset tag of the current device being replaced (for laptop_replacement, except when reason is lost_or_stolen) or null for new monitor setups. Format: AST-3 letters-6 digits."
+        required: false
+      - name: laptop_os
+        type: string
+        description: "Required for laptop_replacement. Operating system: macos or windows."
+        required: false
+      - name: laptop_size
+        type: string
+        description: "Required for laptop_replacement. Screen size: 13_inch, 14_inch, or 16_inch."
         required: false
       - name: monitor_size
         type: string
-        description: "For monitor_bundle requests only: 24_inch, 27_inch, or 32_inch. Omit for laptop requests."
+        description: "Required for monitor_bundle. Monitor size: 24_inch, 27_inch, or 32_inch. Omit for laptop requests."
         required: false
       - name: delivery_building
         type: string
-        description: "Building code for delivery. Format: BLD followed by 1-2 digits. Example: BLD3"
+        description: "Building code OR name/alias for delivery. Examples: 'BLD3', 'Headquarters', 'Downtown'."
       - name: delivery_floor
         type: string
         description: "Floor for delivery. Format: FL followed by 1-2 digits. Example: FL2"
@@ -604,33 +618,35 @@ tools:
   - id: verify_cost_center_budget
     name: verify_cost_center_budget
     description: >
-      Verify that a department cost center has available budget for a purchase.
-      Returns budget status and remaining allocation. Must be called before
+      Verify that the department cost center associated with the caller has
+      available budget for a hardware purchase. The tool auto-fetches the
+      department_code and cost_center_code from the caller's employee record
+      — the caller does NOT need to provide a CC code. Must be called before
       submitting a hardware request to confirm funding is available.
     tool_type: read
     domain: itsm
     required_parameters:
-      - name: department_code
+      - name: employee_id
         type: string
-        description: "Department code. Example: ENG"
-      - name: cost_center_code
-        type: string
-        description: "Cost center code: CC followed by a dash and 4 digits. Example: CC-4021"
+        description: "Employee ID of the caller. Example: EMP048271"
 
   # ── FLOW 7: APPLICATION ACCESS REQUEST ──────────────────────────────────────
 
   - id: get_application_details
     name: get_application_details
     description: >
-      Retrieve details for a software application from the service catalog.
-      Returns application name, description, approval requirements, and
-      available access levels. Call before submitting an access request.
+      Retrieve details for a software application by its product name.
+      The tool resolves the name to a catalog entry using exact (case-insensitive)
+      match against the product name or its aliases (e.g. "IntelliJ" → "JetBrains
+      IntelliJ IDEA Ultimate"). Returns the catalog_id, full name, description,
+      approval requirements, and available access levels. Use the returned
+      catalog_id for the subsequent submit_access_request call.
     tool_type: read
     domain: itsm
     required_parameters:
-      - name: catalog_id
+      - name: application_name
         type: string
-        description: "Application catalog ID in format APP-4 digits. Example: APP-0042"
+        description: "Application name as the caller provides it (e.g. 'Slack', 'Confluence'). Must match a product name or alias in the catalog."
 
   - id: submit_access_request
     name: submit_access_request
@@ -676,19 +692,24 @@ tools:
   - id: get_license_catalog_item
     name: get_license_catalog_item
     description: >
-      Retrieve details for a software license from the catalog. Returns
-      license name, vendor, cost center requirements, and availability.
+      Retrieve details for a software license by product name. Resolves the
+      name to a catalog entry via exact (case-insensitive) match on the license
+      name or its aliases. Returns the catalog_id, full name, vendor, cost-center
+      requirements, and availability. Use the returned catalog_id for subsequent
+      submit_license_request calls.
     tool_type: read
     domain: itsm
     required_parameters:
-      - name: catalog_id
+      - name: license_name
         type: string
-        description: "License catalog ID in format LIC-4 digits. Example: LIC-0018"
+        description: "License product name as the caller provides it (e.g. 'IntelliJ', 'Figma'). Must match a product name or alias in the catalog."
 
   - id: submit_license_request
     name: submit_license_request
     description: >
-      Submit a permanent software license request. Returns a request ID.
+      Submit a software license request. For permanent licenses, omit duration_days.
+      For temporary licenses, set duration_days to exactly 30, 60, or 90. Returns
+      a request ID (and expiration date for temporary licenses).
     tool_type: write
     domain: itsm
     required_parameters:
@@ -697,43 +718,25 @@ tools:
         description: "Employee ID. Example: EMP048271"
       - name: catalog_id
         type: string
-        description: "License catalog ID. Example: LIC-0018"
+        description: "License catalog ID returned by get_license_catalog_item. Example: LIC-0018"
+      - name: duration_days
+        type: integer
+        description: "Duration in days for a temporary license. Must be 30, 60, or 90. Omit (null) for permanent licenses."
+        required: false
 
   - id: validate_cost_center
     name: validate_cost_center
     description: >
-      Validate a cost center charge code for a license purchase. The caller
-      provides their cost center code and the system verifies it is active and
-      associated with their department. Must be called before submit_license_request.
+      Validate a cost center charge code for a permanent license purchase.
+      Auto-fetches the department_code and cost_center_code from the caller's
+      employee record; the caller does NOT provide a CC. Must be called before
+      submit_license_request for permanent licenses.
     tool_type: read
-    domain: itsm
-    required_parameters:
-      - name: cost_center_code
-        type: string
-        description: "Cost center code: CC followed by a dash and 4 digits. Example: CC-4021"
-      - name: department_code
-        type: string
-        description: "Department code. Example: ENG"
-
-  # ── FLOW 9: TEMPORARY LICENSE ───────────────────────────────────────────────
-
-  - id: submit_temporary_license
-    name: submit_temporary_license
-    description: >
-      Submit a time-limited software license request. Duration must be
-      exactly 30, 60, or 90 days. Returns a request ID with expiration date.
-    tool_type: write
     domain: itsm
     required_parameters:
       - name: employee_id
         type: string
-        description: "Employee ID. Example: EMP048271"
-      - name: catalog_id
-        type: string
-        description: "License catalog ID. Example: LIC-0018"
-      - name: duration_days
-        type: integer
-        description: "License duration: exactly 30, 60, or 90 days"
+        description: "Employee ID of the caller. Example: EMP048271"
 
   # ── FLOW 10: LICENSE RENEWAL ────────────────────────────────────────────────
 
@@ -750,26 +753,14 @@ tools:
         type: string
         description: "Employee ID. Example: EMP048271"
 
-  - id: check_renewal_eligibility
-    name: check_renewal_eligibility
-    description: >
-      Check whether a specific license assignment is eligible for renewal.
-      Must be within 30 days of expiration or expired no more than 14 days ago.
-    tool_type: read
-    domain: itsm
-    required_parameters:
-      - name: employee_id
-        type: string
-        description: "Employee ID. Example: EMP048271"
-      - name: license_assignment_id
-        type: string
-        description: "License assignment ID in format LASGN-6 digits. Example: LASGN-048271"
-
   - id: submit_license_renewal
     name: submit_license_renewal
     description: >
-      Submit a license renewal for an eligible license assignment.
-      Returns a request ID and the new expiration date.
+      Submit a license renewal for an existing license assignment. The tool
+      enforces the renewal window: the license must be within 30 days of
+      expiration or expired no more than 14 days ago. If outside the window,
+      returns `not_in_renewal_window` with the expiration date so the agent
+      can inform the caller to submit a new license request instead.
     tool_type: write
     domain: itsm
     required_parameters:
@@ -778,21 +769,21 @@ tools:
         description: "Employee ID. Example: EMP048271"
       - name: license_assignment_id
         type: string
-        description: "License assignment ID. Example: LASGN-048271"
+        description: "License assignment ID from get_employee_licenses (caller states the product name; agent picks the matching assignment). Format: LASGN-6 digits. Example: LASGN-048271"
 
   # ── FLOW 11: DESK/OFFICE SPACE REQUEST ──────────────────────────────────────
 
-  - id: check_space_availability
-    name: check_space_availability
+  - id: check_desk_availability
+    name: check_desk_availability
     description: >
-      Check available desk or office spaces in a given building and floor.
-      Returns a list of available desk codes with locations.
+      Check available desks in a given building and floor. Returns a list of
+      available desk codes with their zone and window proximity.
     tool_type: read
     domain: itsm
     required_parameters:
       - name: building_code
         type: string
-        description: "Building code. Example: BLD3"
+        description: "Building code OR name/alias. Examples: 'BLD3', 'Headquarters', 'Downtown'. Returns name_not_found on unknown name."
       - name: floor_code
         type: string
         description: "Floor code. Example: FL2"
@@ -800,8 +791,10 @@ tools:
   - id: submit_desk_assignment
     name: submit_desk_assignment
     description: >
-      Submit a desk or office space assignment request. The desk code must
-      be one returned by check_space_availability.
+      Submit a desk assignment. The desk code must be one returned by
+      check_desk_availability. Fails with `already_assigned` if the caller
+      already has an assigned desk on file, or with `too_soon` if the caller's
+      previous desk assignment is less than 90 days old (reassignment cooldown).
     tool_type: write
     domain: itsm
     required_parameters:
@@ -817,20 +810,26 @@ tools:
   - id: check_parking_availability
     name: check_parking_availability
     description: >
-      Check available parking spaces in a given zone. Returns a list of
-      available space IDs.
+      Check available parking spaces. If a zone code is provided, returns
+      available spaces in that zone; if omitted, returns available spaces
+      across all zones (each entry includes its zone so the agent can present
+      options). Callers who don't know zone codes can ask "what parking is
+      available?" and the agent should omit zone_code.
     tool_type: read
     domain: itsm
     required_parameters:
       - name: zone_code
         type: string
-        description: "Parking zone code. Example: PZA"
+        description: "Parking zone code OR name/alias (e.g., 'Executive Garage', 'North Lot'). Optional — omit to return availability across all zones. Examples: 'PZA', 'Executive Garage'."
+        required: false
 
   - id: submit_parking_assignment
     name: submit_parking_assignment
     description: >
-      Submit a parking space assignment request. The space ID must be
-      one returned by check_parking_availability.
+      Submit a parking space assignment. The space ID must be one returned by
+      check_parking_availability. Fails with `already_assigned` if the caller
+      already has an assigned parking space, or with `too_soon` if the caller's
+      previous parking assignment is less than 180 days old (reassignment cooldown).
     tool_type: write
     domain: itsm
     required_parameters:
@@ -840,6 +839,26 @@ tools:
       - name: parking_space_id
         type: string
         description: "Parking space ID from availability check. Example: PZA-042"
+
+  - id: submit_waitlist
+    name: submit_waitlist
+    description: >
+      Place the caller on the desk or parking waitlist for a specific building
+      or zone. Use only when check_desk_availability or check_parking_availability
+      returns zero available resources. Returns a waitlist ID and the caller's
+      position in the queue.
+    tool_type: write
+    domain: itsm
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID. Example: EMP048271"
+      - name: resource_type
+        type: string
+        description: "Resource to waitlist for: desk or parking"
+      - name: zone_or_building
+        type: string
+        description: "Building code (for desks) or parking zone code (for parking). Example: BLD3 or PZA"
 
   # ── FLOW 13: OFFICE/ERGONOMIC EQUIPMENT ─────────────────────────────────────
 
@@ -871,7 +890,7 @@ tools:
         description: "Equipment type: standing_desk_converter, ergonomic_chair, ergonomic_keyboard, monitor_arm, or footrest"
       - name: delivery_building
         type: string
-        description: "Building code for delivery. Example: BLD3"
+        description: "Building code OR name/alias for delivery. Examples: 'BLD3', 'Headquarters'."
       - name: delivery_floor
         type: string
         description: "Floor for delivery. Example: FL2"
@@ -881,18 +900,20 @@ tools:
   - id: check_room_availability
     name: check_room_availability
     description: >
-      Check available conference rooms for a given building, floor, date,
-      time window, and minimum capacity. Returns a list of available rooms
-      with their codes, capacities, and equipment.
+      Check available conference rooms for a given building, optional floor,
+      date, time window, minimum capacity, and optionally required equipment.
+      Returns a list of available rooms with their codes, floor, capacities,
+      and equipment.
     tool_type: read
     domain: itsm
     required_parameters:
       - name: building_code
         type: string
-        description: "Building code. Example: BLD3"
+        description: "Building code OR name/alias. Examples: 'BLD3', 'Headquarters', 'Downtown'. Returns name_not_found on unknown name."
       - name: floor_code
         type: string
-        description: "Floor code. Example: FL2"
+        description: "Floor code. Example: FL2. Optional — omit to search all floors in the building."
+        required: false
       - name: date
         type: string
         description: "Booking date in YYYY-MM-DD format. Example: 2026-08-15"
@@ -905,6 +926,10 @@ tools:
       - name: min_capacity
         type: integer
         description: "Minimum seating capacity required. Example: 8"
+      - name: equipment_required
+        type: array
+        description: "Optional list of equipment that MUST be present in the room. Valid values: projector, whiteboard, video_conferencing, display_screen, speakerphone. Only rooms containing all listed items are returned. Omit if the caller has no equipment requirements."
+        required: false
 
   - id: submit_room_booking
     name: submit_room_booking
@@ -1035,7 +1060,10 @@ tools:
     name: get_group_details
     description: >
       Retrieve details about a specific access group including description,
-      approval requirements, and current member count.
+      approval requirements, current member count, and eligibility
+      restrictions (eligible_departments, eligible_roles). An empty list on
+      either dimension means unrestricted; otherwise the employee's
+      department_code / role_code must appear in the list.
     tool_type: read
     domain: itsm
     required_parameters:
@@ -1047,7 +1075,12 @@ tools:
     name: submit_group_membership_change
     description: >
       Submit a request to add or remove an employee from an access group.
-      If the group requires approval, the request is created in pending state.
+      If the group requires approval, the request is created in pending state
+      and the response includes both a case_id and a request_id — use the
+      request_id when calling route_approval_workflow. Returns
+      `group_not_eligible` when the employee's department/role does not match
+      the group's eligibility restrictions (check `get_group_details` first
+      if unsure).
     tool_type: write
     domain: itsm
     required_parameters:
@@ -1080,7 +1113,9 @@ tools:
     name: submit_permission_change
     description: >
       Submit a permission change request due to a role change. Requires
-      OTP auth. Returns a case ID.
+      OTP auth. The effective_date must not be in the past and must match
+      the HR-approved effective date from check_role_change_authorized.
+      Returns a case ID.
     tool_type: write
     domain: itsm
     required_parameters:
@@ -1095,7 +1130,7 @@ tools:
         description: "Permission template ID selected by the caller. Example: PTPL-SWE-01"
       - name: effective_date
         type: string
-        description: "Date the role change takes effect in YYYY-MM-DD format. Example: 2026-09-01"
+        description: "Date the role change takes effect in YYYY-MM-DD format. Must match the HR-approved date returned by check_role_change_authorized. Example: 2026-09-01"
 
   - id: schedule_access_review
     name: schedule_access_review
@@ -1173,7 +1208,114 @@ tools:
         description: "The access removal case ID. Example: CASE-ACCT-072948"
       - name: recovery_method
         type: string
-        description: "How equipment will be recovered: office_pickup (IT collects from desk), shipping_label (employee ships devices), or drop_off (employee brings to IT office)"
+        description: "How equipment will be recovered: shipping_label (IT mails a prepaid label and the employee ships the devices back) or drop_off (the employee returns the devices in person to an IT office)."
+
+  # ── FLOW 17 EXTENSION: HR-GATED ROLE-CHANGE CHECK (G2) ─────────────────────
+
+  - id: check_role_change_authorized
+    name: check_role_change_authorized
+    description: >
+      HR-gated eligibility check. Confirms HR has pre-approved the requested
+      role change for the caller before any permission modification is made.
+      Must be called after OTP verification and before get_permission_templates
+      in Flow 17. Returns success with the HR case ID and intended effective
+      date, or not_authorized if HR has not approved a matching role change.
+    tool_type: read
+    domain: itsm
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID of the caller. Example: EMP048271"
+      - name: new_role_code
+        type: string
+        description: "The role code the caller is transitioning to. Example: MGENG"
+
+  # ── FLOW 19: SECURITY INCIDENT / STOLEN DEVICE ─────────────────────────────
+
+  - id: report_security_incident
+    name: report_security_incident
+    description: >
+      Open a security case for a lost, stolen, or potentially compromised
+      company device. Returns a security_case_id used by the subsequent
+      initiate_remote_wipe call.
+    tool_type: write
+    domain: itsm
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID of the caller. Example: EMP048271"
+      - name: asset_tag
+        type: string
+        description: "Asset tag of the affected device. Must be assigned to the caller. Example: AST-LPT-284719"
+      - name: incident_type
+        type: string
+        description: "Type of incident: lost, stolen, or suspected_compromise"
+
+  - id: initiate_remote_wipe
+    name: initiate_remote_wipe
+    description: >
+      Dispatch a remote wipe command to a compromised device. Links the wipe
+      to an existing security case. Must be called after report_security_incident.
+    tool_type: write
+    domain: itsm
+    required_parameters:
+      - name: asset_tag
+        type: string
+        description: "Asset tag of the device to wipe. Example: AST-LPT-284719"
+      - name: security_case_id
+        type: string
+        description: "The security case ID returned by report_security_incident. Example: SEC-048271"
+
+  # ── FLOW 20: MFA RESET (refusal + escalation) ──────────────────────────────
+
+  - id: submit_mfa_reset
+    name: submit_mfa_reset
+    description: >
+      Submit a request to change the phone-of-record for MFA. ALWAYS returns
+      in_person_required — phone-of-record changes cannot be completed over
+      the phone. A security case is opened to track the in-person visit. After
+      this tool returns, call transfer_to_agent with reason
+      policy_exception_needed.
+    tool_type: write
+    domain: itsm
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID of the caller. Example: EMP048271"
+      - name: new_phone_last_four
+        type: string
+        description: "Last 4 digits of the new phone number the caller wants on file. Example: 9912"
+
+  # ── FLOW 21: SOFTWARE REQUEST STATUS / ESCALATION ──────────────────────────
+
+  - id: get_request_status
+    name: get_request_status
+    description: >
+      Look up the current status of a prior software or hardware request,
+      including approval routing, SLA deadline, and whether the SLA has been
+      breached.
+    tool_type: read
+    domain: itsm
+    required_parameters:
+      - name: request_id
+        type: string
+        description: "Request ID. Example: REQ-SW-048271"
+
+  - id: escalate_approval
+    name: escalate_approval
+    description: >
+      Escalate a pending approval to a skip-level approver after the original
+      SLA has been breached. Returns an error if the original SLA has NOT yet
+      been breached. Sets a new 48-hour SLA window on the escalation.
+    tool_type: write
+    domain: itsm
+    required_parameters:
+      - name: request_id
+        type: string
+        description: "Request ID to escalate. Example: REQ-SW-048271"
+      - name: escalate_to_employee_id
+        type: string
+        description: "Employee ID of the skip-level approver. Example: EMP031482"
 
   # ── SYSTEM: TRANSFER TO LIVE AGENT ──────────────────────────────────────────
 
@@ -1195,3 +1337,25 @@ tools:
       - name: issue_summary
         type: string
         description: "Brief summary of the request, what was attempted, and why transfer is needed"
+
+  - id: mark_resolved
+    name: mark_resolved
+    description: >
+      Terminal step for resolved-without-ticket calls (login resolved via
+      troubleshooting or unlock/reset, hardware resolved via troubleshooting,
+      network resolved via troubleshooting). Writes an interactions row so
+      the call has a concrete state change even when no ticket or other
+      persistent record is created. Call this AFTER confirming resolution
+      with the caller and before ending the call.
+    tool_type: write
+    domain: itsm
+    required_parameters:
+      - name: employee_id
+        type: string
+        description: "Employee ID of the caller. Example: EMP048271"
+      - name: flow_id
+        type: string
+        description: "Flow identifier: login_issue, network_connectivity, or hardware_malfunction"
+      - name: resolution_type
+        type: string
+        description: "How the call resolved. Use `resolved_via_troubleshooting` for all currently-active resolved flows (1a login, 3a hardware, 4a network). `transferred` is reserved for future flows that log a transfer — it is not used by any current flow."

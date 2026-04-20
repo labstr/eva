@@ -1,0 +1,694 @@
+{
+  "_current_date": "2026-04-08",
+  "_ticket_counter": 48270,
+  "_request_counter": 48270,
+  "_case_counter": 48270,
+  "_security_case_counter": 48270,
+  "employees": {
+    "EMP067342": {
+      "employee_id": "EMP067342",
+      "first_name": "Nathan",
+      "last_name": "Kowalski",
+      "date_of_birth": "1990-11-14",
+      "phone_last_four": "2185",
+      "otp_code": "482193",
+      "department_code": "OPS",
+      "role_code": "ANALYST",
+      "cost_center_code": "CC-3301",
+      "hire_date": "2021-06-14",
+      "employment_status": "active",
+      "building_code": "BLD1",
+      "floor_code": "FL2",
+      "is_manager": false,
+      "manager_employee_id": "EMP054210",
+      "manager_auth_code": null,
+      "direct_reports": [],
+      "assigned_desk": null,
+      "assigned_parking": null,
+      "last_desk_assignment_date": null,
+      "last_parking_assignment_date": null,
+      "hardware_entitlements": {
+        "laptop_replacement": {
+          "current_asset_tag": "AST-LPT-673421",
+          "pending_request": false,
+          "pending_request_id": null
+        },
+        "monitor_bundle": {
+          "current_asset_tag": "AST-MON-673422",
+          "pending_request": false,
+          "pending_request_id": null
+        }
+      },
+      "software_licenses": [],
+      "group_memberships": [
+        {
+          "group_code": "GRP-OPS001",
+          "group_name": "Operations Core Access",
+          "status": "active",
+          "added_date": "2021-06-14"
+        },
+        {
+          "group_code": "GRP-VPN000",
+          "group_name": "Corporate VPN",
+          "status": "active",
+          "added_date": "2021-06-14"
+        }
+      ],
+      "account_status": {
+        "active_directory": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "sso": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "email": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "vpn": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "erp": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        }
+      },
+      "ergonomic_assessment": {
+        "status": "not_completed",
+        "completed_date": null
+      },
+      "offboarding_record": {
+        "status": null,
+        "last_working_day": null,
+        "initiated_by": null,
+        "initiated_date": null,
+        "access_removed": false,
+        "removal_case_id": null,
+        "removal_scope": null
+      },
+      "pending_role_change": {
+        "new_role_code": null,
+        "effective_date": null,
+        "hr_case_id": null
+      }
+    },
+    "EMP054210": {
+      "employee_id": "EMP054210",
+      "first_name": "Maya",
+      "last_name": "Singh",
+      "date_of_birth": "1983-03-02",
+      "phone_last_four": "4408",
+      "otp_code": "715204",
+      "department_code": "OPS",
+      "role_code": "MANAGER",
+      "cost_center_code": "CC-3301",
+      "hire_date": "2018-02-19",
+      "employment_status": "active",
+      "building_code": "BLD1",
+      "floor_code": "FL3",
+      "is_manager": true,
+      "manager_employee_id": "EMP041100",
+      "manager_auth_code": "M4Y8K2",
+      "direct_reports": [
+        "EMP067342"
+      ],
+      "assigned_desk": "BLD1-FL3-D301",
+      "assigned_parking": "PZE-101",
+      "last_desk_assignment_date": "2025-11-20",
+      "last_parking_assignment_date": "2025-09-01",
+      "hardware_entitlements": {
+        "laptop_replacement": {
+          "current_asset_tag": "AST-LPT-542101",
+          "pending_request": false,
+          "pending_request_id": null
+        },
+        "monitor_bundle": {
+          "current_asset_tag": "AST-MON-542102",
+          "pending_request": false,
+          "pending_request_id": null
+        }
+      },
+      "software_licenses": [],
+      "group_memberships": [
+        {
+          "group_code": "GRP-OPS001",
+          "group_name": "Operations Core Access",
+          "status": "active",
+          "added_date": "2018-02-19"
+        },
+        {
+          "group_code": "GRP-VPN000",
+          "group_name": "Corporate VPN",
+          "status": "active",
+          "added_date": "2018-02-19"
+        }
+      ],
+      "account_status": {
+        "active_directory": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "sso": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "email": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "vpn": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "erp": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        }
+      },
+      "ergonomic_assessment": {
+        "status": "completed",
+        "completed_date": "2025-05-05"
+      },
+      "offboarding_record": {
+        "status": null,
+        "last_working_day": null,
+        "initiated_by": null,
+        "initiated_date": null,
+        "access_removed": false,
+        "removal_case_id": null,
+        "removal_scope": null
+      },
+      "pending_role_change": {
+        "new_role_code": null,
+        "effective_date": null,
+        "hr_case_id": null
+      }
+    },
+    "EMP041100": {
+      "employee_id": "EMP041100",
+      "first_name": "Laura",
+      "last_name": "Chen",
+      "date_of_birth": "1978-07-21",
+      "phone_last_four": "7811",
+      "otp_code": "631905",
+      "department_code": "OPS",
+      "role_code": "DIRECTOR",
+      "cost_center_code": "CC-3301",
+      "hire_date": "2015-09-08",
+      "employment_status": "active",
+      "building_code": "BLD1",
+      "floor_code": "FL4",
+      "is_manager": true,
+      "manager_employee_id": null,
+      "manager_auth_code": "LC7P9Q",
+      "direct_reports": [
+        "EMP054210"
+      ],
+      "assigned_desk": "BLD1-FL4-D401",
+      "assigned_parking": "PZA-401",
+      "last_desk_assignment_date": "2025-08-14",
+      "last_parking_assignment_date": "2025-02-14",
+      "hardware_entitlements": {
+        "laptop_replacement": {
+          "current_asset_tag": "AST-LPT-411001",
+          "pending_request": false,
+          "pending_request_id": null
+        },
+        "monitor_bundle": {
+          "current_asset_tag": "AST-MON-411002",
+          "pending_request": false,
+          "pending_request_id": null
+        }
+      },
+      "software_licenses": [],
+      "group_memberships": [
+        {
+          "group_code": "GRP-OPS001",
+          "group_name": "Operations Core Access",
+          "status": "active",
+          "added_date": "2015-09-08"
+        },
+        {
+          "group_code": "GRP-VPN000",
+          "group_name": "Corporate VPN",
+          "status": "active",
+          "added_date": "2015-09-08"
+        }
+      ],
+      "account_status": {
+        "active_directory": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "sso": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "email": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "vpn": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "erp": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        }
+      },
+      "ergonomic_assessment": {
+        "status": "completed",
+        "completed_date": "2024-10-10"
+      },
+      "offboarding_record": {
+        "status": null,
+        "last_working_day": null,
+        "initiated_by": null,
+        "initiated_date": null,
+        "access_removed": false,
+        "removal_case_id": null,
+        "removal_scope": null
+      },
+      "pending_role_change": {
+        "new_role_code": null,
+        "effective_date": null,
+        "hr_case_id": null
+      }
+    }
+  },
+  "assets": {
+    "AST-LPT-673421": {
+      "asset_tag": "AST-LPT-673421",
+      "asset_type": "laptop",
+      "manufacturer": "Dell",
+      "model": "Latitude 7440",
+      "os": "windows",
+      "size": "14-inch",
+      "serial_number": "DL7440-673421",
+      "assigned_employee_id": "EMP067342",
+      "status": "active",
+      "purchase_date": "2023-10-11",
+      "warranty_expiration": "2027-10-11",
+      "lifecycle_status": "current"
+    },
+    "AST-MON-673422": {
+      "asset_tag": "AST-MON-673422",
+      "asset_type": "monitor",
+      "manufacturer": "Dell",
+      "model": "UltraSharp U2722D",
+      "os": null,
+      "size": "27-inch",
+      "serial_number": "DU2722-673422",
+      "assigned_employee_id": "EMP067342",
+      "status": "active",
+      "purchase_date": "2023-10-11",
+      "warranty_expiration": "2026-10-11",
+      "lifecycle_status": "current"
+    },
+    "AST-LPT-542101": {
+      "asset_tag": "AST-LPT-542101",
+      "asset_type": "laptop",
+      "manufacturer": "Apple",
+      "model": "MacBook Pro",
+      "os": "macos",
+      "size": "14-inch",
+      "serial_number": "MBP-542101",
+      "assigned_employee_id": "EMP054210",
+      "status": "active",
+      "purchase_date": "2022-09-01",
+      "warranty_expiration": "2026-09-01",
+      "lifecycle_status": "current"
+    },
+    "AST-MON-542102": {
+      "asset_tag": "AST-MON-542102",
+      "asset_type": "monitor",
+      "manufacturer": "Dell",
+      "model": "P2422H",
+      "os": null,
+      "size": "24-inch",
+      "serial_number": "DP2422-542102",
+      "assigned_employee_id": "EMP054210",
+      "status": "active",
+      "purchase_date": "2022-09-01",
+      "warranty_expiration": "2025-09-01",
+      "lifecycle_status": "current"
+    },
+    "AST-LPT-411001": {
+      "asset_tag": "AST-LPT-411001",
+      "asset_type": "laptop",
+      "manufacturer": "Lenovo",
+      "model": "ThinkPad X1 Carbon",
+      "os": "windows",
+      "size": "14-inch",
+      "serial_number": "LNX1-411001",
+      "assigned_employee_id": "EMP041100",
+      "status": "active",
+      "purchase_date": "2021-07-15",
+      "warranty_expiration": "2025-07-15",
+      "lifecycle_status": "current"
+    },
+    "AST-MON-411002": {
+      "asset_tag": "AST-MON-411002",
+      "asset_type": "monitor",
+      "manufacturer": "LG",
+      "model": "27UP850",
+      "os": null,
+      "size": "27-inch",
+      "serial_number": "LG27-411002",
+      "assigned_employee_id": "EMP041100",
+      "status": "active",
+      "purchase_date": "2021-07-15",
+      "warranty_expiration": "2024-07-15",
+      "lifecycle_status": "current"
+    }
+  },
+  "software_catalog": {
+    "applications": {
+      "APP-1001": {
+        "catalog_id": "APP-1001",
+        "name": "Slack",
+        "name_aliases": [
+          "slack"
+        ],
+        "vendor": "Salesforce",
+        "requires_manager_approval": false,
+        "available_access_levels": [
+          "standard",
+          "admin"
+        ],
+        "department_restrictions": []
+      }
+    },
+    "licenses": {
+      "LIC-2001": {
+        "catalog_id": "LIC-2001",
+        "name": "Microsoft Visio",
+        "name_aliases": [
+          "Visio"
+        ],
+        "vendor": "Microsoft",
+        "license_cost_usd": 180,
+        "license_types_supported": [
+          "permanent",
+          "temporary"
+        ]
+      }
+    }
+  },
+  "access_groups": {
+    "GRP-OPS001": {
+      "group_code": "GRP-OPS001",
+      "name": "Operations Core Access",
+      "description": "Baseline access for operations staff",
+      "requires_approval": false,
+      "member_count": 84,
+      "eligible_departments": [
+        "OPS"
+      ],
+      "eligible_roles": []
+    },
+    "GRP-VPN000": {
+      "group_code": "GRP-VPN000",
+      "name": "Corporate VPN",
+      "description": "Standard VPN access",
+      "requires_approval": false,
+      "member_count": 412,
+      "eligible_departments": [],
+      "eligible_roles": []
+    }
+  },
+  "permission_templates": {},
+  "active_outages": {},
+  "known_errors": {},
+  "troubleshooting_guides": {
+    "login_issue": {
+      "steps": [
+        "Confirm the username and try signing in again.",
+        "Verify caps lock is off and the correct password is being used.",
+        "Try the password reset link if available."
+      ]
+    },
+    "hardware_malfunction": {
+      "steps": [
+        "Inspect the device for visible damage.",
+        "Power cycle the device.",
+        "Reseat all cables and peripherals.",
+        "Test with a known-good power source or peripheral."
+      ]
+    },
+    "network_connectivity": {
+      "steps": [
+        "Verify Wi-Fi or ethernet is connected.",
+        "Disconnect and reconnect to the network.",
+        "Restart the VPN client if in use.",
+        "Reboot the device and test connectivity again."
+      ]
+    }
+  },
+  "facilities": {
+    "buildings": {
+      "BLD1": {
+        "building_code": "BLD1",
+        "name": "Headquarters",
+        "name_aliases": [
+          "HQ",
+          "Headquarters"
+        ],
+        "floors": {
+          "FL2": {
+            "desks": {
+              "BLD1-FL2-D201": {
+                "desk_code": "BLD1-FL2-D201",
+                "assigned_employee_id": "EMP090201",
+                "near_window": true
+              },
+              "BLD1-FL2-D202": {
+                "desk_code": "BLD1-FL2-D202",
+                "assigned_employee_id": "EMP090202",
+                "near_window": false
+              }
+            },
+            "rooms": {}
+          },
+          "FL3": {
+            "desks": {
+              "BLD1-FL3-D301": {
+                "desk_code": "BLD1-FL3-D301",
+                "assigned_employee_id": "EMP054210",
+                "near_window": false
+              },
+              "BLD1-FL3-D302": {
+                "desk_code": "BLD1-FL3-D302",
+                "assigned_employee_id": null,
+                "near_window": true
+              },
+              "BLD1-FL3-D303": {
+                "desk_code": "BLD1-FL3-D303",
+                "assigned_employee_id": null,
+                "near_window": false
+              }
+            },
+            "rooms": {}
+          },
+          "FL4": {
+            "desks": {
+              "BLD1-FL4-D401": {
+                "desk_code": "BLD1-FL4-D401",
+                "assigned_employee_id": "EMP041100",
+                "near_window": true
+              }
+            },
+            "rooms": {}
+          }
+        },
+        "parking_zones": {
+          "PZE": {
+            "zone_code": "PZE",
+            "name": "Executive Garage",
+            "covered": true,
+            "spaces": {
+              "PZE-101": {
+                "space_id": "PZE-101",
+                "assigned_employee_id": "EMP054210"
+              },
+              "PZE-102": {
+                "space_id": "PZE-102",
+                "assigned_employee_id": "EMP090203"
+              }
+            }
+          },
+          "PZA": {
+            "zone_code": "PZA",
+            "name": "General Surface Lot",
+            "covered": false,
+            "spaces": {
+              "PZA-401": {
+                "space_id": "PZA-401",
+                "assigned_employee_id": "EMP041100"
+              },
+              "PZA-402": {
+                "space_id": "PZA-402",
+                "assigned_employee_id": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "desks": {
+      "BLD1-FL2-D201": {
+        "building_code": "BLD1",
+        "floor_code": "FL2",
+        "status": "assigned",
+        "assigned_employee_id": "EMP090201",
+        "zone": "north",
+        "near_window": true
+      },
+      "BLD1-FL2-D202": {
+        "building_code": "BLD1",
+        "floor_code": "FL2",
+        "status": "assigned",
+        "assigned_employee_id": "EMP090202",
+        "zone": "south",
+        "near_window": false
+      },
+      "BLD1-FL3-D301": {
+        "building_code": "BLD1",
+        "floor_code": "FL3",
+        "status": "assigned",
+        "assigned_employee_id": "EMP054210",
+        "zone": "center",
+        "near_window": false
+      },
+      "BLD1-FL3-D302": {
+        "building_code": "BLD1",
+        "floor_code": "FL3",
+        "status": "available",
+        "assigned_employee_id": null,
+        "zone": "east",
+        "near_window": true
+      },
+      "BLD1-FL3-D303": {
+        "building_code": "BLD1",
+        "floor_code": "FL3",
+        "status": "available",
+        "assigned_employee_id": null,
+        "zone": "west",
+        "near_window": false
+      },
+      "BLD1-FL4-D401": {
+        "building_code": "BLD1",
+        "floor_code": "FL4",
+        "status": "assigned",
+        "assigned_employee_id": "EMP041100",
+        "zone": "executive",
+        "near_window": true
+      }
+    },
+    "conference_rooms": {},
+    "zones": {
+      "PZE": {
+        "zone_code": "PZE",
+        "name": "Executive Garage",
+        "name_aliases": [
+          "Executive Garage"
+        ],
+        "covered": true
+      },
+      "PZA": {
+        "zone_code": "PZA",
+        "name": "General Surface Lot",
+        "name_aliases": [
+          "General Lot"
+        ],
+        "covered": false
+      }
+    },
+    "parking": {
+      "PZE-101": {
+        "zone_code": "PZE",
+        "level": "L1",
+        "covered": true,
+        "status": "assigned",
+        "assigned_employee_id": "EMP054210"
+      },
+      "PZE-102": {
+        "zone_code": "PZE",
+        "level": "L1",
+        "covered": true,
+        "status": "assigned",
+        "assigned_employee_id": "EMP090203"
+      },
+      "PZA-401": {
+        "zone_code": "PZA",
+        "level": "G",
+        "covered": false,
+        "status": "assigned",
+        "assigned_employee_id": "EMP041100"
+      },
+      "PZA-402": {
+        "zone_code": "PZA",
+        "level": "G",
+        "covered": false,
+        "status": "available",
+        "assigned_employee_id": null
+      }
+    }
+  },
+  "field_dispatch_availability": {
+    "BLD1": {
+      "2026-04-09": {
+        "morning": {
+          "available": true,
+          "technician_id": "T-201",
+          "technician_name": "Alex Porter"
+        },
+        "afternoon": {
+          "available": true,
+          "technician_id": "T-202",
+          "technician_name": "Rina Shah"
+        }
+      }
+    }
+  },
+  "cost_centers": {
+    "CC-3301": {
+      "cost_center_code": "CC-3301",
+      "department_code": "OPS",
+      "description": "Operations Facilities and Support",
+      "has_budget": true,
+      "remaining_budget_usd": 42000
+    }
+  },
+  "requests": {},
+  "tickets": {},
+  "cases": {},
+  "security_cases": {},
+  "calendar_events": {},
+  "waitlists": {
+    "desk": [],
+    "parking": []
+  },
+  "interactions": {},
+  "asset_recoveries": {},
+  "session": {}
+}

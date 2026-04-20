@@ -1,0 +1,597 @@
+{
+  "_current_date": "2026-03-25",
+  "_ticket_counter": 48270,
+  "_request_counter": 48270,
+  "_case_counter": 48270,
+  "_security_case_counter": 48270,
+  "employees": {
+    "EMP061537": {
+      "employee_id": "EMP061537",
+      "first_name": "Trevor",
+      "last_name": "Blackwood",
+      "date_of_birth": "1991-07-14",
+      "phone_last_four": "4488",
+      "otp_code": "615372",
+      "department_code": "ENG",
+      "role_code": "SWE",
+      "cost_center_code": "CC-4010",
+      "hire_date": "2020-06-15",
+      "employment_status": "active",
+      "building_code": "BLD3",
+      "floor_code": "FL2",
+      "is_manager": false,
+      "manager_employee_id": "EMP052100",
+      "manager_auth_code": null,
+      "direct_reports": [],
+      "assigned_desk": "BLD3-FL2-D214",
+      "assigned_parking": null,
+      "last_desk_assignment_date": "2025-11-03",
+      "last_parking_assignment_date": null,
+      "hardware_entitlements": {
+        "laptop_replacement": {
+          "current_asset_tag": "AST-LPT-615372",
+          "pending_request": false,
+          "pending_request_id": null
+        },
+        "monitor_bundle": {
+          "current_asset_tag": "AST-MON-615373",
+          "pending_request": false,
+          "pending_request_id": null
+        }
+      },
+      "software_licenses": [],
+      "group_memberships": [
+        {
+          "group_code": "GRP-ENGCOR",
+          "group_name": "Engineering Core Access",
+          "status": "active",
+          "added_date": "2020-06-15"
+        },
+        {
+          "group_code": "GRP-VPN001",
+          "group_name": "Corporate VPN Users",
+          "status": "active",
+          "added_date": "2020-06-15"
+        }
+      ],
+      "account_status": {
+        "active_directory": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "sso": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "email": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "vpn": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "erp": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        }
+      },
+      "ergonomic_assessment": {
+        "status": "not_completed",
+        "completed_date": null
+      },
+      "offboarding_record": {
+        "status": null,
+        "last_working_day": null,
+        "initiated_by": null,
+        "initiated_date": null,
+        "access_removed": false,
+        "removal_case_id": null,
+        "removal_scope": null
+      },
+      "pending_role_change": {
+        "new_role_code": null,
+        "effective_date": null,
+        "hr_case_id": null
+      }
+    },
+    "EMP052100": {
+      "employee_id": "EMP052100",
+      "first_name": "Dana",
+      "last_name": "Morrison",
+      "date_of_birth": "1984-02-22",
+      "phone_last_four": "2100",
+      "otp_code": "521004",
+      "department_code": "ENG",
+      "role_code": "MANAGER",
+      "cost_center_code": "CC-4010",
+      "hire_date": "2017-04-10",
+      "employment_status": "active",
+      "building_code": "BLD3",
+      "floor_code": "FL2",
+      "is_manager": true,
+      "manager_employee_id": "EMP040001",
+      "manager_auth_code": "MGR210",
+      "direct_reports": [
+        "EMP061537"
+      ],
+      "assigned_desk": "BLD3-FL2-D201",
+      "assigned_parking": "PZA-014",
+      "last_desk_assignment_date": "2024-09-10",
+      "last_parking_assignment_date": "2024-01-15",
+      "hardware_entitlements": {
+        "laptop_replacement": {
+          "current_asset_tag": "AST-LPT-521000",
+          "pending_request": false,
+          "pending_request_id": null
+        },
+        "monitor_bundle": {
+          "current_asset_tag": "AST-MON-521001",
+          "pending_request": false,
+          "pending_request_id": null
+        }
+      },
+      "software_licenses": [],
+      "group_memberships": [
+        {
+          "group_code": "GRP-ENGCOR",
+          "group_name": "Engineering Core Access",
+          "status": "active",
+          "added_date": "2017-04-10"
+        }
+      ],
+      "account_status": {
+        "active_directory": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "sso": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "email": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "vpn": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "erp": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        }
+      },
+      "ergonomic_assessment": {
+        "status": "completed",
+        "completed_date": "2025-08-01"
+      },
+      "offboarding_record": {
+        "status": null,
+        "last_working_day": null,
+        "initiated_by": null,
+        "initiated_date": null,
+        "access_removed": false,
+        "removal_case_id": null,
+        "removal_scope": null
+      },
+      "pending_role_change": {
+        "new_role_code": null,
+        "effective_date": null,
+        "hr_case_id": null
+      }
+    },
+    "EMP040001": {
+      "employee_id": "EMP040001",
+      "first_name": "Martin",
+      "last_name": "Keane",
+      "date_of_birth": "1978-11-05",
+      "phone_last_four": "4001",
+      "otp_code": "400001",
+      "department_code": "ENG",
+      "role_code": "DIRECTOR",
+      "cost_center_code": "CC-4010",
+      "hire_date": "2015-02-02",
+      "employment_status": "active",
+      "building_code": "BLD3",
+      "floor_code": "FL3",
+      "is_manager": true,
+      "manager_employee_id": null,
+      "manager_auth_code": "DIR401",
+      "direct_reports": [
+        "EMP052100"
+      ],
+      "assigned_desk": "BLD3-FL3-D301",
+      "assigned_parking": "PZA-002",
+      "last_desk_assignment_date": "2023-06-01",
+      "last_parking_assignment_date": "2023-06-01",
+      "hardware_entitlements": {
+        "laptop_replacement": {
+          "current_asset_tag": "AST-LPT-400001",
+          "pending_request": false,
+          "pending_request_id": null
+        },
+        "monitor_bundle": {
+          "current_asset_tag": "AST-MON-400002",
+          "pending_request": false,
+          "pending_request_id": null
+        }
+      },
+      "software_licenses": [],
+      "group_memberships": [
+        {
+          "group_code": "GRP-ENGCOR",
+          "group_name": "Engineering Core Access",
+          "status": "active",
+          "added_date": "2015-02-02"
+        }
+      ],
+      "account_status": {
+        "active_directory": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "sso": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "email": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "vpn": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        },
+        "erp": {
+          "locked": false,
+          "lock_reason": null,
+          "requires_in_person_reset": false
+        }
+      },
+      "ergonomic_assessment": {
+        "status": "completed",
+        "completed_date": "2024-12-10"
+      },
+      "offboarding_record": {
+        "status": null,
+        "last_working_day": null,
+        "initiated_by": null,
+        "initiated_date": null,
+        "access_removed": false,
+        "removal_case_id": null,
+        "removal_scope": null
+      },
+      "pending_role_change": {
+        "new_role_code": null,
+        "effective_date": null,
+        "hr_case_id": null
+      }
+    }
+  },
+  "assets": {
+    "AST-LPT-615372": {
+      "asset_tag": "AST-LPT-615372",
+      "asset_type": "laptop",
+      "manufacturer": "Dell",
+      "model": "Latitude 7440",
+      "os": "windows",
+      "size": "14-inch",
+      "serial_number": "DL7440TB615372",
+      "assigned_employee_id": "EMP061537",
+      "status": "active",
+      "purchase_date": "2024-05-20",
+      "warranty_expiration": "2027-05-20",
+      "lifecycle_status": "current"
+    },
+    "AST-MON-615373": {
+      "asset_tag": "AST-MON-615373",
+      "asset_type": "monitor",
+      "manufacturer": "Dell",
+      "model": "UltraSharp U2722D",
+      "os": null,
+      "size": "27-inch",
+      "serial_number": "MN615373DP",
+      "assigned_employee_id": "EMP061537",
+      "status": "active",
+      "purchase_date": "2024-05-20",
+      "warranty_expiration": "2027-05-20",
+      "lifecycle_status": "current"
+    },
+    "AST-PRF-615374": {
+      "asset_tag": "AST-PRF-615374",
+      "asset_type": "peripheral",
+      "manufacturer": "Dell",
+      "model": "DisplayPort Cable 1.4",
+      "os": null,
+      "size": null,
+      "serial_number": "DPCBL615374",
+      "assigned_employee_id": "EMP061537",
+      "status": "active",
+      "purchase_date": "2024-05-20",
+      "warranty_expiration": "2027-05-20",
+      "lifecycle_status": "current"
+    },
+    "AST-LPT-521000": {
+      "asset_tag": "AST-LPT-521000",
+      "asset_type": "laptop",
+      "manufacturer": "Lenovo",
+      "model": "ThinkPad T14",
+      "os": "windows",
+      "size": "14-inch",
+      "serial_number": "TPT14521000",
+      "assigned_employee_id": "EMP052100",
+      "status": "active",
+      "purchase_date": "2023-01-12",
+      "warranty_expiration": "2026-01-12",
+      "lifecycle_status": "current"
+    },
+    "AST-MON-521001": {
+      "asset_tag": "AST-MON-521001",
+      "asset_type": "monitor",
+      "manufacturer": "Dell",
+      "model": "P2723D",
+      "os": null,
+      "size": "27-inch",
+      "serial_number": "MN521001",
+      "assigned_employee_id": "EMP052100",
+      "status": "active",
+      "purchase_date": "2023-01-12",
+      "warranty_expiration": "2026-01-12",
+      "lifecycle_status": "current"
+    },
+    "AST-LPT-400001": {
+      "asset_tag": "AST-LPT-400001",
+      "asset_type": "laptop",
+      "manufacturer": "Apple",
+      "model": "MacBook Pro",
+      "os": "macos",
+      "size": "16-inch",
+      "serial_number": "MBP400001",
+      "assigned_employee_id": "EMP040001",
+      "status": "active",
+      "purchase_date": "2022-02-14",
+      "warranty_expiration": "2025-02-14",
+      "lifecycle_status": "current"
+    },
+    "AST-MON-400002": {
+      "asset_tag": "AST-MON-400002",
+      "asset_type": "monitor",
+      "manufacturer": "LG",
+      "model": "27QN600",
+      "os": null,
+      "size": "27-inch",
+      "serial_number": "LG400002",
+      "assigned_employee_id": "EMP040001",
+      "status": "active",
+      "purchase_date": "2022-02-14",
+      "warranty_expiration": "2025-02-14",
+      "lifecycle_status": "current"
+    }
+  },
+  "software_catalog": {
+    "APP-1001": {
+      "catalog_id": "APP-1001",
+      "name": "Slack",
+      "name_aliases": [
+        "slack"
+      ],
+      "vendor": "Slack Technologies",
+      "requires_manager_approval": false,
+      "available_access_levels": [
+        "read_only",
+        "standard",
+        "admin"
+      ],
+      "department_restrictions": []
+    },
+    "LIC-2001": {
+      "catalog_id": "LIC-2001",
+      "name": "JetBrains IntelliJ IDEA",
+      "name_aliases": [
+        "IntelliJ",
+        "IntelliJ IDEA"
+      ],
+      "vendor": "JetBrains",
+      "license_cost_usd": 599,
+      "license_types_supported": [
+        "permanent",
+        "temporary"
+      ]
+    }
+  },
+  "access_groups": {
+    "GRP-ENGCOR": {
+      "group_code": "GRP-ENGCOR",
+      "name": "Engineering Core Access",
+      "description": "Baseline engineering systems access",
+      "requires_approval": false,
+      "member_count": 148,
+      "eligible_departments": [
+        "ENG"
+      ],
+      "eligible_roles": []
+    },
+    "GRP-VPN001": {
+      "group_code": "GRP-VPN001",
+      "name": "Corporate VPN Users",
+      "description": "VPN access for employees",
+      "requires_approval": false,
+      "member_count": 892,
+      "eligible_departments": [],
+      "eligible_roles": []
+    }
+  },
+  "permission_templates": {
+    "PTPL-SWE-01": {
+      "template_id": "PTPL-SWE-01",
+      "role_code": "SWE",
+      "name": "Software Engineer Standard",
+      "description": "Default permissions for software engineers",
+      "groups": [
+        "GRP-ENGCOR",
+        "GRP-VPN001"
+      ],
+      "permissions": [
+        "repo_read",
+        "repo_write",
+        "ci_access"
+      ]
+    }
+  },
+  "active_outages": {},
+  "known_errors": {},
+  "troubleshooting_guides": {
+    "login_issue": {
+      "steps": [
+        "Confirm the username and verify caps lock is off.",
+        "Try signing in from the standard SSO portal.",
+        "Restart the workstation and try again."
+      ]
+    },
+    "hardware_malfunction": {
+      "steps": [
+        "Check the monitor and cable for any visible damage and confirm the monitor is powered on.",
+        "Power cycle the monitor and confirm the computer itself is on.",
+        "Reseat the DisplayPort cable on both ends.",
+        "Swap in a known-good peripheral or cable if available.",
+        "Verify the monitor power source and outlet."
+      ]
+    },
+    "network_connectivity": {
+      "steps": [
+        "Confirm Wi-Fi or ethernet is connected.",
+        "Disconnect and reconnect to the corporate network.",
+        "Restart the device and retry the connection."
+      ]
+    }
+  },
+  "facilities": {
+    "buildings": {
+      "BLD3": {
+        "name": "Downtown Engineering Center",
+        "name_aliases": [
+          "Downtown",
+          "Engineering Center"
+        ]
+      }
+    },
+    "zones": {
+      "PZA": {
+        "name": "Main Garage A",
+        "name_aliases": [
+          "Garage A"
+        ]
+      }
+    },
+    "desks": {
+      "BLD3-FL2-D201": {
+        "building_code": "BLD3",
+        "floor_code": "FL2",
+        "zone": "north",
+        "near_window": true,
+        "status": "assigned",
+        "assigned_employee_id": "EMP052100"
+      },
+      "BLD3-FL2-D214": {
+        "building_code": "BLD3",
+        "floor_code": "FL2",
+        "zone": "east",
+        "near_window": false,
+        "status": "assigned",
+        "assigned_employee_id": "EMP061537"
+      },
+      "BLD3-FL3-D301": {
+        "building_code": "BLD3",
+        "floor_code": "FL3",
+        "zone": "west",
+        "near_window": true,
+        "status": "assigned",
+        "assigned_employee_id": "EMP040001"
+      }
+    },
+    "conference_rooms": {
+      "BLD3-FL2-RM210": {
+        "building_code": "BLD3",
+        "floor_code": "FL2",
+        "capacity": 8,
+        "equipment": [
+          "projector",
+          "video_conferencing"
+        ],
+        "bookings": []
+      }
+    },
+    "parking": {
+      "PZA-002": {
+        "zone_code": "PZA",
+        "level": "L1",
+        "covered": true,
+        "status": "assigned",
+        "assigned_employee_id": "EMP040001"
+      },
+      "PZA-014": {
+        "zone_code": "PZA",
+        "level": "L1",
+        "covered": true,
+        "status": "assigned",
+        "assigned_employee_id": "EMP052100"
+      },
+      "PZA-031": {
+        "zone_code": "PZA",
+        "level": "L2",
+        "covered": true,
+        "status": "available",
+        "assigned_employee_id": null
+      }
+    }
+  },
+  "field_dispatch_availability": {
+    "BLD3": {
+      "2026-03-26": {
+        "morning": {
+          "available": true,
+          "technician_id": "T-103",
+          "technician_name": "Luis Romero"
+        },
+        "afternoon": {
+          "available": true,
+          "technician_id": "T-118",
+          "technician_name": "Cara Patel"
+        }
+      }
+    }
+  },
+  "cost_centers": {
+    "CC-4010": {
+      "cost_center_code": "CC-4010",
+      "department_code": "ENG",
+      "description": "Engineering Operations",
+      "has_budget": true,
+      "remaining_budget_usd": 48000
+    }
+  },
+  "requests": {},
+  "tickets": {},
+  "cases": {},
+  "security_cases": {},
+  "calendar_events": {},
+  "waitlists": {},
+  "interactions": {},
+  "asset_recoveries": {},
+  "session": {}
+}
