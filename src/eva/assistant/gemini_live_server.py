@@ -189,7 +189,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
         else:
             logger.error("Pipeline config is not SpeechToSpeechConfig")
             return
-        self._model = s2s_params.get("model", "gemini-3.1-flash-live-preview")
+        self._model = s2s_params["model"]
         self._voice = s2s_params.get("voice", "Kore")
         self._language_code = s2s_params.get("language_code", "en-US")
         self._api_key = s2s_params.get("api_key", "")
