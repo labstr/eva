@@ -59,8 +59,6 @@ The ITSM Voice Agent handles inbound calls to an enterprise IT service desk. Emp
 
 **Tool calls:** 5 (resolved directly) or 6 (escalated to ticket)
 
-**Note:** Steps 4a/4b are alternatives — agent picks based on what the caller describes. Ask the caller explicitly: *"Is your account locked out (for example, too many failed sign-in attempts), or has your password expired and you can't reset it?"* Choose 4a for a lockout, 4b for a password/reset issue. Steps 5–6 only happen if 4a/4b fail.
-
 ---
 
 ### Flow 2a — Service Outage (existing outage found)
