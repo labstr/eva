@@ -21,6 +21,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v6
+        with:
+          python-version-file: pyproject.toml
 
       - name: Cache pip packages
         uses: actions/cache@v4
