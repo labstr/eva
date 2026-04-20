@@ -5,8 +5,9 @@ import csv
 import json
 import time
 import warnings
+from collections.abc import AsyncGenerator
 from pathlib import Path
-from typing import Any, AsyncGenerator
+from typing import Any
 
 from eva.assistant.agentic.audit_log import (
     AuditLog,
@@ -189,6 +190,9 @@ class AgenticSystem:
                     tool_calls_dicts.append(tc_dict)
 
                 response_content = getattr(response, "content", "") or (response if isinstance(response, str) else "")
+                if response_content:
+                    response_content = response_content.strip()
+
                 response_tool_calls_for_stats = (
                     [
                         {"name": tool["function"]["name"], "arguments": tool["function"]["arguments"]}
@@ -228,7 +232,7 @@ class AgenticSystem:
                 llm_call_response = ConversationMessage(
                     role=MessageRole.ASSISTANT,
                     content=response_content,
-                    tool_calls=tool_calls_dicts if tool_calls_dicts else None,
+                    tool_calls=tool_calls_dicts or None,
                     reasoning=llm_stats.get("reasoning_content"),
                 )
 
@@ -286,100 +290,81 @@ class AgenticSystem:
                     yield GENERIC_ERROR
                 return
 
-            if tool_calls_dicts:
-                # Build assistant message with tool calls
-                assistant_msg = {
-                    "role": "assistant",
-                    "content": response_content,
-                    "tool_calls": tool_calls_dicts,
-                }
+            if response_content:
+                logger.info(f"💬 Assistant LLM response: {response_content}")
+                yield response_content
 
-                # For Anthropic: include thinking blocks in message history
-                # LiteLLM will handle these appropriately when sending to Anthropic
-                thinking_blocks = llm_stats.get("thinking_blocks")
-                if thinking_blocks:
-                    assistant_msg["thinking_blocks"] = thinking_blocks
-                    logger.info(f"🧠 Including {len(thinking_blocks)} thinking block(s) in message history for next turn")
+            reasoning_content = llm_stats.get("reasoning_content") or llm_stats.get("reasoning")
+            self.audit_log.append_assistant_output(content=response_content, tool_calls=tool_calls_dicts or None, reasoning=reasoning_content)
 
-                # For Gemini: thought signatures are already embedded in tool_calls by LiteLLM
-                # They're stored in provider_specific_fields and will be preserved automatically
+            if not tool_calls_dicts:
+                # No tool calls, this is the final response
+                return
 
-                messages.append(assistant_msg)
+            # Build assistant message - include thinking blocks for Anthropic if present
+            assistant_msg = {
+                "role": "assistant",
+                "content": response_content,
+                "tool_calls": tool_calls_dicts,
+            }
+            thinking_blocks = llm_stats.get("thinking_blocks")
+            if thinking_blocks:
+                assistant_msg["thinking_blocks"] = thinking_blocks
+                logger.info(f"🧠 Including {len(thinking_blocks)} thinking block(s) in message history for next turn")
+            messages.append(assistant_msg)
 
-                # Pass reasoning content to audit log for metrics/debugging
-                reasoning_content = llm_stats.get("reasoning_content") or llm_stats.get("reasoning")
-                self.audit_log.append_assistant_output(
-                    content=response_content,
-                    tool_calls=tool_calls_dicts,
-                    reasoning=reasoning_content
-                )
+            # Execute each tool call
+            for tool_call in response_tool_calls:
+                tool_name = _clean_tool_name(tool_call.function.name)
+                try:
+                    # TODO Consider this a model error instead of handling this gracefully
+                    params = json.loads(tool_call.function.arguments)
+                except json.JSONDecodeError:
+                    params = {}
 
-                # Execute each tool call
-                for tool_call in response_tool_calls:
-                    tool_name = _clean_tool_name(tool_call.function.name)
-                    try:
-                        # TODO Consider this a model error instead of handling this gracefully
-                        params = json.loads(tool_call.function.arguments)
-                    except json.JSONDecodeError:
-                        params = {}
+                # Log tool call
+                logger.info(f"🔧 Tool call: {tool_name}")
+                logger.info(f"   Parameters: {json.dumps(params, indent=2)}")
 
-                    # Log tool call
-                    logger.info(f"🔧 Tool call: {tool_name}")
-                    logger.info(f"   Parameters: {json.dumps(params, indent=2)}")
-
-                    # Special handling for transfer to live agent
-                    if tool_name == "transfer_to_agent":
-                        transfer_message = "Transferring you to a live agent. Please wait."
-                        self.audit_log.append_tool_call(
-                            tool_name=tool_name,
-                            parameters=params,
-                            response={"status": "transfer_initiated"},
-                        )
-
-                        logger.info(f"🔀 Transfer initiated: {transfer_message}")
-                        yield transfer_message
-
-                        # Pass reasoning content to audit log for metrics/debugging
-                        reasoning_content = llm_stats.get("reasoning_content") or llm_stats.get("reasoning")
-                        self.audit_log.append_assistant_output(transfer_message, reasoning=reasoning_content)
-                        return
-
-                    result = await self.tool_handler.execute(tool_name, params)
-
-                    if result.get("status") == "error":
-                        logger.warning(f"❌ Tool error: {tool_name} - {result.get('message', 'Unknown error')}")
-                    else:
-                        logger.info(f"✅ Tool response: {tool_name}")
-                        logger.info(f"   Result: {json.dumps(result, indent=2)}")
-
+                # Special handling for transfer to live agent
+                if tool_name == "transfer_to_agent":
+                    transfer_message = "Transferring you to a live agent. Please wait."
                     self.audit_log.append_tool_call(
                         tool_name=tool_name,
                         parameters=params,
-                        response=result,
+                        response={"status": "transfer_initiated"},
                     )
 
-                    # Add tool response to messages
-                    tool_content = json.dumps(result)
-                    messages.append(
-                        {
-                            "role": "tool",
-                            "tool_call_id": tool_call.id,
-                            "content": tool_content,
-                        }
-                    )
+                    logger.info(f"🔀 Transfer initiated: {transfer_message}")
+                    yield transfer_message
+                    self.audit_log.append_assistant_output(transfer_message, reasoning=reasoning_content)
+                    return
 
-                    self.audit_log.append_tool_message(tool_call_id=tool_call.id, content=tool_content)
-            else:
-                # No tool calls, this is the final response
-                if response_content:
-                    response_content = response_content.strip()
-                    logger.info(f"💬 Assistant LLM response: {response_content}")
-                    yield response_content
+                result = await self.tool_handler.execute(tool_name, params)
 
-                    # Pass reasoning content to audit log for metrics/debugging
-                    reasoning_content = llm_stats.get("reasoning_content") or llm_stats.get("reasoning")
-                    self.audit_log.append_assistant_output(response_content, reasoning=reasoning_content)
-                return
+                if result.get("status") == "error":
+                    logger.warning(f"❌ Tool error: {tool_name} - {result.get('message', 'Unknown error')}")
+                else:
+                    logger.info(f"✅ Tool response: {tool_name}")
+                    logger.info(f"   Result: {json.dumps(result, indent=2)}")
+
+                self.audit_log.append_tool_call(
+                    tool_name=tool_name,
+                    parameters=params,
+                    response=result,
+                )
+
+                # Add tool response to messages
+                tool_content = json.dumps(result)
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": tool_content,
+                    }
+                )
+
+                self.audit_log.append_tool_message(tool_call_id=tool_call.id, content=tool_content)
 
     def get_stats(self) -> dict[str, Any]:
         """Get conversation statistics."""
