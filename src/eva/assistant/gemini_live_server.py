@@ -294,7 +294,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
             return genai.Client(vertexai=True, project=project, location=location)
 
         # Fallback: let the SDK resolve credentials (e.g. ADC)
-        logger.info("No explicit credentials; relying on google-genai default resolution")
+        logger.warning(msg="No explicit credentials; relying on google-genai default resolution")
         return genai.Client()
 
     # ------------------------------------------------------------------
