@@ -1,94 +1,216 @@
 # Turn Taking
 
-> **Experience Metric**: Poor timing — interrupting the user or leaving awkward silences — makes the conversation feel unnatural even if the content is correct.
+> **Experience Metric**: poor timing — interrupting the user or leaving awkward silences — makes the conversation feel unnatural even if the content is correct.
 
 ## Overview
 
-LLM-based metric that evaluates timing accuracy of assistant responses after user utterances, using the transcript and the latency measurements. It assesses whether the assistant takes the conversational floor at the correct time after user completion, avoids interrupting before the user finishes, responds promptly without awkward delays, and recognizes proper turn-completion points (TRPs). Greeting turn (turn 0) is excluded from evaluation. Turns with missing audio timestamps are skipped.
+Code-based metric (no LLM) that scores each user→assistant transition on a continuous `[0, 1]` scale derived from the ElevenLabs audio timestamps already stored on `MetricContext`. The main score is the plain mean of the per-turn scores. A flat set of sub-metrics surfaces supporting headline numbers (latency percentiles, interruption rates, recovery/yield rates) that show up as their own columns in analysis tools.
 
-### Capabilities Measured
+## Scope
 
-- **VAD**: Accurate detection of when the user has started and finished speaking is essential for well-timed responses.
-- **Pipeline**: Turn-taking timing is a function of the end-to-end latency across all models in the pipeline (STT → LLM → TTS in cascade, or the single audio-native model). It reflects overall system performance.
+- **Greeting (turn 0) is excluded.**
+- A turn is **evaluable** only when both `audio_timestamps_user_turns[t]` and `audio_timestamps_assistant_turns[t]` are non-empty. Turns without both sides are silently excluded from the set that feeds the score and sub-metrics.
+- If no evaluable turns exist, the metric returns `normalized_score = None` with an error `"No turns with both user and assistant audio timestamps"`.
 
-## How It Works
+## Inputs (from `MetricContext`)
 
-### Evaluation Method
+- `audio_timestamps_user_turns` / `audio_timestamps_assistant_turns` — per-turn audio segment lists `[(start_s, end_s), ...]`. Drive the evaluable set, overlap, and yield computations.
+- `latency_assistant_turns` — per-turn latency (`first_asst_start - last_user_end`) in seconds. Drives the latency curve.
+- `assistant_interrupted_turns` / `user_interrupted_turns` — turn-level interruption flags set by the processor.
 
-- **Type**: Text Judge (LLM-as-judge with timestamps and transcript context)
-- **Model**: GPT-5.2
-- **Granularity**: Per-turn (each user-to-assistant transition evaluated)
+## Per-turn Score
 
-### Input Data
+For each evaluable turn, one of four signals is used depending on the turn's flags:
 
-Uses the following MetricContext fields:
-- `audio_timestamps_user_turns` / `audio_timestamps_assistant_turns`: Timing segments per turn
-- `intended_user_turns` / `intended_assistant_turns`: What each speaker intended to say
-- `transcribed_user_turns` / `transcribed_assistant_turns`: What was actually heard
-- `assistant_interrupted_turns` / `user_interrupted_turns`: Interruption flags
+| Turn flag state | Signal → Score |
+|---|---|
+| `turn ∈ assistant_interrupted_turns` only | **Overlap score** (capped) |
+| `turn ∈ user_interrupted_turns` only | **Yield score** |
+| `turn` in **both** sets | `min(overlap_score, yield_score)` |
+| neither flag | **Latency score** |
 
-The judge receives per-turn context blocks with timestamps, expected text, heard text, segment transitions, and interruption annotations. It does **not** receive raw audio.
+Each signal has its own continuous curve (below).
 
-### Audio-Native vs Cascade
+### Latency curve (piecewise linear)
 
-This metric works with both architectures since it relies on ElevenLabs audio timestamps (available in both). The judge sees both intended and transcribed text for context, but the core evaluation is based on **timing** (latency between user end and assistant start), which is architecture-agnostic.
+Ramp up from `LATENCY_HARD_EARLY_MS` (-500ms) to `LATENCY_SWEET_SPOT_LOW_MS` (500ms), plateau at 1.0 through `LATENCY_SWEET_SPOT_HIGH_MS` (2000ms), ramp down to `LATENCY_HARD_LATE_MS` (5000ms). Outside the outer bounds the score is clamped at 0.
 
-### Evaluation Methodology
+| Latency (ms) | Score |
+|---|---|
+| ≤ -500 (hard early) | 0.00 |
+| 0 | 0.50 |
+| 200 | 0.70 |
+| 500–2000 (sweet spot) | 1.00 |
+| 3000 | 0.67 |
+| 4000 | 0.33 |
+| ≥ 5000 (hard late) | 0.00 |
 
-For each user→assistant turn transition, the judge receives a context block containing:
+### Overlap curve (agent-interrupt turns)
 
-1. **Segment transitions** — computed latencies between speaker handoffs (e.g., "user_end→assistant_start: 1.4s"). Positive values are gaps, negative values are overlaps.
-2. **Interruption flags** — per-turn flags indicating who interrupted whom, detected from audio overlap analysis.
-3. **User transcript** — both the intended text (what the user meant to say) and the heard text (what the STT transcribed), , plus interruption tags (e.g., `[assistant interrupts]`).
-4. **Assistant transcript** — both the intended text and the heard text (transcribed by the user-side system), plus interruption tags (e.g., `[user interrupts]`, `[likely cut off by user]`).
+`overlap_ms` is the **total** simultaneous-speech duration between user and assistant in the turn, computed as the sum of pairwise segment intersections (streamed turns with interleaved silence would wildly over-count under a naive full-range intersection).
 
-The judge does **not** receive raw audio — it works entirely from timestamps, transcripts, and metadata tags.
+```
+raw = max(0, 1 - overlap_ms / OVERLAP_HARD_MS)
+score = AGENT_INTERRUPT_MAX_SCORE * raw
+```
 
-**Decision logic**: The judge determines whether the user still holds the floor (mid-sentence, interruption tags indicate ongoing speech) or has yielded it (syntactically and pragmatically complete). Interruption tags are the strongest signal and override timing values when they conflict.
+The cap (default `0.5`) ensures agent interruptions are always penalized — a clean recovery is still worse than not interrupting at all.
 
-### Scoring
+| Overlap (ms) | Score |
+|---|---|
+| 0 | 0.50 (capped) |
+| 500 | 0.375 |
+| 1000 | 0.25 |
+| ≥ 2000 | 0.00 |
 
-- **Scale**: -1 to +1 per turn
-  - -1: Early/Interrupting — agent begins before user completion (< 200ms latency)
-  - 0: On-Time — agent begins 200ms–4000ms after user completion
-  - +1: Late — agent begins >= 4000ms after user completion
-  - null: Indeterminate — no clear completion or unclear audio
-- **Normalization**: `1.0 - abs(aggregated_score)` — perfect timing (all 0s) = 1.0, maximum deviation (all +/-1) = 0.0
-- **Aggregation**: Absolute mean (default) — takes absolute value of each rating, then averages
+### Yield curve (user-interrupt turns)
 
-In addition to the judge evaluation, the metric computes latency-based timing labels as a reference:
-- Latency < 200ms → "Early / Interrupting"
-- 200ms <= Latency < 4000ms → "On-Time"
-- Latency >= 4000ms → "Late"
+`yield_ms` is how long the agent kept speaking after the user barged in: `assistant_audio_end[t-1] - user_audio_start[t]`.
 
-Agreement between judge labels and latency-derived labels is tracked in the output as `agreement_with_latency_values`.
+`score = max(0, 1 - yield_ms / YIELD_HARD_MS)`
+
+User interruptions are not the agent's fault, so the score is uncapped — a fast-yielding agent gets the full `1.0`.
+
+| Yield (ms) | Score |
+|---|---|
+| 0 | 1.00 |
+| 600 | 0.70 |
+| 1000 | 0.50 |
+| ≥ 2000 | 0.00 |
+
+## Main Score
+
+`turn_taking.score = turn_taking.normalized_score = mean(per_turn_score)` over evaluable turns. No weighting.
+
+## Per-turn Evidence
+
+Every evaluated turn contributes one entry to `details.per_turn_evidence[turn_id]`. The fields depend on which signal fired:
+
+**Latency turns**
+- `latency_ms`
+- `latency_score`
+
+**Agent-interrupt turns** (either agent-only or dual)
+- `overlap_ms`
+- `overlap_score`
+- `n_interrupt_segments` — diagnostic: how many distinct agent audio segments overlap the user's speech in this turn.
+- `post_interrupt_latency_ms` — gap between user's last audio end and the agent's first *settled* segment (the first one starting **after** the user finished). Present only when such a segment exists.
+- `post_interrupt_latency_score` — `_latency_score(post_interrupt_latency_ms)`. The agent's turn score folds this in: `turn_score = min(overlap_score, post_interrupt_latency_score)`, so "brief barge-in then 10s wait" is penalized even when the barge-in itself was short.
+
+**User-interrupt turns** (either user-only or dual)
+- `yield_ms`
+- `yield_score`
+
+## Details Fields
+
+`details` on the main `MetricScore` contains:
+
+| Field | Description |
+|---|---|
+| `per_turn_score` | `{turn_id: float}` — the final 0–1 score per turn. |
+| `per_turn_reason` | `{turn_id: "latency" / "agent_interrupt" / "user_interrupt" / "dual_interrupt"}` — which signal fired. |
+| `per_turn_evidence` | `{turn_id: {...}}` — see previous section. |
+| `num_turns` | Highest turn_id present in either user or assistant audio timestamps (greeting excluded). |
+| `num_evaluated` | Number of turns actually scored (both timestamp sides present). |
+
+## Sub-metrics (flat)
+
+Emitted as `sub_metrics` on the main `MetricScore`, in this order. The runner aggregates each generically into `metrics_summary.json` as its own column, preserving insertion order.
+
+**Latency (always present when at least one latency measurement exists)**
+
+| Key | Normalized? | Meaning |
+|---|---|---|
+| `mean_latency_ms` | no | Arithmetic mean of per-turn latencies in ms. |
+| `p50_latency_ms` | no | Median latency. |
+| `p90_latency_ms` | no | 90th-percentile latency. |
+| `on_time_rate` | yes | Fraction with `EARLY_THRESHOLD_MS ≤ latency < LATE_THRESHOLD_MS`. |
+| `early_rate` | yes | Fraction with `latency < EARLY_THRESHOLD_MS` (default 200 ms). |
+| `late_rate` | yes | Fraction with `latency ≥ LATE_THRESHOLD_MS` (default 4000 ms). |
+
+**Agent interruptions** (dotted prefix so tables group them visibly)
+
+| Key | Normalized? | When present | Meaning |
+| --- | --- | --- | --- |
+| `agent_interruption.rate` | yes | always | Fraction of evaluable turns in `assistant_interrupted_turns`. |
+| `agent_interruption.mean_overlap_ms` | no | rate > 0 | Arithmetic mean of `overlap_ms` across agent-interrupt turns. |
+| `agent_interruption.mean_overlap_score` | yes | rate > 0 | Mean of the per-turn overlap scores (capped at `AGENT_INTERRUPT_MAX_SCORE`). |
+| `agent_interruption.mean_post_interrupt_latency_ms` | no | ≥ 1 interrupt turn has a settled response | Mean `post_interrupt_latency_ms` across agent-interrupt turns that emit a settled segment after the user finishes. |
+| `agent_interruption.mean_post_interrupt_latency_score` | yes | same as above | Mean of the post-interrupt latency scores that feed the main score. |
+
+**User interruptions**
+
+| Key | Normalized? | When present | Meaning |
+| --- | --- | --- | --- |
+| `user_interruption.rate` | yes | always | Fraction of evaluable turns in `user_interrupted_turns`. |
+| `user_interruption.mean_yield_ms` | no | rate > 0 | Arithmetic mean of `yield_ms` across user-interrupt turns. |
+| `user_interruption.mean_yield_score` | yes | rate > 0 | Mean of the per-turn yield scores that feed the main score. |
+
+Rate sub-metrics are emitted as `normalized_score` (they already live on `[0, 1]`). Raw-ms sub-metrics have `normalized_score = None` so they don't corrupt cross-metric averages.
+
+## Tunable Constants
+
+All thresholds live as class-level attributes on `TurnTakingMetric`. Override by subclassing or editing in place.
+
+| Constant | Default | Purpose |
+|---|---|---|
+| `LATENCY_HARD_EARLY_MS` | -500 | Left edge of the latency ramp (score = 0 at or below). |
+| `LATENCY_SWEET_SPOT_LOW_MS` | 500 | Left edge of the latency plateau (score reaches 1). |
+| `LATENCY_SWEET_SPOT_HIGH_MS` | 2000 | Right edge of the plateau (score starts descending). |
+| `LATENCY_HARD_LATE_MS` | 5000 | Right edge of the ramp (score = 0 at or above). |
+| `OVERLAP_HARD_MS` | 2000 | Overlap at which the agent-interrupt raw score hits 0 (pre-cap). |
+| `AGENT_INTERRUPT_MAX_SCORE` | 0.5 | Cap on the agent-interrupt score — never > this, even with 0ms overlap. |
+| `YIELD_HARD_MS` | 2000 | Yield time at which the user-interrupt score hits 0. |
+| `EARLY_THRESHOLD_MS` | 200 | Latency classification cutoff — below ⇒ "early". |
+| `LATE_THRESHOLD_MS` | 4000 | Latency classification cutoff — at or above ⇒ "late". |
+
+Note: the latency *curve* and the latency *classification* use independent thresholds. The curve is continuous (`LATENCY_HARD_EARLY_MS` / `LATENCY_HARD_LATE_MS`), while `EARLY_THRESHOLD_MS` / `LATE_THRESHOLD_MS` bucket turns for the `early_rate` / `on_time_rate` / `late_rate` sub-metrics only.
 
 ## Example Output
 
 ```json
 {
   "name": "turn_taking",
-  "score": 0.2,
-  "normalized_score": 0.8,
+  "score": 0.85,
+  "normalized_score": 0.85,
   "details": {
-    "aggregation": "abs_mean",
-    "num_turns": 5,
-    "num_evaluated": 5,
-    "per_turn_judge_timing_ratings": {"1": "On-Time", "2": "On-Time", "3": "Early / Interrupting", "4": "On-Time", "5": "On-Time"},
-    "per_turn_latency": {"1": 0.412, "2": 0.589, "3": -0.15, "4": 0.501, "5": 0.32},
-    "agreement_with_latency_values": 1.0
+    "per_turn_score": {"1": 1.0, "2": 0.67, "3": 0.45, "4": 0.95},
+    "per_turn_reason": {"1": "latency", "2": "latency", "3": "agent_interrupt", "4": "user_interrupt"},
+    "per_turn_evidence": {
+      "1": {"latency_ms": 1000, "latency_score": 1.0},
+      "2": {"latency_ms": 3000, "latency_score": 0.667},
+      "3": {"overlap_ms": 200, "overlap_score": 0.45, "n_interrupt_segments": 1,
+            "post_interrupt_latency_ms": 1000, "post_interrupt_latency_score": 1.0},
+      "4": {"yield_ms": 100, "yield_score": 0.95}
+    },
+    "num_turns": 4,
+    "num_evaluated": 4
+  },
+  "sub_metrics": {
+    "mean_latency_ms":                        {"score": 2000.0, "normalized_score": null},
+    "p50_latency_ms":                         {"score": 2000.0, "normalized_score": null},
+    "p90_latency_ms":                         {"score": 3000.0, "normalized_score": null},
+    "on_time_rate":                           {"score": 1.0,    "normalized_score": 1.0},
+    "early_rate":                             {"score": 0.0,    "normalized_score": 0.0},
+    "late_rate":                              {"score": 0.0,    "normalized_score": 0.0},
+    "agent_interruption.rate":                                {"score": 0.25,   "normalized_score": 0.25},
+    "agent_interruption.mean_overlap_ms":                     {"score": 200.0,  "normalized_score": null},
+    "agent_interruption.mean_overlap_score":                  {"score": 0.45,   "normalized_score": 0.45},
+    "agent_interruption.mean_post_interrupt_latency_ms":      {"score": 1000.0, "normalized_score": null},
+    "agent_interruption.mean_post_interrupt_latency_score":   {"score": 1.0,    "normalized_score": 1.0},
+    "user_interruption.rate":                                 {"score": 0.25,   "normalized_score": 0.25},
+    "user_interruption.mean_yield_ms":        {"score": 100.0,  "normalized_score": null},
+    "user_interruption.mean_yield_score":     {"score": 0.95,   "normalized_score": 0.95}
   }
 }
 ```
 
 ## Related Metrics
 
-- [response_speed.md](response_speed.md) - Code-based latency measurement (no judge involved)
+- [`response_speed`](response_speed.md) — raw per-turn latency values, no curve or bucketing.
 
 ## Implementation Details
 
 - **File**: `src/eva/metrics/experience/turn_taking.py`
 - **Class**: `TurnTakingMetric`
-- **Base Class**: `TextJudgeMetric`
-- **Prompt location**: `configs/prompts/judge.yaml` under `judge.turn_taking`
-- **Configuration**: `judge_model` (default: "gpt-5.2"), `aggregation` (default: "abs_mean"; options: "mean", "abs_mean", "median")
+- **Base class**: `CodeMetric`
