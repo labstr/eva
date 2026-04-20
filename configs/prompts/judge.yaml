@@ -1144,4 +1144,75 @@ judge:
           ],
           "summary": "<1-2 sentence summary for this turn>"
       }}
+
+  pronunciation:
+    user_prompt: |
+        You are a phonetics expert evaluating the pronunciation quality of a voice agent's speech.
+        You will listen to an audio recording and assess how naturally and correctly each turn is pronounced.
+
+        Your job is to evaluate HOW words are spoken, not whether the correct words were spoken.
+        Word-level accuracy is a separate concern — focus entirely on phonetic quality.
+
+        ## Intended Turns
+        {intended_turns_formatted}
+
+        ## Evaluation Criteria
+
+        For each turn, assess the following dimensions:
+
+        **Vowel quality**
+        Are vowel sounds close to standard American English targets? Centralised, reduced, or
+        indistinct vowels (e.g. every vowel sounding like a schwa) indicate poor phoneme realisation.
+
+        **Stress contrast**
+        Do stressed syllables sound noticeably longer and louder than unstressed syllables?
+        Natural English has roughly 1.5–2.5× longer stressed vowels. Flat, metronomic delivery
+        where all syllables are equal length is a hallmark of robotic TTS.
+
+        **Consonant articulation**
+        Are stops, fricatives, and affricates cleanly produced? Listen for:
+        - Stops (p, t, k, b, d, g): appropriate burst/release
+        - Fricatives (s, z, f, v, sh): clear frication, not muffled
+        - Word-final consonants not swallowed or over-articulated
+
+        **Connected speech**
+        Does the speech flow with natural coarticulation — smooth transitions between sounds —
+        or do phonemes sound isolated and clipped as if each were produced separately?
+
+        **Overall naturalness**
+        Does it sound like fluent human speech, or does it have the flat, over-precise, or
+        mechanical quality typical of poor TTS?
+
+        ## What NOT to penalise
+        - Different words than intended (word accuracy is not this metric's concern)
+        - Slight regional accent variation that does not impair naturalness
+        - Turns that were interrupted or cut off — see interruption tags below
+
+        ### Interruption Tags
+        {interruption_tags_reference}
+
+        Do NOT penalise for pronunciation in turns that were cut off by an interruption.
+
+        ## Rating Scale (per turn)
+        - **3** (Natural): Vowels on-target, clear stress contrast, consonants well-articulated,
+          connected speech sounds fluid. Listener would not notice anything unusual.
+        - **2** (Mostly natural): One or two noticeable issues — a mispronounced phoneme, weak
+          stress contrast, or slightly mechanical quality — but the turn is largely intelligible
+          and natural-sounding.
+        - **1** (Unnatural): Clear pronunciation problems that impair naturalness — consistently
+          wrong vowel quality, flat stress throughout, clipped or distorted consonants, or
+          obviously robotic delivery.
+
+        ## Response Format
+        {{
+          "turns": [
+            {{
+              "turn_id": <int: the turn number from the Intended Turns>,
+              "transcript": "<string: your transcription of what was spoken in this turn>",
+              "explanation": "<string: 1-3 sentences on what you hear phonetically, citing specific examples of correct or incorrect pronunciation>",
+              "rating": <1, 2, or 3>
+            }}
+          ],
+          "explanation": "<string: overall summary of pronunciation quality across all turns>"
+        }}
       ]
