@@ -1081,6 +1081,8 @@ def render_cross_run_comparison(run_dirs: list[Path], latest_only: bool = True):
         max_records = summary_df["records"].max()
         if max_records > 0:
             summary_df = summary_df[summary_df["records"] == max_records]
+            complete_runs = set(summary_df["run"])
+            scatter_data = [d for d in scatter_data if d["run"] in complete_runs]
 
     ordered_metrics = [m for m in metric_names if m in summary_df.columns]
 
