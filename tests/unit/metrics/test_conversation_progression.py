@@ -42,6 +42,41 @@ class TestConversationProgression:
         assert score.details["explanation"]["flags_count"] == 0
         assert score.details["num_turns"] == 3
 
+    def test_build_metric_score_surfaces_dimension_sub_metrics(self):
+        ctx = make_metric_context(conversation_trace=[{"role": "user"}, {"role": "assistant"}])
+        response = {
+            "rating": 2,
+            "dimensions": {
+                "unnecessary_tool_calls": {"rating": 3, "flagged": False, "evidence": "clean"},
+                "information_loss": {"rating": 2, "flagged": True, "evidence": "minor"},
+                "redundant_statements": {"rating": 3, "flagged": False, "evidence": ""},
+                "question_quality": {"rating": 1, "flagged": True, "evidence": "bad"},
+            },
+        }
+
+        score = self.metric.build_metric_score(
+            rating=1,
+            normalized=0.0,
+            response=response,
+            prompt="test prompt",
+            context=ctx,
+            raw_response="{...}",
+        )
+
+        assert score.sub_metrics is not None
+        assert set(score.sub_metrics.keys()) == {
+            "unnecessary_tool_calls",
+            "information_loss",
+            "redundant_statements",
+            "question_quality",
+        }
+        q_quality = score.sub_metrics["question_quality"]
+        assert q_quality.name == "conversation_progression.question_quality"
+        assert q_quality.score == 1.0
+        assert q_quality.normalized_score == 0.0
+        assert q_quality.details["flagged"] is True
+        assert q_quality.details["evidence"] == "bad"
+
     @pytest.mark.asyncio
     async def test_compute_excellent(self):
         self.metric.llm_client.generate_text.return_value = json.dumps(

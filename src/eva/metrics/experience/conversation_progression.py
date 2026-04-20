@@ -4,7 +4,15 @@ from typing import Any
 
 from eva.metrics.base import ConversationTextJudgeMetric, MetricContext
 from eva.metrics.registry import register_metric
+from eva.metrics.utils import build_dimension_sub_metrics
 from eva.models.results import MetricScore
+
+_CONVERSATION_PROGRESSION_DIMENSION_KEYS = (
+    "unnecessary_tool_calls",
+    "information_loss",
+    "redundant_statements",
+    "question_quality",
+)
 
 
 @register_metric
@@ -36,15 +44,21 @@ class ConversationProgressionJudgeMetric(ConversationTextJudgeMetric):
         context: MetricContext,
         raw_response: str | None = None,
     ) -> MetricScore:
-        """Build MetricScore with analysis details."""
+        """Build MetricScore with analysis details and per-dimension sub-metrics."""
+        dimensions = response.get("dimensions", {}) or {}
+        sub_metrics = build_dimension_sub_metrics(
+            self.name, dimensions, _CONVERSATION_PROGRESSION_DIMENSION_KEYS, self.rating_scale
+        )
+
         analysis = {
-            "dimensions": response.get("dimensions", {}),
+            "dimensions": dimensions,
             "flags_count": response.get("flags_count", ""),
         }
         return MetricScore(
             name=self.name,
             score=float(rating),
             normalized_score=normalized,
+            error=None,
             details={
                 "rating": rating,
                 "explanation": analysis,
@@ -52,4 +66,5 @@ class ConversationProgressionJudgeMetric(ConversationTextJudgeMetric):
                 "judge_prompt": prompt,
                 "judge_raw_response": raw_response,
             },
+            sub_metrics=sub_metrics or None,
         )

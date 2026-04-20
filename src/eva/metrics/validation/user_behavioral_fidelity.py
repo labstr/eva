@@ -7,6 +7,14 @@ from eva.metrics.base import ConversationTextJudgeMetric, MetricContext
 from eva.metrics.registry import register_metric
 from eva.models.results import MetricScore
 
+_USER_BEHAVIORAL_FIDELITY_CORRUPTION_KEYS = (
+    "extra_modifications",
+    "premature_ending",
+    "missing_information",
+    "duplicate_modifications",
+    "decision_tree_violation",
+)
+
 # --- Pipeline-specific prompt text for user behavioral fidelity ---
 
 _CASCADE_CONVERSATION_EVIDENCE = (
@@ -85,16 +93,49 @@ class UserBehavioralFidelityMetric(ConversationTextJudgeMetric):
         context: MetricContext,
         raw_response: str | None = None,
     ) -> MetricScore:
-        """Build MetricScore with corruption analysis details."""
+        """Build MetricScore with corruption analysis details and per-type sub-metrics."""
+        corruption_analysis = response.get("corruption_analysis", {}) or {}
+        sub_metrics = _build_corruption_sub_metrics(self.name, corruption_analysis)
+
         return MetricScore(
             name=self.name,
             score=float(rating),
             normalized_score=normalized,
+            error=None,
             details={
                 "rating": rating,
                 "corrupted": rating == 0,
-                "corruption_analysis": response.get("corruption_analysis", {}),
+                "corruption_analysis": corruption_analysis,
                 "judge_prompt": prompt,
                 "judge_raw_response": raw_response,
             },
+            sub_metrics=sub_metrics or None,
         )
+
+
+def _build_corruption_sub_metrics(
+    parent_name: str,
+    corruption_analysis: dict[str, Any],
+) -> dict[str, MetricScore]:
+    """Build sub-metrics for each corruption type in the judge response.
+
+    Each corruption entry has ``detected`` (bool) and ``analysis`` (str).
+    Sub-metric convention: score = 1.0 if clean (not detected), 0.0 if detected.
+    """
+    sub_metrics: dict[str, MetricScore] = {}
+    for key in _USER_BEHAVIORAL_FIDELITY_CORRUPTION_KEYS:
+        entry = corruption_analysis.get(key)
+        if not isinstance(entry, dict) or "detected" not in entry:
+            continue
+        detected = bool(entry.get("detected"))
+        score = 0.0 if detected else 1.0
+        sub_metrics[key] = MetricScore(
+            name=f"{parent_name}.{key}",
+            score=score,
+            normalized_score=score,
+            details={
+                "detected": detected,
+                "analysis": entry.get("analysis", ""),
+            },
+        )
+    return sub_metrics

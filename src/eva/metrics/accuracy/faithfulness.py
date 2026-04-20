@@ -5,7 +5,16 @@ from typing import Any
 
 from eva.metrics.base import ConversationTextJudgeMetric, MetricContext
 from eva.metrics.registry import register_metric
+from eva.metrics.utils import build_dimension_sub_metrics
 from eva.models.results import MetricScore
+
+_FAITHFULNESS_DIMENSION_KEYS = (
+    "fabricating_tool_parameters",
+    "misrepresenting_tool_result",
+    "violating_policies",
+    "failing_to_disambiguate",
+    "hallucination",
+)
 
 # --- Pipeline-specific prompt text for faithfulness evaluation ---
 
@@ -94,14 +103,18 @@ class FaithfulnessJudgeMetric(ConversationTextJudgeMetric):
         context: MetricContext,
         raw_response: str | None = None,
     ) -> MetricScore:
-        """Build MetricScore with analysis details."""
-        analysis = {
-            "dimensions": response.get("dimensions", {}),
-        }
+        """Build MetricScore with analysis details and per-dimension sub-metrics."""
+        dimensions = response.get("dimensions", {}) or {}
+        sub_metrics = build_dimension_sub_metrics(
+            self.name, dimensions, _FAITHFULNESS_DIMENSION_KEYS, self.rating_scale
+        )
+
+        analysis = {"dimensions": dimensions}
         return MetricScore(
             name=self.name,
             score=float(rating),
             normalized_score=normalized,
+            error=None,
             details={
                 "rating": rating,
                 "explanation": analysis,
@@ -109,4 +122,5 @@ class FaithfulnessJudgeMetric(ConversationTextJudgeMetric):
                 "judge_prompt": prompt,
                 "judge_raw_response": raw_response,
             },
+            sub_metrics=sub_metrics or None,
         )

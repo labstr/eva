@@ -83,6 +83,70 @@ class TestFaithfulness:
         assert score.score == 0.0
         assert "No transcript" in score.error
 
+    def test_build_metric_score_surfaces_dimension_sub_metrics(self):
+        ctx = make_metric_context(conversation_trace=[{"role": "user"}, {"role": "assistant"}])
+        response = {
+            "rating": 2,
+            "dimensions": {
+                "fabricating_tool_parameters": {"rating": 3, "flagged": False, "evidence": "clean"},
+                "misrepresenting_tool_result": {"rating": 2, "flagged": True, "evidence": "minor"},
+                "violating_policies": {"rating": 3, "flagged": False, "evidence": ""},
+                "failing_to_disambiguate": {"rating": 1, "flagged": True, "evidence": "bad"},
+                "hallucination": {"rating": 3, "flagged": False, "evidence": ""},
+            },
+        }
+
+        score = self.metric.build_metric_score(
+            rating=1,
+            normalized=0.0,
+            response=response,
+            prompt="test prompt",
+            context=ctx,
+            raw_response="{...}",
+        )
+
+        assert score.sub_metrics is not None
+        assert set(score.sub_metrics.keys()) == {
+            "fabricating_tool_parameters",
+            "misrepresenting_tool_result",
+            "violating_policies",
+            "failing_to_disambiguate",
+            "hallucination",
+        }
+        fab = score.sub_metrics["fabricating_tool_parameters"]
+        assert fab.name == "faithfulness.fabricating_tool_parameters"
+        assert fab.score == 3.0
+        assert fab.normalized_score == 1.0
+        assert fab.details["flagged"] is False
+
+        disamb = score.sub_metrics["failing_to_disambiguate"]
+        assert disamb.score == 1.0
+        assert disamb.normalized_score == 0.0
+        assert disamb.details["flagged"] is True
+        assert disamb.details["evidence"] == "bad"
+
+    def test_build_metric_score_skips_missing_or_invalid_dimensions(self):
+        ctx = make_metric_context(conversation_trace=[{"role": "user"}])
+        response = {
+            "rating": 3,
+            "dimensions": {
+                "fabricating_tool_parameters": {"rating": "not-an-int"},
+                "hallucination": {"rating": 3, "flagged": False},
+            },
+        }
+
+        score = self.metric.build_metric_score(
+            rating=3,
+            normalized=1.0,
+            response=response,
+            prompt="p",
+            context=ctx,
+            raw_response="{}",
+        )
+
+        assert score.sub_metrics is not None
+        assert set(score.sub_metrics.keys()) == {"hallucination"}
+
     @pytest.mark.asyncio
     async def test_compute_unparseable_response(self):
         self.metric.llm_client.generate_text.return_value = "not json at all ~~~"

@@ -81,6 +81,67 @@ class TestUserBehavioralFidelity:
         assert score.score == 0.0
         assert score.details["corrupted"] is True
 
+    def test_build_metric_score_surfaces_corruption_sub_metrics(self):
+        ctx = make_metric_context()
+        response = {
+            "corruption_analysis": {
+                "extra_modifications": {"detected": False, "analysis": "none"},
+                "premature_ending": {"detected": True, "analysis": "ended early"},
+                "missing_information": {"detected": False, "analysis": ""},
+                "duplicate_modifications": {"detected": False, "analysis": ""},
+                "decision_tree_violation": {"detected": False, "analysis": ""},
+            }
+        }
+
+        score = self.metric.build_metric_score(
+            rating=0,
+            normalized=0.0,
+            response=response,
+            prompt="test",
+            context=ctx,
+        )
+
+        assert score.sub_metrics is not None
+        assert set(score.sub_metrics.keys()) == {
+            "extra_modifications",
+            "premature_ending",
+            "missing_information",
+            "duplicate_modifications",
+            "decision_tree_violation",
+        }
+        extra = score.sub_metrics["extra_modifications"]
+        assert extra.name == "user_behavioral_fidelity.extra_modifications"
+        assert extra.score == 1.0  # clean
+        assert extra.normalized_score == 1.0
+        assert extra.details["detected"] is False
+
+        premature = score.sub_metrics["premature_ending"]
+        assert premature.score == 0.0  # detected
+        assert premature.normalized_score == 0.0
+        assert premature.details["detected"] is True
+        assert premature.details["analysis"] == "ended early"
+
+    def test_build_metric_score_skips_malformed_corruption_entries(self):
+        ctx = make_metric_context()
+        response = {
+            "corruption_analysis": {
+                "extra_modifications": {"detected": False},
+                "premature_ending": "not-a-dict",  # malformed
+                "missing_information": {},  # no detected key
+            }
+        }
+
+        score = self.metric.build_metric_score(
+            rating=1,
+            normalized=1.0,
+            response=response,
+            prompt="test",
+            context=ctx,
+        )
+
+        assert score.sub_metrics is not None
+        assert set(score.sub_metrics.keys()) == {"extra_modifications"}
+
     @pytest.mark.asyncio
     async def test_compute_not_corrupted(self):
         self.metric.llm_client.generate_text.return_value = json.dumps(

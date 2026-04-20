@@ -9,6 +9,7 @@ from typing import Any
 
 from pydub import AudioSegment
 
+from eva.models.results import MetricScore
 from eva.utils.json_utils import extract_and_load_json
 from eva.utils.logging import get_logger
 
@@ -322,6 +323,87 @@ def compute_aggregation(aggregation: str, scores: list[int | float | None]) -> f
 def reverse_word_error_rate(wer: float) -> float:
     """Convert WER to accuracy."""
     return 1 - min(1.0, wer)
+
+
+def make_rate_sub_metric(
+    parent_name: str,
+    key: str,
+    numerator: int,
+    denominator: int,
+    details: dict[str, Any],
+    precision: int = 3,
+) -> MetricScore:
+    """Build a rate-style sub-metric where ``score == normalized_score == numerator/denominator``.
+
+    Returns a zero-rate sub-metric when ``denominator <= 0`` so callers never
+    divide by zero. Callers are responsible for choosing the ``details`` shape
+    (counts, turn IDs, reference counts, etc.) that makes sense for their metric.
+
+    Args:
+        parent_name: Parent metric's name (used as prefix in sub-metric name).
+        key: Sub-metric key suffix (final name is ``f"{parent_name}.{key}"``).
+        numerator: Count (e.g., flagged turns, component errors, correct entities).
+        denominator: Denominator (e.g., rated turns, reference words, total calls).
+        details: Details dict attached to the sub-metric.
+        precision: Number of decimal places to round the rate to.
+
+    Returns:
+        A MetricScore with equal ``score`` and ``normalized_score`` fields.
+    """
+    rate = numerator / denominator if denominator > 0 else 0.0
+    rounded = round(rate, precision)
+    return MetricScore(
+        name=f"{parent_name}.{key}",
+        score=rounded,
+        normalized_score=rounded,
+        details=details,
+    )
+
+
+def build_dimension_sub_metrics(
+    parent_name: str,
+    dimensions: dict[str, Any],
+    dimension_keys: tuple[str, ...],
+    rating_scale: tuple[int, int],
+) -> dict[str, MetricScore]:
+    """Build sub-metrics for judge dimensions rated on a scale (e.g., 1-3).
+
+    Each dimension entry is expected to have at minimum a ``rating`` (int) and
+    optionally ``flagged`` (bool) and ``evidence`` (str). Only dimensions with
+    valid integer ratings in-range are surfaced.
+
+    Args:
+        parent_name: The parent metric's name (used as prefix in sub-metric name).
+        dimensions: Mapping of dimension key to its judge-response entry.
+        dimension_keys: Ordered tuple of expected dimension keys.
+        rating_scale: Tuple of (min, max) valid rating values.
+
+    Returns:
+        Dict keyed by dimension name with a MetricScore per surfaceable dimension.
+    """
+    min_r, max_r = rating_scale
+    valid_range = set(range(min_r, max_r + 1))
+    sub_metrics: dict[str, MetricScore] = {}
+
+    for dim_key in dimension_keys:
+        entry = dimensions.get(dim_key)
+        if not isinstance(entry, dict):
+            continue
+        rating = entry.get("rating")
+        if not isinstance(rating, int) or rating not in valid_range:
+            continue
+        sub_metrics[dim_key] = MetricScore(
+            name=f"{parent_name}.{dim_key}",
+            score=float(rating),
+            normalized_score=normalize_rating(rating, min_r, max_r),
+            details={
+                "rating": rating,
+                "flagged": entry.get("flagged"),
+                "evidence": entry.get("evidence", ""),
+            },
+        )
+
+    return sub_metrics
 
 
 def aggregate_per_turn_scores(scores: list[float | None], aggregation: str) -> float | None:
