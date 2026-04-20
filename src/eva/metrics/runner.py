@@ -96,6 +96,7 @@ class MetricsRunner:
         self.force_rerun = force_rerun
         self.metric_configs = metric_configs or {}
         self.registry = registry or get_global_registry()
+        self._context_cache: dict[str, Any] = {}
 
         # pass@k configuration
         self.num_draws = num_draws
@@ -200,7 +201,38 @@ class MetricsRunner:
                 record_dirs.append((d.name, d))  # k=1 record
         return record_dirs
 
-    async def run(self) -> MetricsRunResult:
+    def process_records(self) -> dict[str, Any]:
+        """Run the metrics processor on each targeted record.
+
+        This is phase 1 of metric computation: load each record's ``result.json``
+        and invoke ``MetricsContextProcessor.process_record`` to produce a
+        ``_ProcessorContext``. No metric computation happens here. Callers that
+        need to classify records up front (e.g., the validation gate) use this
+        map to inspect processor-derived fields like
+        ``agent_timeout_on_user_turn``, then optionally pass the filtered map
+        back into :meth:`run` to avoid re-processing.
+
+        Per-record errors are logged and the record is omitted from the result.
+        """
+        contexts: dict[str, Any] = {}
+        for record_id, record_dir in self._discover_record_dirs(self.run_dir, self.record_ids):
+            result_path = record_dir / "result.json"
+            if not result_path.exists():
+                logger.info(f"process_records: {record_id} has no result.json, skipping")
+                continue
+            try:
+                result_data = json.loads(result_path.read_text())
+                result = ConversationResult(**result_data)
+                ctx = self.metrics_processor.process_record(result, record_dir, pipeline_type=self._pipeline_type)
+            except Exception as e:
+                logger.warning(f"process_records: {record_id} failed ({e})")
+                continue
+            if ctx is None:
+                continue
+            contexts[record_id] = ctx
+        return contexts
+
+    async def run(self, contexts: dict[str, Any] | None = None) -> MetricsRunResult:
         """Run all metrics on all records.
 
         All records and metrics run concurrently. The LiteLLM Router
@@ -210,9 +242,18 @@ class MetricsRunner:
         After computing per-record metrics, if multi-attempt records are detected,
         computes pass@k and pass^k aggregation across attempts.
 
+        Args:
+            contexts: Optional mapping of record_id to pre-computed
+                ``_ProcessorContext`` (from :meth:`process_records`). When
+                supplied, records present in the map reuse the provided context
+                instead of re-invoking the processor. Records missing from the
+                map fall back to on-demand processing inside ``_load_context``.
+
         Returns:
             MetricsRunResult with all metrics and error information
         """
+        if contexts:
+            self._context_cache = contexts
         all_metrics: dict[str, RecordMetrics] = {}
 
         # Discover ALL record dirs; split into targeted (to compute) and rest (read-only).
@@ -428,8 +469,13 @@ class MetricsRunner:
         # Create ConversationResult object
         result = ConversationResult(**result_data)
 
-        # Use postprocessor to process logs and create enriched context
-        metrics_context = self.metrics_processor.process_record(result, record_dir, pipeline_type=self._pipeline_type)
+        cached_context = self._context_cache.get(record_id)
+        if cached_context is not None:
+            metrics_context = cached_context
+        else:
+            metrics_context = self.metrics_processor.process_record(
+                result, record_dir, pipeline_type=self._pipeline_type
+            )
 
         # Get agent instructions and tools from config
         agent_instructions = self._agent_config["instructions"]

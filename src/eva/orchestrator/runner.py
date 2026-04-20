@@ -176,49 +176,53 @@ class BenchmarkRunner:
             tasks = [(output_id_to_record[oid], oid) for oid in pending_output_ids]
             run_results = await self._run_targeted(tasks)
 
-            # STEP 2: Check conversation_finished for each output_id
-            finished_ids: list[str] = []
+            # STEP 2: Segregate exception / not-completed results (never run metrics on
+            # these). Everything else is handed to ValidationRunner which owns the gate.
             not_finished_ids: list[str] = []
-
+            to_validate_ids: list[str] = []
             for output_id in pending_output_ids:
                 result = run_results.get(output_id)
-                record_dir = self.output_dir / "records" / output_id
-
-                # Treat exceptions and incomplete results as not finished
                 if isinstance(result, Exception) or (isinstance(result, ConversationResult) and not result.completed):
                     not_finished_ids.append(output_id)
-                elif check_conversation_finished(record_dir):
-                    finished_ids.append(output_id)
                 else:
-                    not_finished_ids.append(output_id)
+                    to_validate_ids.append(output_id)
+
+            # STEP 3: Run validation (includes gate) on everything that produced a result.
+            validation_results: dict = {}
+            failed_validation_ids: list[str] = []
+            if to_validate_ids:
+                to_validate_records = list(
+                    {id(output_id_to_record[oid]): output_id_to_record[oid] for oid in to_validate_ids}.values()
+                )
+                logger.info(f"Running validation (gate + metrics) on {len(to_validate_ids)} tasks...")
+                validation_runner = ValidationRunner(
+                    run_dir=self.output_dir,
+                    dataset=to_validate_records,
+                    thresholds=self.config.validation_thresholds,
+                    output_ids=to_validate_ids,
+                )
+                validation_results = await validation_runner.run_validation()
+
+                for output_id in to_validate_ids:
+                    vr = validation_results.get(output_id)
+                    if vr is None:
+                        not_finished_ids.append(output_id)
+                        continue
+                    if vr.passed:
+                        continue
+                    # No failed_metrics → gate rejected before metrics ran (not_finished).
+                    # Populated failed_metrics → metrics ran and some fell below threshold.
+                    if not vr.failed_metrics:
+                        not_finished_ids.append(output_id)
+                    else:
+                        failed_validation_ids.append(output_id)
 
             if not_finished_ids:
                 logger.info(
                     f"{len(not_finished_ids)} tasks did not finish properly (attempt {attempt_number}/{max_attempts})"
                 )
 
-            # STEP 3: Run validation metrics on finished records only
-            failed_validation_ids: list[str] = []
-            if finished_ids:
-                finished_records = list(
-                    {id(output_id_to_record[oid]): output_id_to_record[oid] for oid in finished_ids}.values()
-                )
-                logger.info(f"Running validation metrics on {len(finished_ids)} finished tasks...")
-                validation_runner = ValidationRunner(
-                    run_dir=self.output_dir,
-                    dataset=finished_records,
-                    thresholds=self.config.validation_thresholds,
-                    skip_conversation_finished=True,
-                    output_ids=finished_ids,
-                )
-                validation_results = await validation_runner.run_validation()
-
-                for output_id in finished_ids:
-                    vr = validation_results.get(output_id)
-                    if not vr or not vr.passed:
-                        failed_validation_ids.append(output_id)
-
-            # STEP 4: Determine which output_ids failed this attempt
+            # STEP 4: Determine which output_ids failed this attempt AND should be retried.
             failed_this_attempt = not_finished_ids + failed_validation_ids
 
             # Record failures in history with structured entries
@@ -535,7 +539,6 @@ class BenchmarkRunner:
                 run_dir=self.output_dir,
                 dataset=filtered_records,
                 thresholds=self.config.validation_thresholds,
-                skip_conversation_finished=False,
                 output_ids=needs_validation_ids,
             )
             validation_results = await validation_runner.run_validation()
@@ -573,36 +576,40 @@ class BenchmarkRunner:
             tasks = [(output_id_to_record[oid], oid) for oid in pending_ids]
             run_results = await self._run_targeted(tasks)
 
-            # Check conversation_finished
-            finished_ids: list[str] = []
+            # Segregate exceptions/incomplete; hand everything else to ValidationRunner.
             still_not_finished: list[str] = []
+            to_validate_ids: list[str] = []
             for output_id in pending_ids:
                 result = run_results.get(output_id)
-                record_dir = records_dir / output_id
                 if isinstance(result, Exception) or (isinstance(result, ConversationResult) and not result.completed):
                     still_not_finished.append(output_id)
-                elif check_conversation_finished(record_dir):
-                    finished_ids.append(output_id)
                 else:
-                    still_not_finished.append(output_id)
+                    to_validate_ids.append(output_id)
 
-            # Validate finished records
+            # Validate (gate + metrics)
             failed_validation: list[str] = []
-            if finished_ids:
-                finished_records = list(
-                    {id(output_id_to_record[oid]): output_id_to_record[oid] for oid in finished_ids}.values()
+            new_results: dict = {}
+            if to_validate_ids:
+                to_validate_records = list(
+                    {id(output_id_to_record[oid]): output_id_to_record[oid] for oid in to_validate_ids}.values()
                 )
                 vr_runner = ValidationRunner(
                     run_dir=self.output_dir,
-                    dataset=finished_records,
+                    dataset=to_validate_records,
                     thresholds=self.config.validation_thresholds,
-                    skip_conversation_finished=True,
-                    output_ids=finished_ids,
+                    output_ids=to_validate_ids,
                 )
                 new_results = await vr_runner.run_validation()
-                for output_id in finished_ids:
+                for output_id in to_validate_ids:
                     vr = new_results.get(output_id)
-                    if not vr or not vr.passed:
+                    if vr is None:
+                        still_not_finished.append(output_id)
+                        continue
+                    if vr.passed:
+                        continue
+                    if not vr.failed_metrics:
+                        still_not_finished.append(output_id)
+                    else:
                         failed_validation.append(output_id)
 
             pending_ids = still_not_finished + failed_validation
@@ -614,7 +621,7 @@ class BenchmarkRunner:
                     }
                 )
             for oid in failed_validation:
-                vr = new_results.get(oid) if finished_ids else None
+                vr = new_results.get(oid)
                 entry: dict = {
                     "attempt": attempt_number,
                     "reason": "validation_failed",

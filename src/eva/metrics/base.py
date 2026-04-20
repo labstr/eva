@@ -86,6 +86,7 @@ class MetricContext:
         assistant_interrupted_turns: set[int] | None = None,
         user_interrupted_turns: set[int] | None = None,
         pipeline_type: PipelineType = PipelineType.CASCADE,
+        agent_timeout_on_user_turn: bool = False,
     ):
         self.record_id = record_id
 
@@ -136,6 +137,7 @@ class MetricContext:
         self.assistant_interrupted_turns = assistant_interrupted_turns or set()
         self.user_interrupted_turns = user_interrupted_turns or set()
         self.pipeline_type = pipeline_type
+        self.agent_timeout_on_user_turn = agent_timeout_on_user_turn
 
     @property
     def is_audio_native(self) -> bool:

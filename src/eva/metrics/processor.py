@@ -8,6 +8,7 @@ from pathlib import Path
 from eva.assistant.agentic.system import GENERIC_ERROR
 from eva.models.config import PipelineType
 from eva.models.results import ConversationResult
+from eva.utils.conversation_checks import check_conversation_finished
 from eva.utils.log_processing import (
     AnnotationLabel,
     aggregate_pipecat_logs_by_type,
@@ -23,6 +24,42 @@ from eva.utils.log_processing import (
 from eva.utils.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+def last_audio_speaker(
+    audio_timestamps_user_turns: dict[int, list[tuple[float, float]]],
+    audio_timestamps_assistant_turns: dict[int, list[tuple[float, float]]],
+) -> str | None:
+    """Return "user", "assistant", or None based on which side's audio ended latest.
+
+    Uses the max end-timestamp across all audio intervals for each role. Returns None
+    when neither side has any audio recorded (e.g. infra error before any audio played).
+    """
+
+    def _latest_end(intervals_by_turn: dict[int, list[tuple[float, float]]]) -> float | None:
+        ends = [iv[1] for intervals in intervals_by_turn.values() if intervals for iv in intervals]
+        return max(ends) if ends else None
+
+    user_end = _latest_end(audio_timestamps_user_turns)
+    asst_end = _latest_end(audio_timestamps_assistant_turns)
+    if user_end is None and asst_end is None:
+        return None
+    if user_end is None:
+        return "assistant"
+    if asst_end is None:
+        return "user"
+    return "user" if user_end > asst_end else "assistant"
+
+
+def is_agent_timeout_on_user_turn(
+    conversation_ended_reason: str | None,
+    audio_timestamps_user_turns: dict[int, list[tuple[float, float]]],
+    audio_timestamps_assistant_turns: dict[int, list[tuple[float, float]]],
+) -> bool:
+    """True iff conversation ended with inactivity_timeout and the user spoke last."""
+    if conversation_ended_reason != "inactivity_timeout":
+        return False
+    return last_audio_speaker(audio_timestamps_user_turns, audio_timestamps_assistant_turns) == "user"
 
 
 def _resolve_path(stored: str | None, output_dir: Path) -> str | None:
@@ -730,6 +767,11 @@ class _ProcessorContext:
         self.conversation_ended_reason: str | None = None
         self.pipeline_type: PipelineType = PipelineType.CASCADE
 
+        # True when conversation ended with inactivity_timeout AND the user was the last
+        # speaker by audio timeline. Computed by the processor after audio timestamps
+        # and conversation_ended_reason are populated.
+        self.agent_timeout_on_user_turn: bool = False
+
         # Per-turn latency: user_end -> assistant_start (seconds)
         self.latency_assistant_turns: dict[int, float] = {}
 
@@ -778,6 +820,8 @@ class MetricsContextProcessor:
         context.audio_user_path = _resolve_path(result.audio_user_path, output_dir)
         context.audio_mixed_path = _resolve_path(result.audio_mixed_path, output_dir)
         context.pipeline_type = pipeline_type
+        context.conversation_ended_reason = result.conversation_ended_reason
+        context.conversation_finished = check_conversation_finished(output_dir)
 
         pipecat_path = _resolve_path(result.pipecat_logs_path, output_dir)
         elevenlabs_path = _resolve_path(result.elevenlabs_logs_path, output_dir)
@@ -787,6 +831,12 @@ class MetricsContextProcessor:
             self._extract_turns_from_history(context)
             self._compute_per_turn_latency(context)
             self._reconcile_transcript_with_tools(context)
+
+            context.agent_timeout_on_user_turn = is_agent_timeout_on_user_turn(
+                context.conversation_ended_reason,
+                context.audio_timestamps_user_turns,
+                context.audio_timestamps_assistant_turns,
+            )
 
             return context
 
