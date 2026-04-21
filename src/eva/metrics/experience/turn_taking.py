@@ -74,10 +74,10 @@ class TurnTakingMetric(CodeMetric):
     YIELD_HARD_MS: float = 2000
 
     # --- Latency classification thresholds (early / on-time / late rates). ---
-    EARLY_THRESHOLD_MS: float = 200        # latency < this ⇒ "early" (no tool call)
-    LATE_THRESHOLD_MS: float = 3000        # latency >= this ⇒ "late" (no tool call)
-    EARLY_THRESHOLD_MS_TOOL: float = 200   # latency < this ⇒ "early" (turn with tool call)
-    LATE_THRESHOLD_MS_TOOL: float = 6000   # latency >= this ⇒ "late" (turn with tool call)
+    EARLY_THRESHOLD_MS: float = 200  # latency < this ⇒ "early" (no tool call)
+    LATE_THRESHOLD_MS: float = 3000  # latency >= this ⇒ "late" (no tool call)
+    EARLY_THRESHOLD_MS_TOOL: float = 200  # latency < this ⇒ "early" (turn with tool call)
+    LATE_THRESHOLD_MS_TOOL: float = 6000  # latency >= this ⇒ "late" (turn with tool call)
 
     @staticmethod
     def _get_turn_ids_with_turn_taking(context: MetricContext) -> list[int]:
