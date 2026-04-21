@@ -54,14 +54,15 @@ class TurnTakingMetric(CodeMetric):
     # Ramp up 0 → 1 from LATENCY_HARD_EARLY_MS to LATENCY_SWEET_SPOT_LOW_MS.
     # Flat at 1 from LATENCY_SWEET_SPOT_LOW_MS to LATENCY_SWEET_SPOT_HIGH_MS.
     # Ramp down 1 → 0 from LATENCY_SWEET_SPOT_HIGH_MS to LATENCY_HARD_LATE_MS.
+    # LATENCY_HARD_EARLY_MS and LATENCY_SWEET_SPOT_LOW_MS are shared across all turns
+    # (tool-call and non-tool-call) because early-response penalties and the ramp-up
+    # boundary are unaffected by tool execution time.
     LATENCY_HARD_EARLY_MS: float = -500
     LATENCY_SWEET_SPOT_LOW_MS: float = 500
     LATENCY_SWEET_SPOT_HIGH_MS: float = 2000
     LATENCY_HARD_LATE_MS: float = 5000
 
-    # Tool-call turn variants — more lenient since tool execution adds inherent latency.
-    LATENCY_HARD_EARLY_MS_TOOL: float = -500
-    LATENCY_SWEET_SPOT_LOW_MS_TOOL: float = 500
+    # Tool-call turn variants — more lenient on the upper end since tool execution adds inherent latency.
     LATENCY_SWEET_SPOT_HIGH_MS_TOOL: float = 4000
     LATENCY_HARD_LATE_MS_TOOL: float = 7000
 
@@ -74,9 +75,10 @@ class TurnTakingMetric(CodeMetric):
     YIELD_HARD_MS: float = 2000
 
     # --- Latency classification thresholds (early / on-time / late rates). ---
-    EARLY_THRESHOLD_MS: float = 200  # latency < this ⇒ "early" (no tool call)
+    # EARLY_THRESHOLD_MS is shared across all turns — early-response behaviour is not
+    # affected by whether a tool call occurred.
+    EARLY_THRESHOLD_MS: float = 200  # latency < this ⇒ "early"
     LATE_THRESHOLD_MS: float = 3000  # latency >= this ⇒ "late" (no tool call)
-    EARLY_THRESHOLD_MS_TOOL: float = 200  # latency < this ⇒ "early" (turn with tool call)
     LATE_THRESHOLD_MS_TOOL: float = 6000  # latency >= this ⇒ "late" (turn with tool call)
 
     @staticmethod
@@ -89,8 +91,8 @@ class TurnTakingMetric(CodeMetric):
     @classmethod
     def _latency_score(cls, latency_ms: float, has_tool_call: bool = False) -> float:
         """Map a single latency (ms) to a score in [0, 1] using the piecewise-linear curve."""
-        hard_early = cls.LATENCY_HARD_EARLY_MS_TOOL if has_tool_call else cls.LATENCY_HARD_EARLY_MS
-        sweet_low = cls.LATENCY_SWEET_SPOT_LOW_MS_TOOL if has_tool_call else cls.LATENCY_SWEET_SPOT_LOW_MS
+        hard_early = cls.LATENCY_HARD_EARLY_MS
+        sweet_low = cls.LATENCY_SWEET_SPOT_LOW_MS
         sweet_high = cls.LATENCY_SWEET_SPOT_HIGH_MS_TOOL if has_tool_call else cls.LATENCY_SWEET_SPOT_HIGH_MS
         hard_late = cls.LATENCY_HARD_LATE_MS_TOOL if has_tool_call else cls.LATENCY_HARD_LATE_MS
 
@@ -294,7 +296,7 @@ class TurnTakingMetric(CodeMetric):
             early = sum(
                 1
                 for t, ms in latency_data
-                if ms < (cls.EARLY_THRESHOLD_MS_TOOL if t in turns_with_tool_calls else cls.EARLY_THRESHOLD_MS)
+                if ms < cls.EARLY_THRESHOLD_MS
             )
             late = sum(
                 1
