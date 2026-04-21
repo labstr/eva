@@ -1367,7 +1367,8 @@ def _build_figure(
             hover = hover + "<br><br>" + tt_block
         if _tool_turns and pause["from_speaker"] == "user" and pause["to_speaker"] == "assistant":
             to_tid = pause.get("to_turn_id")
-            hover = hover + f"<br>Tool call: {'yes \u2699' if to_tid in _tool_turns else 'no'}"
+            tool_label = "yes ⚙" if to_tid in _tool_turns else "no"
+            hover = hover + f"<br>Tool call: {tool_label}"
         # Highlight user→assistant pauses — these are the ones turn_taking scores.
         # Assistant→user gaps use the original muted style so the scored ones pop.
         is_scored = pause["from_speaker"] == "user" and pause["to_speaker"] == "assistant"
