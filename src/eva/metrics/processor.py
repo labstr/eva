@@ -767,11 +767,6 @@ class _ProcessorContext:
         self.conversation_ended_reason: str | None = None
         self.pipeline_type: PipelineType = PipelineType.CASCADE
 
-        # True when conversation ended with inactivity_timeout AND the user was the last
-        # speaker by audio timeline. Computed by the processor after audio timestamps
-        # and conversation_ended_reason are populated.
-        self.agent_timeout_on_user_turn: bool = False
-
         # Per-turn latency: user_end -> assistant_start (seconds)
         self.latency_assistant_turns: dict[int, float] = {}
 
@@ -831,12 +826,6 @@ class MetricsContextProcessor:
             self._extract_turns_from_history(context)
             self._compute_per_turn_latency(context)
             self._reconcile_transcript_with_tools(context)
-
-            context.agent_timeout_on_user_turn = is_agent_timeout_on_user_turn(
-                context.conversation_ended_reason,
-                context.audio_timestamps_user_turns,
-                context.audio_timestamps_assistant_turns,
-            )
 
             return context
 

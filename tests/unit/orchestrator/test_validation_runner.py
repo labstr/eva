@@ -21,11 +21,27 @@ def _make_score(name: str, score: float, error: str | None = None, details: dict
     return make_metric_score(name, score=score, error=error, details=details or {})
 
 
-def _ctx(conversation_finished: bool = False, agent_timeout_on_user_turn: bool = False):
+def _ctx(
+    conversation_finished: bool = False,
+    conversation_ended_reason: str | None = None,
+    audio_timestamps_user_turns: dict | None = None,
+    audio_timestamps_assistant_turns: dict | None = None,
+):
     """Duck-typed stand-in for _ProcessorContext exposing the fields the gate reads."""
     return SimpleNamespace(
         conversation_finished=conversation_finished,
-        agent_timeout_on_user_turn=agent_timeout_on_user_turn,
+        conversation_ended_reason=conversation_ended_reason,
+        audio_timestamps_user_turns=audio_timestamps_user_turns or {},
+        audio_timestamps_assistant_turns=audio_timestamps_assistant_turns or {},
+    )
+
+
+def _ctx_agent_timeout():
+    """Duck-typed context that satisfies is_agent_timeout_on_user_turn."""
+    return _ctx(
+        conversation_ended_reason="inactivity_timeout",
+        audio_timestamps_user_turns={0: [(0.0, 5.0)]},
+        audio_timestamps_assistant_turns={0: [(1.0, 2.0)]},
     )
 
 
@@ -82,7 +98,7 @@ class TestClassify:
         assert at == set()
 
     def test_agent_timeout_passes_and_flagged(self):
-        contexts = {"r1": _ctx(agent_timeout_on_user_turn=True)}
+        contexts = {"r1": _ctx_agent_timeout()}
         gp, nf, at = ValidationRunner._classify(contexts, ["r1"])
         assert gp == ["r1"]
         assert nf == []
@@ -102,16 +118,23 @@ class TestClassify:
         assert at == set()
 
     def test_goodbye_takes_precedence_over_flag(self):
-        contexts = {"r1": _ctx(conversation_finished=True, agent_timeout_on_user_turn=True)}
+        # Conversation-finished + would-be agent-timeout markers: goodbye short-circuits.
+        contexts = {
+            "r1": _ctx(
+                conversation_finished=True,
+                conversation_ended_reason="inactivity_timeout",
+                audio_timestamps_user_turns={0: [(0.0, 5.0)]},
+                audio_timestamps_assistant_turns={0: [(1.0, 2.0)]},
+            )
+        }
         gp, nf, at = ValidationRunner._classify(contexts, ["r1"])
         assert gp == ["r1"]
-        # goodbye short-circuits; record is not flagged as agent_timeout.
         assert at == set()
 
     def test_mixed_set(self):
         contexts = {
             "a": _ctx(conversation_finished=True),
-            "b": _ctx(agent_timeout_on_user_turn=True),
+            "b": _ctx_agent_timeout(),
             "c": _ctx(),
         }
         gp, nf, at = ValidationRunner._classify(contexts, ["a", "b", "c", "d"])
@@ -364,15 +387,15 @@ class TestRunValidation:
     async def test_agent_timeout_passes_even_if_metric_scores_fail(self, validation_runner):
         """Agent-timeout records always pass the validation layer.
 
-        The agent failure is surfaced via ``metrics.json``
-        (``context.agent_timeout_on_user_turn``), not as a validation failure. Even when
-        a validation metric dropped below its threshold for this record, ``vr.passed``
-        is forced True and ``failed_metrics`` is cleared — the metric signal is distorted
-        by the agent's missing final turn, not a true validation failure.
+        The agent failure is surfaced via the ``agent_turn_response`` diagnostic metric
+        in ``metrics.json``, not as a validation failure. Even when a validation metric
+        dropped below its threshold for this record, ``vr.passed`` is forced True and
+        ``failed_metrics`` is cleared — the metric signal is distorted by the agent's
+        missing final turn, not a true validation failure.
         """
         tts_pass = {"per_turn_ratings": {"turn_0": 3, "turn_1": 2}}
         contexts = {
-            "record_1": _ctx(agent_timeout_on_user_turn=True),
+            "record_1": _ctx_agent_timeout(),
             "record_2": _ctx(conversation_finished=True),
         }
         mock_results = {

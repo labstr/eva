@@ -3,6 +3,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from eva.metrics.processor import is_agent_timeout_on_user_turn
 from eva.metrics.runner import MetricsRunner
 from eva.models.record import EvaluationRecord
 from eva.models.results import RecordMetrics
@@ -23,9 +24,9 @@ class ValidationResult:
         metrics ran and some failed. Callers that need to distinguish the two failure
         modes (e.g. for ``rerun_history`` bookkeeping) check ``failed_metrics`` directly.
 
-    ``agent_timeout_on_user_turn`` records pass the gate with ``passed=True`` — the
-    agent-side failure is surfaced via ``metrics.json``
-    (``context.agent_timeout_on_user_turn``), not through this object.
+    Agent-timeout-on-user-turn records pass the gate with ``passed=True`` — the
+    agent-side failure is surfaced via the ``agent_turn_response`` diagnostic metric
+    in ``metrics.json``, not through this object.
     """
 
     passed: bool
@@ -111,7 +112,11 @@ class ValidationRunner:
             if ctx.conversation_finished:  # type: ignore[attr-defined]
                 gate_passed.append(record_id)
                 continue
-            if ctx.agent_timeout_on_user_turn:  # type: ignore[attr-defined]
+            if is_agent_timeout_on_user_turn(
+                ctx.conversation_ended_reason,  # type: ignore[attr-defined]
+                ctx.audio_timestamps_user_turns,  # type: ignore[attr-defined]
+                ctx.audio_timestamps_assistant_turns,  # type: ignore[attr-defined]
+            ):
                 gate_passed.append(record_id)
                 agent_timeout.add(record_id)
                 continue
@@ -157,10 +162,9 @@ class ValidationRunner:
                 vr = self._evaluate_record(record_id, record_metrics, metrics_to_run)
                 vr.scores["conversation_finished"] = 1.0
                 if record_id in agent_timeout_ids:
-                    # Agent-side failure; surfaced via metrics.json
-                    # (context.agent_timeout_on_user_turn). Validation produced usable
-                    # data, so the record passes the gate — the agent bug is not a
-                    # validation failure.
+                    # Agent-side failure; surfaced via the agent_turn_response diagnostic
+                    # metric in metrics.json. Validation produced usable data, so the
+                    # record passes the gate — the agent bug is not a validation failure.
                     vr.passed = True
                     vr.failed_metrics = []
                 validation_results[record_id] = vr
