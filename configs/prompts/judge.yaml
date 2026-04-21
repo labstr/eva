@@ -792,11 +792,11 @@ judge:
 
         **Entity categories to watch:**
         - Confirmation codes (e.g., ZK3FFW, FAR0UM, 8JVSDF)
-        - Flight numbers (e.g., SkyWay 410, SW302)
+        - Domain-specific identifiers (e.g., flight numbers like "SkyWay 410", ticket or incident numbers, order numbers, case IDs)
         - Dollar amounts (e.g., $15, $1,285.00)
-        - Seat numbers (e.g., 21C, 14A)
+        - Short alphanumeric codes (e.g., seat numbers like "21C", room numbers, extension numbers)
         - Spelled-out codes (e.g., "Z K three F F W") — verify EVERY letter and digit individually; "K O L T S F" vs "K O L T S S F" is an error
-        - Reference/voucher IDs (e.g., REF-8JVSDF-001, MEAL-FAR0UM-PAX0) — verify each segment; "M E L" vs "M E A L" is an error
+        - Reference IDs with segments (e.g., REF-8JVSDF-001,  MEAL-FAR0UM-PAX0) — verify each segment; "M E L" vs "M E A L" is an error
         - Times (e.g., 3:55 PM, 10:30 AM)
         - Dates (e.g., March 25th, February 3rd)
         - Names (e.g., Mr. Rivera, Rodriguez)
