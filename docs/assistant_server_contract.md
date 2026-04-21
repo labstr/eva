@@ -160,7 +160,6 @@ turn boundaries.
 | `mulaw_8k_to_pcm16_24k` | Twilio input → OpenAI / most models (24 kHz PCM16) |
 | `mulaw_8k_to_pcm16_16k` | Twilio input → Gemini Live (16 kHz PCM16) |
 | `pcm16_24k_to_mulaw_8k` | 24 kHz PCM16 → Twilio output |
-| `pcm16_16k_to_mulaw_8k` | 16 kHz PCM16 → Twilio output |
 
 Use `soxr`-based `pcm16_24k_to_mulaw_8k` for the 24→8 kHz path; plain
 `audioop.ratecv` produces muffled audio due to lack of anti-aliasing.
@@ -411,7 +410,6 @@ class MyFrameworkAssistantServer(AbstractAssistantServer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         assert isinstance(self.pipeline_config, SpeechToSpeechConfig)
-        self._audio_sample_rate = 24000
         self._model = self.pipeline_config.s2s_params.get("model", "my-default")
         self._app: FastAPI | None = None
         self._server: uvicorn.Server | None = None
@@ -549,7 +547,7 @@ the run to fail or produce `None` latency fields in the result.
 | `initial_scenario_db.json` | Yes | Task completion metrics |
 | `final_scenario_db.json` | Yes | Task completion metrics |
 | `audio_mixed.wav` | No | Human review |
-| `audio_user.wav` | No | STT accuracy metrics |
-| `audio_assistant.wav` | No | TTS quality metrics |
-| `framework_logs.jsonl` | No | Turn boundary metrics |
-| `pipecat_metrics.jsonl` | No | `model_response_latency` in `ConversationResult` |
+| `audio_user.wav` | Yes | STT accuracy metrics |
+| `audio_assistant.wav` | Yes | TTS quality metrics |
+| `framework_logs.jsonl` | Yes | Turn boundary metrics |
+| `pipecat_metrics.jsonl` | Yes | `model_response_latency` in `ConversationResult` |

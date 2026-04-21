@@ -21,6 +21,7 @@ from eva.utils.logging import get_logger
 logger = get_logger(__name__)
 
 INITIAL_MESSAGE = "Hello! How can I help you today?"
+SAMPLE_RATE = 24000
 
 
 class AbstractAssistantServer(ABC):
@@ -79,7 +80,7 @@ class AbstractAssistantServer(ABC):
         self._audio_buffer = bytearray()
         self.user_audio_buffer = bytearray()
         self.assistant_audio_buffer = bytearray()
-        self._audio_sample_rate: int = 24000  # Subclasses can override
+        self._audio_sample_rate: int = SAMPLE_RATE  # Subclasses can override
 
     @abstractmethod
     async def start(self) -> None:

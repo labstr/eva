@@ -490,7 +490,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                 timestamp_ms=self._assistant_state.first_audio_wall_ms,
             )
             if self._fw_log:
-                self._fw_log.tts_text(partial_text)
+                self._fw_log.s2s_transcript(partial_text)
                 self._fw_log.turn_end(was_interrupted=True)
             logger.debug(f"Flushed interrupted assistant response: {partial_text[:60]}...")
             self._assistant_state = _AssistantResponseState()

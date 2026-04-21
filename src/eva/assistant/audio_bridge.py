@@ -51,14 +51,6 @@ def mulaw_8k_to_pcm16_24k(mulaw_bytes: bytes) -> bytes:
     return pcm_24k
 
 
-def pcm16_16k_to_mulaw_8k(pcm_bytes: bytes) -> bytes:
-    """Convert 16kHz 16-bit PCM to 8kHz mu-law."""
-    # Downsample from 16kHz to 8kHz
-    pcm_8k, _ = audioop.ratecv(pcm_bytes, 2, 1, 16000, 8000, None)
-    # Encode to mu-law
-    return audioop.lin2ulaw(pcm_8k, 2)
-
-
 def pcm16_24k_to_mulaw_8k(pcm_bytes: bytes) -> bytes:
     """Convert 24kHz 16-bit PCM to 8kHz mu-law.
 
@@ -148,31 +140,13 @@ def create_twilio_media_message(stream_sid: str, audio_bytes: bytes) -> str:
     )
 
 
-def create_twilio_start_response(stream_sid: str) -> str:
-    """Create a Twilio 'start' event response."""
-    return json.dumps(
-        {
-            "event": "start",
-            "streamSid": stream_sid,
-            "start": {
-                "streamSid": stream_sid,
-                "mediaFormat": {
-                    "encoding": "audio/x-mulaw",
-                    "sampleRate": 8000,
-                    "channels": 1,
-                },
-            },
-        }
-    )
-
-
 # ── Framework Logs Writer ────────────────────────────────────────────
 
 
 class FrameworkLogWriter:
     """Write framework_logs.jsonl (replacement for pipecat_logs.jsonl).
 
-    Captures turn boundaries, TTS text, and LLM responses with accurate
+    Capture turn boundaries, TTS text, and LLM responses with accurate
     wall-clock timestamps.
     """
 
@@ -217,6 +191,10 @@ class FrameworkLogWriter:
     def llm_response(self, text: str, timestamp_ms: int | None = None) -> None:
         """Log LLM response text (full intended response)."""
         self.write("llm_response", {"frame": text}, timestamp_ms)
+
+    def s2s_transcript(self, text: str, timestamp_ms: int | None = None) -> None:
+        """Log S2S transcript (what was actually spoken)."""
+        self.write("s2s_transcript", {"frame": text}, timestamp_ms)
 
 
 # ── Metrics Log Writer ───────────────────────────────────────────────

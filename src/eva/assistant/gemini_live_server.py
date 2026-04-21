@@ -577,7 +577,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                                         self.audit_log.append_assistant_output(
                                             full_text + " [interrupted]", timestamp_ms=_assistant_turn_start_ts
                                         )
-                                        self._fw_log.tts_text(full_text)
+                                        self._fw_log.s2s_transcript(full_text)
                                     self._fw_log.turn_end(was_interrupted=True)
                                     _in_model_turn = False
                                     _assistant_turn_text = []

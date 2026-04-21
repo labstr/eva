@@ -13,10 +13,8 @@ import pytest
 
 from eva.assistant.audio_bridge import (
     create_twilio_media_message,
-    mulaw_8k_to_pcm16_16k,
     mulaw_8k_to_pcm16_24k,
     parse_twilio_media_message,
-    pcm16_16k_to_mulaw_8k,
     pcm16_24k_to_mulaw_8k,
     pcm16_mix,
 )
@@ -45,22 +43,6 @@ class TestAudioConversionRoundTrip:
 
         pcm_24k = mulaw_8k_to_pcm16_24k(original)
         recovered = pcm16_24k_to_mulaw_8k(pcm_24k)
-
-        assert len(recovered) == len(original)
-
-        orig_pcm = audioop.ulaw2lin(original, 2)
-        recov_pcm = audioop.ulaw2lin(recovered, 2)
-        orig_rms = _rms(orig_pcm)
-        recov_rms = _rms(recov_pcm)
-        assert orig_rms > 0
-        assert recov_rms / orig_rms == pytest.approx(1.0, abs=0.15)
-
-    def test_mulaw_8k_pcm16_16k_round_trip(self):
-        """Mulaw 8k -> pcm16 16k -> mulaw 8k preserves signal energy."""
-        original = _generate_mulaw_tone(440, 100)
-
-        pcm_16k = mulaw_8k_to_pcm16_16k(original)
-        recovered = pcm16_16k_to_mulaw_8k(pcm_16k)
 
         assert len(recovered) == len(original)
 
