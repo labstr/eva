@@ -61,19 +61,19 @@ judge:
       - If the response enumerates options or items (e.g., "Option one is… Option two is…"), does the structure help the user? The volume should not be overwhelming.
       - Is the provided information justified by context (e.g., confirming a detail the user may have misheard)? Or is it inappropriate (e.g., excessive itemization or explanation when the user may only care about the end result)?
       - Within turns, is repetition avoided? Across turns there may be valid reasons for repetition, but it should usually not occur within a single turn.
-      - Essential information — such as confirmation codes, voucher numbers, reference IDs, or specific details the user needs — should never be penalized, regardless of length.
+      - Essential information — such as confirmation codes, reference IDs, ticket numbers, or other specific details the user needs to take away — should never be penalized, regardless of length.
 
       ## Allowed Exceptions (Voice Interaction Realities)
       The assistant may occasionally produce longer turns when the context requires precise information transfer. The following cases should NOT be penalized for verbosity or information density. The turn itself may still be penalized for other reasons.
       1. **Phonetic Confirmation of Codes**
-        - When confirming a confirmation code, booking reference, voucher code, or similar identifier, the assistant may spell characters using the NATO phonetic alphabet (e.g., "B as in Bravo, F as in Foxtrot").
-        - This is especially appropriate when the user previously misheard or asked for clarification.
-      2. **Voucher or Reference Code Delivery**
-        - When providing meal voucher codes, hotel voucher codes, travel credit codes etc the assistant may read the whole code out loud.
-        - This information is essential and should not be penalized regardless of length.
+      - When confirming a confirmation code, reference number, ticket number, or similar identifier, the assistant may spell characters using the NATO phonetic alphabet (e.g., "B as in Bravo, F as in Foxtrot").
+      - This is especially appropriate when the user previously misheard or asked for clarification.
+      2. **Reference or Identifier Delivery**
+      - When providing an identifier the user needs to take away (e.g., a ticket number, reference code, or voucher code), the assistant may read the whole code out loud.
+      - This information is essential and should not be penalized regardless of length.
       3. **End-of-Call Wrap-Up**
-        - The final assistant turn in a conversation may include a slightly longer recap or confirmation of next steps (e.g., summarizing booking details, confirming vouchers sent, thanking the user).
-        - Minor additional detail in this final wrap-up should not be penalized unless it becomes excessively long or introduces unrelated information.
+      - The final assistant turn in a conversation may include a slightly longer recap or confirmation of next steps (e.g., summarizing the action taken, confirming what will be sent or followed up on, thanking the user).
+      - Minor additional detail in this final wrap-up should not be penalized unless it becomes excessively long or introduces unrelated information.
 
       Important principle: Information given in assistant turns must be short enough for an average person to easily follow in real-time conversation and retain in working memory.
 
@@ -84,7 +84,7 @@ judge:
       Contains unnecessary wording, repetition within the same turn, hedging, or explanation beyond what the context requires.
 
       **excess_information_density**
-      Presents too many distinct facts, options, numbers, steps, or requests at once, making it difficult for a listener to process in real time. Note: bundling closely related transactional details that the user needs to act on or remember together (e.g., confirming a flight number, departure time, and seat in one turn) is expected behavior — only flag this when the volume of information genuinely exceeds what a listener can comfortably retain.
+      Presents too many distinct facts, options, numbers, steps, or requests at once, making it difficult for a listener to process in real time. Note: bundling closely related transactional details that the user needs to act on or remember together (e.g., confirming a reference number, date, and one or two key details in a single turn) is expected behavior — only flag this when the volume of information genuinely exceeds what a listener can comfortably retain.
 
       **over_enumeration_or_list_exhaustion**
       Reads out long lists instead of summarizing, or presents multiple options with excessive detail rather than inviting follow-up.
@@ -98,7 +98,7 @@ judge:
       If none of the above are present, return an empty list for failure_modes.
 
       ## Rating Scale For Each Turn With Assistant Content
-      - 3 (Highly Concise / No Cognitive Overload) – The response is clear, appropriately scoped for voice, and comfortably digestible in real time. No failure modes are present. A turn that delivers a few closely related facts as part of a single transactional step (e.g., confirming booking details) still qualifies as 3 if the listener can comfortably absorb it in one pass.
+      - 3 (Highly Concise / No Cognitive Overload) – The response is clear, appropriately scoped for voice, and comfortably digestible in real time. No failure modes are present. A turn that delivers a few closely related facts as part of a single transactional step (e.g., confirming the key details of a booking or incident) still qualifies as 3 if the listener can comfortably absorb it in one pass.
       - 2 (Adequate but Not Optimally Concise) – One minor failure mode is present, but the response remains reasonably processable in a voice setting and does not meaningfully overwhelm the listener. Reserve this rating for turns where you can identify specific content that should have been omitted or deferred to a later turn — not merely for turns that happen to contain several necessary details.
       - 1 (Not Concise / Causes Cognitive Overload) – One or more significant failure modes are present that materially increase cognitive load and would hinder comprehension in a voice conversation.
 
@@ -118,7 +118,6 @@ judge:
       ]
 
       If the turn is rated 3 or null, failure_modes must be an empty list: [].
-
   conversation_progression:
     user_prompt: |
       You are an expert evaluator analyzing whether a voice assistant effectively moved a conversation forward. You will evaluate the conversation across four dimensions, each scored as a binary flag (true = issue present, false = no issue).
