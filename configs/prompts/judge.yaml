@@ -125,8 +125,8 @@ judge:
       Each dimension evaluates a **different type of action**. Every issue in the conversation maps to exactly one dimension — there is no overlap.
       Ensure to consider both the assistant agent instructions and the following agent dimensions when evaluating the conversation.
 
-      **IMPORTANT — Scope boundary with faithfulness:** This metric evaluates whether the conversation moved forward efficiently. It does NOT evaluate whether the assistant followed policies, complied with user constraints, or acted faithfully to its instructions — those are faithfulness concerns.
-      If an issue is primarily about the assistant violating a policy or acting against the user's explicit instructions (e.g., rebooking when the user said not to, not disclosing fees), do NOT flag it here even if it also affected conversation flow. Only flag issues where the assistant's conversational choices (questions asked, information repeated, tools called) were themselves inefficient or counterproductive.
+      **IMPORTANT — Scope boundary with faithfulness:** This metric evaluates whether the conversation moved forward efficiently. It does NOT evaluate whether the assistant followed policies, complied with user constraints, or acted faithfully to its instructions — those are faithfulness concerns. 
+      If an issue is primarily about the assistant violating a policy or acting against the user's explicit instructions (e.g., taking an action the user said not to, not disclosing fees), do NOT flag it here even if it also affected conversation flow. Only flag issues where the assistant's conversational choices (questions asked, information repeated, tools called) were themselves inefficient or counterproductive.
 
       **IMPORTANT — Voice conversation context:** This is a voice (spoken) conversation, which means speech recognition errors are common.
       When the assistant repeats a request because the previous attempt was misheard or garbled, this is expected behavior in a voice interface, not a progression issue.
@@ -147,17 +147,17 @@ judge:
 
       **IS a flag:**
       - Calling the same tool with the same parameters after a prior successful response (no new user input or error in between)
-      - Calling a tool with empty or missing required parameters, causing a predictable error (e.g., `get_reservation` with empty strings before asking the user)
+      - Calling a tool with empty or missing required parameters, causing a predictable error (e.g., calling a lookup tool with empty strings before asking the user for the required identifier)
       - Calling a tool when the needed information was already returned by a previous tool response
       - Calling a tool to verify something a prior tool response already confirmed
 
       **Is NOT a flag:**
       - Retrying a tool call after a tool error with corrected parameters
-      - Calling the same tool with different parameters (e.g., different flight numbers)
-      - Sequential tool calls that each return new, necessary information (e.g., get_reservation → get_flight_status → get_disruption_info)
+      - Calling the same tool with different parameters (e.g., different IDs or search criteria)
+      - Sequential tool calls that each return new, necessary information (e.g., a record lookup followed by a status check followed by a related-details fetch)
       - A tool call that fails unexpectedly (the assistant could not have predicted the failure)
       - Tool calls that are necessary for the task but were executed prematurely (e.g., before the user confirmed) — premature execution is a faithfulness/policy compliance issue, not a conversation progression issue
-      - Tool calls that follow standard agent instructions (e.g., automatically carrying over seat assignments or baggage when rebooking) even if the user did not explicitly request those specific actions
+      - Tool calls that follow standard agent instructions (e.g., automatically carrying over related attributes or defaults when taking an action) even if the user did not explicitly request those specific actions
 
       **CAVEAT: If the model makes 3 or more unnecessary tool calls, this dimension should be rated 1.**
 
@@ -167,20 +167,20 @@ judge:
       This dimension is about the assistant **forgetting or ignoring known facts**, regardless of how that failure manifests (re-asking, wrong assumptions, ignoring constraints).
 
       **IS a flag:**
-      - Re-asking the user for information they already provided (e.g., asking for the confirmation number after the user stated it and it was used successfully). Note: if the assistant says "could you repeat your confirmation code?" and the transcript shows the user already clearly provided it (no speech recognition garbling), this IS information_loss — the assistant failed to retain established facts.
-      - Ignoring a constraint the user explicitly stated (e.g., user said "no rebooking" but assistant asks about rebooking options or asked for specific details before a booking should be made)
-      - Failing to use relevant data from a prior tool response when it was needed for the next step (e.g., not using the flight number from get_reservation when calling get_flight_status)
+      - Re-asking the user for information they already provided (e.g., asking for the confirmation number or reference ID after the user stated it and it was used successfully).
+      - Ignoring a constraint the user explicitly stated (e.g., the user ruled out a particular action but the assistant still asks about it or asks for the details that would only be needed to take that action)
+      - Failing to use relevant data from a prior tool response when it was needed for the next step (e.g., not using an identifier returned by an earlier lookup when making a follow-up tool call that requires it)
 
       **Is NOT a flag:**
       - Asking for information the user has not yet provided
       - Asking a clarifying question about genuinely ambiguous information
-      - Asking for authentication details (confirmation number, last name) at the start of the conversation
+      - Asking for authentication or identification details required by the agent instructions (e.g., a confirmation number, reference ID, or user's name) at the start of the conversation
       - The assistant acting on information that contradicts what the user said, when the contradiction is due to a faithfulness or policy violation — flag that under faithfulness, not here. Only flag here if the assistant demonstrably forgot or ignored previously established facts within the conversation flow.
 
       **Disambiguation from other dimensions:**
       - If the assistant re-asks for user-provided info → flag here (not redundant_statements)
       - If the assistant makes an unnecessary tool call because it forgot a prior result → flag under unnecessary_tool_calls (the tool action is the observable problem)
-      - If the assistant proceeds with an action that contradicts the user's stated preference (e.g., rebooking instead of standby) → this is a faithfulness violation, not information_loss. Only flag here if the assistant clearly forgot the user's input, not if it chose to override it.
+      - If the assistant proceeds with an action that contradicts the user's stated preference (e.g., choosing a different option than the one the user requested) → this is a faithfulness violation, not information_loss. Only flag here if the assistant clearly forgot the user's input, not if it chose to override it.
 
       ### 3. redundant_statements
       **Scope: The assistant repeating its own previous output.** Did the assistant restate information it had already communicated to the user?
@@ -188,11 +188,11 @@ judge:
       This dimension ONLY covers the assistant repeating **its own prior utterances** — not forgetting user input (that is information_loss) and not tool call issues (that is unnecessary_tool_calls).
 
       **IS a flag:**
-      - Restating flight details, times, or gate information the assistant already told the user in an earlier turn (outside of a final recap) when the user did not ask for it
+      - Restating details, times, amounts, or status information the assistant already told the user in an earlier turn (outside of a final recap) when the user did not ask for it
       - Repeating the same explanation or instruction in multiple turns when the user has acknowledged and moved on
 
       **Is NOT a flag:**
-      - A single brief recap or summary at the very end of the conversation as a closing confirmation (this is helpful, not redundant). However, if the assistant provides multiple recaps across different turns, only the final one is exempt — earlier recaps that restate already-communicated information are still flagged.
+      - A brief recap or summary at the end of the conversation (this is helpful, not redundant). However, if the assistant provides multiple recaps across different turns, only the final one is exempt — earlier recaps that restate already-communicated information are still flagged.
       - Confirming back details to the user once for verification (e.g., reading back a confirmation number the user just provided)
       - Stating information for the first time, even if it was available from a tool response earlier
       - Repeating information in direct response to the user explicitly requesting confirmation or asking to hear it again (the user must clearly ask — simply continuing the conversation is not a request for repetition)
@@ -209,13 +209,13 @@ judge:
       - Failing to ask for clarification when there are multiple options that meet the users requirements
       - Failing to ask for required information before taking an action (e.g., not asking for required details for a tool call before making the tool call, when those details have not been made available through a previous tool call, or inputs from the user)
       - Failing to provide necessary information for the user to make a decision (e.g not providing clear information about the details of the options available to the user)
-      - Taking an irreversible action (rebooking, cancellation) without first confirming when user input is ambiguous or contradicts system data (e.g., user claims a 4-hour delay but system shows 45 minutes — assistant should clarify before acting)
+      - Taking an irreversible action (e.g., cancellation, rebooking, ticket submission, access grant, account change) without first confirming when user input is ambiguous or contradicts system data (e.g., user claims a 4-hour delay but system shows 45 minutes — assistant should clarify before acting)
 
       **Is NOT a flag:**
-      - Asking for required authentication information (confirmation number, last name)
+      - Asking for required authentication or identification information required by the agent instructions (e.g., confirmation number, reference ID, user's name)
       - Asking a clarifying question when the user's intent is genuinely ambiguous
       - Asking a follow-up question based on new information from a tool response
-      - Not disclosing fees, fare differences, or other policy-required details before taking an action — policy compliance (e.g., whether the assistant explained costs before rebooking) is a faithfulness concern, not a conversation progression issue. This dimension only evaluates whether the assistant's questions and information-sharing effectively moved the conversation forward.
+      - Not disclosing fees, costs, or other policy-required details before taking an action — policy compliance (e.g., whether the assistant explained consequences before an irreversible action) is a faithfulness concern, not a conversation progression issue. This dimension only evaluates whether the assistant's questions and information-sharing effectively moved the conversation forward.
       - Referencing information that exists in the agent instructions (e.g., standard fees, policies) without verifying it via a tool call — the agent is expected to know its own instructions. Only flag if the information was genuinely unknown and required a tool call or user input.
 
       **Disambiguation from information_loss:**
@@ -272,7 +272,6 @@ judge:
           }},
           "rating": <int: 1, 2, or 3>
       }}
-
   faithfulness:
     user_prompt: |
       You are an expert evaluator analyzing whether a voice assistant remains faithful to information, policies, and instructions throughout a conversation. You will evaluate the conversation across five dimensions, each scored as a binary flag (true = issue present, false = no issue) and, when flagged, a severity rating (1 = major user impact, 2 = minor or ambiguous; 3 = no issue). See the Rating Scale section below for detailed severity guidance.
