@@ -59,6 +59,12 @@ class TurnTakingMetric(CodeMetric):
     LATENCY_SWEET_SPOT_HIGH_MS: float = 2000
     LATENCY_HARD_LATE_MS: float = 5000
 
+    # Tool-call turn variants — more lenient since tool execution adds inherent latency.
+    LATENCY_HARD_EARLY_MS_TOOL: float = -500
+    LATENCY_SWEET_SPOT_LOW_MS_TOOL: float = 500
+    LATENCY_SWEET_SPOT_HIGH_MS_TOOL: float = 4000
+    LATENCY_HARD_LATE_MS_TOOL: float = 7000
+
     # --- Agent interruption (overlap duration in ms). Score ramps down 1 → 0 over [0, OVERLAP_HARD_MS], ---
     # then capped by AGENT_INTERRUPT_MAX_SCORE so interrupting is never fully "free".
     OVERLAP_HARD_MS: float = 2000
@@ -69,9 +75,9 @@ class TurnTakingMetric(CodeMetric):
 
     # --- Latency classification thresholds (early / on-time / late rates). ---
     EARLY_THRESHOLD_MS: float = 200        # latency < this ⇒ "early" (no tool call)
-    LATE_THRESHOLD_MS: float = 4000        # latency >= this ⇒ "late" (no tool call)
-    EARLY_THRESHOLD_MS_TOOL: float = 500   # latency < this ⇒ "early" (turn with tool call)
-    LATE_THRESHOLD_MS_TOOL: float = 8000   # latency >= this ⇒ "late" (turn with tool call)
+    LATE_THRESHOLD_MS: float = 3000        # latency >= this ⇒ "late" (no tool call)
+    EARLY_THRESHOLD_MS_TOOL: float = 200   # latency < this ⇒ "early" (turn with tool call)
+    LATE_THRESHOLD_MS_TOOL: float = 6000   # latency >= this ⇒ "late" (turn with tool call)
 
     @staticmethod
     def _get_turn_ids_with_turn_taking(context: MetricContext) -> list[int]:
@@ -81,17 +87,20 @@ class TurnTakingMetric(CodeMetric):
         )
 
     @classmethod
-    def _latency_score(cls, latency_ms: float) -> float:
+    def _latency_score(cls, latency_ms: float, has_tool_call: bool = False) -> float:
         """Map a single latency (ms) to a score in [0, 1] using the piecewise-linear curve."""
-        if latency_ms <= cls.LATENCY_HARD_EARLY_MS or latency_ms >= cls.LATENCY_HARD_LATE_MS:
+        hard_early = cls.LATENCY_HARD_EARLY_MS_TOOL if has_tool_call else cls.LATENCY_HARD_EARLY_MS
+        sweet_low = cls.LATENCY_SWEET_SPOT_LOW_MS_TOOL if has_tool_call else cls.LATENCY_SWEET_SPOT_LOW_MS
+        sweet_high = cls.LATENCY_SWEET_SPOT_HIGH_MS_TOOL if has_tool_call else cls.LATENCY_SWEET_SPOT_HIGH_MS
+        hard_late = cls.LATENCY_HARD_LATE_MS_TOOL if has_tool_call else cls.LATENCY_HARD_LATE_MS
+
+        if latency_ms <= hard_early or latency_ms >= hard_late:
             return 0.0
-        if latency_ms < cls.LATENCY_SWEET_SPOT_LOW_MS:
-            return (latency_ms - cls.LATENCY_HARD_EARLY_MS) / (
-                cls.LATENCY_SWEET_SPOT_LOW_MS - cls.LATENCY_HARD_EARLY_MS
-            )
-        if latency_ms <= cls.LATENCY_SWEET_SPOT_HIGH_MS:
+        if latency_ms < sweet_low:
+            return (latency_ms - hard_early) / (sweet_low - hard_early)
+        if latency_ms <= sweet_high:
             return 1.0
-        return (cls.LATENCY_HARD_LATE_MS - latency_ms) / (cls.LATENCY_HARD_LATE_MS - cls.LATENCY_SWEET_SPOT_HIGH_MS)
+        return (hard_late - latency_ms) / (hard_late - sweet_high)
 
     @classmethod
     def _overlap_score(cls, overlap_ms: float) -> float:
@@ -190,6 +199,7 @@ class TurnTakingMetric(CodeMetric):
         cls,
         context: MetricContext,
         turn_id: int,
+        has_tool_call: bool = False,
     ) -> tuple[float, str, dict[str, Any]]:
         """Compute (score, reason, evidence) for a single turn.
 
@@ -217,7 +227,7 @@ class TurnTakingMetric(CodeMetric):
                 # becomes the min of overlap_score and the settled-latency score.
                 post_ms = cls._compute_post_interrupt_latency_ms(context, turn_id)
                 if post_ms is not None:
-                    post_score = cls._latency_score(post_ms)
+                    post_score = cls._latency_score(post_ms, has_tool_call=has_tool_call)
                     evidence["post_interrupt_latency_ms"] = round(post_ms, 3)
                     evidence["post_interrupt_latency_score"] = round(post_score, 4)
                     agent_score = min(agent_score, post_score)
@@ -238,7 +248,7 @@ class TurnTakingMetric(CodeMetric):
 
         latency_s = context.latency_assistant_turns[turn_id]
         latency_ms = latency_s * 1000
-        score = cls._latency_score(latency_ms)
+        score = cls._latency_score(latency_ms, has_tool_call=has_tool_call)
         evidence["latency_ms"] = round(latency_ms, 3)
         evidence["latency_score"] = round(score, 4)
         return score, "latency", evidence
@@ -318,7 +328,7 @@ class TurnTakingMetric(CodeMetric):
             post_ms = cls._compute_post_interrupt_latency_ms(context, t)
             if post_ms is not None:
                 post_ms_list.append(post_ms)
-                post_scores.append(cls._latency_score(post_ms))
+                post_scores.append(cls._latency_score(post_ms, has_tool_call=t in turns_with_tool_calls))
         if overlap_ms_list:
             sub["agent_interruption.mean_overlap_ms"] = _wrap(
                 "agent_interruption.mean_overlap_ms", round(statistics.mean(overlap_ms_list), 3), False
@@ -376,8 +386,9 @@ class TurnTakingMetric(CodeMetric):
             per_turn_reason: dict[int, str] = {}
             per_turn_evidence: dict[int, dict[str, Any]] = {}
             for t in turn_keys:
-                score, reason, evidence = self._per_turn_score_and_reason(context, t)
-                evidence["has_tool_call"] = t in turns_with_tool_calls
+                _has_tool = t in turns_with_tool_calls
+                score, reason, evidence = self._per_turn_score_and_reason(context, t, has_tool_call=_has_tool)
+                evidence["has_tool_call"] = _has_tool
                 per_turn_score[t] = round(score, 4)
                 per_turn_reason[t] = reason
                 per_turn_evidence[t] = evidence
