@@ -1,4 +1,4 @@
-"""Tests for PipecatPipecatAssistantServer."""
+"""Tests for PipecatAssistantServer."""
 
 import asyncio
 import json
