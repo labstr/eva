@@ -37,18 +37,18 @@ class PronunciationMetric(SpeechFidelityBaseMetric):
     mirroring the faithfulness/conversation_progression dimension pattern so
     AI judgements can be directly compared to human annotations.
 
-    Rating scale per turn (matches human rubric):
-        3 — Great: natural General American English throughout
-        2 — Acceptable: errors present but meaning clear, agent still competent
-        1 — Unacceptable: errors a typical customer would notice
-    Normalized: (rating - 1) / 2  →  0.0–1.0
+    Rating scale per turn (binary pass/fail — high bar):
+        1 — Great: native-quality General American English (human rubric: "Great")
+        0 — Not great: one or more noticeable errors in sounds or stress
+            (human rubric: "Acceptable" + "Unacceptable" collapsed)
+    Normalized: same as raw score (already 0–1).
     """
 
     name = "pronunciation"
     description = "Diagnostic metric: audio judge evaluation of agent pronunciation quality per turn"
     category = "diagnostic"
     role = "assistant"
-    rating_scale = (1, 3)
+    rating_scale = (0, 1)
     exclude_from_pass_at_k = True
 
     async def compute(self, context: MetricContext) -> MetricScore:

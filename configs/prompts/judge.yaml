@@ -1165,37 +1165,16 @@ judge:
         For each turn, evaluate all seven dimensions. Every dimension must have an evidence field
         — even when clean, briefly explain why no issue was found.
 
-        **non_standard_accent**
-        The agent sounds like it has an accent outside General American English, or the accent
-        shifts inconsistently across words.
-        Example: "i pahked the cah" (non-standard) vs "i parked the car" (correct).
-
-        **bad_stress**
-        Within a multi-syllable word, stress falls on the wrong syllable.
-        Example: "i see your REcord" (correct, noun) vs "i see your reCORD" (incorrect).
-
-        **bad_sound**
-        One or more sounds within a word are pronounced incorrectly.
-        Example: "ski-zors" (incorrect) vs "si-zers" for "scissors" (correct).
-
-        **bad_date**
-        A date is read in a non-fluent or unnatural manner.
-        Example: "ten slash three slash two zero two five" (incorrect) vs
-        "October third, twenty-twenty-five" (correct) for "10/3/2025".
-
-        **bad_currency**
-        A currency value is read in a non-fluent or unnatural manner.
-        Example: "four point five zero dollars" (incorrect) vs
-        "four dollars and fifty cents" (correct) for "$4.50".
-
-        **bad_acronym**
-        An acronym is not spelled out letter-by-letter when it should be, or is incorrectly
-        blended into a word.
-        Example: "sesv" (incorrect) vs "see-es-vee" (correct) for "CSV".
-
-        **other_special_words**
-        Abbreviations, URLs, or other non-standard words are mispronounced.
-        Example: "123 hillside doctor" (incorrect) vs "123 hillside drive" (correct) for "123 hillside dr."
+        - **non_standard_accent**: accent outside General American English, or an accent that
+          shifts inconsistently across words.
+        - **bad_stress**: stress falls on the wrong syllable within a multi-syllable word.
+        - **bad_sound**: one or more sounds within a word are pronounced incorrectly.
+        - **bad_date**: a date is read in a non-fluent or unnatural manner.
+        - **bad_currency**: a currency value is read in a non-fluent or unnatural manner.
+        - **bad_acronym**: an acronym is not spelled out letter-by-letter when it should be, or
+          is incorrectly blended into a word.
+        - **other_special_words**: abbreviations, URLs, or other non-standard words are
+          mispronounced.
 
         ## What NOT to penalise
         - Whether the agent said the correct words (that is a separate fidelity metric)
@@ -1208,23 +1187,21 @@ judge:
 
         ## Rating Scale (per turn)
         Rate each turn from the perspective of a typical customer interacting with a professional
-        voice agent.
+        voice agent. The bar for a passing rating is high — only native-quality pronunciation passes.
 
-        - **3** (Great): Pronunciation is natural and native-sounding throughout. All words —
-          including dates, currencies, acronyms, and abbreviations — are spoken as a native
-          General American English speaker would say them. Any errors are so minor they would
-          not be noticed.
+        - **1** (Great): The pronunciation of every word — including sounds and the stress
+          placed on specific syllables — is great quality. There may be very minor errors but
+          overall, the turn would meet or exceed a typical customer's expectations. All
+          pronunciations are in line with those expected from a native speaker of General
+          American English.
 
-        - **2** (Acceptable): There are one or more pronunciation errors, but the turn is still
-          acceptable quality. The meaning is fully interpretable and the agent still sounds
-          competent. The errors are noticeable to a careful listener but do not impair
-          comprehension or the overall listening experience.
-
-        - **1** (Unacceptable): Pronunciation errors that a typical customer would notice and
-          that undermine the credibility of the agent. This includes clearly wrong word stress
-          (e.g. "REcord" when "reCORD" is intended), badly mispronounced special words such as
-          dates, currencies, or acronyms, or a non-standard accent severe enough to impair
-          comprehension.
+        - **0** (Not great): Pronunciation has one or more noticeable errors in word sounds
+          or syllable stress. This covers both:
+          • *Acceptable* — errors present but meaning is fully interpretable and the agent
+            still sounds competent (e.g. a non-standard accent that doesn't impair comprehension).
+          • *Unacceptable* — errors that have a high negative impact on comprehension or the
+            listening experience (e.g. clearly wrong word stress, badly mispronounced special
+            words, or a non-standard accent severe enough to impair comprehension).
 
         ## Response Format
         Respond with a JSON object. The evidence field is REQUIRED for every dimension in every
@@ -1265,7 +1242,7 @@ judge:
                 }}
               }},
               "explanation": "<string: 1-3 sentences summarising the overall pronunciation quality of this turn>",
-              "rating": <1, 2, or 3>
+              "rating": <0 or 1>
             }}
           ],
           "explanation": "<string: overall summary of pronunciation quality across all turns>"
