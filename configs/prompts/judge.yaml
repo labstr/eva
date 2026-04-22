@@ -1147,98 +1147,84 @@ judge:
 
   pronunciation:
     user_prompt: |
-        You are evaluating the pronunciation quality of a voice agent.
-        Listen to the audio and assess each turn as a typical customer of a professional voice
-        agent would — not as a linguist.
+        You are evaluating the PHONETIC pronunciation quality of a voice agent.
+        Listen to the audio and assess each turn on acoustic-phonetic grounds only.
 
-        Your job is to evaluate HOW words are spoken, not whether the correct words were spoken.
-        Word-level accuracy is a separate concern — focus entirely on pronunciation.
+        This metric evaluates two narrow things: whether individual phonemes within words are
+        produced correctly, and whether lexical stress falls on the right syllable. It does
+        NOT evaluate the content of what was said, the choice of words, accent or regional
+        variation, or whether entities such as dates, currencies, acronyms, or confirmation
+        codes were rendered accurately. A separate fidelity metric handles content accuracy.
 
-        The reference standard is General American English (e.g. a national US news anchor).
-        Non-American accents or inconsistent accent shifts are errors.
+        Use the dictionary pronunciation of General American English as your reference.
 
-        ## Intended Turns
-        {intended_turns_formatted}
+        ## Turns to Evaluate
+        The assistant audio contains the following turns, in order of appearance:
+        {turn_ids_formatted}
+
+        Segment the audio yourself by assistant utterance. Produce one rating per turn,
+        and assign the matching turn_id from the list above in the order the turns appear.
 
         ## Error Dimensions
 
-        For each turn, evaluate all seven dimensions. Every dimension must have an evidence field
+        Evaluate both dimensions for every turn. Every dimension must have an evidence field
         — even when clean, briefly explain why no issue was found.
 
-        - **non_standard_accent**: accent outside General American English, or an accent that
-          shifts inconsistently across words.
-        - **bad_stress**: stress falls on the wrong syllable within a multi-syllable word.
-        - **bad_sound**: one or more sounds within a word are pronounced incorrectly.
-        - **bad_date**: a date is read in a non-fluent or unnatural manner.
-        - **bad_currency**: a currency value is read in a non-fluent or unnatural manner.
-        - **bad_acronym**: an acronym is not spelled out letter-by-letter when it should be, or
-          is incorrectly blended into a word.
-        - **other_special_words**: abbreviations, URLs, or other non-standard words are
-          mispronounced.
+        - **bad_stress**: lexical stress falls on the wrong syllable of a multi-syllable word,
+          changing the word's natural prosody. Classic example: "REcord" (noun) produced as
+          "reCORD" (verb) when used as a noun. Flag only when the mis-stress is acoustically
+          clear and audible; do not flag emphasis-for-meaning or sentence-level prosody.
+
+        - **bad_sound**: one or more individual phonemes within a word are mispronounced —
+          substituted, omitted, added, or distorted — relative to the dictionary pronunciation.
+          Example: "ski-zors" instead of "si-zors" for "scissors". This is about the acoustic
+          realisation of phonemes, not about whether the right word was spoken.
 
         ## What NOT to penalise
-        - Whether the agent said the correct words (that is a separate fidelity metric)
-        - Turns that were interrupted or cut off — see interruption tags below
-
-        ### Interruption Tags
-        {interruption_tags_reference}
-
-        Do NOT penalise for pronunciation in turns that were cut off or interrupted.
+        - Whether the agent said the correct words or rendered entities (dates, currencies,
+          acronyms, codes) accurately — those are fidelity concerns, not pronunciation.
+        - Rendering choices for numbers, dates, or amounts — e.g. "fifteen dollars" vs "one
+          five dollars" is a rendering-style decision, not a pronunciation error.
+        - Accent or regional variation — do not flag non-American vowels or rhoticity.
+        - TTS artifacts unrelated to phonetic production (background noise, clicks, volume).
+        - Turns that were interrupted or cut off.
 
         ## Rating Scale (per turn)
         Rate each turn from the perspective of a typical customer interacting with a professional
-        voice agent. The bar for a passing rating is high — only native-quality pronunciation passes.
+        voice agent. Only clearly unacceptable pronunciation fails.
 
-        - **1** (Great): The pronunciation of every word — including sounds and the stress
-          placed on specific syllables — is great quality. There may be very minor errors but
-          overall, the turn would meet or exceed a typical customer's expectations. All
-          pronunciations are in line with those expected from a native speaker of General
-          American English.
+        - **1** (Acceptable or Great): The meaning is fully interpretable and the agent sounds
+          competent. This covers both:
+          • *Great* — pronunciation of every word, including sounds and syllable stress, is
+            in line with a native speaker of General American English. Very minor errors only.
+          • *Acceptable* — one or more pronunciation errors are present, but the turn still
+            meets a typical customer's expectations (e.g. a non-standard accent that doesn't
+            impair comprehension).
 
-        - **0** (Not great): Pronunciation has one or more noticeable errors in word sounds
-          or syllable stress. This covers both:
-          • *Acceptable* — errors present but meaning is fully interpretable and the agent
-            still sounds competent (e.g. a non-standard accent that doesn't impair comprehension).
-          • *Unacceptable* — errors that have a high negative impact on comprehension or the
-            listening experience (e.g. clearly wrong word stress, badly mispronounced special
-            words, or a non-standard accent severe enough to impair comprehension).
+        - **0** (Unacceptable): Pronunciation errors that have a high negative impact on
+          comprehension or the listening experience and would not meet a typical customer's
+          expectations. Examples include clearly wrong word stress (e.g. "REcord" when "reCORD"
+          is intended), badly mispronounced special words such as dates, currencies, or
+          acronyms, or a non-standard accent severe enough to impair comprehension.
 
         ## Response Format
-        Respond with a JSON object. The evidence field is REQUIRED for every dimension in every
-        turn — cite specific words or phrases heard if flagged, or briefly explain why clean if not.
+        Respond with a JSON object. For each turn you MUST provide a `transcript` field
+        containing your own transcription of the audio for that turn — do not skip or leave
+        it empty. The `evidence` field is REQUIRED for every dimension in every turn — cite
+        specific words or phrases heard if flagged, or briefly explain why clean if not.
         {{
           "turns": [
             {{
-              "turn_id": <int: the turn number from the Intended Turns>,
-              "transcript": "<string: your transcription of what was spoken in this turn>",
+              "turn_id": <int: turn_id from the Turns to Evaluate list above>,
+              "transcript": "<string: REQUIRED — your transcription of the audio for this turn, based only on what you heard>",
               "errors": {{
-                "non_standard_accent": {{
-                  "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite the specific words that sounded non-standard, or explain why accent is clean>"
-                }},
                 "bad_stress": {{
                   "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite the mispronounced word and which syllable was stressed, or confirm stress was correct>"
+                  "evidence": "<string: REQUIRED — cite the word and which syllable was stressed vs which should have been, or confirm stress was correct>"
                 }},
                 "bad_sound": {{
                   "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite word and what was heard vs expected, or confirm sounds were correct>"
-                }},
-                "bad_date": {{
-                  "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite how the date was spoken and what was expected, or confirm no dates present / dates read correctly>"
-                }},
-                "bad_currency": {{
-                  "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite how the amount was spoken and what was expected, or confirm no currency present / currency read correctly>"
-                }},
-                "bad_acronym": {{
-                  "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite the acronym and how it was pronounced, or confirm no acronyms present / acronyms read correctly>"
-                }},
-                "other_special_words": {{
-                  "flagged": <bool>,
-                  "evidence": "<string: REQUIRED — cite the word and what was heard vs expected, or confirm no special words present / all read correctly>"
+                  "evidence": "<string: REQUIRED — cite the word and which phoneme was produced incorrectly (what was heard vs the dictionary pronunciation), or confirm sounds were correct>"
                 }}
               }},
               "explanation": "<string: 1-3 sentences summarising the overall pronunciation quality of this turn>",

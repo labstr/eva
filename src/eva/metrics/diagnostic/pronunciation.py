@@ -14,13 +14,8 @@ from eva.models.results import MetricScore
 from eva.utils.json_utils import extract_and_load_json
 
 ERROR_DIMENSIONS = [
-    "non_standard_accent",
     "bad_stress",
     "bad_sound",
-    "bad_date",
-    "bad_currency",
-    "bad_acronym",
-    "other_special_words",
 ]
 
 
@@ -28,19 +23,18 @@ ERROR_DIMENSIONS = [
 class PronunciationMetric(SpeechFidelityBaseMetric):
     """Audio-based pronunciation quality metric for agent speech using Gemini.
 
-    Evaluates pronunciation against the same seven error categories used by
-    human annotators:
-        non_standard_accent, bad_stress, bad_sound, bad_date,
-        bad_currency, bad_acronym, other_special_words
+    Scoped narrowly to phonetic production — does not overlap with
+    agent_speech_fidelity (which covers content/entity accuracy). Two dimensions:
+        bad_stress — lexical stress on the wrong syllable
+        bad_sound  — phoneme mispronounced (substituted/omitted/added/distorted)
 
-    Each category is captured per turn with a flagged bool and evidence string,
+    Each dimension is captured per turn with a flagged bool and evidence string,
     mirroring the faithfulness/conversation_progression dimension pattern so
     AI judgements can be directly compared to human annotations.
 
-    Rating scale per turn (binary pass/fail — high bar):
-        1 — Great: native-quality General American English (human rubric: "Great")
-        0 — Not great: one or more noticeable errors in sounds or stress
-            (human rubric: "Acceptable" + "Unacceptable" collapsed)
+    Rating scale per turn (binary pass/fail — low bar):
+        1 — Acceptable: phonetic production is competent
+        0 — Unacceptable: stress or phoneme errors that impair the turn
     Normalized: same as raw score (already 0–1).
     """
 
@@ -74,11 +68,11 @@ class PronunciationMetric(SpeechFidelityBaseMetric):
 
             num_turns = len(intended_turns)
             audio_b64 = self.encode_audio_segment(audio_segment)
-            intended_turns_formatted = self._format_intended_turns(intended_turns)
+            turn_ids_formatted = "\n".join(f"- turn_id {tid}" for tid in sorted(intended_turns.keys()))
 
             prompt = self.get_judge_prompt(
                 prompt_key="user_prompt",
-                intended_turns_formatted=intended_turns_formatted,
+                turn_ids_formatted=turn_ids_formatted,
             )
 
             messages = self.create_audio_message(audio_b64, prompt)
