@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 def _param_alias(params: dict[str, Any]) -> str:
     """Return the display alias from a params dict."""
-    return params.get("alias") or params.get("model", "")
+    return params.get("alias") or params.get["model"]
 
 
 class PipelineConfig(BaseModel):
@@ -98,7 +98,7 @@ class PipelineConfig(BaseModel):
     # VAD configuration
     vad: str = Field(
         "silero",
-        description=("VAD analyzer type: 'silero'. Defaults to 'silero' (SileroVADAnalyzer). Set via EVA_MODEL__VAD."),
+        description=("VAD analyzer type: 'silero' or 'none'. Defaults to 'silero' (SileroVADAnalyzer). Use 'none' with external turn strategies (e.g. deepgram-flux) to skip local VAD. Set via EVA_MODEL__VAD."),
     )
     vad_params: dict[str, Any] = Field(
         {},
@@ -179,7 +179,7 @@ class SpeechToSpeechConfig(BaseModel):
     # VAD configuration
     vad: str = Field(
         "silero",
-        description=("VAD analyzer type: 'silero'. Defaults to 'silero' (SileroVADAnalyzer). Set via EVA_MODEL__VAD."),
+        description=("VAD analyzer type: 'silero' or 'none'. Defaults to 'silero' (SileroVADAnalyzer). Use 'none' with external turn strategies (e.g. deepgram-flux) to skip local VAD. Set via EVA_MODEL__VAD."),
     )
     vad_params: dict[str, Any] = Field(
         {},
@@ -256,7 +256,7 @@ class AudioLLMConfig(BaseModel):
     # VAD configuration
     vad: str = Field(
         "silero",
-        description=("VAD analyzer type: 'silero'. Defaults to 'silero' (SileroVADAnalyzer). Set via EVA_MODEL__VAD."),
+        description=("VAD analyzer type: 'silero' or 'none'. Defaults to 'silero' (SileroVADAnalyzer). Use 'none' with external turn strategies (e.g. deepgram-flux) to skip local VAD. Set via EVA_MODEL__VAD."),
     )
     vad_params: dict[str, Any] = Field(
         {},

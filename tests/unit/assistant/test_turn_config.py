@@ -65,9 +65,21 @@ class TestCreateVadAnalyzer:
         with pytest.raises(ValueError, match="Unsupported VAD type: webrtc"):
             create_vad_analyzer("webrtc", {})
 
+    def test_none_vad_type_returns_none(self):
+        """'none' vad_type returns None without loading any model."""
+        result = create_vad_analyzer("none", {})
+        assert result is None
+
+    def test_none_vad_type_case_insensitive(self):
+        """'none' is matched case-insensitively."""
+        assert create_vad_analyzer("None", {}) is None
+        assert create_vad_analyzer("NONE", {}) is None
+
     def test_unsupported_vad_type_error_lists_supported(self):
-        """ValueError message lists supported types."""
+        """ValueError message lists supported types including 'none'."""
         with pytest.raises(ValueError, match="silero"):
+            create_vad_analyzer("unknown", {})
+        with pytest.raises(ValueError, match="none"):
             create_vad_analyzer("unknown", {})
 
 

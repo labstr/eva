@@ -304,21 +304,12 @@ class PipecatAssistantServer(AbstractAssistantServer):
                     "smart_turn_stop_secs", 0.8
                 )  # Shorter silence so we don't have to wait 3s if smart turn marks audio as incomplete
 
-            # Use configurable turn strategies if specified, otherwise fall back to defaults
-            if isinstance(self.pipeline_config, (PipelineConfig, AudioLLMConfig, SpeechToSpeechConfig)):
-                turn_start_cfg = self.pipeline_config.turn_start_strategy
-                turn_start_params = self.pipeline_config.turn_start_strategy_params
-                turn_stop_cfg = self.pipeline_config.turn_stop_strategy
-                turn_stop_params = self.pipeline_config.turn_stop_strategy_params
-                vad_cfg = self.pipeline_config.vad
-                vad_cfg_params = self.pipeline_config.vad_params
-            else:
-                turn_start_cfg = None
-                turn_start_params = {}
-                turn_stop_cfg = None
-                turn_stop_params = {}
-                vad_cfg = None
-                vad_cfg_params = {}
+            turn_start_cfg = self.pipeline_config.turn_start_strategy
+            turn_start_params = self.pipeline_config.turn_start_strategy_params
+            turn_stop_cfg = self.pipeline_config.turn_stop_strategy
+            turn_stop_params = self.pipeline_config.turn_stop_strategy_params
+            vad_cfg = self.pipeline_config.vad
+            vad_cfg_params = self.pipeline_config.vad_params
 
             # Create turn start strategy using factory function
             turn_start_strategy = create_turn_start_strategy(turn_start_cfg, turn_start_params)

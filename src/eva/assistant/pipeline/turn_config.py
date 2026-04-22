@@ -28,27 +28,29 @@ from eva.utils.logging import get_logger
 logger = get_logger(__name__)
 
 
-def create_vad_analyzer(vad_type: str, vad_params: dict[str, Any]) -> VADAnalyzer:
+def create_vad_analyzer(vad_type: str, vad_params: dict[str, Any]) -> VADAnalyzer | None:
     """Create a VAD analyzer from configuration.
 
     Args:
-        vad_type: VAD analyzer type ('silero')
+        vad_type: VAD analyzer type ('silero', 'none')
         vad_params: VAD parameters (confidence, start_secs, stop_secs, min_volume)
 
     Returns:
-        VAD analyzer instance
+        VAD analyzer instance, or None if vad_type is 'none'
 
     Raises:
         ValueError: If vad_type is not supported
     """
     vad_type_lower = vad_type.lower()
 
-    if vad_type_lower == "silero":
+    if vad_type_lower == "none":
+        return None
+    elif vad_type_lower == "silero":
         # Create VADParams, respecting existing defaults if no params specified
         params = VADParams(**vad_params) if vad_params else None
         return SileroVADAnalyzer(params=params)
     else:
-        raise ValueError(f"Unsupported VAD type: {vad_type}. Supported types: 'silero'")
+        raise ValueError(f"Unsupported VAD type: {vad_type}. Supported types: 'silero', 'none'")
 
 
 def create_turn_start_strategy(
