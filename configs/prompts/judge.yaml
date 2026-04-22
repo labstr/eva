@@ -1156,14 +1156,13 @@ judge:
         variation, or whether entities such as dates, currencies, acronyms, or confirmation
         codes were rendered accurately. A separate fidelity metric handles content accuracy.
 
-        Use the dictionary pronunciation of General American English as your reference.
-
         ## Turns to Evaluate
         The assistant audio contains the following turns, in order of appearance:
         {turn_ids_formatted}
 
-        Segment the audio yourself by assistant utterance. Produce one rating per turn,
-        and assign the matching turn_id from the list above in the order the turns appear.
+        The list above contains only turn identifiers — no content. Transcribe each turn
+        from the audio alone. Produce one rating per turn, and assign the matching turn_id
+        from the list above in the order the turns appear in the audio.
 
         ## Error Dimensions
 
