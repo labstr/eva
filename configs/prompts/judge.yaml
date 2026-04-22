@@ -1147,72 +1147,126 @@ judge:
 
   pronunciation:
     user_prompt: |
-        You are a phonetics expert evaluating the pronunciation quality of a voice agent's speech.
-        You will listen to an audio recording and assess how naturally and correctly each turn is pronounced.
+        You are evaluating the pronunciation quality of a voice agent.
+        Listen to the audio and assess each turn as a typical customer of a professional voice
+        agent would — not as a linguist.
 
         Your job is to evaluate HOW words are spoken, not whether the correct words were spoken.
-        Word-level accuracy is a separate concern — focus entirely on phonetic quality.
+        Word-level accuracy is a separate concern — focus entirely on pronunciation.
+
+        The reference standard is General American English (e.g. a national US news anchor).
+        Non-American accents or inconsistent accent shifts are errors.
 
         ## Intended Turns
         {intended_turns_formatted}
 
-        ## Evaluation Criteria
+        ## Error Dimensions
 
-        For each turn, assess the following dimensions:
+        For each turn, evaluate all seven dimensions. Every dimension must have an evidence field
+        — even when clean, briefly explain why no issue was found.
 
-        **Vowel quality**
-        Are vowel sounds close to standard American English targets? Centralised, reduced, or
-        indistinct vowels (e.g. every vowel sounding like a schwa) indicate poor phoneme realisation.
+        **non_standard_accent**
+        The agent sounds like it has an accent outside General American English, or the accent
+        shifts inconsistently across words.
+        Example: "i pahked the cah" (non-standard) vs "i parked the car" (correct).
 
-        **Stress contrast**
-        Do stressed syllables sound noticeably longer and louder than unstressed syllables?
-        Natural English has roughly 1.5–2.5× longer stressed vowels. Flat, metronomic delivery
-        where all syllables are equal length is a hallmark of robotic TTS.
+        **bad_stress**
+        Within a multi-syllable word, stress falls on the wrong syllable.
+        Example: "i see your REcord" (correct, noun) vs "i see your reCORD" (incorrect).
 
-        **Consonant articulation**
-        Are stops, fricatives, and affricates cleanly produced? Listen for:
-        - Stops (p, t, k, b, d, g): appropriate burst/release
-        - Fricatives (s, z, f, v, sh): clear frication, not muffled
-        - Word-final consonants not swallowed or over-articulated
+        **bad_sound**
+        One or more sounds within a word are pronounced incorrectly.
+        Example: "ski-zors" (incorrect) vs "si-zers" for "scissors" (correct).
 
-        **Connected speech**
-        Does the speech flow with natural coarticulation — smooth transitions between sounds —
-        or do phonemes sound isolated and clipped as if each were produced separately?
+        **bad_date**
+        A date is read in a non-fluent or unnatural manner.
+        Example: "ten slash three slash two zero two five" (incorrect) vs
+        "October third, twenty-twenty-five" (correct) for "10/3/2025".
 
-        **Overall naturalness**
-        Does it sound like fluent human speech, or does it have the flat, over-precise, or
-        mechanical quality typical of poor TTS?
+        **bad_currency**
+        A currency value is read in a non-fluent or unnatural manner.
+        Example: "four point five zero dollars" (incorrect) vs
+        "four dollars and fifty cents" (correct) for "$4.50".
+
+        **bad_acronym**
+        An acronym is not spelled out letter-by-letter when it should be, or is incorrectly
+        blended into a word.
+        Example: "sesv" (incorrect) vs "see-es-vee" (correct) for "CSV".
+
+        **other_special_words**
+        Abbreviations, URLs, or other non-standard words are mispronounced.
+        Example: "123 hillside doctor" (incorrect) vs "123 hillside drive" (correct) for "123 hillside dr."
 
         ## What NOT to penalise
-        - Different words than intended (word accuracy is not this metric's concern)
-        - Slight regional accent variation that does not impair naturalness
+        - Whether the agent said the correct words (that is a separate fidelity metric)
         - Turns that were interrupted or cut off — see interruption tags below
 
         ### Interruption Tags
         {interruption_tags_reference}
 
-        Do NOT penalise for pronunciation in turns that were cut off by an interruption.
+        Do NOT penalise for pronunciation in turns that were cut off or interrupted.
 
         ## Rating Scale (per turn)
-        - **3** (Natural): Vowels on-target, clear stress contrast, consonants well-articulated,
-          connected speech sounds fluid. Listener would not notice anything unusual.
-        - **2** (Mostly natural): One or two noticeable issues — a mispronounced phoneme, weak
-          stress contrast, or slightly mechanical quality — but the turn is largely intelligible
-          and natural-sounding.
-        - **1** (Unnatural): Clear pronunciation problems that impair naturalness — consistently
-          wrong vowel quality, flat stress throughout, clipped or distorted consonants, or
-          obviously robotic delivery.
+        Rate each turn from the perspective of a typical customer interacting with a professional
+        voice agent.
+
+        - **3** (Great): Pronunciation is natural and native-sounding throughout. All words —
+          including dates, currencies, acronyms, and abbreviations — are spoken as a native
+          General American English speaker would say them. Any errors are so minor they would
+          not be noticed.
+
+        - **2** (Acceptable): There are one or more pronunciation errors, but the turn is still
+          acceptable quality. The meaning is fully interpretable and the agent still sounds
+          competent. The errors are noticeable to a careful listener but do not impair
+          comprehension or the overall listening experience.
+
+        - **1** (Unacceptable): Pronunciation errors that a typical customer would notice and
+          that undermine the credibility of the agent. This includes clearly wrong word stress
+          (e.g. "REcord" when "reCORD" is intended), badly mispronounced special words such as
+          dates, currencies, or acronyms, or a non-standard accent severe enough to impair
+          comprehension.
 
         ## Response Format
+        Respond with a JSON object. The evidence field is REQUIRED for every dimension in every
+        turn — cite specific words or phrases heard if flagged, or briefly explain why clean if not.
         {{
           "turns": [
             {{
               "turn_id": <int: the turn number from the Intended Turns>,
               "transcript": "<string: your transcription of what was spoken in this turn>",
-              "explanation": "<string: 1-3 sentences on what you hear phonetically, citing specific examples of correct or incorrect pronunciation>",
+              "errors": {{
+                "non_standard_accent": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite the specific words that sounded non-standard, or explain why accent is clean>"
+                }},
+                "bad_stress": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite the mispronounced word and which syllable was stressed, or confirm stress was correct>"
+                }},
+                "bad_sound": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite word and what was heard vs expected, or confirm sounds were correct>"
+                }},
+                "bad_date": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite how the date was spoken and what was expected, or confirm no dates present / dates read correctly>"
+                }},
+                "bad_currency": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite how the amount was spoken and what was expected, or confirm no currency present / currency read correctly>"
+                }},
+                "bad_acronym": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite the acronym and how it was pronounced, or confirm no acronyms present / acronyms read correctly>"
+                }},
+                "other_special_words": {{
+                  "flagged": <bool>,
+                  "evidence": "<string: REQUIRED — cite the word and what was heard vs expected, or confirm no special words present / all read correctly>"
+                }}
+              }},
+              "explanation": "<string: 1-3 sentences summarising the overall pronunciation quality of this turn>",
               "rating": <1, 2, or 3>
             }}
           ],
           "explanation": "<string: overall summary of pronunciation quality across all turns>"
         }}
-      ]
