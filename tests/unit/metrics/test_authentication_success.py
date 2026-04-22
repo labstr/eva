@@ -16,7 +16,7 @@ def metric():
 async def test_session_matches_expected(metric):
     """Final session matching expected session exactly should score 1.0."""
     ctx = make_metric_context(
-        expected_scenario_db={"session": {"confirmation_number": "ABC123", "last_name": "doe"}},
+        expected_scenario_db={"session": {"confirmation_number": "ABC123", "last_name": "Doe"}},
         final_scenario_db={"session": {"confirmation_number": "ABC123", "last_name": "doe"}},
     )
     result = await metric.compute(ctx)
@@ -89,5 +89,6 @@ async def test_no_expected_session(metric):
     )
     result = await metric.compute(ctx)
 
-    assert result.score == 1.0
+    assert result.score is None
+    assert result.skipped is True
     assert "skipping" in result.details["reason"]

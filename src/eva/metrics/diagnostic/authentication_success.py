@@ -9,19 +9,23 @@ from eva.metrics.registry import register_metric
 from eva.models.results import MetricScore
 
 
+def _normalize_session_value(v: object) -> object:
+    """Normalize a session value for comparison — strings are lowercased."""
+    return v.lower() if isinstance(v, str) else v
+
+
 def compute_session_auth_mismatches(expected_scenario_db: dict, final_scenario_db: dict) -> dict:
     """Check whether the final DB session satisfies the expected session.
 
+    String values are compared case-insensitively.
     Returns a dict of mismatched keys (empty dict means auth succeeded or no auth expected).
     """
     expected_session = expected_scenario_db.get("session", {})
-    if not expected_session:
-        return {}
     actual_session = final_scenario_db.get("session", {})
     return {
         k: {"expected": v, "actual": actual_session.get(k)}
         for k, v in expected_session.items()
-        if actual_session.get(k) != v
+        if _normalize_session_value(actual_session.get(k)) != _normalize_session_value(v)
     }
 
 
@@ -54,8 +58,9 @@ class AuthenticationSuccessMetric(CodeMetric):
             if not expected_session:
                 return MetricScore(
                     name=self.name,
-                    score=1.0,
-                    normalized_score=1.0,
+                    score=None,
+                    normalized_score=None,
+                    skipped=True,
                     details={"reason": "No expected session to verify — skipping auth check"},
                 )
 

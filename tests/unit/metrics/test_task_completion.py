@@ -114,7 +114,7 @@ class TestTaskCompletion:
         score = await self.metric.compute(ctx)
 
         assert score.score == 0.0
-        assert score.details["auth_failed"] is True
+        assert score.details["auth_success"] is False
         assert "last_name" in score.details["auth_mismatches"]
 
     @pytest.mark.asyncio
