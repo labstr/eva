@@ -46,6 +46,73 @@ def get_display_style(tool_type: str) -> tuple[str, str]:
     return TOOL_TYPE_COLORS.get(tool_type, "#999"), TOOL_TYPE_LABELS.get(tool_type, "?")
 
 
+def _auto_height(text: str, min_height: int = 68, chars_per_line: int = 65) -> int:
+    """Estimate the pixel height needed to display text without scrolling."""
+    if not text:
+        return min_height
+    lines = text.split("\n")
+    total_rows = sum(max(1, -(-len(line) // chars_per_line)) for line in lines)
+    return max(min_height, total_rows * 22 + 40)
+
+
+def _render_list_field(label: str, base_key: str):
+    """Render a list field as individually editable text areas, one per item."""
+    st.markdown(f"**{label}**")
+    count = st.session_state.get(f"{base_key}_count", 0)
+    for i in range(count):
+        item_key = f"{base_key}_{i}"
+        if item_key not in st.session_state:
+            st.session_state[item_key] = ""
+        text = st.session_state.get(item_key, "")
+        st.text_area(f"item {i + 1}", key=item_key, height=_auto_height(text), label_visibility="collapsed")
+
+
+def _get_list_values(base_key: str) -> list[str]:
+    """Read back edited list items from session state."""
+    count = st.session_state.get(f"{base_key}_count", 0)
+    return [v for i in range(count) if (v := st.session_state.get(f"{base_key}_{i}", "").strip())]
+
+
+def _render_diff_html(diff_lines: list[str]):
+    """Render unified diff lines as colored HTML."""
+    rows = []
+    for line in diff_lines:
+        escaped = line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        if line.startswith("@@"):
+            rows.append(
+                f'<div style="background:#1e3a5f;color:#58a6ff;'
+                f"padding:4px 12px;margin-top:8px;border-radius:3px;"
+                f'font-weight:600">{escaped}</div>'
+            )
+        elif line.startswith("+++") or line.startswith("---"):
+            rows.append(f'<div style="color:#8b949e;padding:2px 12px;font-weight:700">{escaped}</div>')
+        elif line.startswith("+"):
+            rows.append(
+                f'<div style="background:#0d2818;color:#56d364;'
+                f'padding:1px 12px;border-left:3px solid #2ea043">'
+                f"{escaped}</div>"
+            )
+        elif line.startswith("-"):
+            rows.append(
+                f'<div style="background:#2d1115;color:#f85149;'
+                f'padding:1px 12px;border-left:3px solid #da3633">'
+                f"{escaped}</div>"
+            )
+        else:
+            rows.append(f'<div style="color:#c9d1d9;padding:1px 12px">{escaped}</div>')
+    body = "\n".join(rows)
+    n_lines = len(diff_lines)
+    height = min(max(200, n_lines * 22), 600)
+    html = (
+        f'<div style="font-family:ui-monospace,SFMono-Regular,'
+        f"'SF Mono',Menlo,Consolas,monospace;font-size:12px;"
+        f"line-height:1.5;background:#0d1117;border:1px solid #30363d;"
+        f'border-radius:6px;padding:8px 0;overflow-x:auto">'
+        f"{body}</div>"
+    )
+    components.html(html, height=height, scrolling=True)
+
+
 # ── Question definitions ─────────────────────────────────────────────────────
 QUESTIONS = [
     {
@@ -231,11 +298,83 @@ def load_feedback(record_id: str) -> dict | None:
 
 def save_feedback(record_id: str, feedback: dict):
     FEEDBACK_DIR.mkdir(exist_ok=True)
+    path = FEEDBACK_DIR / f"{record_id}.json"
+    if path.exists():
+        try:
+            with open(path) as f:
+                prev = json.load(f)
+            prev_ts = str(prev.get("last_updated", "unknown")).replace(":", "-")
+            hist_dir = FEEDBACK_DIR / "history" / str(record_id)
+            hist_dir.mkdir(parents=True, exist_ok=True)
+            with open(hist_dir / f"{prev_ts}.json", "w") as f:
+                json.dump(prev, f, indent=2)
+        except (OSError, json.JSONDecodeError):
+            pass
     feedback["record_id"] = record_id
     feedback["last_updated"] = datetime.now().isoformat()
-    path = FEEDBACK_DIR / f"{record_id}.json"
     with open(path, "w") as f:
         json.dump(feedback, f, indent=2)
+
+
+STATUS_ACCEPTABLE = ("acceptable", "✅", "Acceptable", "#2ea043")
+STATUS_HAS_ISSUES = ("has_issues", "❌", "Has issues", "#da3633")
+STATUS_NONE = ("none", "○", "Not reviewed", "#6e7681")
+
+
+def _classify_feedback(fb: dict | None) -> tuple[str, str, str, str]:
+    if not fb:
+        return STATUS_NONE
+    acc = fb.get("acceptability", {})
+    as_is = acc.get("can_use_as_is", "")
+    with_edits = acc.get("can_submit_with_edits", "")
+    if as_is == "No" or with_edits == "No":
+        return STATUS_HAS_ISSUES
+    if as_is == "Yes" or with_edits == "Yes":
+        return STATUS_ACCEPTABLE
+    return STATUS_NONE
+
+
+def load_status_map(mtime: float = 0) -> dict[str, tuple[str, str, str, str]]:
+    """Return {record_id: (key, emoji, label, color)} for every saved feedback file."""
+    out: dict[str, tuple[str, str, str, str]] = {}
+    if not FEEDBACK_DIR.exists():
+        return out
+    for p in FEEDBACK_DIR.glob("*.json"):
+        try:
+            with open(p) as f:
+                out[p.stem] = _classify_feedback(json.load(f))
+        except (OSError, json.JSONDecodeError):
+            continue
+    return out
+
+
+def _feedback_dir_mtime() -> float:
+    if not FEEDBACK_DIR.exists():
+        return 0.0
+    mtimes = [FEEDBACK_DIR.stat().st_mtime]
+    for p in FEEDBACK_DIR.glob("*.json"):
+        try:
+            mtimes.append(p.stat().st_mtime)
+        except OSError:
+            continue
+    return max(mtimes)
+
+
+def load_history(record_id: str) -> list[tuple[str, dict]]:
+    """Return previous saves for a record, newest-first: [(timestamp, data), ...]."""
+    hist_dir = FEEDBACK_DIR / "history" / str(record_id)
+    if not hist_dir.exists():
+        return []
+    entries: list[tuple[str, dict]] = []
+    for p in hist_dir.glob("*.json"):
+        try:
+            with open(p) as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            continue
+        entries.append((data.get("last_updated", p.stem), data))
+    entries.sort(key=lambda e: e[0], reverse=True)
+    return entries
 
 
 def load_assignments() -> dict[str, list[str]]:
@@ -393,6 +532,8 @@ if st.session_state.get("_prev_record_id") != current_id:
 
         usab = existing.get("acceptability", {})
         st.session_state["acceptability_as_is"] = usab.get("can_use_as_is", "")
+        st.session_state["acceptability_with_edits"] = usab.get("can_submit_with_edits", "")
+        st.session_state["acceptability_edits_made"] = usab.get("edits_made_notes", "")
         st.session_state["acceptability_needs_change"] = usab.get("needs_change_notes", "")
     else:
         for key in [
@@ -410,6 +551,8 @@ if st.session_state.get("_prev_record_id") != current_id:
             "diff_comments",
             "general_comments",
             "acceptability_as_is",
+            "acceptability_with_edits",
+            "acceptability_edits_made",
             "acceptability_needs_change",
         ]:
             st.session_state[key] = ""
@@ -424,6 +567,35 @@ expected_db = ground_truth.get("expected_scenario_db", {})
 _scenario_path = SCENARIOS_DIR / f"{current_id}.json"
 initial_db = load_initial_scenario(current_id, _scenario_path.stat().st_mtime if _scenario_path.exists() else 0)
 
+# ── Per-record edit-field initialization (run once per record per session) ────
+# Uses record-scoped keys so each record has independent state; value= sets the
+# initial content the first time the record is visited, then session state takes over.
+_eid = current_id
+if f"edit_high_level_goal_{_eid}" not in st.session_state:
+    _fb = load_feedback(current_id) or {}
+    _eug = _fb.get("edited_user_goal", {})
+    _edt = _eug.get("decision_tree", dt)
+    st.session_state[f"edit_high_level_goal_{_eid}"] = _eug.get(
+        "high_level_user_goal", goal.get("high_level_user_goal", "")
+    )
+    st.session_state[f"edit_starting_utterance_{_eid}"] = _eug.get(
+        "starting_utterance", goal.get("starting_utterance", "")
+    )
+    for _fkey, _items in [
+        (f"edit_must_have_{_eid}", _edt.get("must_have_criteria", dt.get("must_have_criteria", []))),
+        (f"edit_nice_to_have_{_eid}", _edt.get("nice_to_have_criteria", dt.get("nice_to_have_criteria", []))),
+        (f"edit_negotiation_{_eid}", _edt.get("negotiation_behavior", dt.get("negotiation_behavior", []))),
+        (f"edit_edge_cases_{_eid}", _edt.get("edge_cases", dt.get("edge_cases", []))),
+    ]:
+        st.session_state[f"{_fkey}_count"] = len(_items)
+        for _i, _item in enumerate(_items):
+            st.session_state[f"{_fkey}_{_i}"] = _item
+    st.session_state[f"edit_resolution_{_eid}"] = _edt.get("resolution_condition", dt.get("resolution_condition", ""))
+    st.session_state[f"edit_failure_{_eid}"] = _edt.get("failure_condition", dt.get("failure_condition", ""))
+    st.session_state[f"edit_escalation_{_eid}"] = _edt.get("escalation_behavior", dt.get("escalation_behavior", ""))
+    _info = _eug.get("information_required", goal.get("information_required", {}))
+    st.session_state[f"edit_info_required_{_eid}"] = json.dumps(_info, indent=2) if _info else "{}"
+
 # Extract tool calls from trace (if it exists) for the review form
 review_tool_calls = extract_review_tool_calls(trace, tool_type_map) if trace else []
 
@@ -431,13 +603,23 @@ review_tool_calls = extract_review_tool_calls(trace, tool_type_map) if trace els
 # HEADER: Title + Navigation
 # ══════════════════════════════════════════════════════════════════════════════
 
+_status_map = load_status_map(_feedback_dir_mtime())
+
+
+def _format_record_option(rid: str) -> str:
+    _, emoji, label, _color = _status_map.get(rid, STATUS_NONE)
+    return f"{emoji}  {rid}  —  {label}"
+
+
 nav_left, nav_mid, nav_right, nav_labeler, nav_height = st.columns([1, 3, 1, 2, 1])
 with nav_left:
     if st.button("< Prev", disabled=current_idx == 0, use_container_width=True):
         st.query_params["record_id"] = ids[current_idx - 1]
         st.rerun()
 with nav_mid:
-    selected = st.selectbox("Record", ids, index=current_idx, label_visibility="collapsed")
+    selected = st.selectbox(
+        "Record", ids, index=current_idx, format_func=_format_record_option, label_visibility="collapsed"
+    )
     if selected != current_id:
         st.query_params["record_id"] = selected
         st.rerun()
@@ -455,6 +637,97 @@ with nav_labeler:
 with nav_height:
     q_height = st.slider("Height", 200, 800, 400, 50, label_visibility="collapsed")
 
+# Status badge for the current record
+_cur_key, _cur_emoji, _cur_label, _cur_color = _status_map.get(current_id, STATUS_NONE)
+st.markdown(
+    f'<div style="margin:4px 0 8px 0">'
+    f'<span style="background:{_cur_color};color:white;padding:3px 10px;border-radius:4px;'
+    f'font-size:0.85em;font-weight:600">'
+    f"Current ({current_id}): {_cur_emoji} {_cur_label}</span>"
+    f"</div>",
+    unsafe_allow_html=True,
+)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PREVIOUS SAVED REVIEW (history)
+# ══════════════════════════════════════════════════════════════════════════════
+
+_history = load_history(current_id)
+if _history:
+    with st.expander(f"Previous saved review ({len(_history)} version(s))", expanded=False):
+        _hist_labels = [ts for ts, _ in _history]
+        _sel_ts = st.selectbox(
+            "Version",
+            _hist_labels,
+            index=0,
+            key=f"hist_sel_{current_id}",
+            help="Select a previous saved version to view. Newest first.",
+        )
+        _sel_data = next((d for ts, d in _history if ts == _sel_ts), _history[0][1])
+
+        # Read-only view of the saved radio answers and comments
+        _sections = [
+            ("User Goal", _sel_data.get("user_goal", {})),
+            ("Ground Truth Trace", _sel_data.get("ground_truth_trace", {})),
+            ("Diff", _sel_data.get("diff", {})),
+            ("General", _sel_data.get("general", {})),
+            ("Acceptability", _sel_data.get("acceptability", {})),
+        ]
+        for _title, _section in _sections:
+            if not _section:
+                continue
+            st.markdown(f"**{_title}**")
+            for _k, _v in _section.items():
+                if _k == "review_tool_calls" and isinstance(_v, list):
+                    for _tc in _v:
+                        st.markdown(
+                            f"- `{_tc.get('tool_name', '?')}` "
+                            f"(grounded={_tc.get('inputs_grounded', '—')}, "
+                            f"policy_consistent={_tc.get('policy_consistent', '—')})"
+                        )
+                elif isinstance(_v, (dict, list)):
+                    st.markdown(f"- **{_k}**: `{json.dumps(_v, default=str)}`")
+                else:
+                    st.markdown(f"- **{_k}**: {_v if _v not in (None, '') else '—'}")
+
+        # Diff: previous saved edited_user_goal vs current in-form edits
+        _prev_eug = _sel_data.get("edited_user_goal")
+        if _prev_eug:
+            try:
+                _cur_info = json.loads(st.session_state.get(f"edit_info_required_{_eid}", "{}") or "{}")
+            except json.JSONDecodeError:
+                _cur_info = _prev_eug.get("information_required", {})
+            _cur_eug = {
+                "high_level_user_goal": st.session_state.get(f"edit_high_level_goal_{_eid}", ""),
+                "starting_utterance": st.session_state.get(f"edit_starting_utterance_{_eid}", ""),
+                "decision_tree": {
+                    "must_have_criteria": _get_list_values(f"edit_must_have_{_eid}"),
+                    "nice_to_have_criteria": _get_list_values(f"edit_nice_to_have_{_eid}"),
+                    "negotiation_behavior": _get_list_values(f"edit_negotiation_{_eid}"),
+                    "resolution_condition": st.session_state.get(f"edit_resolution_{_eid}", ""),
+                    "failure_condition": st.session_state.get(f"edit_failure_{_eid}", ""),
+                    "escalation_behavior": st.session_state.get(f"edit_escalation_{_eid}", ""),
+                    "edge_cases": _get_list_values(f"edit_edge_cases_{_eid}"),
+                },
+                "information_required": _cur_info,
+            }
+            _prev_json = json.dumps(_prev_eug, indent=2, sort_keys=True)
+            _cur_json = json.dumps(_cur_eug, indent=2, sort_keys=True)
+            _hist_diff = list(
+                difflib.unified_diff(
+                    _prev_json.splitlines(),
+                    _cur_json.splitlines(),
+                    fromfile=f"Previous ({_sel_ts})",
+                    tofile="Current edits",
+                    lineterm="",
+                )
+            )
+            st.markdown("**Changes since previous save (user goal)**")
+            if _hist_diff:
+                _render_diff_html(_hist_diff)
+            else:
+                st.caption("No changes in user goal since the previous save.")
+
 # ══════════════════════════════════════════════════════════════════════════════
 # REVIEW QUESTIONS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -466,6 +739,10 @@ with st.container(height=q_height):
 
 
 def _build_feedback() -> dict:
+    try:
+        _info_edited = json.loads(st.session_state.get(f"edit_info_required_{current_id}", "{}") or "{}")
+    except json.JSONDecodeError:
+        _info_edited = {}
     return {
         "user_goal": {
             "reflects_context": st.session_state.get("q_reflects", ""),
@@ -475,6 +752,20 @@ def _build_feedback() -> dict:
             "dates_make_sense": st.session_state.get("q_dates_make_sense", ""),
             "issues_from_seed": st.session_state.get("q_issues_from_seed", ""),
             "comments": st.session_state.get("user_goal_comments", ""),
+        },
+        "edited_user_goal": {
+            "high_level_user_goal": st.session_state.get(f"edit_high_level_goal_{current_id}", ""),
+            "starting_utterance": st.session_state.get(f"edit_starting_utterance_{current_id}", ""),
+            "decision_tree": {
+                "must_have_criteria": _get_list_values(f"edit_must_have_{current_id}"),
+                "nice_to_have_criteria": _get_list_values(f"edit_nice_to_have_{current_id}"),
+                "negotiation_behavior": _get_list_values(f"edit_negotiation_{current_id}"),
+                "resolution_condition": st.session_state.get(f"edit_resolution_{current_id}", ""),
+                "failure_condition": st.session_state.get(f"edit_failure_{current_id}", ""),
+                "escalation_behavior": st.session_state.get(f"edit_escalation_{current_id}", ""),
+                "edge_cases": _get_list_values(f"edit_edge_cases_{current_id}"),
+            },
+            "information_required": _info_edited,
         },
         "ground_truth_trace": {
             "review_tool_calls": [
@@ -499,6 +790,8 @@ def _build_feedback() -> dict:
         },
         "acceptability": {
             "can_use_as_is": st.session_state.get("acceptability_as_is", ""),
+            "can_submit_with_edits": st.session_state.get("acceptability_with_edits", ""),
+            "edits_made_notes": st.session_state.get("acceptability_edits_made", ""),
             "needs_change_notes": st.session_state.get("acceptability_needs_change", ""),
         },
     }
@@ -595,11 +888,27 @@ with q_tabs[-1]:
         horizontal=True,
     )
     if st.session_state.get("acceptability_as_is") == "No":
+        _with_edits_val = st.session_state.get("acceptability_with_edits", "")
+        st.radio(
+            "Is it acceptable with your user-goal edits?",
+            YES_NO,
+            index=YES_NO.index(_with_edits_val) if _with_edits_val in YES_NO else None,
+            key="acceptability_with_edits",
+            help="After applying the edits you made in the User Goal column, would this sample be usable?",
+            horizontal=True,
+        )
+        if st.session_state.get("acceptability_with_edits") == "Yes":
+            st.text_area(
+                "What edits did you make?",
+                key="acceptability_edits_made",
+                height=max(80, q_height - 300),
+                help="Briefly summarize the edits you applied to the user goal to make this sample usable.",
+            )
         st.text_area(
-            "What would need to change?",
+            "What would need to change? / Acceptability comments",
             key="acceptability_needs_change",
-            height=max(80, q_height - 200),
-            help="Describe what would need to change to make this sample usable.",
+            height=max(80, q_height - 250),
+            help="Describe issues with the sample and any changes needed to make it usable.",
         )
     if st.button("Save Feedback", type="primary", key="save_acceptability"):
         save_feedback(current_id, _build_feedback())
@@ -823,58 +1132,122 @@ st.markdown(
 # ── Side-by-side: User Goal | Trace ──────────────────────────────────────────
 col_goal, col_trace = st.columns(2)
 
+# Estimate total pixel height of the user goal column so the trace container matches
+_goal_height = 60
+_goal_height += _auto_height(st.session_state.get(f"edit_high_level_goal_{_eid}", "")) + 48
+_goal_height += _auto_height(st.session_state.get(f"edit_starting_utterance_{_eid}", "")) + 48
+for _lkey in [
+    f"edit_must_have_{_eid}",
+    f"edit_nice_to_have_{_eid}",
+    f"edit_negotiation_{_eid}",
+    f"edit_edge_cases_{_eid}",
+]:
+    _cnt = st.session_state.get(f"{_lkey}_count", 0)
+    _goal_height += 32
+    for _li in range(_cnt):
+        _goal_height += _auto_height(st.session_state.get(f"{_lkey}_{_li}", "")) + 16
+_goal_height += _auto_height(st.session_state.get(f"edit_resolution_{_eid}", "")) + 48
+_goal_height += _auto_height(st.session_state.get(f"edit_failure_{_eid}", "")) + 48
+_goal_height += _auto_height(st.session_state.get(f"edit_escalation_{_eid}", "")) + 48
+_goal_height += _auto_height(st.session_state.get(f"edit_info_required_{_eid}", ""), min_height=100) + 48
+
 with col_goal:
     st.markdown("##### User Goal")
-    with st.container(height=700):
-        st.markdown("###### High-level Goal")
-        st.info(goal.get("high_level_user_goal", "—"))
+    st.text_area(
+        "High-level Goal",
+        key=f"edit_high_level_goal_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_high_level_goal_{_eid}", "")),
+    )
+    st.text_area(
+        "Starting Utterance",
+        key=f"edit_starting_utterance_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_starting_utterance_{_eid}", "")),
+    )
+    _render_list_field("Must-Have Criteria", f"edit_must_have_{_eid}")
+    _render_list_field("Nice-to-Have Criteria", f"edit_nice_to_have_{_eid}")
+    _render_list_field("Negotiation Behavior", f"edit_negotiation_{_eid}")
+    st.text_area(
+        "Resolution Condition",
+        key=f"edit_resolution_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_resolution_{_eid}", "")),
+    )
+    st.text_area(
+        "Failure Condition",
+        key=f"edit_failure_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_failure_{_eid}", "")),
+    )
+    st.text_area(
+        "Escalation Behavior",
+        key=f"edit_escalation_{_eid}",
+        height=_auto_height(st.session_state.get(f"edit_escalation_{_eid}", "")),
+    )
+    _render_list_field("Edge Cases", f"edit_edge_cases_{_eid}")
+    _info_text = st.session_state.get(f"edit_info_required_{_eid}", "")
+    st.text_area(
+        "Information Required (JSON)",
+        key=f"edit_info_required_{_eid}",
+        height=_auto_height(_info_text, min_height=100),
+    )
 
-        st.markdown("###### Starting Utterance")
-        st.code(goal.get("starting_utterance", "—"), language=None)
+    # ── Diff: original vs edited ──────────────────────────────────────────────
+    _info_raw = st.session_state.get(f"edit_info_required_{_eid}", "{}") or "{}"
+    _info_parse_error = False
+    try:
+        _info_for_diff = json.loads(_info_raw)
+    except json.JSONDecodeError:
+        _info_parse_error = True
+        _info_for_diff = goal.get("information_required", {})
+        st.caption(
+            ":warning: `Information Required` is not valid JSON right now — "
+            "diff below uses the original values for that field until the JSON parses."
+        )
 
-        if dt.get("must_have_criteria"):
-            st.markdown("###### Must-Have Criteria")
-            for i, item in enumerate(dt["must_have_criteria"], 1):
-                st.markdown(f"{i}. {item}")
-
-        if dt.get("nice_to_have_criteria"):
-            st.markdown("###### Nice-to-Have Criteria")
-            for item in dt["nice_to_have_criteria"]:
-                st.markdown(f"- {item}")
-
-        if dt.get("negotiation_behavior"):
-            st.markdown("###### Negotiation Behavior")
-            for i, item in enumerate(dt["negotiation_behavior"], 1):
-                st.markdown(f"{i}. {item}")
-
-        st.markdown("###### Resolution Condition")
-        st.success(dt.get("resolution_condition", "—"))
-
-        st.markdown("###### Failure Condition")
-        st.error(dt.get("failure_condition", "—"))
-
-        if dt.get("escalation_behavior"):
-            st.markdown("###### Escalation Behavior")
-            st.warning(dt["escalation_behavior"])
-
-        if dt.get("edge_cases"):
-            st.markdown("###### Edge Cases")
-            for item in dt["edge_cases"]:
-                st.markdown(f"- {item}")
-
-        info = goal.get("information_required", {})
-        if info:
-            st.markdown("###### Information Required")
-            rows = []
-            for k, v in info.items():
-                if isinstance(v, (dict, list)):
-                    v = json.dumps(v, default=str)
-                rows.append(f"| **{k}** | `{v}` |")
-            st.markdown("| Field | Value |\n|---|---|\n" + "\n".join(rows))
+    _original_goal_dict = {
+        "high_level_user_goal": goal.get("high_level_user_goal", ""),
+        "starting_utterance": goal.get("starting_utterance", ""),
+        "decision_tree": {
+            "must_have_criteria": dt.get("must_have_criteria", []),
+            "nice_to_have_criteria": dt.get("nice_to_have_criteria", []),
+            "negotiation_behavior": dt.get("negotiation_behavior", []),
+            "resolution_condition": dt.get("resolution_condition", ""),
+            "failure_condition": dt.get("failure_condition", ""),
+            "escalation_behavior": dt.get("escalation_behavior", ""),
+            "edge_cases": dt.get("edge_cases", []),
+        },
+        "information_required": goal.get("information_required", {}),
+    }
+    _edited_goal_dict = {
+        "high_level_user_goal": st.session_state.get(f"edit_high_level_goal_{_eid}", ""),
+        "starting_utterance": st.session_state.get(f"edit_starting_utterance_{_eid}", ""),
+        "decision_tree": {
+            "must_have_criteria": _get_list_values(f"edit_must_have_{_eid}"),
+            "nice_to_have_criteria": _get_list_values(f"edit_nice_to_have_{_eid}"),
+            "negotiation_behavior": _get_list_values(f"edit_negotiation_{_eid}"),
+            "resolution_condition": st.session_state.get(f"edit_resolution_{_eid}", ""),
+            "failure_condition": st.session_state.get(f"edit_failure_{_eid}", ""),
+            "escalation_behavior": st.session_state.get(f"edit_escalation_{_eid}", ""),
+            "edge_cases": _get_list_values(f"edit_edge_cases_{_eid}"),
+        },
+        "information_required": _info_for_diff,
+    }
+    _orig_json = json.dumps(_original_goal_dict, indent=2, sort_keys=True)
+    _edit_json = json.dumps(_edited_goal_dict, indent=2, sort_keys=True)
+    _goal_diff = list(
+        difflib.unified_diff(
+            _orig_json.splitlines(),
+            _edit_json.splitlines(),
+            fromfile="Original",
+            tofile="Edited",
+            lineterm="",
+        )
+    )
+    if _goal_diff:
+        st.markdown("**Edits (diff)**")
+        _render_diff_html(_goal_diff)
 
 with col_trace:
     st.markdown("##### Ground Truth Trace")
-    with st.container(height=700):
+    with st.container(height=_goal_height, border=False):
         if trace is None:
             st.warning(
                 "Trace data not yet available for this record. "
@@ -904,39 +1277,4 @@ with st.expander("Scenario DB Diff (Initial vs Expected Final)", expanded=True):
         if not diff_lines:
             st.success("No differences between initial and expected scenario DB.")
         else:
-            rows = []
-            for line in diff_lines:
-                escaped = line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-                if line.startswith("@@"):
-                    rows.append(
-                        f'<div style="background:#1e3a5f;color:#58a6ff;'
-                        f"padding:4px 12px;margin-top:8px;border-radius:3px;"
-                        f'font-weight:600">{escaped}</div>'
-                    )
-                elif line.startswith("+++") or line.startswith("---"):
-                    rows.append(f'<div style="color:#8b949e;padding:2px 12px;font-weight:700">{escaped}</div>')
-                elif line.startswith("+"):
-                    rows.append(
-                        f'<div style="background:#0d2818;color:#56d364;'
-                        f'padding:1px 12px;border-left:3px solid #2ea043">'
-                        f"{escaped}</div>"
-                    )
-                elif line.startswith("-"):
-                    rows.append(
-                        f'<div style="background:#2d1115;color:#f85149;'
-                        f'padding:1px 12px;border-left:3px solid #da3633">'
-                        f"{escaped}</div>"
-                    )
-                else:
-                    rows.append(f'<div style="color:#c9d1d9;padding:1px 12px">{escaped}</div>')
-            body = "\n".join(rows)
-            html = (
-                f'<div style="font-family:ui-monospace,SFMono-Regular,'
-                f"'SF Mono',Menlo,Consolas,monospace;font-size:13px;"
-                f"line-height:1.6;background:#0d1117;border:1px solid #30363d;"
-                f'border-radius:6px;padding:8px 0;overflow-x:auto">'
-                f"{body}</div>"
-            )
-            n_lines = len(diff_lines)
-            height = min(max(300, n_lines * 24), 800)
-            components.html(html, height=height, scrolling=True)
+            _render_diff_html(diff_lines)
