@@ -43,13 +43,8 @@ class LiteLLMClient:
 
         The field lives at the top level of the deployment object (not inside litellm_params),
         since it is an EVA routing decision rather than a LiteLLM parameter.
-
-        Returns False if the router is not yet initialized or the deployment is not found.
         """
-        try:
-            r = router.get()
-        except RuntimeError:
-            return False
+        r = router.get()
         for deployment in getattr(r, "model_list", []):
             if deployment.get("model_name") == self.model:
                 return bool(deployment.get("use_responses_api", False))
@@ -59,7 +54,6 @@ class LiteLLMClient:
         self,
         messages: list[dict[str, Any]],
         tools: list[dict] | None = None,
-        reasoning_effort: str | None = None,
         max_retries: int = 5,
         initial_delay: float = 1.0,
     ) -> tuple[Any, dict[str, Any]]:
@@ -68,9 +62,6 @@ class LiteLLMClient:
         Args:
             messages: List of message dicts with 'role' and 'content'
             tools: Optional list of tools in OpenAI format
-            reasoning_effort: Optional reasoning effort level ("low", "medium", "high").
-                            If provided, enables extended thinking for models that support it.
-                            Can also be set in model config via litellm_params.reasoning_effort.
             max_retries: Maximum number of retry attempts for rate limits
             initial_delay: Initial delay in seconds before first retry
 
@@ -81,7 +72,7 @@ class LiteLLMClient:
         """
         # OpenAI Responses API path: stateless multi-turn encrypted reasoning
         if self.use_responses_api:
-            return await self._complete_via_responses_api(messages, tools, reasoning_effort, max_retries, initial_delay)
+            return await self._complete_via_responses_api(messages, tools, max_retries, initial_delay)
 
         kwargs = {
             "model": self.model,
@@ -91,11 +82,6 @@ class LiteLLMClient:
         if tools:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
-
-        # Enable extended thinking if reasoning_effort is provided
-        # Note: reasoning_effort can also be set in model config (litellm_params.reasoning_effort)
-        if reasoning_effort:
-            kwargs["reasoning_effort"] = reasoning_effort
 
         last_exception = None
         for attempt in range(max_retries + 1):
@@ -289,7 +275,6 @@ class LiteLLMClient:
         self,
         messages: list[dict[str, Any]],
         tools: list[dict] | None,
-        reasoning_effort: str | None,
         max_retries: int,
         initial_delay: float,
     ) -> tuple[Any, dict[str, Any]]:
@@ -312,8 +297,8 @@ class LiteLLMClient:
 
         api_base = litellm_params.get("api_base") or None
 
-        # reasoning_effort: caller takes priority, then fall back to litellm_params
-        effective_reasoning_effort = reasoning_effort or litellm_params.get("reasoning_effort")
+        # reasoning_effort from litellm_params (set in EVA_MODEL_LIST deployment config)
+        reasoning_effort = litellm_params.get("reasoning_effort")
 
         instructions, input_items = self._convert_messages_for_responses_api(messages)
 
@@ -323,8 +308,8 @@ class LiteLLMClient:
             "store": False,
             "include": ["reasoning.encrypted_content"],
         }
-        if effective_reasoning_effort:
-            kwargs["reasoning"] = {"effort": effective_reasoning_effort}
+        if reasoning_effort:
+            kwargs["reasoning"] = {"effort": reasoning_effort}
         if instructions:
             kwargs["instructions"] = instructions
         if tools:
