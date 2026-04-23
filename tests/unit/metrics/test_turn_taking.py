@@ -58,6 +58,28 @@ class TestLatencyScore:
     def test_latency_score_points(self, metric, latency_ms, expected):
         assert metric._latency_score(latency_ms) == pytest.approx(expected, abs=1e-3)
 
+    @pytest.mark.parametrize(
+        "latency_ms, expected",
+        [
+            # Lower half unchanged: hard_early / sweet_low shared with non-tool curve.
+            (-500, 0.00),
+            (0, 0.50),
+            (500, 1.00),
+            # Extended sweet spot [500, 4000] for tool turns.
+            (2000, 1.00),
+            (3500, 1.00),
+            (4000, 1.00),
+            # Ramp 1 → 0 over [4000, 7000] (vs [2000, 5000] without a tool call).
+            (4500, 0.8333),
+            (5500, 0.5),
+            (6500, 0.1667),
+            (7000, 0.00),
+            (9000, 0.00),
+        ],
+    )
+    def test_latency_score_tool_call_curve(self, metric, latency_ms, expected):
+        assert metric._latency_score(latency_ms, has_tool_call=True) == pytest.approx(expected, abs=1e-3)
+
 
 class TestOverlapScore:
     @pytest.mark.parametrize(
@@ -87,6 +109,23 @@ class TestYieldScore:
     )
     def test_yield_score(self, metric, yield_ms, expected):
         assert metric._yield_score(yield_ms) == pytest.approx(expected, abs=1e-3)
+
+
+class TestCountScore:
+    @pytest.mark.parametrize(
+        "n_segments, expected",
+        [
+            # Computed directly in [0, AGENT_INTERRUPT_MAX_SCORE=0.5] — mirrors _overlap_score's cap
+            # so any barge-in lands at most at 0.5.
+            (1, 0.50),  # single barge-in → cap
+            (2, 0.25),  # halfway to hard floor
+            (3, 0.00),  # INTERRUPT_COUNT_HARD → saturated
+            (4, 0.00),  # saturated beyond hard cap
+            (10, 0.00),
+        ],
+    )
+    def test_count_score(self, metric, n_segments, expected):
+        assert metric._count_score(n_segments) == pytest.approx(expected, abs=1e-3)
 
 
 # ---------- End-to-end scenarios ----------
@@ -373,3 +412,185 @@ class TestFlatSubMetrics:
         result = await metric.compute(context)
         # Only real simultaneous speech is 3.8–4.0 = 200ms.
         assert result.details["per_turn_evidence"][1]["overlap_ms"] == pytest.approx(200, abs=1)
+
+
+# ---------- Tool-aware scoring ----------
+
+
+class TestToolAwareScoring:
+    """Turns with tool calls get a more lenient latency curve and late-rate threshold."""
+
+    @pytest.mark.asyncio
+    async def test_5s_latency_scores_perfect_on_tool_turn(self, metric):
+        """5s wait is 0 on the non-tool curve, but sits inside the tool sweet spot → score 1.0."""
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(20.0, 21.0)]},
+            audio_timestamps_assistant_turns={1: [(6.0, 7.0)], 2: [(22.0, 23.0)]},  # 5s, 1s
+            conversation_trace=[
+                {"type": "tool_call", "turn_id": 1, "tool_name": "lookup"},
+            ],
+        )
+        result = await metric.compute(context)
+        ev1 = result.details["per_turn_evidence"][1]
+        ev2 = result.details["per_turn_evidence"][2]
+        assert ev1["has_tool_call"] is True
+        assert ev2["has_tool_call"] is False
+        # Tool turn at 5s latency: inside the extended sweet spot [500ms, 4000ms]? No — 5000ms
+        # is on the ramp-down. (7000-5000)/(7000-4000) = 0.6667.
+        assert ev1["latency_score"] == pytest.approx(0.6667, abs=1e-3)
+        # Non-tool turn at 1s: firmly in the sweet spot.
+        assert ev2["latency_score"] == pytest.approx(1.0, abs=1e-3)
+
+    @pytest.mark.asyncio
+    async def test_tool_turn_beyond_hard_late_scores_zero(self, metric):
+        """Latency past 7s on a tool turn still drops to 0 (just further out than the non-tool 5s)."""
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(20.0, 21.0)]},
+            audio_timestamps_assistant_turns={1: [(9.0, 10.0)], 2: [(22.0, 23.0)]},  # 8s, 1s
+            conversation_trace=[{"type": "tool_call", "turn_id": 1, "tool_name": "lookup"}],
+        )
+        result = await metric.compute(context)
+        assert result.details["per_turn_evidence"][1]["latency_score"] == pytest.approx(0.0, abs=1e-3)
+
+    @pytest.mark.asyncio
+    async def test_has_tool_call_false_when_trace_has_no_tool_calls(self, metric):
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 1.0)]},
+            audio_timestamps_assistant_turns={1: [(2.0, 3.0)]},
+            conversation_trace=[
+                {"role": "user", "turn_id": 1, "type": "transcribed", "content": "hi"},
+                {"role": "assistant", "turn_id": 1, "type": "intended", "content": "hello"},
+            ],
+        )
+        result = await metric.compute(context)
+        assert result.details["per_turn_evidence"][1]["has_tool_call"] is False
+
+    @pytest.mark.asyncio
+    async def test_late_rate_uses_tool_threshold(self, metric):
+        """A 5s latency is 'late' on a non-tool turn but 'on time' on a tool turn (threshold 6s)."""
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(20.0, 21.0)]},
+            audio_timestamps_assistant_turns={1: [(6.0, 7.0)], 2: [(27.0, 28.0)]},  # 5s tool, 6s no-tool
+            conversation_trace=[{"type": "tool_call", "turn_id": 1, "tool_name": "lookup"}],
+        )
+        result = await metric.compute(context)
+        sub = result.sub_metrics
+        # Turn 1 (tool, 5s < LATE_THRESHOLD_MS_TOOL=6000) → on_time.
+        # Turn 2 (no tool, 6s >= LATE_THRESHOLD_MS=4000) → late.
+        assert sub["late_rate"].score == pytest.approx(0.5, abs=1e-3)
+        assert sub["on_time_rate"].score == pytest.approx(0.5, abs=1e-3)
+
+    @pytest.mark.asyncio
+    async def test_post_interrupt_latency_honors_tool_curve(self, metric):
+        """Settled response 5s after user_end on a tool turn → non-zero score via the tool curve."""
+        context = make_metric_context(
+            # Interrupt at 0.8–1.0, then settled response at 6.0 (5s after user end = 1.0).
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(10.0, 11.0)]},
+            audio_timestamps_assistant_turns={1: [(0.8, 1.0), (6.0, 7.0)], 2: [(12.0, 13.0)]},
+            assistant_interrupted_turns={1},
+            conversation_trace=[{"type": "tool_call", "turn_id": 1, "tool_name": "lookup"}],
+        )
+        result = await metric.compute(context)
+        ev = result.details["per_turn_evidence"][1]
+        # 5000ms post-interrupt latency on the tool curve: (7000-5000)/(7000-4000) = 0.6667.
+        assert ev["post_interrupt_latency_ms"] == pytest.approx(5000, abs=1)
+        assert ev["post_interrupt_latency_score"] == pytest.approx(0.6667, abs=1e-3)
+
+
+# ---------- Count-based interrupt penalty ----------
+
+
+class TestInterruptCountPenalty:
+    @pytest.mark.asyncio
+    async def test_single_barge_in_count_score_at_cap(self, metric):
+        """n=1 lands at AGENT_INTERRUPT_MAX_SCORE=0.5 (matching the overlap cap)."""
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 2.0)], 2: [(5.0, 6.0)]},
+            audio_timestamps_assistant_turns={1: [(0.8, 1.0), (3.0, 4.0)], 2: [(7.0, 8.0)]},
+            assistant_interrupted_turns={1},
+        )
+        result = await metric.compute(context)
+        ev = result.details["per_turn_evidence"][1]
+        assert ev["n_interrupt_segments"] == 1
+        assert ev["interrupt_count_score"] == pytest.approx(0.5, abs=1e-3)
+        # overlap_score (0.45) < count_score (0.5) → overlap still drives the turn score.
+        assert result.details["per_turn_score"][1] == pytest.approx(ev["overlap_score"], abs=1e-4)
+
+    @pytest.mark.asyncio
+    async def test_count_score_dominates_multi_barge_in_turn(self, metric):
+        """3 tiny overlaps: each overlap_score is near cap, but count_score drops to 0 → turn score 0."""
+        context = make_metric_context(
+            # Three 50ms agent barge-ins during a single long user turn, then settled response.
+            audio_timestamps_user_turns={1: [(0.0, 10.0)], 2: [(15.0, 16.0)]},
+            audio_timestamps_assistant_turns={
+                1: [(2.0, 2.05), (5.0, 5.05), (8.0, 8.05), (11.0, 12.0)],
+                2: [(17.0, 18.0)],
+            },
+            assistant_interrupted_turns={1},
+        )
+        result = await metric.compute(context)
+        ev = result.details["per_turn_evidence"][1]
+        assert ev["n_interrupt_segments"] == 3
+        assert ev["interrupt_count_score"] == pytest.approx(0.0, abs=1e-3)
+        # Overlap is tiny (150ms total) so overlap_score is near cap — count_score=0 forces turn=0.
+        assert ev["overlap_score"] > 0.4
+        assert result.details["per_turn_score"][1] == pytest.approx(0.0, abs=1e-3)
+
+    @pytest.mark.asyncio
+    async def test_two_segment_interrupt_halves_cap(self, metric):
+        """n=2 is halfway from the cap (0.5) to the floor (0) → 0.25."""
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 10.0)], 2: [(15.0, 16.0)]},
+            audio_timestamps_assistant_turns={
+                1: [(2.0, 2.05), (5.0, 5.05), (11.0, 12.0)],
+                2: [(17.0, 18.0)],
+            },
+            assistant_interrupted_turns={1},
+        )
+        result = await metric.compute(context)
+        ev = result.details["per_turn_evidence"][1]
+        assert ev["n_interrupt_segments"] == 2
+        assert ev["interrupt_count_score"] == pytest.approx(0.25, abs=1e-3)
+
+
+# ---------- New sub-metrics: num_interruptions, mean_count_score ----------
+
+
+class TestInterruptCountSubMetrics:
+    @pytest.mark.asyncio
+    async def test_num_interruptions_sums_segments_across_turns(self, metric):
+        """Two interrupt turns (1 seg + 2 segs) → num_interruptions = 3, mean_count_score = mean(1, 0.5)."""
+        context = make_metric_context(
+            audio_timestamps_user_turns={
+                1: [(0.0, 5.0)],
+                2: [(10.0, 20.0)],
+                3: [(25.0, 26.0)],  # normal latency turn
+            },
+            audio_timestamps_assistant_turns={
+                1: [(1.0, 1.2), (6.0, 7.0)],  # 1 barge-in, then settled
+                2: [(11.0, 11.05), (14.0, 14.05), (21.0, 22.0)],  # 2 barge-ins, then settled
+                3: [(27.0, 28.0)],
+            },
+            assistant_interrupted_turns={1, 2},
+        )
+        result = await metric.compute(context)
+        sub = result.sub_metrics
+        assert sub["agent_interruption.num_interruptions"].score == pytest.approx(3.0)
+        # num_interruptions is a raw count, not normalized.
+        assert sub["agent_interruption.num_interruptions"].normalized_score is None
+        # mean_count_score = mean(count_score(1)=0.5, count_score(2)=0.25) = 0.375.
+        assert sub["agent_interruption.mean_count_score"].score == pytest.approx(0.375, abs=1e-3)
+        assert sub["agent_interruption.mean_count_score"].normalized_score == pytest.approx(0.375, abs=1e-3)
+
+    @pytest.mark.asyncio
+    async def test_num_interruptions_none_when_no_agent_interrupts(self, metric):
+        context = make_metric_context(
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)]},
+            audio_timestamps_assistant_turns={1: [(2.0, 3.0)], 2: [(7.0, 8.0)]},
+        )
+        result = await metric.compute(context)
+        sub = result.sub_metrics
+        # num_interruptions surfaces None so cross-record aggregates exclude clean runs.
+        assert sub["agent_interruption.num_interruptions"].score is None
+        assert sub["agent_interruption.num_interruptions"].normalized_score is None
+        assert "agent_interruption.mean_count_score" not in sub
