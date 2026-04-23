@@ -77,7 +77,22 @@ _CATEGORY_COLORS = {
     "Other": "#AAAAAA",
 }
 
-_NON_NORMALIZED_METRICS = {"response_speed"}
+_NON_NORMALIZED_METRICS = {"response_speed", "tool_call_validity__num_tool_calls"}
+
+# Axis title + hover suffix for non-normalized metrics. Sub-metrics fall back to their parent's entry.
+_NON_NORMALIZED_UNITS: dict[str, tuple[str, str]] = {
+    "response_speed": ("Seconds", "s"),
+    "tool_call_validity__num_tool_calls": ("Count", ""),
+}
+
+
+def _non_normalized_unit(name: str) -> tuple[str, str]:
+    """Return (x-axis title, hover suffix) for a non-normalized metric."""
+    if name in _NON_NORMALIZED_UNITS:
+        return _NON_NORMALIZED_UNITS[name]
+    parent = name.split("__", 1)[0]
+    return _NON_NORMALIZED_UNITS.get(parent, ("Value", ""))
+
 
 # Prefix shown in front of metric labels when the metric is lower-is-better.
 _LOWER_IS_BETTER_PREFIX = "↓ "
@@ -1280,6 +1295,7 @@ def render_run_overview(run_dir: Path):
         for m, stats in standalone_data.items():
             display_name = _format_metric_name(m)
             cat = _METRIC_GROUP.get(m, "Other")
+            axis_title, suffix = _non_normalized_unit(m)
             fig = go.Figure()
             fig.add_trace(
                 go.Bar(
@@ -1296,17 +1312,17 @@ def render_run_overview(run_dir: Path):
                     },
                     hovertemplate=(
                         f"<b>{display_name}</b><br>"
-                        "Mean: %{x:.3f}s<br>"
-                        f"Std: {stats['std']:.3f}s<br>"
-                        f"Min: {stats['min']:.3f}s<br>"
-                        f"Max: {stats['max']:.3f}s<br>"
+                        f"Mean: %{{x:.3f}}{suffix}<br>"
+                        f"Std: {stats['std']:.3f}{suffix}<br>"
+                        f"Min: {stats['min']:.3f}{suffix}<br>"
+                        f"Max: {stats['max']:.3f}{suffix}<br>"
                         f"n={stats['count']}"
                         "<extra></extra>"
                     ),
                 )
             )
             fig.update_layout(
-                xaxis_title="Seconds",
+                xaxis_title=axis_title,
                 yaxis={"categoryorder": "array", "categoryarray": [display_name]},
                 height=150,
                 margin={"l": 10, "r": 10, "t": 10, "b": 40},
