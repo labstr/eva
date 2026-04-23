@@ -12,6 +12,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from eva.assistant.services.llm import LiteLLMClient
+from eva.utils import router
 
 # ---------------------------------------------------------------------------
 # _convert_tools_for_responses_api
@@ -169,6 +170,21 @@ def _make_mock_response(output_items: list, reasoning_tokens: int = 0) -> MagicM
 
 
 class TestCompleteViaResponsesApiReasoning:
+    @pytest.fixture(autouse=True, scope="class")
+    def _init_router(self):
+        router.init(
+            model_list=[
+                {
+                    "model_name": "gpt-5.2",
+                    "litellm_params": {
+                        "model": "openai/gpt-5.2",
+                        "api_key": "test-key",
+                    },
+                    "use_responses_api": True,
+                }
+            ]
+        )
+
     @pytest.mark.asyncio
     async def test_encrypted_content_used_when_no_human_readable_summary(self):
         """When the reasoning item has no summary, encrypted_content becomes the reasoning value.
@@ -176,7 +192,7 @@ class TestCompleteViaResponsesApiReasoning:
         This is the gpt-5.2 case: no human-readable text is returned, but the encrypted
         blob must flow through the system as the 'reasoning text' equivalent.
         """
-        client = LiteLLMClient(model="gpt-5.2", use_responses_api=True)
+        client = LiteLLMClient(model="gpt-5.2")
 
         reasoning_item = _make_reasoning_item(summary_texts=[], encrypted_content="enc_blob_xyz")
         message_item = _make_message_item("Here is your answer.")
@@ -197,7 +213,7 @@ class TestCompleteViaResponsesApiReasoning:
     @pytest.mark.asyncio
     async def test_human_readable_summary_preferred_over_encrypted_content(self):
         """When the reasoning item has a human-readable summary, it takes priority."""
-        client = LiteLLMClient(model="gpt-5.2", use_responses_api=True)
+        client = LiteLLMClient(model="gpt-5.2")
 
         reasoning_item = _make_reasoning_item(
             summary_texts=["I thought about this carefully."],
@@ -220,7 +236,7 @@ class TestCompleteViaResponsesApiReasoning:
 
         Responses_output_items in stats contains all output items for the next turn.
         """
-        client = LiteLLMClient(model="gpt-5.2", use_responses_api=True)
+        client = LiteLLMClient(model="gpt-5.2")
 
         reasoning_item = _make_reasoning_item([], "enc_abc")
 

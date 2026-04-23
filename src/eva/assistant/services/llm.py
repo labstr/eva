@@ -26,21 +26,14 @@ class LiteLLMClient:
     ``litellm_params.model`` in the ``EVA_MODEL_LIST`` deployment config.
     """
 
-    def __init__(self, model: str, use_responses_api: bool | None = None):
+    def __init__(self, model: str):
         """Initialize LiteLLM client.
 
         Args:
             model: Model name matching a model_name in EVA_MODEL_LIST (e.g., 'gpt-5.2', 'gemini-3-pro')
-            use_responses_api: Whether to route calls through the OpenAI Responses API instead of
-                chat completions. Required for multi-turn encrypted reasoning on OpenAI o-series /
-                gpt-5.x models. When None (default), the value is read from the ``use_responses_api``
-                top-level field in the matching EVA_MODEL_LIST deployment. Pass True/False explicitly
-                to override.
         """
         self.model = model
-        self.use_responses_api = (
-            self._lookup_use_responses_api_from_router() if use_responses_api is None else use_responses_api
-        )
+        self.use_responses_api = self._lookup_use_responses_api_from_router()
 
         logger.info(f"Initialized LiteLLM client with model: {self.model}, use_responses_api={self.use_responses_api}")
         litellm.drop_params = True
