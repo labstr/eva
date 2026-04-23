@@ -170,6 +170,8 @@ instructions: |
   - Unresolved complaint after 2 attempts
   - Technical system issues arise
 
+  Always offer the transfer first and wait for the caller to explicitly confirm before initiating it.
+
 tools:
 - id: get_reservation
   name: get_reservation
