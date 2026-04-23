@@ -11,7 +11,6 @@ from eva.metrics.registry import register_metric
 from eva.metrics.speech_fidelity_base import SpeechFidelityBaseMetric
 from eva.metrics.utils import aggregate_per_turn_scores, normalize_rating, resolve_turn_id
 from eva.models.results import MetricScore
-from eva.utils.json_utils import extract_and_load_json
 
 ERROR_DIMENSIONS = [
     "bad_stress",
@@ -76,9 +75,7 @@ class PronunciationMetric(SpeechFidelityBaseMetric):
             )
 
             messages = self.create_audio_message(audio_b64, prompt)
-            response_text, turns = await self._call_and_parse(
-                messages, context, audio_segment, prompt
-            )
+            response_text, turns = await self._call_and_parse(messages, context, audio_segment, prompt)
 
             if response_text is None:
                 return MetricScore(
@@ -111,9 +108,7 @@ class PronunciationMetric(SpeechFidelityBaseMetric):
 
                 rating = item.get("rating")
                 if rating not in valid_ratings_range:
-                    self.logger.warning(
-                        f"[{context.record_id}] Invalid rating {rating} for turn {turn_id}"
-                    )
+                    self.logger.warning(f"[{context.record_id}] Invalid rating {rating} for turn {turn_id}")
                     per_turn_ratings[turn_id] = None
                     per_turn_explanations[turn_id] = f"Invalid rating: {rating}"
                     continue
@@ -135,17 +130,13 @@ class PronunciationMetric(SpeechFidelityBaseMetric):
 
             valid_ratings = [r for r in per_turn_ratings.values() if r is not None]
             avg_rating = sum(valid_ratings) / len(valid_ratings) if valid_ratings else 0.0
-            aggregated_score = aggregate_per_turn_scores(
-                list(per_turn_normalized.values()), self.aggregation
-            )
+            aggregated_score = aggregate_per_turn_scores(list(per_turn_normalized.values()), self.aggregation)
 
             # Build per-dimension flag summaries across all turns
             per_dimension_summary: dict[str, Any] = {}
             for dim in ERROR_DIMENSIONS:
                 flagged_turns = [
-                    tid
-                    for tid, errs in per_turn_errors.items()
-                    if errs.get(dim, {}).get("flagged", False)
+                    tid for tid, errs in per_turn_errors.items() if errs.get(dim, {}).get("flagged", False)
                 ]
                 per_dimension_summary[dim] = {
                     "flagged_turn_count": len(flagged_turns),
