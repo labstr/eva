@@ -2167,8 +2167,8 @@
       "turn_id": 10
     }
   ],
-  "conversation_finished": false,
-  "conversation_ended_reason": null,
+  "conversation_finished": true,
+  "conversation_ended_reason": "goodbye",
   "is_audio_native": false,
   "assistant_interrupted_turns": [],
   "user_interrupted_turns": [],
