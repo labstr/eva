@@ -396,7 +396,7 @@ def check_appointment_availability(params: dict, db: dict, call_index: int) -> d
         nearby = []
         for date_str, date_slots in sorted(dept_avail.items()):
             if date_slots and date_str >= p.preferred_date:
-                nearby.append({"date": date_str, "available_slots": date_slots})
+                nearby.append({"date": date_str, "available_slots": list(date_slots)})
                 if len(nearby) >= 3:
                     break
         return {
@@ -407,11 +407,12 @@ def check_appointment_availability(params: dict, db: dict, call_index: int) -> d
             "message": f"No availability on {p.preferred_date} for {p.appointment_type} in {p.department_code}",
         }
 
+    returned_slots = list(slots)
     return {
         "status": "success",
-        "available_slots": slots,
+        "available_slots": returned_slots,
         "date": p.preferred_date,
-        "message": f"{len(slots)} slot(s) available on {p.preferred_date}",
+        "message": f"{len(returned_slots)} slot(s) available on {p.preferred_date}",
     }
 
 
@@ -442,7 +443,7 @@ def _validate_and_book_slot(
             "error_type": "slot_not_available",
             "message": f"Time slot {time_str} on {date_str} is not available for "
             f"{appointment_type} in {department_code}. "
-            f"Available slots: {slots if slots else 'none on this date'}",
+            f"Available slots: {slots or 'none on this date'}",
         }
 
     # Book the slot by removing it from availability
@@ -550,9 +551,16 @@ def check_extension_eligibility(params: dict, db: dict, call_index: int) -> dict
 def submit_license_extension(params: dict, db: dict, call_index: int) -> dict:
     """Submit a provisional or supervised extension for an expiring license.
 
-    For supervised extensions, a supervising physician NPI is required.
-    For provisional extensions, supervising_physician_npi must be omitted/null.
+    For supervised extensions, a supervising physician NPI is required and
+    must match an existing provider. For provisional extensions, any value
+    passed in supervising_physician_npi is ignored.
     """
+    # For provisional extensions, drop supervising_physician_npi before
+    # validation so that placeholder / empty values the model may emit (""
+    # "0000000000", "OMIT", None, etc.) never cause a validation failure.
+    if isinstance(params, dict) and params.get("extension_type") == "provisional":
+        params = {k: v for k, v in params.items() if k != "supervising_physician_npi"}
+
     try:
         p = SubmitLicenseExtensionParams.model_validate(params)
     except ValidationError as exc:
@@ -587,14 +595,6 @@ def submit_license_extension(params: dict, db: dict, call_index: int) -> dict:
                 "error_type": "supervising_physician_not_found",
                 "message": f"Supervising physician NPI {p.supervising_physician_npi} not found",
             }
-
-    # Provisional extensions must NOT have a supervising physician
-    if p.extension_type == "provisional" and p.supervising_physician_npi:
-        return {
-            "status": "error",
-            "error_type": "invalid_parameter",
-            "message": "Provisional extensions do not require a supervising physician — omit supervising_physician_npi",
-        }
 
     case_id = _make_case_id("LIC", provider.get("employee_id", p.npi))
 
