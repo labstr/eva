@@ -442,7 +442,7 @@ def _validate_and_book_slot(
             "error_type": "slot_not_available",
             "message": f"Time slot {time_str} on {date_str} is not available for "
             f"{appointment_type} in {department_code}. "
-            f"Available slots: {slots if slots else 'none on this date'}",
+            f"Available slots: {slots or 'none on this date'}",
         }
 
     # Book the slot by removing it from availability
