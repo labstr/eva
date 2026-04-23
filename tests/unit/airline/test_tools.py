@@ -1078,6 +1078,33 @@ def test_get_reservation_not_found(sample_db):
     assert "XXXXXX" in result["message"]
 
 
+def test_get_reservation_enriches_with_flight_details(sample_db):
+    """Bookings returned from get_reservation are enriched with flight details from the journeys table."""
+    params = {"confirmation_number": "ABC123", "last_name": "Doe"}
+    result = get_reservation(params, sample_db, call_index=1)
+
+    assert result["status"] == "success"
+    bookings_by_journey = {b["journey_id"]: b for b in result["reservation"]["bookings"]}
+
+    cancelled = bookings_by_journey["FL_SW100_20260320"]
+    cancelled_seg = cancelled["segments"][0]
+    assert cancelled_seg["origin"] == "LAX"
+    assert cancelled_seg["destination"] == "JFK"
+    assert cancelled_seg["scheduled_departure"] == "10:00"
+    assert cancelled_seg["scheduled_arrival"] == "18:00"
+
+    confirmed = bookings_by_journey["FL_SW200_20260320"]
+    confirmed_seg = confirmed["segments"][0]
+    assert confirmed_seg["origin"] == "LAX"
+    assert confirmed_seg["destination"] == "JFK"
+    assert confirmed_seg["scheduled_departure"] == "14:00"
+    assert confirmed_seg["scheduled_arrival"] == "22:00"
+
+    # Enrichment must not mutate the underlying DB
+    db_seg = sample_db["reservations"]["ABC123"]["bookings"][1]["segments"][0]
+    assert "scheduled_departure" not in db_seg
+
+
 def test_get_flight_status_success(sample_db):
     """Test successful flight status lookup."""
     params = {"flight_number": "SW200", "flight_date": "2026-03-20"}
