@@ -67,7 +67,6 @@ async def test_inactivity_assistant_last_scores_1(metric):
 
 @pytest.mark.asyncio
 async def test_inactivity_no_audio_scores_1(metric):
-    """No audio on either side is not a user-last agent timeout; score = 1.0."""
     context = make_metric_context(
         conversation_ended_reason="inactivity_timeout",
         audio_timestamps_user_turns={},

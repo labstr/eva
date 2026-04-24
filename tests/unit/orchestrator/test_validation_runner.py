@@ -37,12 +37,10 @@ def _gate_score(
 
 
 def _gate_result(per_record: dict[str, MetricScore]) -> dict[str, RecordMetrics]:
-    """Build a ``MetricsRunResult.all_metrics``-shaped dict carrying only the gate metric."""
     return {rid: RecordMetrics(record_id=rid, metrics={GATE_METRIC: ms}) for rid, ms in per_record.items()}
 
 
 def _mock_runner(contexts: dict, all_metrics: dict) -> MagicMock:
-    """MagicMock standing in for a MetricsRunner instance."""
     instance = MagicMock()
     instance.process_records.return_value = contexts
     instance.run = AsyncMock(return_value=MetricsRunResult(all_metrics=all_metrics, total_records=len(all_metrics)))
@@ -50,11 +48,6 @@ def _mock_runner(contexts: dict, all_metrics: dict) -> MagicMock:
 
 
 def _patch_runners(gate_all_metrics: dict, downstream_all_metrics: dict, gate_contexts: dict | None = None):
-    """Patch MetricsRunner so the two sequential instantiations return two distinct mocks.
-
-    Gate runner (first call) carries conversation_valid_end scores; downstream runner
-    (second call) carries the remaining validation metric scores.
-    """
     gate_instance = _mock_runner(gate_contexts or {}, gate_all_metrics)
     downstream_instance = _mock_runner({}, downstream_all_metrics)
     captured_calls: list[dict] = []
@@ -88,13 +81,11 @@ class TestValidationResult:
         assert vr.scores == {}
 
     def test_not_finished_has_empty_failed_metrics(self):
-        """Gate-rejected records have empty failed_metrics — the signal for "not_finished"."""
         vr = ValidationResult(passed=False)
         assert vr.passed is False
         assert vr.failed_metrics == []
 
     def test_validation_failed_has_populated_failed_metrics(self):
-        """Metric-threshold failures carry the names of violating metrics."""
         vr = ValidationResult(passed=False, failed_metrics=["user_behavioral_fidelity"])
         assert vr.passed is False
         assert vr.failed_metrics == ["user_behavioral_fidelity"]
@@ -320,7 +311,6 @@ class TestRunValidation:
         assert results["record_1"].passed is True
         assert results["record_2"].passed is True
         assert results["record_1"].failed_metrics == []
-        # First MetricsRunner instantiation runs only the gate metric; second runs the rest.
         assert calls[0]["metric_names"] == [GATE_METRIC]
         assert GATE_METRIC not in calls[1]["metric_names"]
 
@@ -359,12 +349,11 @@ class TestRunValidation:
 
     @pytest.mark.asyncio
     async def test_gate_rejection_short_circuits_downstream(self, validation_runner):
-        """A record with a failing gate score is marked not_finished; downstream metrics skip it."""
         tts_pass = {"per_turn_ratings": {"turn_0": 3, "turn_1": 2}}
         gate_metrics = _gate_result(
             {
                 "record_1": _gate_score(1.0),
-                "record_2": _gate_score(0.0),  # gate-rejected
+                "record_2": _gate_score(0.0),
             }
         )
         downstream = {
@@ -381,21 +370,12 @@ class TestRunValidation:
             results = await validation_runner.run_validation()
 
         assert results["record_2"].passed is False
-        # Gate rejected: no downstream metrics ran → empty failed_metrics is the "not_finished" signal.
         assert results["record_2"].failed_metrics == []
         assert results["record_1"].passed is True
-        # Only the gate-passed record_1 was forwarded to the downstream runner.
         assert calls[1]["record_ids"] == ["record_1"]
 
     @pytest.mark.asyncio
     async def test_agent_timeout_still_fails_on_bad_downstream_metrics(self, validation_runner):
-        """Agent-timeout records get no special treatment at the validation layer.
-
-        A truncated conversation can still have a genuinely misbehaving user simulator,
-        and that should surface as a validation failure like any other. The agent-side
-        failure is tracked separately via the ``conversation_correctly_finished``
-        diagnostic metric — not by forcing the validation result to pass.
-        """
         tts_pass = {"per_turn_ratings": {"turn_0": 3, "turn_1": 2}}
         gate_metrics = _gate_result(
             {
@@ -406,7 +386,6 @@ class TestRunValidation:
         downstream = {
             "record_1": RecordMetrics(
                 record_id="record_1",
-                # Below threshold — should fail validation even though record is agent_timeout.
                 metrics={
                     "user_behavioral_fidelity": _make_score("user_behavioral_fidelity", 0.5),
                     "user_speech_fidelity": _make_score("user_speech_fidelity", 0.8, details=tts_pass),
@@ -469,7 +448,6 @@ class TestRunValidation:
 
     @pytest.mark.asyncio
     async def test_output_ids_passed_to_metrics_runner(self, temp_dir):
-        """output_ids are forwarded as record_ids to the gate MetricsRunner."""
         output_ids = ["rec-0/trial_0", "rec-0/trial_1"]
         gate_metrics = _gate_result(
             {
