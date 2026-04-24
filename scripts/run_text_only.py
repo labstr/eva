@@ -626,7 +626,6 @@ async def run_record(
         num_user_turns=len(user_turns),
         tool_params=tool_params,
         tool_responses=tool_responses,
-        conversation_finished=conversation_finished,
     )
 
     # ---- Run metrics ----
