@@ -103,7 +103,21 @@ Tool sequences per flow (updated):
 from enum import StrEnum
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field, ValidationError, model_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+
+_EMPTY_SENTINELS = {"", ".", "none", "null", "n/a", "na"}
+
+
+def _empty_to_none(v):
+    """Coerce common empty/placeholder strings to None for Optional fields.
+
+    The agent sometimes emits an empty string instead of omitting an optional
+    field; without this, enum/pattern validators reject the value before the
+    @model_validator conditional check can produce a helpful error.
+    """
+    if isinstance(v, str) and v.strip().lower() in _EMPTY_SENTINELS:
+        return None
+    return v
 
 # ---------------------------------------------------------------------------
 # Annotated ID types
@@ -523,45 +537,72 @@ class SubmitHardwareRequestParams(BaseModel):
     delivery_building: BuildingCodeStr
     delivery_floor: FloorCodeStr
 
+    @field_validator("current_asset_tag", "laptop_os", "laptop_size", "monitor_size", mode="before")
+    @classmethod
+    def _optional_empty_to_none(cls, v):
+        return _empty_to_none(v)
+
     @model_validator(mode="after")
     def _validate_by_request_type(self):
+        """Validate required fields per request_type; silently drop inapplicable ones.
+
+        The stored request record always writes `None` for inapplicable fields
+        (see itsm_tools.submit_hardware_request), and expected_scenario_db
+        reflects that. Silently zeroing extraneous fields here makes the tool
+        robust to agents that keep cross-type fields populated on retry, while
+        still failing hard when a required field is missing.
+        """
         if self.request_type == HardwareRequestType.laptop_replacement:
             if self.justification not in {m.value for m in LaptopReplacementReason}:
                 raise ValueError(
                     f"justification '{self.justification}' invalid for laptop_replacement; "
                     f"must be one of {[m.value for m in LaptopReplacementReason]}"
                 )
+            # Silently drop fields that only apply to monitor_bundle.
+            self.monitor_size = None
+            # Required fields stay strict.
             if self.laptop_os is None:
-                raise ValueError("laptop_os is required when request_type is laptop_replacement")
-            if self.laptop_size is None:
-                raise ValueError("laptop_size is required when request_type is laptop_replacement")
-            if self.monitor_size is not None:
                 raise ValueError(
-                    "monitor_size must be omitted when request_type is laptop_replacement; "
-                    "it is only valid for monitor_bundle"
+                    "laptop_os is required when request_type is laptop_replacement. "
+                    "Add 'laptop_os' to your tool call with one of: macos, windows."
+                )
+            if self.laptop_size is None:
+                raise ValueError(
+                    "laptop_size is required when request_type is laptop_replacement. "
+                    "Add 'laptop_size' to your tool call with one of: 13_inch, 14_inch, 16_inch."
                 )
             if self.justification != LaptopReplacementReason.lost_or_stolen.value and self.current_asset_tag is None:
                 raise ValueError(
-                    "current_asset_tag is required when request_type is laptop_replacement (except when justification is lost_or_stolen)"
+                    "current_asset_tag is required when request_type is laptop_replacement "
+                    "(except when justification is lost_or_stolen). "
+                    "Add 'current_asset_tag' with the format AST-XXX-NNNNNN (e.g. AST-LPT-284719)."
                 )
+            if self.justification == LaptopReplacementReason.lost_or_stolen.value:
+                # lost_or_stolen reports the stolen device; tag is passed through if provided, else None.
+                pass
         elif self.request_type == HardwareRequestType.monitor_bundle:
             if self.justification not in {m.value for m in MonitorSetupReason}:
                 raise ValueError(
                     f"justification '{self.justification}' invalid for monitor_bundle; "
                     f"must be one of {[m.value for m in MonitorSetupReason]}"
                 )
+            # Silently drop fields that only apply to laptop_replacement.
+            self.laptop_os = None
+            self.laptop_size = None
+            # Required fields stay strict.
             if self.monitor_size is None:
-                raise ValueError("monitor_size is required when request_type is monitor_bundle")
-            if self.laptop_os is not None:
                 raise ValueError(
-                    "laptop_os must be omitted when request_type is monitor_bundle; "
-                    "it is only valid for laptop_replacement"
+                    "monitor_size is required when request_type is monitor_bundle. "
+                    "Add 'monitor_size' to your tool call with one of: 24_inch, 27_inch, 32_inch."
                 )
-            if self.laptop_size is not None:
+            if self.justification == MonitorSetupReason.replacement.value and self.current_asset_tag is None:
                 raise ValueError(
-                    "laptop_size must be omitted when request_type is monitor_bundle; "
-                    "it is only valid for laptop_replacement"
+                    "current_asset_tag is required when request_type is monitor_bundle and justification is replacement. "
+                    "Add 'current_asset_tag' with the format AST-XXX-NNNNNN (e.g. AST-MON-104582)."
                 )
+            if self.justification == MonitorSetupReason.new_setup.value:
+                # new_setup has no existing asset; silently drop any tag the agent supplied.
+                self.current_asset_tag = None
         return self
 
 
@@ -622,6 +663,23 @@ class SubmitLicenseRequestParams(BaseModel):
     )
     duration_days: Literal[30, 60, 90] | None = None  # None = permanent
 
+    @field_validator("duration_days", mode="before")
+    @classmethod
+    def _normalize_duration(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            if s in _EMPTY_SENTINELS:
+                return None
+            try:
+                v = int(s)
+            except ValueError:
+                return v  # let the Literal validator raise with a clear error
+        if isinstance(v, (int, float)) and v == 0:
+            return None
+        return v
+
 
 # ---------------------------------------------------------------------------
 # Software - renewal (Flow 10)
@@ -656,6 +714,11 @@ class SubmitDeskAssignmentParams(BaseModel):
 
 class CheckParkingAvailabilityParams(BaseModel):
     zone_code: ParkingZoneStr | None = None
+
+    @field_validator("zone_code", mode="before")
+    @classmethod
+    def _optional_empty_to_none(cls, v):
+        return _empty_to_none(v)
 
 
 class SubmitParkingAssignmentParams(BaseModel):
@@ -701,6 +764,25 @@ class CheckRoomAvailabilityParams(BaseModel):
     end_time: TimeStr
     min_capacity: int = Field(gt=0, le=50)
     equipment_required: list[RoomEquipment] | None = None
+
+    @field_validator("floor_code", mode="before")
+    @classmethod
+    def _optional_floor_empty_to_none(cls, v):
+        return _empty_to_none(v)
+
+    @field_validator("equipment_required", mode="before")
+    @classmethod
+    def _coerce_equipment(cls, v):
+        # Accept a bare string ("whiteboard") or empty sentinel from the agent
+        # and normalize to a list. Agents sometimes forget JSON array syntax.
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            if s in _EMPTY_SENTINELS:
+                return None
+            return [v]
+        return v
 
 
 class SubmitRoomBookingParams(BaseModel):
@@ -909,6 +991,33 @@ FIELD_ERROR_TYPES: dict[str, tuple[str, str]] = {
 }
 
 
+# Per-field hints appended to validation errors, to steer the agent toward the
+# correct fix when the raw pydantic message is ambiguous or misleading (e.g.
+# Optional enum fields that must be OMITTED, not sent as empty string).
+FIELD_ERROR_HINTS: dict[str, str] = {
+    "monitor_size": (
+        "Required for monitor_bundle (one of 24_inch/27_inch/32_inch). "
+        "OMIT this field entirely (do not pass empty string) for laptop_replacement."
+    ),
+    "laptop_os": (
+        "Required for laptop_replacement (macos or windows). "
+        "OMIT this field entirely for monitor_bundle."
+    ),
+    "laptop_size": (
+        "Required for laptop_replacement (13_inch, 14_inch, or 16_inch). "
+        "OMIT this field entirely for monitor_bundle."
+    ),
+    "current_asset_tag": (
+        "Required for laptop_replacement unless justification is lost_or_stolen. "
+        "Required for monitor_bundle replacement; OMIT for monitor_bundle new_setup."
+    ),
+    "duration_days": (
+        "OMIT duration_days for a permanent license. "
+        "Valid values for temporary licenses are exactly 30, 60, or 90."
+    ),
+}
+
+
 def validation_error_response(exc: ValidationError, model: type[BaseModel]) -> dict:
     for error in exc.errors():
         loc = error.get("loc", ())
@@ -924,11 +1033,23 @@ def validation_error_response(exc: ValidationError, model: type[BaseModel]) -> d
                         msg += f" (e.g. {', '.join(str(e) for e in fi.examples)})"
                 elif detail := error.get("msg", ""):
                     msg += f": {detail}"
+                if hint := FIELD_ERROR_HINTS.get(field):
+                    msg += f". {hint}"
                 return {"status": "error", "error_type": error_type, "message": msg}
+    # Fallback path — typically `@model_validator` errors where loc is empty.
+    # Scan the message for any FIELD_ERROR_HINTS key and append the matching hint
+    # so cross-field rules (e.g. "omit monitor_size for laptop_replacement") still
+    # carry the directive guidance.
     first = exc.errors()[0] if exc.errors() else {}
     loc = first.get("loc", ("parameter",))
+    raw_msg = first.get("msg", str(exc))
+    base = f"Invalid '{loc[0] if loc else 'parameter'}': {raw_msg}"
+    for field, hint in FIELD_ERROR_HINTS.items():
+        if field in raw_msg and hint not in base:
+            base += f" {hint}"
+            break
     return {
         "status": "error",
         "error_type": "invalid_parameter",
-        "message": f"Invalid '{loc[0] if loc else 'parameter'}': {first.get('msg', str(exc))}",
+        "message": base,
     }

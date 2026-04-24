@@ -87,7 +87,7 @@ instructions: |
 
   Do not let the caller choose the category directly — determine it from what they describe.
 
-  For login issues, after walking the caller through the troubleshooting guide, attempt to resolve the issue directly. Ask the caller explicitly: *"Is your account locked out (for example, too many failed sign-in attempts), or has your password expired and you can't reset it?"* If the caller says their account is locked, use the account unlock tool. If the caller says their password has expired, initiate a password reset. These actions may resolve the issue without creating a ticket. If the unlock tool returns `cannot_unlock_security_hold`, the account is under security review — do not retry, and offer to transfer the caller to a live agent (security will contact them separately). Only create an incident ticket and assign an SLA if a direct resolution attempt fails for a non-security reason.
+  For login issues, after walking the caller through the troubleshooting guide, attempt to resolve the issue directly. Ask the caller explicitly: *"Is your account locked out (for example, too many failed sign-in attempts), or has your password expired and you can't reset it?"* If the caller says their account is locked, use the account unlock tool. If the caller says their password has expired, initiate a password reset. These actions may resolve the issue without creating a ticket. **If the unlock tool returns `cannot_unlock_security_hold`, the account is under security review — do not retry. You MUST create an incident ticket (category=login_issue, urgency=high, troubleshooting_completed=true) and assign tier_1 SLA BEFORE offering to transfer the caller. The sequence is: `create_incident_ticket` → `assign_sla_tier` → `transfer_to_agent`. Never transfer on a security_hold denial without first creating the ticket and sharing the ticket number and SLA with the caller.** Only skip ticket creation for password-reset / unlock attempts that succeed. For any other non-security failure of a direct resolution attempt, create an incident ticket and assign an SLA as usual.
 
   For service outages, check whether an existing outage has already been reported for the affected service before creating a new incident. If an outage already exists, add the caller to the affected users list rather than creating a duplicate ticket.
 
@@ -152,6 +152,14 @@ instructions: |
 
   Account and access management involves creating, modifying, and removing system access for employees. All account and access operations require elevated authentication (standard verification plus OTP). Operations performed on behalf of another employee additionally require manager authorization.
 
+  **Scope clarification — when OTP IS required:** the following tools require elevated authentication (OTP) before they will accept the call:
+  `submit_access_request` (software/catalog access), `submit_group_membership_change`, `submit_permission_change`, `provision_new_account`, `submit_access_removal`.
+
+  **Scope clarification — when OTP is NOT required:** the following are NOT "account management" and do NOT require OTP — standard employee verification is sufficient:
+  `attempt_account_unlock` (a login-issue flow, not account management — an unlock restores an existing account to its prior state without granting new access), `initiate_password_reset`, `submit_license_request` (software licensing), `submit_equipment_request` (hardware/facilities equipment), `submit_hardware_request` (laptop/monitor/peripherals), `submit_desk_assignment`, `submit_parking_assignment`, `submit_waitlist`, `submit_room_booking`, incident ticket creation, and any outage/known-error lookups.
+
+  Do not initiate OTP for any flow not in the first list above; invoking OTP unnecessarily creates friction for the caller and can fail if the caller does not have their phone handy.
+
   - **new_account_provisioning**: Set up system accounts for a new hire. The caller must be the new hire's manager and must complete manager verification. Collect the new hire's employee ID, department code, role code, start date, and the list of initial system access groups. The new hire's employee ID must already exist in the HR system — look it up to confirm; the lookup returns the new hire's full name, which you should read back to confirm with the caller before proceeding.
   - **group_membership**: Add or remove an employee from a system access group. The caller requests changes for themselves. Retrieve the employee's current group memberships first, then collect which group to add or remove and whether this is an addition or removal. Access groups may restrict eligibility by department or role; if `submit_group_membership_change` returns `group_not_eligible`, explain the restriction to the caller (the error surfaces the eligible departments/roles) and offer to transfer them if they believe the restriction is wrong for their role.
   - **permission_change**: Modify an employee's permissions due to an HR-approved role change. The caller requests this for themselves. Before any other permission work, call `check_role_change_authorized` to confirm HR has pre-approved the role change for this caller — if HR has not approved, refuse the request and direct the caller to HR first. The tool returns the HR-approved effective date; use this date when submitting the permission change (`submit_permission_change` enforces that the effective date matches the HR record). Then collect the new role code and the permission template that applies to the new role. Retrieve the available permission templates for the new role so the caller can confirm which template matches their responsibilities.
@@ -184,7 +192,11 @@ instructions: |
 
   After completing the primary action for a request, additional follow-up steps are required depending on the flow. These are separate operations that must be completed before ending the call:
 
-  - **Incident-ticket SLA tiering (all categories)**: After ANY `create_incident_ticket` call — login_issue, service_outage, hardware_malfunction, or network_connectivity — assign an SLA tier via `assign_sla_tier`. Infer the urgency from the caller's own description (business impact, whether they are blocked, whether it affects a customer-facing deadline) — do NOT ask the caller "what urgency is this?" The SLA tier corresponding to each urgency is defined in the `assign_sla_tier` tool description; after assignment, inform the caller of the expected response time returned by the tool.
+  - **Incident-ticket SLA tiering (all categories)**: After ANY `create_incident_ticket` call — login_issue, service_outage, hardware_malfunction, or network_connectivity — assign an SLA tier via `assign_sla_tier`. Infer the urgency from the caller's own description (business impact, whether they are blocked, whether it affects a customer-facing deadline) — do NOT ask the caller "what urgency is this?" Apply the following mapping when inferring urgency:
+      - **high (tier_1)**: caller cannot do their job / is blocked from working / cannot work reliably / cannot meet a customer-facing deadline, or a shared service is fully unavailable. Examples: "VPN keeps dropping and I can't work", "I can't log in at all", "production deploys are blocked", "customer demo in 30 minutes and the CRM is down", repeated/intermittent failures that materially prevent work.
+      - **medium (tier_2)**: caller is degraded but still functional with a workaround. Examples: "it's slow", "one feature doesn't work but I can keep going", "occasional disconnects but I can reconnect".
+      - **low (tier_3)**: minor inconvenience with full workaround, not time-sensitive. Examples: cosmetic issue, one-off glitch with an easy retry, request for info.
+      When the caller uses phrases like "blocked", "can't work", "keeps disconnecting and I can't get anything done", "I'm stuck", or similar language signalling they are prevented from working, classify urgency=high / tier_1 even if they don't explicitly use the word "urgent". Conversely, if the caller describes a recurring or intermittent disruption but explicitly says they can still work between events (e.g., "disconnects every 30 minutes but I can reconnect each time and keep going", "I'm still functional, it just keeps happening"), classify urgency=medium / tier_2 — do not escalate to tier_1 on frequency alone when the caller has stated they are not blocked. The SLA tier corresponding to each urgency is defined in the `assign_sla_tier` tool description; after assignment, inform the caller of the expected response time returned by the tool.
 
   - **Service outages (new)**: After creating an outage ticket, check the known error database for a matching entry. There are three cases to handle explicitly:
     - If a known error exists and has a workaround, link the error to the ticket and read the workaround to the caller.
@@ -355,7 +367,8 @@ tools:
     required_parameters:
       - name: issue_category
         type: string
-        description: "Issue category: login_issue, network_connectivity, or hardware_malfunction"
+        enum: [login_issue, network_connectivity, hardware_malfunction]
+        description: "Issue category"
 
   - id: attempt_account_unlock
     name: attempt_account_unlock
@@ -374,7 +387,8 @@ tools:
         description: "Employee ID. Example: EMP048271"
       - name: target_system
         type: string
-        description: "The system where the account is locked: active_directory, sso_identity, email_exchange, vpn_gateway, or erp_oracle"
+        enum: [active_directory, sso_identity, email_exchange, vpn_gateway, erp_oracle]
+        description: "The system where the account is locked"
 
   - id: attempt_password_reset
     name: attempt_password_reset
@@ -392,7 +406,8 @@ tools:
         description: "Employee ID. Example: EMP048271"
       - name: target_system
         type: string
-        description: "The system to reset: active_directory, sso_identity, email_exchange, vpn_gateway, or erp_oracle"
+        enum: [active_directory, sso_identity, email_exchange, vpn_gateway, erp_oracle]
+        description: "The system to reset"
 
   - id: create_incident_ticket
     name: create_incident_ticket
@@ -409,10 +424,12 @@ tools:
         description: "Employee ID of the affected employee. Example: EMP048271"
       - name: category
         type: string
-        description: "Incident category: login_issue, service_outage, hardware_malfunction, or network_connectivity"
+        enum: [login_issue, service_outage, hardware_malfunction, network_connectivity]
+        description: "Incident category"
       - name: urgency
         type: string
-        description: "Urgency level: low (workaround available, not time-sensitive), medium (degraded but functional), or high (complete block, no workaround)"
+        enum: [low, medium, high]
+        description: "Urgency level. low = workaround available, not time-sensitive; medium = degraded but functional; high = complete block, no workaround."
       - name: affected_system
         type: string
         description: "The affected system identifier. For login/outage: active_directory, sso_identity, email_exchange, vpn_gateway, erp_oracle, crm_platform, hr_portal, code_repository, ci_cd_pipeline, file_storage, or print_service. For hardware: the asset tag (e.g., AST-LPT-284719). For network: vpn, wifi, or ethernet."
@@ -439,7 +456,8 @@ tools:
         description: "Incident ticket number in INC format. Example: INC0048271"
       - name: sla_tier
         type: string
-        description: "SLA tier: tier_1 (high urgency), tier_2 (medium urgency), or tier_3 (low urgency)"
+        enum: [tier_1, tier_2, tier_3]
+        description: "SLA tier. tier_1 = high urgency; tier_2 = medium urgency; tier_3 = low urgency."
 
   # ── FLOW 2: SERVICE OUTAGE ───────────────────────────────────────────────────
 
@@ -454,7 +472,8 @@ tools:
     required_parameters:
       - name: service_name
         type: string
-        description: "Name of the affected service or application exactly as it appears in the service catalog. Example: email_exchange, vpn_gateway, erp_oracle, crm_platform"
+        enum: [email_exchange, vpn_gateway, erp_oracle, crm_platform, hr_portal, code_repository, ci_cd_pipeline, file_storage, sso_identity, print_service]
+        description: "Name of the affected service or application from the service catalog"
 
   - id: add_affected_user
     name: add_affected_user
@@ -485,7 +504,8 @@ tools:
         description: "The incident ticket number to link. Example: INC0048271"
       - name: service_name
         type: string
-        description: "The affected service name. Example: email_exchange"
+        enum: [email_exchange, vpn_gateway, erp_oracle, crm_platform, hr_portal, code_repository, ci_cd_pipeline, file_storage, sso_identity, print_service]
+        description: "The affected service name"
 
   # ── FLOW 3: HARDWARE MALFUNCTION ─────────────────────────────────────────────
 
@@ -515,7 +535,8 @@ tools:
         description: "Preferred dispatch date in YYYY-MM-DD format. Example: 2026-08-15"
       - name: time_window
         type: string
-        description: "Preferred time window: morning (08:00-12:00), afternoon (12:00-17:00), or full_day (08:00-17:00)"
+        enum: [morning, afternoon, full_day]
+        description: "Preferred time window. morning = 08:00-12:00; afternoon = 12:00-17:00; full_day = 08:00-17:00."
 
   # ── FLOW 4: NETWORK/VPN ISSUE ────────────────────────────────────────────────
 
@@ -552,7 +573,8 @@ tools:
         description: "Employee ID in format EMP followed by 6 digits. Example: EMP048271"
       - name: request_type
         type: string
-        description: "Type of hardware request: laptop_replacement or monitor_bundle"
+        enum: [laptop_replacement, monitor_bundle]
+        description: "Type of hardware request"
 
   - id: submit_hardware_request
     name: submit_hardware_request
@@ -567,25 +589,30 @@ tools:
         description: "Employee ID in format EMP followed by 6 digits. Example: EMP048271"
       - name: request_type
         type: string
-        description: "Type of hardware request: laptop_replacement or monitor_bundle"
+        enum: [laptop_replacement, monitor_bundle]
+        description: "Type of hardware request"
       - name: justification
         type: string
-        description: "For laptop_replacement: end_of_life, performance_degradation, physical_damage, or lost_or_stolen (use lost_or_stolen only with the Security Incident flow). For monitor_bundle: new_setup or replacement."
+        enum: [end_of_life, performance_degradation, physical_damage, lost_or_stolen, new_setup, replacement]
+        description: "Reason for the request. For laptop_replacement use one of end_of_life, performance_degradation, physical_damage, or lost_or_stolen (lost_or_stolen only via the Security Incident flow). For monitor_bundle use new_setup or replacement."
       - name: current_asset_tag
         type: string
         description: "Asset tag of the current device being replaced (for laptop_replacement, except when reason is lost_or_stolen) or null for new monitor setups. Format: AST-3 letters-6 digits."
         required: false
       - name: laptop_os
         type: string
-        description: "Required for laptop_replacement. Operating system: macos or windows."
+        enum: [macos, windows]
+        description: "Operating system. Required for laptop_replacement; omit for monitor_bundle."
         required: false
       - name: laptop_size
         type: string
-        description: "Required for laptop_replacement. Screen size: 13_inch, 14_inch, or 16_inch."
+        enum: [13_inch, 14_inch, 16_inch]
+        description: "Screen size. Required for laptop_replacement; omit for monitor_bundle."
         required: false
       - name: monitor_size
         type: string
-        description: "Required for monitor_bundle. Monitor size: 24_inch, 27_inch, or 32_inch. Omit for laptop requests."
+        enum: [24_inch, 27_inch, 32_inch]
+        description: "Monitor size. Required for monitor_bundle; omit for laptop_replacement."
         required: false
       - name: delivery_building
         type: string
@@ -665,7 +692,8 @@ tools:
         description: "Application catalog ID. Example: APP-0042"
       - name: access_level
         type: string
-        description: "Requested access level: read_only, standard, or admin. Must be one of the levels returned by get_application_details."
+        enum: [read_only, standard, admin]
+        description: "Requested access level. Must be one of the levels returned by get_application_details."
 
   - id: route_approval_workflow
     name: route_approval_workflow
@@ -721,7 +749,8 @@ tools:
         description: "License catalog ID returned by get_license_catalog_item. Example: LIC-0018"
       - name: duration_days
         type: integer
-        description: "Duration in days for a temporary license. Must be 30, 60, or 90. Omit (null) for permanent licenses."
+        enum: ["30", "60", "90"]
+        description: "Duration in days for a temporary license. Omit (null) for permanent licenses."
         required: false
 
   - id: validate_cost_center
@@ -855,7 +884,8 @@ tools:
         description: "Employee ID. Example: EMP048271"
       - name: resource_type
         type: string
-        description: "Resource to waitlist for: desk or parking"
+        enum: [desk, parking]
+        description: "Resource to waitlist for"
       - name: zone_or_building
         type: string
         description: "Building code (for desks) or parking zone code (for parking). Example: BLD3 or PZA"
@@ -887,7 +917,8 @@ tools:
         description: "Employee ID. Example: EMP048271"
       - name: equipment_type
         type: string
-        description: "Equipment type: standing_desk_converter, ergonomic_chair, ergonomic_keyboard, monitor_arm, or footrest"
+        enum: [standing_desk_converter, ergonomic_chair, ergonomic_keyboard, monitor_arm, footrest]
+        description: "Equipment type"
       - name: delivery_building
         type: string
         description: "Building code OR name/alias for delivery. Examples: 'BLD3', 'Headquarters'."
@@ -928,7 +959,8 @@ tools:
         description: "Minimum seating capacity required. Example: 8"
       - name: equipment_required
         type: array
-        description: "Optional list of equipment that MUST be present in the room. Valid values: projector, whiteboard, video_conferencing, display_screen, speakerphone. Only rooms containing all listed items are returned. Omit if the caller has no equipment requirements."
+        enum: [projector, whiteboard, video_conferencing, display_screen, speakerphone]
+        description: "Optional list of equipment that MUST be present in the room. Only rooms containing all listed items are returned. Omit if the caller has no equipment requirements."
         required: false
 
   - id: submit_room_booking
@@ -1092,7 +1124,8 @@ tools:
         description: "Access group code. Example: GRP-ENGCORE"
       - name: action
         type: string
-        description: "Membership action: add or remove"
+        enum: [add, remove]
+        description: "Membership action"
 
   # ── FLOW 17: PERMISSION CHANGE (ROLE CHANGE) ───────────────────────────────
 
@@ -1188,7 +1221,8 @@ tools:
         description: "Last working day from the off-boarding record in YYYY-MM-DD format. Example: 2026-08-29"
       - name: removal_scope
         type: string
-        description: "Scope of access removal: full (all systems and groups immediately) or staged (email preserved for 30 days, all else removed)"
+        enum: [full, staged]
+        description: "Scope of access removal. full = all systems and groups immediately; staged = email preserved for 30 days, all else removed."
 
   - id: initiate_asset_recovery
     name: initiate_asset_recovery
@@ -1208,7 +1242,8 @@ tools:
         description: "The access removal case ID. Example: CASE-ACCT-072948"
       - name: recovery_method
         type: string
-        description: "How equipment will be recovered: shipping_label (IT mails a prepaid label and the employee ships the devices back) or drop_off (the employee returns the devices in person to an IT office)."
+        enum: [shipping_label, drop_off]
+        description: "How equipment will be recovered. shipping_label = IT mails a prepaid label and the employee ships the devices back; drop_off = the employee returns the devices in person to an IT office."
 
   # ── FLOW 17 EXTENSION: HR-GATED ROLE-CHANGE CHECK (G2) ─────────────────────
 
@@ -1249,7 +1284,8 @@ tools:
         description: "Asset tag of the affected device. Must be assigned to the caller. Example: AST-LPT-284719"
       - name: incident_type
         type: string
-        description: "Type of incident: lost, stolen, or suspected_compromise"
+        enum: [lost, stolen, suspected_compromise]
+        description: "Type of incident"
 
   - id: initiate_remote_wipe
     name: initiate_remote_wipe
@@ -1333,7 +1369,8 @@ tools:
         description: "Employee ID of the caller. Example: EMP048271"
       - name: transfer_reason
         type: string
-        description: "Reason: caller_requested, policy_exception_needed, unable_to_resolve, complaint_escalation, or technical_issue"
+        enum: [caller_requested, policy_exception_needed, unable_to_resolve, complaint_escalation, technical_issue]
+        description: "Reason for the transfer"
       - name: issue_summary
         type: string
         description: "Brief summary of the request, what was attempted, and why transfer is needed"
@@ -1355,7 +1392,9 @@ tools:
         description: "Employee ID of the caller. Example: EMP048271"
       - name: flow_id
         type: string
-        description: "Flow identifier: login_issue, network_connectivity, or hardware_malfunction"
+        enum: [login_issue, network_connectivity, hardware_malfunction]
+        description: "Flow identifier"
       - name: resolution_type
         type: string
+        enum: [resolved_via_troubleshooting, transferred]
         description: "How the call resolved. Use `resolved_via_troubleshooting` for all currently-active resolved flows (1a login, 3a hardware, 4a network). `transferred` is reserved for future flows that log a transfer — it is not used by any current flow."

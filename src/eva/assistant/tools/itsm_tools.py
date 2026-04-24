@@ -224,6 +224,8 @@ def verify_otp_auth(params, db, call_index):
     if emp.get("otp_code") != p.otp_code:
         return {"status": "error", "error_type": "authentication_failed", "message": "OTP does not match"}
     db["session"]["otp_auth"] = True
+    db["session"].pop("otp_employee_id", None)
+    db["session"].pop("otp_issued", None)
     return {"status": "success", "authenticated": True, "employee_id": p.employee_id, "message": "OTP verified"}
 
 
@@ -860,6 +862,8 @@ def submit_access_request(params, db, call_index):
         return validation_error_response(e, SubmitAccessRequestParams)
     if not _ok(db, "employee_auth"):
         return _ar()
+    if not _ok(db, "otp_auth"):
+        return _ar("otp_auth")
     app = db.get("software_catalog", {}).get("applications", {}).get(p.catalog_id)
     if not app:
         return {"status": "error", "error_type": "not_found", "message": f"App {p.catalog_id} not found"}
@@ -1933,6 +1937,8 @@ def report_security_incident(params, db, call_index):
         "status": "open",
         "opened_date": _current_date(db),
     }
+    if p.incident_type.value in ("lost", "stolen"):
+        asset["lifecycle_status"] = "lost_or_stolen"
     return {
         "status": "success",
         "security_case_id": sec_id,
