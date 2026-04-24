@@ -97,9 +97,17 @@ class TurnTakingMetric(CodeMetric):
 
     @staticmethod
     def _get_turn_ids_with_turn_taking(context: MetricContext) -> list[int]:
-        """Return sorted turn IDs that have both user and assistant audio timestamps (excludes greeting)."""
+        """Return sorted turn IDs that have both user and assistant audio timestamps (excludes greeting).
+
+        Requires non-empty segment lists on both sides — a turn can be present as a key with a
+        ``None``/empty value when the session ended mid-turn (e.g., user spoke but the agent
+        never replied). Matches the filter used by ``_compute_per_turn_latency`` so downstream
+        ``latency_assistant_turns[turn_id]`` lookups don't KeyError.
+        """
         return sorted(
-            context.audio_timestamps_user_turns.keys() & context.audio_timestamps_assistant_turns.keys() - {0}
+            t
+            for t in context.audio_timestamps_user_turns.keys() & context.audio_timestamps_assistant_turns.keys()
+            if t != 0 and context.audio_timestamps_user_turns.get(t) and context.audio_timestamps_assistant_turns.get(t)
         )
 
     @classmethod
@@ -424,9 +432,9 @@ class TurnTakingMetric(CodeMetric):
             turn_keys = self._get_turn_ids_with_turn_taking(context)
 
             turns_with_tool_calls: set[int] = {
-                turn_id
+                entry["turn_id"]
                 for entry in context.conversation_trace
-                if (turn_id := entry.get("turn_id") and entry.get("type") == "tool_call")
+                if entry.get("type") == "tool_call" and entry.get("turn_id") is not None
             }
 
             per_turn_score: dict[int, float] = {}
