@@ -79,8 +79,8 @@ _CATEGORY_COLORS = {
 
 _NON_NORMALIZED_METRICS = {"response_speed"}
 
-# Metric name substrings that indicate lower values are better (e.g. error rates, latency)
-_LOWER_BETTER_KEYWORDS = {"latency", "error", "wer", "delay", "penalty"}
+# Metric names for which lower values are better
+_LOWER_BETTER_METRICS = {"response_speed", "stt_wer"}
 
 # EVA composite scores to show in the bar chart
 _EVA_BAR_COMPOSITES = ["EVA-A_pass", "EVA-X_pass", "EVA-A_mean", "EVA-X_mean"]
@@ -251,9 +251,8 @@ def _is_sub_metric(name: str) -> bool:
 
 
 def _is_lower_better(metric_name: str) -> bool:
-    """Return True if lower values are better for this metric (e.g. error rates, latency)."""
-    lower = metric_name.lower()
-    return any(kw in lower for kw in _LOWER_BETTER_KEYWORDS)
+    """Return True if lower values are better for this metric."""
+    return metric_name in _LOWER_BETTER_METRICS
 
 
 def _sort_metrics_by_category(metric_names: list[str]) -> list[str]:
