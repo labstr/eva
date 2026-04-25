@@ -130,7 +130,10 @@ class AbstractAssistantServer(ABC):
                         f"diff={diff_ms:.0f}ms — mixed recording may be temporally skewed"
                     )
                 from eva.assistant.audio_bridge import pcm16_mix  # lazy: avoids circular import at module load
-                self._audio_buffer = bytearray(pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer)))
+
+                self._audio_buffer = bytearray(
+                    pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer))
+                )
             elif self.user_audio_buffer:
                 self._audio_buffer = bytearray(self.user_audio_buffer)
             elif self.assistant_audio_buffer:
@@ -150,9 +153,7 @@ class AbstractAssistantServer(ABC):
 
         if mixed_audio or user_audio or assistant_audio:
             return asyncio.create_task(
-                asyncio.to_thread(
-                    self._save_audio_deferred, mixed_audio, user_audio, assistant_audio, sample_rate
-                )
+                asyncio.to_thread(self._save_audio_deferred, mixed_audio, user_audio, assistant_audio, sample_rate)
             )
         return None
 

@@ -195,9 +195,7 @@ async def test_evaluation_mode_all_pass_first_attempt(eval_config, mock_dataset)
         with patch("eva.orchestrator.runner.ValidationRunner") as MockValidationRunner:
             mock_val_runner = AsyncMock()
             MockValidationRunner.return_value = mock_val_runner
-            mock_val_runner.validate_one = AsyncMock(
-                side_effect=_make_validate_one_side_effect([validation_results])
-            )
+            mock_val_runner.validate_one = AsyncMock(side_effect=_make_validate_one_side_effect([validation_results]))
 
             summary = await runner.run(mock_dataset)
 
@@ -243,9 +241,7 @@ async def test_evaluation_mode_rerun_failures(eval_config, mock_dataset):
         with patch("eva.orchestrator.runner.ValidationRunner") as MockValidationRunner:
             mock_val_runner = AsyncMock()
             MockValidationRunner.return_value = mock_val_runner
-            mock_val_runner.validate_one = AsyncMock(
-                side_effect=_make_validate_one_side_effect(validation_attempts)
-            )
+            mock_val_runner.validate_one = AsyncMock(side_effect=_make_validate_one_side_effect(validation_attempts))
 
             summary = await runner.run(mock_dataset)
 
@@ -285,46 +281,46 @@ async def test_evaluation_mode_max_reruns_reached(eval_config, mock_dataset):
     }
 
     with patch.object(runner, "_run_conversation", side_effect=_mock_run_conversation_helper(runner, call_counts)):
-            with patch("eva.orchestrator.runner.ValidationRunner") as MockValidationRunner:
-                mock_val_runner = AsyncMock()
-                MockValidationRunner.return_value = mock_val_runner
-                mock_val_runner.validate_one = AsyncMock(
-                    side_effect=lambda oid: always_fail_results.get(oid, ValidationResult(passed=True))
-                )
+        with patch("eva.orchestrator.runner.ValidationRunner") as MockValidationRunner:
+            mock_val_runner = AsyncMock()
+            MockValidationRunner.return_value = mock_val_runner
+            mock_val_runner.validate_one = AsyncMock(
+                side_effect=lambda oid: always_fail_results.get(oid, ValidationResult(passed=True))
+            )
 
-                summary = await runner.run(mock_dataset)
+            summary = await runner.run(mock_dataset)
 
-                assert summary.total_records == 2
-                assert summary.successful_records == 1  # Only pass_record_1
-                assert summary.failed_records == 1  # fail_record_1 never passed
+            assert summary.total_records == 2
+            assert summary.successful_records == 1  # Only pass_record_1
+            assert summary.failed_records == 1  # fail_record_1 never passed
 
-                # fail_record_1 ran max_rerun_attempts times (3)
-                assert call_counts.get("fail_record_1") == 3
+            # fail_record_1 ran max_rerun_attempts times (3)
+            assert call_counts.get("fail_record_1") == 3
 
-                eval_summary_path = runner.output_dir / "evaluation_summary.json"
-                with open(eval_summary_path) as f:
-                    eval_summary = json.load(f)
-                    sim = eval_summary["simulation"]
-                    assert sim["total_attempts"] == 3
-                    assert sim["successful_records"] == 1
-                    assert sim["failed_records"] == 1
-                    assert "fail_record_1" in sim["failed_record_ids"]
-                    assert len(eval_summary["rerun_history"]["fail_record_1"]) == 3
-                    # Each entry is a dict with structured failure info
-                    for entry in eval_summary["rerun_history"]["fail_record_1"]:
-                        assert "attempt" in entry
-                        assert "reason" in entry
+            eval_summary_path = runner.output_dir / "evaluation_summary.json"
+            with open(eval_summary_path) as f:
+                eval_summary = json.load(f)
+                sim = eval_summary["simulation"]
+                assert sim["total_attempts"] == 3
+                assert sim["successful_records"] == 1
+                assert sim["failed_records"] == 1
+                assert "fail_record_1" in sim["failed_record_ids"]
+                assert len(eval_summary["rerun_history"]["fail_record_1"]) == 3
+                # Each entry is a dict with structured failure info
+                for entry in eval_summary["rerun_history"]["fail_record_1"]:
+                    assert "attempt" in entry
+                    assert "reason" in entry
 
-                # Archiving happens for attempts 1 and 2, not 3 (final stays)
-                for attempt in [1, 2]:
-                    archive_dir = runner.output_dir / "records" / f"fail_record_1_failed_attempt_{attempt}"
-                    assert archive_dir.exists()
+            # Archiving happens for attempts 1 and 2, not 3 (final stays)
+            for attempt in [1, 2]:
+                archive_dir = runner.output_dir / "records" / f"fail_record_1_failed_attempt_{attempt}"
+                assert archive_dir.exists()
 
-                final_failed_attempt_archive = runner.output_dir / "records" / "fail_record_1_failed_attempt_3"
-                assert not final_failed_attempt_archive.exists()
+            final_failed_attempt_archive = runner.output_dir / "records" / "fail_record_1_failed_attempt_3"
+            assert not final_failed_attempt_archive.exists()
 
-                final_record_dir = runner.output_dir / "records" / "fail_record_1"
-                assert final_record_dir.exists()
+            final_record_dir = runner.output_dir / "records" / "fail_record_1"
+            assert final_record_dir.exists()
 
 
 @pytest.mark.asyncio
@@ -387,9 +383,7 @@ async def test_evaluation_mode_conversation_not_finished_retries(eval_config, mo
         with patch("eva.orchestrator.runner.ValidationRunner") as MockValidationRunner:
             mock_val_runner = AsyncMock()
             MockValidationRunner.return_value = mock_val_runner
-            mock_val_runner.validate_one = AsyncMock(
-                side_effect=_make_validate_one_side_effect(validation_attempts)
-            )
+            mock_val_runner.validate_one = AsyncMock(side_effect=_make_validate_one_side_effect(validation_attempts))
 
             summary = await runner.run(mock_dataset)
 
@@ -422,9 +416,7 @@ async def test_evaluation_mode_with_unresolved_errors(eval_config, mock_dataset)
         with patch("eva.orchestrator.runner.ValidationRunner") as MockValidationRunner:
             mock_val_runner = AsyncMock()
             MockValidationRunner.return_value = mock_val_runner
-            mock_val_runner.validate_one = AsyncMock(
-                side_effect=_make_validate_one_side_effect([validation_results])
-            )
+            mock_val_runner.validate_one = AsyncMock(side_effect=_make_validate_one_side_effect([validation_results]))
 
             summary = await runner.run(mock_dataset)
 
