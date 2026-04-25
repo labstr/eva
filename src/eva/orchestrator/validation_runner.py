@@ -1,5 +1,6 @@
 """Validation metrics runner for benchmark validation mode."""
 
+import asyncio
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -48,6 +49,12 @@ class ValidationRunner:
         self.metric_configs = metric_configs or {}
         self.output_ids = output_ids
 
+        # Shared MetricsRunners for validate_one() — lazily initialized on first call.
+        # Safe for concurrent calls on different output_ids (asyncio single-threaded).
+        self._shared_gate_runner: MetricsRunner | None = None
+        self._shared_llm_runner: MetricsRunner | None = None
+        self._runner_init_lock = asyncio.Lock()
+
     async def run_validation(self) -> dict[str, ValidationResult]:
         validation_results: dict[str, ValidationResult] = {}
         check_ids = self.output_ids if self.output_ids is not None else [r.id for r in self.dataset]
@@ -95,6 +102,63 @@ class ValidationRunner:
         logger.info(f"Validation complete: {passed_count}/{total_count} records passed ({pct:.1f}%)")
 
         return validation_results
+
+    async def validate_one(self, output_id: str) -> ValidationResult:
+        """Validate a single record inline for per-record pipelining.
+
+        Runs a two-phase check matching run_validation():
+        1. Gate metric (conversation_valid_end) — fast fail if the conversation didn't
+           end properly. Returns ValidationResult(passed=False, failed_metrics=[]) which
+           signals "not_finished" to the caller (empty failed_metrics convention).
+        2. LLM metrics (user_behavioral_fidelity, user_speech_fidelity) — only run if
+           the gate passed.
+
+        Both MetricsRunners are lazily initialized on first call and shared across
+        concurrent calls — safe because asyncio is single-threaded.
+
+        Args:
+            output_id: Record directory name (e.g. "1.2.1" or "1.2.1/trial_0").
+
+        Returns:
+            ValidationResult with pass/fail details.
+        """
+        # Double-checked lazy init for both shared runners.
+        if self._shared_gate_runner is None:
+            async with self._runner_init_lock:
+                if self._shared_gate_runner is None:
+                    self._shared_gate_runner = MetricsRunner(
+                        run_dir=self.run_dir,
+                        dataset=self.dataset,
+                        metric_names=[GATE_METRIC],
+                        metric_configs=self.metric_configs,
+                    )
+                    self._shared_llm_runner = MetricsRunner(
+                        run_dir=self.run_dir,
+                        dataset=self.dataset,
+                        metric_names=LLM_METRICS,
+                        metric_configs=self.metric_configs,
+                    )
+
+        record_dir = self.run_dir / "records" / output_id
+
+        # Phase 1: gate metric
+        gate_metrics = await self._shared_gate_runner.run_and_save_record(output_id, record_dir)
+        rm = gate_metrics
+        ms = rm.metrics.get(GATE_METRIC) if rm else None
+        if ms is None or ms.error:
+            return ValidationResult(passed=False)  # empty failed_metrics = "not_finished"
+        score = ms.normalized_score if ms.normalized_score is not None else ms.score
+        if score != 1.0:
+            return ValidationResult(passed=False)  # empty failed_metrics = "not_finished"
+
+        # Phase 2: LLM metrics (gate passed)
+        llm_metrics = await self._shared_llm_runner.run_and_save_record(output_id, record_dir)
+        if llm_metrics is None:
+            return ValidationResult(passed=False, failed_metrics=list(LLM_METRICS))
+
+        vr = self._evaluate_record(output_id, llm_metrics, LLM_METRICS)
+        vr.scores[GATE_METRIC] = 1.0
+        return vr
 
     @staticmethod
     def _partition(

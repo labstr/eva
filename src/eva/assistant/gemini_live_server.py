@@ -252,8 +252,8 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
 
         logger.info(f"GeminiLive server started on ws://localhost:{self.port}")
 
-    async def stop(self) -> None:
-        """Stop the server, save outputs."""
+    async def _shutdown(self) -> None:
+        """Stop the GeminiLive server."""
         if not self._running:
             return
         self._running = False
@@ -274,7 +274,6 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
             self._server = None
             self._server_task = None
 
-        await self.save_outputs()
         logger.info(f"GeminiLive server stopped on port {self.port}")
 
     # ------------------------------------------------------------------
