@@ -468,7 +468,8 @@
         "building_code": "BLD1",
         "capacity": 12,
         "equipment": [
-          "projector"
+          "projector",
+          "whiteboard"
         ],
         "floor_code": "FL3",
         "room_code": "BLD1-FL3-RM301"
