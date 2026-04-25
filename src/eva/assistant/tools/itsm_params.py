@@ -548,10 +548,36 @@ class SubmitHardwareRequestParams(BaseModel):
     employee_id: EmployeeIdStr
     request_type: HardwareRequestType
     justification: str
-    current_asset_tag: AssetTagStr | None = None
-    laptop_os: LaptopOS | None = None
-    laptop_size: LaptopSize | None = None
-    monitor_size: MonitorSize | None = None
+    current_asset_tag: AssetTagStr | None = Field(
+        default=None,
+        description=(
+            "Asset tag of the existing device. Required for laptop_replacement (unless justification is "
+            "lost_or_stolen) and for monitor_bundle when justification is replacement. **Omit this field** "
+            "(do not include the key) for monitor_bundle with justification=new_setup, or when otherwise "
+            "not applicable — do not pass null, empty string, or 'N/A'."
+        ),
+    )
+    laptop_os: LaptopOS | None = Field(
+        default=None,
+        description=(
+            "Operating system. Required only when request_type is laptop_replacement. "
+            "**Omit this field** for monitor_bundle and other request types."
+        ),
+    )
+    laptop_size: LaptopSize | None = Field(
+        default=None,
+        description=(
+            "Laptop screen size. Required only when request_type is laptop_replacement. "
+            "**Omit this field** for monitor_bundle and other request types."
+        ),
+    )
+    monitor_size: MonitorSize | None = Field(
+        default=None,
+        description=(
+            "Monitor size. Required only when request_type is monitor_bundle. "
+            "**Omit this field** for laptop_replacement and other request types."
+        ),
+    )
     delivery_building: BuildingCodeStr
     delivery_floor: FloorCodeStr
 
@@ -679,7 +705,14 @@ class SubmitLicenseRequestParams(BaseModel):
     catalog_id: str = Field(
         pattern=r"^LIC-\d{4}$", description="LIC-NNNN (obtained from get_license_catalog_item)", examples=["LIC-0018"]
     )
-    duration_days: Literal[30, 60, 90] | None = None  # None = permanent
+    duration_days: Literal[30, 60, 90] | None = Field(
+        default=None,
+        description=(
+            "Trial duration in days. Use 30, 60, or 90 for trial licenses. "
+            "**Omit this field** (do not include the key) for permanent licenses — "
+            "do not pass null, 'null', or empty string."
+        ),
+    )  # None = permanent
 
     @field_validator("duration_days", mode="before")
     @classmethod
@@ -776,7 +809,13 @@ class SubmitEquipmentRequestParams(BaseModel):
 
 class CheckRoomAvailabilityParams(BaseModel):
     building_code: BuildingCodeStr
-    floor_code: FloorCodeStr | None = None
+    floor_code: FloorCodeStr | None = Field(
+        default=None,
+        description=(
+            "Specific floor code (e.g. 'FL2'). **Omit this field** to search all floors — "
+            "do not pass an empty string or null."
+        ),
+    )
     date: DateStr
     start_time: TimeStr
     end_time: TimeStr

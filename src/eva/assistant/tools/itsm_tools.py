@@ -1393,7 +1393,7 @@ def check_ergonomic_assessment(params, db, call_index):
     return {
         "status": "success",
         "employee_id": p.employee_id,
-        "assessment_date": a.get("completion_date"),
+        "assessment_date": a.get("completed_date"),
         "message": "Assessment on file",
     }
 
