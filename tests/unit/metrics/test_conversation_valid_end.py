@@ -13,7 +13,6 @@ class TestConversationValidEnd:
         self.metric = ConversationValidEndMetric()
 
     def _write_events(self, tmp_path, events: list[dict]) -> str:
-        """Write events to elevenlabs_events.jsonl and return output_dir."""
         events_file = tmp_path / "elevenlabs_events.jsonl"
         with open(events_file, "w") as f:
             f.writelines(json.dumps(event) + "\n" for event in events)

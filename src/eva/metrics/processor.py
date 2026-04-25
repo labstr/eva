@@ -8,7 +8,6 @@ from pathlib import Path
 from eva.assistant.agentic.system import GENERIC_ERROR
 from eva.models.config import PipelineType
 from eva.models.results import ConversationResult
-from eva.utils.conversation_checks import check_conversation_finished
 from eva.utils.log_processing import (
     AnnotationLabel,
     aggregate_pipecat_logs_by_type,
@@ -30,11 +29,7 @@ def last_audio_speaker(
     audio_timestamps_user_turns: dict[int, list[tuple[float, float]]],
     audio_timestamps_assistant_turns: dict[int, list[tuple[float, float]]],
 ) -> str | None:
-    """Return "user", "assistant", or None based on which side's audio ended latest.
-
-    Uses the max end-timestamp across all audio intervals for each role. Returns None
-    when neither side has any audio recorded (e.g. infra error before any audio played).
-    """
+    """Return the role whose audio ended latest, or None if neither recorded audio."""
 
     def _latest_end(intervals_by_turn: dict[int, list[tuple[float, float]]]) -> float | None:
         ends = [iv[1] for intervals in intervals_by_turn.values() if intervals for iv in intervals]
@@ -56,7 +51,7 @@ def is_agent_timeout_on_user_turn(
     audio_timestamps_user_turns: dict[int, list[tuple[float, float]]],
     audio_timestamps_assistant_turns: dict[int, list[tuple[float, float]]],
 ) -> bool:
-    """True iff conversation ended with inactivity_timeout and the user spoke last."""
+    """True if conversation ended with inactivity_timeout and the user spoke last."""
     if conversation_ended_reason != "inactivity_timeout":
         return False
     return last_audio_speaker(audio_timestamps_user_turns, audio_timestamps_assistant_turns) == "user"
@@ -767,7 +762,6 @@ class _ProcessorContext:
         self.user_interrupted_turns: set[int] = set()
 
         # Conversation metadata
-        self.conversation_finished: bool = False
         self.conversation_ended_reason: str | None = None
         self.pipeline_type: PipelineType = PipelineType.CASCADE
 
@@ -820,7 +814,6 @@ class MetricsContextProcessor:
         context.audio_mixed_path = _resolve_path(result.audio_mixed_path, output_dir)
         context.pipeline_type = pipeline_type
         context.conversation_ended_reason = result.conversation_ended_reason
-        context.conversation_finished = check_conversation_finished(output_dir)
 
         pipecat_path = _resolve_path(result.pipecat_logs_path, output_dir)
         elevenlabs_path = _resolve_path(result.elevenlabs_logs_path, output_dir)

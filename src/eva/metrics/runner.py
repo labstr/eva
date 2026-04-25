@@ -12,6 +12,7 @@ import yaml
 from eva.metrics.accuracy.agent_speech_fidelity_s2s import AgentSpeechFidelityS2SMetric
 from eva.metrics.aggregation import compute_record_aggregates, compute_run_level_aggregates
 from eva.metrics.base import BaseMetric, MetricContext
+from eva.metrics.legacy_aliases import rename_metric_keys
 from eva.metrics.processor import MetricsContextProcessor
 from eva.metrics.registry import MetricRegistry, get_global_registry
 from eva.metrics.utils import direction_for_sub_metric
@@ -294,8 +295,6 @@ class MetricsRunner:
                 all_metrics[record_id] = result
 
         # Include remaining records from disk for globally accurate aggregation.
-        from eva.metrics.legacy_aliases import rename_metric_keys
-
         for record_id, record_dir in all_record_dirs:
             if record_id in targeted_ids:
                 continue
@@ -339,8 +338,6 @@ class MetricsRunner:
             try:
                 existing_data = json.loads(metrics_path.read_text())
                 # Backwards compat: remap legacy metric names saved by older runs.
-                from eva.metrics.legacy_aliases import rename_metric_keys
-
                 raw_metrics = rename_metric_keys(existing_data.get("metrics", {}))
                 existing_metrics = {}
                 for k, v in raw_metrics.items():
@@ -504,13 +501,9 @@ class MetricsRunner:
         # Create ConversationResult object
         result = ConversationResult(**result_data)
 
-        cached_context = self._context_cache.get(record_id)
-        if cached_context is not None:
-            metrics_context = cached_context
-        else:
-            metrics_context = self.metrics_processor.process_record(
-                result, record_dir, pipeline_type=self._pipeline_type
-            )
+        metrics_context = self._context_cache.get(record_id) or self.metrics_processor.process_record(
+            result, record_dir, pipeline_type=self._pipeline_type
+        )
 
         # Get agent instructions and tools from config
         agent_instructions = self._agent_config["instructions"]

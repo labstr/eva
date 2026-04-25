@@ -1,30 +1,40 @@
-"""Conversation-valid-end validation metric (previously ``conversation_finished``)."""
+"""Conversation-valid-end validation metric."""
 
 import json
 from pathlib import Path
 
 from eva.metrics.base import CodeMetric, MetricContext
+from eva.metrics.processor import is_agent_timeout_on_user_turn
 from eva.metrics.registry import register_metric
 from eva.models.results import MetricScore
 
 
 @register_metric
 class ConversationValidEndMetric(CodeMetric):
-    """Validation metric: conversation ended with the expected ``goodbye`` event.
-
-    Reads ``elevenlabs_events.jsonl`` and checks the last entry is a
-    ``connection_state`` event with ``details.reason == "goodbye"``.
-
-    Binary score: 1.0 (ended with goodbye), 0.0 (did not).
-    """
+    """Binary score: 1.0 when the conversation ended on goodbye OR agent-timeout-on-user-turn; 0.0 otherwise."""
 
     name = "conversation_valid_end"
-    description = "Validation metric: conversation ended with a goodbye connection_state event"
+    description = "Validation metric: conversation reached a definitive end state"
     category = "validation"
 
     async def compute(self, context: MetricContext) -> MetricScore:
-        """Check if conversation properly ended with end_call."""
         try:
+            agent_timeout = is_agent_timeout_on_user_turn(
+                context.conversation_ended_reason,
+                context.audio_timestamps_user_turns,
+                context.audio_timestamps_assistant_turns,
+            )
+            if agent_timeout:
+                return MetricScore(
+                    name=self.name,
+                    score=1.0,
+                    normalized_score=1.0,
+                    details={
+                        "ended_properly": True,
+                        "reason": "agent_timeout_on_user_turn",
+                        "details": "agent timed out on the user's final turn (definitive terminal state)",
+                    },
+                )
             output_dir = Path(context.output_dir)
             elevenlabs_events_path = output_dir / "elevenlabs_events.jsonl"
 
@@ -70,7 +80,6 @@ class ConversationValidEndMetric(CodeMetric):
                     details={"file_path": str(elevenlabs_events_path), "last_line": last_line},
                 )
 
-            # Check if type is "tool_response"
             event_type = last_event.get("type")
             if event_type != "connection_state":
                 return MetricScore(
