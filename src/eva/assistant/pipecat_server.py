@@ -715,19 +715,19 @@ class PipecatAssistantServer(AbstractAssistantServer):
         """Return the current time as an ISO 8601 string with timezone."""
         return time_now_iso8601()
 
+    def _save_transcript(self) -> None:
+        """Pipecat-specific transcript handling.
+
+        For S2S mode, always rebuild from the audit log (correct ordering).
+        For pipeline mode, only write if not already written incrementally.
+        """
+        transcript_path = self.output_dir / "transcript.jsonl"
+        if isinstance(self.pipeline_config, SpeechToSpeechConfig) or not transcript_path.exists():
+            self.audit_log.save_transcript_jsonl(transcript_path)
+
     async def save_outputs(self) -> None:
         """Save all outputs, with pipecat-specific additions."""
-        # Save audit log
-        self.audit_log.save(self.output_dir / "audit_log.json")
-
-        # Pipecat-specific transcript handling:
-        # For S2S mode, always rebuild from audit log (correct ordering).
-        # For pipeline mode, only write if not already written incrementally.
-        transcript_path = self.output_dir / "transcript.jsonl"
-        if isinstance(self.pipeline_config, SpeechToSpeechConfig):
-            self.audit_log.save_transcript_jsonl(transcript_path)
-        elif not transcript_path.exists():
-            self.audit_log.save_transcript_jsonl(transcript_path)
+        await super().save_outputs()
 
         # Save agent performance stats (pipecat-specific: AgenticSystem tracking)
         if self.agentic_system:
@@ -736,14 +736,6 @@ class PipecatAssistantServer(AbstractAssistantServer):
                 self.agentic_system.save_agent_perf_stats()
             except Exception as e:
                 logger.error(f"Error saving agent perf stats: {e}", exc_info=True)
-
-        # Audio files are written via the deferred task returned by stop()
-        # (buffers are cleared before save_outputs() is called)
-
-        # Save scenario database states
-        self._save_scenario_dbs()
-
-        logger.info(f"Outputs saved to {self.output_dir}")
 
 
 async def override__maybe_trigger_user_turn_stopped(self):

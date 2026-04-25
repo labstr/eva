@@ -250,7 +250,7 @@ class BenchmarkRunner:
                     # Phase 6: Fire metrics immediately if passed
                     if vr.passed and metrics_runner is not None:
                         rdir = self.output_dir / "records" / output_id
-                        task = asyncio.create_task(metrics_runner._run_and_save_record(output_id, rdir))
+                        task = asyncio.create_task(metrics_runner.run_and_save_record(output_id, rdir))
                         metrics_background_tasks.append(task)
 
                     return output_id, result, vr.passed, vr
@@ -260,8 +260,7 @@ class BenchmarkRunner:
                     return output_id, exc, False, None
 
             pipeline_results = await asyncio.gather(
-                *[_run_and_pipeline(output_id_to_record[oid], oid) for oid in pending_output_ids],
-                return_exceptions=True,
+                *(_run_and_pipeline(output_id_to_record[oid], oid) for oid in pending_output_ids),
             )
 
             # Collect per-record outcomes
@@ -270,11 +269,7 @@ class BenchmarkRunner:
             failed_validation_ids: list[str] = []
             validation_results: dict[str, ValidationResult] = {}
 
-            for item in pipeline_results:
-                if isinstance(item, Exception):
-                    logger.error(f"Unexpected pipeline coroutine exception: {item}")
-                    continue
-                output_id, _result, passed, vr = item
+            for output_id, _result, passed, vr in pipeline_results:
                 if vr is None:
                     not_finished_ids.append(output_id)
                 else:
@@ -345,6 +340,8 @@ class BenchmarkRunner:
 
         # STEP 7: Await background metrics, then run final aggregation pass.
         # Background tasks already wrote metrics.json for records validated during the loop.
+        # IMPORTANT: Must await all background tasks BEFORE mutating metrics_runner.record_ids
+        # below — running tasks read record_ids to filter which records to process.
         # The final run() skips already-computed records and only does summary aggregation.
         if metrics_background_tasks:
             logger.info(f"Waiting for {len(metrics_background_tasks)} background metrics tasks...")

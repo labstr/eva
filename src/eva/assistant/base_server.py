@@ -119,21 +119,22 @@ class AbstractAssistantServer(ABC):
 
         # Auto-compute mixed audio from tracks if not already populated (S2S servers
         # populate user/assistant tracks but not the mixed buffer directly).
-        if not self._audio_buffer and self.user_audio_buffer and self.assistant_audio_buffer:
-            diff_bytes = abs(len(self.user_audio_buffer) - len(self.assistant_audio_buffer))
-            diff_ms = diff_bytes / (2 * self._audio_sample_rate) * 1000
-            if diff_ms > 500:
-                logger.warning(
-                    f"Audio buffer length mismatch: user={len(self.user_audio_buffer)} "
-                    f"assistant={len(self.assistant_audio_buffer)} "
-                    f"diff={diff_ms:.0f}ms — mixed recording may be temporally skewed"
-                )
-            from eva.assistant.audio_bridge import pcm16_mix  # lazy: avoids circular import at module load
-            self._audio_buffer = bytearray(pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer)))
-        elif not self._audio_buffer and self.user_audio_buffer:
-            self._audio_buffer = bytearray(self.user_audio_buffer)
-        elif not self._audio_buffer and self.assistant_audio_buffer:
-            self._audio_buffer = bytearray(self.assistant_audio_buffer)
+        if not self._audio_buffer:
+            if self.user_audio_buffer and self.assistant_audio_buffer:
+                diff_bytes = abs(len(self.user_audio_buffer) - len(self.assistant_audio_buffer))
+                diff_ms = diff_bytes / (2 * self._audio_sample_rate) * 1000
+                if diff_ms > 500:
+                    logger.warning(
+                        f"Audio buffer length mismatch: user={len(self.user_audio_buffer)} "
+                        f"assistant={len(self.assistant_audio_buffer)} "
+                        f"diff={diff_ms:.0f}ms — mixed recording may be temporally skewed"
+                    )
+                from eva.assistant.audio_bridge import pcm16_mix  # lazy: avoids circular import at module load
+                self._audio_buffer = bytearray(pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer)))
+            elif self.user_audio_buffer:
+                self._audio_buffer = bytearray(self.user_audio_buffer)
+            elif self.assistant_audio_buffer:
+                self._audio_buffer = bytearray(self.assistant_audio_buffer)
 
         # Extract bytes and clear in-memory buffers so the caller can release its
         # concurrency slot while audio writes happen in a background thread.
@@ -214,14 +215,21 @@ class AbstractAssistantServer(ABC):
         # Save audit log
         self.audit_log.save(self.output_dir / "audit_log.json")
 
-        # Save simplified transcript
-        transcript_path = self.output_dir / "transcript.jsonl"
-        self.audit_log.save_transcript_jsonl(transcript_path)
+        # Save transcript (subclasses can override _save_transcript for custom logic)
+        self._save_transcript()
 
         # Save scenario database states (REQUIRED for deterministic metrics)
         self._save_scenario_dbs()
 
         logger.info(f"Outputs saved to {self.output_dir}")
+
+    def _save_transcript(self) -> None:
+        """Save transcript.jsonl from the audit log.
+
+        Subclasses can override to customize transcript handling (e.g. conditional
+        overwrite logic for S2S vs pipeline modes).
+        """
+        self.audit_log.save_transcript_jsonl(self.output_dir / "transcript.jsonl")
 
     def _save_audio(self) -> None:
         """Save accumulated audio buffers to WAV files.

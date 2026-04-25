@@ -189,7 +189,7 @@ class ValidationRunner:
                     )
 
         record_dir = self.run_dir / "records" / output_id
-        record_metrics = await self._shared_validation_metrics_runner._run_and_save_record(
+        record_metrics = await self._shared_validation_metrics_runner.run_and_save_record(
             output_id, record_dir
         )
 

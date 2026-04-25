@@ -232,7 +232,7 @@ class MetricsRunner:
         targeted_ids = {rid for rid, _ in targeted}
 
         # Run targeted records concurrently; LiteLLM limits concurrent API calls.
-        tasks = [self._run_and_save_record(rid, rdir) for rid, rdir in targeted]
+        tasks = [self.run_and_save_record(rid, rdir) for rid, rdir in targeted]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         for (record_id, _), result in zip(targeted, results):
@@ -264,7 +264,7 @@ class MetricsRunner:
             metric_failures=metric_failures,
         )
 
-    async def _run_and_save_record(self, record_id: str, record_dir: Path) -> RecordMetrics | None:
+    async def run_and_save_record(self, record_id: str, record_dir: Path) -> RecordMetrics | None:
         """Run metrics for a record and save results, merging with existing metrics.
 
         Skips computation when possible:
