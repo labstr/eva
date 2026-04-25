@@ -1,4 +1,5 @@
 """Side-by-side comparison of a clean vs perturbed benchmark run."""
+
 from __future__ import annotations
 
 import json
@@ -163,14 +164,16 @@ def build_category_df(clean_blob: dict, pert_blob: dict, metric_names: list[str]
             delta = float(ps) - float(cs) if cs is not None and ps is not None else None
         except (TypeError, ValueError):
             delta = None
-        rows.append({
-            "metric": name,
-            "clean": cs,
-            "perturbed": ps,
-            "delta": delta,
-            "skipped_clean": bool(c.get("skipped", False)) if c else None,
-            "skipped_perturbed": bool(p.get("skipped", False)) if p else None,
-        })
+        rows.append(
+            {
+                "metric": name,
+                "clean": cs,
+                "perturbed": ps,
+                "delta": delta,
+                "skipped_clean": bool(c.get("skipped", False)) if c else None,
+                "skipped_perturbed": bool(p.get("skipped", False)) if p else None,
+            }
+        )
     return pd.DataFrame(rows)
 
 
@@ -180,8 +183,7 @@ def render_category(title: str, df: pd.DataFrame, clean_blob: dict, pert_blob: d
         st.info("No metrics in this category.")
         return
     styled = (
-        df.style
-        .format({"clean": _fmt, "perturbed": _fmt, "delta": _fmt})
+        df.style.format({"clean": _fmt, "perturbed": _fmt, "delta": _fmt})
         .map(_color_score, subset=["clean", "perturbed"])
         .map(_color_delta, subset=["delta"])
     )
@@ -256,14 +258,20 @@ def _iter_turns(details: dict):
         keys = list(expl.keys())
     else:
         keys = list(range(len(expl)))
+
     def sort_key(k):
         try:
             return (0, int(k))
         except (TypeError, ValueError):
             return (1, str(k))
+
     for k in sorted(keys, key=sort_key):
         e = expl[k] if isinstance(expl, dict) else expl[k]
-        r = ratings.get(k) if isinstance(ratings, dict) else (ratings[k] if isinstance(ratings, list) and isinstance(k, int) and k < len(ratings) else None)
+        r = (
+            ratings.get(k)
+            if isinstance(ratings, dict)
+            else (ratings[k] if isinstance(ratings, list) and isinstance(k, int) and k < len(ratings) else None)
+        )
         yield k, r, e
 
 
@@ -440,9 +448,7 @@ def main():
             st.stop()
 
         sample_id = st.selectbox("Sample", shared)
-        shared_trials = sorted(
-            list_trials(clean_root, sample_id) & list_trials(perturbed_root, sample_id)
-        )
+        shared_trials = sorted(list_trials(clean_root, sample_id) & list_trials(perturbed_root, sample_id))
         if not shared_trials:
             st.error(f"No shared trials for sample `{sample_id}`.")
             st.stop()
@@ -450,7 +456,7 @@ def main():
         track = st.radio("Audio track", list(AUDIO_FILES.keys()), index=0)
 
     cfg = load_json(perturbed_root / "config.json") or {}
-    pert = (cfg.get("perturbation") or {})
+    pert = cfg.get("perturbation") or {}
     pert_desc = ", ".join(f"{k}={v}" for k, v in pert.items() if v not in (None, False)) or "none"
     st.markdown(f"**Sample** `{sample_id}` / `{trial}` — perturbations: `{pert_desc}`")
 
