@@ -181,27 +181,26 @@ class PipecatAssistantServer(AbstractAssistantServer):
 
         logger.info(f"Assistant server started on ws://localhost:{self.port}")
 
-    async def stop(self) -> None:
-        """Stop the server and save outputs."""
+    async def _shutdown(self) -> None:
+        """Stop the Pipecat pipeline and uvicorn server."""
         if not self._running:
             return
 
         self._running = False
 
-        # Stop the pipeline task
+        # Cancel pipeline task first so no more audio arrives before base stop()
+        # extracts the buffers.
         if self._task:
             await self._task.cancel()
             self._task = None
 
-        # Stop the server gracefully
+        # Stop the uvicorn server gracefully.
         if self._server:
             self._server.should_exit = True
-            # Wait briefly for graceful shutdown, then cancel if needed
             if self._server_task:
                 try:
                     await asyncio.wait_for(self._server_task, timeout=5.0)
                 except TimeoutError:
-                    # Force cancellation if graceful shutdown times out
                     self._server_task.cancel()
                     try:
                         await self._server_task
@@ -211,9 +210,6 @@ class PipecatAssistantServer(AbstractAssistantServer):
                     pass  # Expected during shutdown
             self._server = None
             self._server_task = None
-
-        # Save outputs
-        await self.save_outputs()
 
         logger.info(f"Assistant server stopped on port {self.port}")
 
@@ -719,8 +715,20 @@ class PipecatAssistantServer(AbstractAssistantServer):
         """Return the current time as an ISO 8601 string with timezone."""
         return time_now_iso8601()
 
+    def _save_transcript(self) -> None:
+        """Pipecat-specific transcript handling.
+
+        For S2S mode, always rebuild from the audit log (correct ordering).
+        For pipeline mode, only write if not already written incrementally.
+        """
+        transcript_path = self.output_dir / "transcript.jsonl"
+        if isinstance(self.pipeline_config, SpeechToSpeechConfig) or not transcript_path.exists():
+            self.audit_log.save_transcript_jsonl(transcript_path)
+
     async def save_outputs(self) -> None:
         """Save all outputs, with pipecat-specific additions."""
+        await super().save_outputs()
+
         # Save agent performance stats (pipecat-specific: AgenticSystem tracking)
         if self.agentic_system:
             try:
@@ -728,9 +736,6 @@ class PipecatAssistantServer(AbstractAssistantServer):
                 self.agentic_system.save_agent_perf_stats()
             except Exception as e:
                 logger.error(f"Error saving agent perf stats: {e}", exc_info=True)
-
-        # Call base class to save audit_log, audio, scenario DBs, latencies
-        await super().save_outputs()
 
 
 async def override__maybe_trigger_user_turn_stopped(self):
