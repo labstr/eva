@@ -589,7 +589,7 @@ class AudioJudgeMetric(BaseMetric):
 
     # Subclasses can override
     default_model = "gemini-3.1-pro-preview"
-    default_params: dict[str, Any] = {"temperature": 0.0, "max_tokens": 30000}
+    default_params: dict[str, Any] = {"temperature": 0.0, "max_tokens": 40000}
     rating_scale: tuple[int, int] = (-2, 2)  # Can vary by metric
 
     def __init__(self, config: dict[str, Any] | None = None):
