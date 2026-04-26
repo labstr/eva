@@ -275,6 +275,7 @@ class ExtensionType(StrEnum):
 
 class LeaveCategory(StrEnum):
     """FMLA leave categories — each is legally distinct:
+
     - employee_medical_condition: the employee themselves has a serious health condition
     - family_member_serious_illness: caring for a spouse, child, or parent with a serious health condition
     - bonding: birth, adoption, or foster placement of a child (within 12 months of the event)
@@ -300,6 +301,7 @@ class OnCallTier(StrEnum):
 
 class PtoType(StrEnum):
     """PTO balance types:
+
     - pto: general paid time off (covers vacation and personal days)
     - sick: sick leave (separate accrual and legal protections)
     """
@@ -310,6 +312,7 @@ class PtoType(StrEnum):
 
 class LeaveTypeOnRecord(StrEnum):
     """Administrative leave category the provider was on — mutually exclusive:
+
     - medical_leave: employer-approved medical leave (not FMLA-protected)
     - personal_leave: approved personal or unpaid leave (not medical, not FMLA)
     - fmla_leave: FMLA-protected leave (federally protected, with specific eligibility)
@@ -337,6 +340,7 @@ class MalpracticeCarrier(StrEnum):
 
 class TransferReason(StrEnum):
     """DEA transfer reasons — each is distinct:
+
     - facility_relocation: same role, moving to a different facility/state
     - role_change: new clinical role at a different facility
     - additional_practice_site: adding a second practice location while keeping the original
@@ -374,10 +378,7 @@ class ManagerNotificationType(StrEnum):
 
 
 class HrComplianceNotificationType(StrEnum):
-    """Maps directly from I9VerificationAction:
-    - initial_verification → i9_verified
-    - reverification → i9_reverified
-    """
+    """Maps directly from I9VerificationAction: initial_verification → i9_verified, reverification → i9_reverified."""
 
     i9_verified = "i9_verified"
     i9_reverified = "i9_reverified"
@@ -385,6 +386,7 @@ class HrComplianceNotificationType(StrEnum):
 
 class EhrAccessChangeType(StrEnum):
     """EHR access levels — caller chooses based on their needs:
+
     - reactivate_full: full clinical access restored (all modules, all patient records)
     - reactivate_restricted: limited access (read-only or specific modules only)
     - suspend: remove access (used for departures, not typically caller-initiated)
@@ -595,9 +597,7 @@ class TransferDeaRegistrationParams(BaseModel):
 
 
 class NotifyPdmpParams(BaseModel):
-    """Notify the state PDMP of a DEA registration transfer.
-    No notification_type param — this tool is only used for transfers.
-    """
+    """Notify the state PDMP of a DEA registration transfer."""
 
     npi: NpiStr
     dea_number: DeaNumberStr
