@@ -88,44 +88,42 @@ _ID_STRIP_RE = re.compile(r"^(REQ-[A-Z]+-|INC|CASE-[A-Z]+-|SEC-|CAL-)[A-Za-z0-9]
 # Excluding them here keeps the ID stable across a record's lifecycle and lets
 # the migration (which sees the final post-mutation state) produce the same
 # hash the tool produced at creation.
-_POST_CREATION_MUTABLE_FIELDS = frozenset({
-    # generic lifecycle
-    "status",
-    "resolved_date",
-    # tickets — assign_sla_tier
-    "sla_tier",
-    "sla_response_hours",
-    "sla_resolution_hours",
-    # tickets — link_known_error
-    "linked_known_error_id",
-    # tickets — schedule_field_dispatch
-    "dispatch_id",
-    "dispatch_date",
-    "dispatch_window",
-    # tickets — attach_diagnostic_log
-    "diagnostic_ref_code",
-    "diagnostic_attached",
-    # requests — route_approval_workflow
-    "approval_routed_to",
-    "approval_sla_deadline",
-    # requests — escalate_approval
-    "escalated_to",
-    "escalation_sla_deadline",
-    # security cases — initiate_remote_wipe
-    "remote_wipe_id",
-    # pending_role_change — schedule_access_review
-    "access_review_id",
-    "review_date",
-})
+_POST_CREATION_MUTABLE_FIELDS = frozenset(
+    {
+        # generic lifecycle
+        "status",
+        "resolved_date",
+        # tickets — assign_sla_tier
+        "sla_tier",
+        "sla_response_hours",
+        "sla_resolution_hours",
+        # tickets — link_known_error
+        "linked_known_error_id",
+        # tickets — schedule_field_dispatch
+        "dispatch_id",
+        "dispatch_date",
+        "dispatch_window",
+        # tickets — attach_diagnostic_log
+        "diagnostic_ref_code",
+        "diagnostic_attached",
+        # requests — route_approval_workflow
+        "approval_routed_to",
+        "approval_sla_deadline",
+        # requests — escalate_approval
+        "escalated_to",
+        "escalation_sla_deadline",
+        # security cases — initiate_remote_wipe
+        "remote_wipe_id",
+        # pending_role_change — schedule_access_review
+        "access_review_id",
+        "review_date",
+    }
+)
 
 
 def _strip_ids_for_hash(obj):
     if isinstance(obj, dict):
-        return {
-            k: _strip_ids_for_hash(v)
-            for k, v in obj.items()
-            if k not in _POST_CREATION_MUTABLE_FIELDS
-        }
+        return {k: _strip_ids_for_hash(v) for k, v in obj.items() if k not in _POST_CREATION_MUTABLE_FIELDS}
     if isinstance(obj, list):
         return [_strip_ids_for_hash(item) for item in obj]
     if isinstance(obj, str) and _ID_STRIP_RE.match(obj):

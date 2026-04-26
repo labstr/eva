@@ -119,6 +119,7 @@ def _empty_to_none(v):
         return None
     return v
 
+
 # ---------------------------------------------------------------------------
 # Annotated ID types
 # ---------------------------------------------------------------------------
@@ -1056,21 +1057,16 @@ FIELD_ERROR_HINTS: dict[str, str] = {
         "Required for monitor_bundle (one of 24_inch/27_inch/32_inch). "
         "OMIT this field entirely (do not pass empty string) for laptop_replacement."
     ),
-    "laptop_os": (
-        "Required for laptop_replacement (macos or windows). "
-        "OMIT this field entirely for monitor_bundle."
-    ),
+    "laptop_os": ("Required for laptop_replacement (macos or windows). OMIT this field entirely for monitor_bundle."),
     "laptop_size": (
-        "Required for laptop_replacement (13_inch, 14_inch, or 16_inch). "
-        "OMIT this field entirely for monitor_bundle."
+        "Required for laptop_replacement (13_inch, 14_inch, or 16_inch). OMIT this field entirely for monitor_bundle."
     ),
     "current_asset_tag": (
         "Required for laptop_replacement unless justification is lost_or_stolen. "
         "Required for monitor_bundle replacement; OMIT for monitor_bundle new_setup."
     ),
     "duration_days": (
-        "OMIT duration_days for a permanent license. "
-        "Valid values for temporary licenses are exactly 30, 60, or 90."
+        "OMIT duration_days for a permanent license. Valid values for temporary licenses are exactly 30, 60, or 90."
     ),
 }
 
