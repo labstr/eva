@@ -492,6 +492,9 @@ judge:
       
       ## Conversation Evidence
       {conversation_evidence}
+      
+      ## How the conversation ended
+      The conversation ended due to: {conversation_end}
         
       ## User's Goal
       {user_goal}
@@ -514,6 +517,9 @@ judge:
       
       ### Corruption Type 2: User ended the conversation prematurely
         The user ended the conversation before the agent had the opportunity to complete the necessary modification tools to fulfill the user's goal.
+        Applicability:
+          - This type only applies when the conversation ended due to the user calling the end call tool. 
+          - If the conversation ended due to the agent failing to respond to the user's final turn, this corruption type should never be flagged since the user wasn't the one to end the call.
       - Only flag this if the user chose to end the call when the agent was still actively working toward resolution or had not yet completed the required actions.
       - Do NOT flag this if the agent encountered an error, said they could not help, or was stuck/unhelpful for multiple consecutive turns — in those cases the user is correct to end the call per their failure condition.
       - Do NOT flag this if the agent completed all necessary actions and the resolution condition was met.

@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 from eva.metrics.base import ConversationTextJudgeMetric, MetricContext
+from eva.metrics.processor import is_agent_timeout_on_user_turn
 from eva.metrics.registry import register_metric
 from eva.metrics.utils import build_binary_flag_sub_metrics
 from eva.models.results import MetricScore
@@ -79,11 +80,23 @@ class UserBehavioralFidelityMetric(ConversationTextJudgeMetric):
             intended_user_turns=context.intended_user_turns,
         )
 
+        agent_timeout = is_agent_timeout_on_user_turn(
+            context.conversation_ended_reason,
+            context.audio_timestamps_user_turns,
+            context.audio_timestamps_assistant_turns,
+        )
+        conversation_end = (
+            "the agent's failure to respond to the final user turn."
+            if agent_timeout
+            else "the user calling the end_call tool."
+        )
+
         return {
             "conversation_evidence": conversation_evidence,
             "user_goal": context.user_goal,
             "user_persona": context.user_persona,
             "modification_tools": json.dumps(modification_tools, indent=2),
+            "conversation_end": conversation_end,
         }
 
     def build_metric_score(
