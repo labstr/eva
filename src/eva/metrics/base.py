@@ -197,6 +197,8 @@ class BaseMetric(ABC):
         self, context: MetricContext, model_name: str, model_params: dict, prompt: str, usage: dict | None
     ) -> None:
         """Append one row of LLM judge token usage to a per-metric CSV and update the run-level JSON summary."""
+        if not context.output_dir:
+            return
         # Walk up from output_dir to find the run root (directory containing config.json).
         path = Path(context.output_dir)
         run_dir = path
