@@ -6,6 +6,7 @@ must inherit from AbstractAssistantServer and implement the required interface.
 See docs/assistant_server_contract.md for the full specification.
 """
 
+import asyncio
 import json
 import wave
 from abc import ABC, abstractmethod
@@ -97,13 +98,73 @@ class AbstractAssistantServer(ABC):
         """
         ...
 
-    @abstractmethod
-    async def stop(self) -> None:
-        """Stop the server and save all outputs.
+    async def stop(self) -> asyncio.Task | None:
+        """Stop the server: shut down framework, extract audio, save outputs.
 
-        Must:
-        1. Gracefully shut down the server
-        2. Call save_outputs() to persist all data
+        Concrete template method — subclasses implement _shutdown() instead of stop().
+
+        Sequence:
+        1. _shutdown(): framework-specific teardown (server stop, task cancellation)
+        2. Auto-compute mixed audio from tracks if not already populated
+        3. Extract and clear audio buffers so the caller can release its concurrency
+           slot while audio hits disk
+        4. save_outputs(): persist audit log, transcript, scenario DBs
+        5. Return a deferred asyncio.Task for audio disk writes
+
+        Returns:
+            asyncio.Task that completes when audio files are written, or None if
+            no audio was recorded.
+        """
+        await self._shutdown()
+
+        # Auto-compute mixed audio from tracks if not already populated (S2S servers
+        # populate user/assistant tracks but not the mixed buffer directly).
+        if not self._audio_buffer:
+            if self.user_audio_buffer and self.assistant_audio_buffer:
+                diff_bytes = abs(len(self.user_audio_buffer) - len(self.assistant_audio_buffer))
+                diff_ms = diff_bytes / (2 * self._audio_sample_rate) * 1000
+                if diff_ms > 500:
+                    logger.warning(
+                        f"Audio buffer length mismatch: user={len(self.user_audio_buffer)} "
+                        f"assistant={len(self.assistant_audio_buffer)} "
+                        f"diff={diff_ms:.0f}ms — mixed recording may be temporally skewed"
+                    )
+                from eva.assistant.audio_bridge import pcm16_mix  # lazy: avoids circular import at module load
+
+                self._audio_buffer = bytearray(
+                    pcm16_mix(bytes(self.user_audio_buffer), bytes(self.assistant_audio_buffer))
+                )
+            elif self.user_audio_buffer:
+                self._audio_buffer = bytearray(self.user_audio_buffer)
+            elif self.assistant_audio_buffer:
+                self._audio_buffer = bytearray(self.assistant_audio_buffer)
+
+        # Extract bytes and clear in-memory buffers so the caller can release its
+        # concurrency slot while audio writes happen in a background thread.
+        mixed_audio = bytes(self._audio_buffer)
+        user_audio = bytes(self.user_audio_buffer)
+        assistant_audio = bytes(self.assistant_audio_buffer)
+        sample_rate = self._audio_sample_rate
+        self._audio_buffer.clear()
+        self.user_audio_buffer.clear()
+        self.assistant_audio_buffer.clear()
+
+        await self.save_outputs()
+
+        if mixed_audio or user_audio or assistant_audio:
+            return asyncio.create_task(
+                asyncio.to_thread(self._save_audio_deferred, mixed_audio, user_audio, assistant_audio, sample_rate)
+            )
+        return None
+
+    @abstractmethod
+    async def _shutdown(self) -> None:
+        """Framework-specific shutdown: stop server, cancel tasks, etc.
+
+        Called by stop() before audio buffer extraction. Implementations should:
+        1. Check / set the running flag
+        2. Stop the WebSocket server (set should_exit, await server task)
+        3. Cancel any pending framework tasks (pipeline, session, etc.)
         """
         ...
 
@@ -148,21 +209,28 @@ class AbstractAssistantServer(ABC):
 
         Subclasses can override to add framework-specific outputs,
         but must call super().save_outputs().
+
+        Note: audio files are NOT saved here — they are written by the deferred
+        asyncio.Task returned by stop() so the concurrency slot is freed first.
         """
         # Save audit log
         self.audit_log.save(self.output_dir / "audit_log.json")
 
-        # Save simplified transcript
-        transcript_path = self.output_dir / "transcript.jsonl"
-        self.audit_log.save_transcript_jsonl(transcript_path)
-
-        # Save audio recordings
-        self._save_audio()
+        # Save transcript (subclasses can override _save_transcript for custom logic)
+        self._save_transcript()
 
         # Save scenario database states (REQUIRED for deterministic metrics)
         self._save_scenario_dbs()
 
         logger.info(f"Outputs saved to {self.output_dir}")
+
+    def _save_transcript(self) -> None:
+        """Save transcript.jsonl from the audit log.
+
+        Subclasses can override to customize transcript handling (e.g. conditional
+        overwrite logic for S2S vs pipeline modes).
+        """
+        self.audit_log.save_transcript_jsonl(self.output_dir / "transcript.jsonl")
 
     def _save_audio(self) -> None:
         """Save accumulated audio buffers to WAV files.
@@ -215,6 +283,27 @@ class AbstractAssistantServer(ABC):
                 self._audio_sample_rate,
                 1,
             )
+
+    def _save_audio_deferred(
+        self,
+        mixed_audio: bytes,
+        user_audio: bytes,
+        assistant_audio: bytes,
+        sample_rate: int,
+    ) -> None:
+        """Write pre-extracted audio bytes to WAV files.
+
+        Designed to run in a thread pool via asyncio.to_thread so audio disk
+        writes happen outside the concurrency semaphore.
+        """
+        if mixed_audio:
+            self._save_wav_file(mixed_audio, self.output_dir / "audio_mixed.wav", sample_rate, 1)
+        if user_audio:
+            self._save_wav_file(user_audio, self.output_dir / "audio_user.wav", sample_rate, 1)
+        if assistant_audio:
+            self._save_wav_file(assistant_audio, self.output_dir / "audio_assistant.wav", sample_rate, 1)
+        if mixed_audio or user_audio or assistant_audio:
+            logger.info(f"Saved audio files to {self.output_dir} ({len(mixed_audio)} bytes mixed)")
 
     def _save_wav_file(self, audio_data: bytes, file_path: Path, sample_rate: int, num_channels: int) -> None:
         """Save raw 16-bit PCM audio data to a WAV file."""

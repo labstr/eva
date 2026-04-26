@@ -197,9 +197,9 @@ class TestMetricsRunner:
             captured_ids.append(record_id)
             return _make_record_metrics(record_id)
 
-        # Mock _run_and_save_record (not _run_record) to bypass caching logic —
+        # Mock run_and_save_record (not _run_record) to bypass caching logic —
         # this test is about directory discovery, not per-record computation.
-        runner._run_and_save_record = mock_run_and_save
+        runner.run_and_save_record = mock_run_and_save
 
         await runner.run()
 
@@ -232,7 +232,7 @@ class TestMetricsRunner:
             },
         )
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         # _run_record was called (new_metric is missing)
         assert len(calls) == 1
@@ -269,7 +269,7 @@ class TestNormalModeCaching:
         runner = _make_runner(run_dir, records, ["m_a", "m_b"])
         calls = _install_mock(runner, {"rec-0": {"m_a": _ms("m_a", 0.99), "m_b": _ms("m_b", 0.99)}})
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 0, "_run_record should not be called"
         assert result.metrics["m_a"].score == 0.8  # original value
@@ -290,7 +290,7 @@ class TestNormalModeCaching:
             },
         )
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 1
         assert calls[0]["metrics_requested"] == {"m_a", "m_b"}
@@ -326,7 +326,7 @@ class TestNormalModeCaching:
             },
         )
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 1
         assert calls[0]["metrics_requested"] == {"m_b"}
@@ -352,7 +352,7 @@ class TestNormalModeCaching:
         runner = _make_runner(run_dir, records, ["m_a"])
         calls = _install_mock(runner, {"rec-0": {"m_a": _ms("m_a", 0.9)}})
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 0, "failed metric should not be rerun in normal mode"
         assert result.metrics["m_a"].error == "judge timeout"  # preserved
@@ -382,7 +382,7 @@ class TestNormalModeCaching:
             },
         )
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 1
         # m_a preserved, m_b written with error
@@ -435,8 +435,8 @@ class TestRerunMode:
         )
 
         # Process both records
-        r0 = await runner._run_and_save_record("rec-0", rec0_dir)
-        r1 = await runner._run_and_save_record("rec-1", rec1_dir)
+        r0 = await runner.run_and_save_record("rec-0", rec0_dir)
+        r1 = await runner.run_and_save_record("rec-1", rec1_dir)
 
         # rec-0: m_b was rerun
         assert len(calls) == 1
@@ -489,8 +489,8 @@ class TestRerunMode:
             },
         )
 
-        r0 = await runner._run_and_save_record("rec-0", rec0_dir)
-        r1 = await runner._run_and_save_record("rec-1", rec1_dir)
+        r0 = await runner.run_and_save_record("rec-0", rec0_dir)
+        r1 = await runner.run_and_save_record("rec-1", rec1_dir)
 
         # rec-0: only m_a rerun
         assert calls[0] == {"record_id": "rec-0", "metrics_requested": {"m_a"}}
@@ -528,7 +528,7 @@ class TestRerunMode:
         )
         calls = _install_mock(runner, {"rec-0": {"m_a": _ms("m_a", 0.5)}})
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 0, "already-succeeded metric should not be rerun"
         assert result.metrics["m_a"].score == 0.9  # disk value preserved
@@ -566,7 +566,7 @@ class TestRerunMode:
             },
         )
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
 
         assert len(calls) == 1
         assert calls[0]["metrics_requested"] == {"m_a", "m_b"}
@@ -609,7 +609,7 @@ class TestRerunMode:
             },
         )
 
-        result = await runner._run_and_save_record("rec-0", record_dir)
+        result = await runner.run_and_save_record("rec-0", record_dir)
         assert len(calls) == 1
         assert result.metrics["m_a"].score == 0.85
         assert result.metrics["m_a"].error is None
@@ -652,8 +652,8 @@ class TestRerunMode:
             },
         )
 
-        r0 = await runner._run_and_save_record("rec-0", rec0_dir)
-        r1 = await runner._run_and_save_record("rec-1", rec1_dir)
+        r0 = await runner.run_and_save_record("rec-0", rec0_dir)
+        r1 = await runner.run_and_save_record("rec-1", rec1_dir)
 
         assert len(calls) == 2
         assert r0.metrics["m_a"].score == 0.7
