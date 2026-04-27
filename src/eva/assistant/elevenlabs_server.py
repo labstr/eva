@@ -230,6 +230,7 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
 
         # Per-turn state
         _in_model_turn = False
+        _is_first_turn = True  # prevents phantom turn from trailing greeting audio
         _user_speaking = False
         _user_speech_start_ts: str | None = None
         _user_speech_stop_ts: str | None = None
@@ -248,12 +249,16 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
         # -- ElevenLabs callbacks ------------------------------------------
 
         async def _on_agent_response(text: str) -> None:
-            nonlocal _assistant_turn_start_ts, _in_model_turn
+            nonlocal _assistant_turn_start_ts, _in_model_turn, _is_first_turn
             logger.info(f"Agent response: {text}")
             self.audit_log.append_assistant_output(text, timestamp_ms=_assistant_turn_start_ts)
             self._fw_log.llm_response(text)
             self._fw_log.turn_end(was_interrupted=False)
-            _in_model_turn = False
+            if _is_first_turn:
+                # Need to track first turn to set _assistant_turn_start_ts correctly
+                _is_first_turn = False
+            else:
+                _in_model_turn = False
             _assistant_turn_start_ts = None
 
         async def _on_agent_response_correction(original: str, corrected: str) -> None:
@@ -316,7 +321,6 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
             callback_agent_response_correction=_on_agent_response_correction,
             callback_user_transcript=_on_user_transcript,
             callback_end_session=_on_end_session,
-            callback_latency_measurement=on_latency,
         )
 
         try:
@@ -338,7 +342,7 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
                 """Read Twilio WS messages, convert audio, send to ElevenLabs."""
                 nonlocal stream_sid, twilio_connected
                 nonlocal _user_speech_start_ts, _user_speech_stop_ts
-                nonlocal _user_speaking
+                nonlocal _user_speaking, _in_model_turn
                 try:
                     while twilio_connected and self._running:
                         try:
@@ -362,6 +366,7 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
                         elif event == "user_speech_start":
                             _user_speech_start_ts = msg.get("timestamp_ms")
                             _user_speaking = True
+                            _in_model_turn = False
                             logger.info(f"User speech start: {_user_speech_start_ts}")
                         elif event == "user_speech_stop":
                             _user_speech_stop_ts = msg.get("timestamp_ms")
