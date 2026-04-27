@@ -160,17 +160,19 @@ def _system_name_from_run(run_dir: Path) -> str:
 
 
 def filter_latest_runs(run_dirs: list[Path]) -> list[Path]:
-    """Keep only the most recent run per system name.
+    """Keep only the most recent run per (system name, domain) combination.
 
     Assumes run_dirs is already sorted newest-first (as returned by
-    get_run_directories), so the first occurrence of each system name wins.
+    get_run_directories), so the first occurrence of each (system, domain) wins.
+    Including domain in the key prevents collapsing runs of the same system on
+    different datasets (e.g., airline vs medical_hr).
     """
-    seen: set[str] = set()
+    seen: set[tuple[str, str]] = set()
     result = []
     for d in run_dirs:
-        system = _system_name_from_run(d)
-        if system not in seen:
-            seen.add(system)
+        key = (_system_name_from_run(d), _domain_from_config(_load_run_config(d)))
+        if key not in seen:
+            seen.add(key)
             result.append(d)
     return result
 
@@ -245,6 +247,11 @@ def _load_run_config(run_dir: Path) -> dict:
         except Exception:
             pass
     return {}
+
+
+def _domain_from_config(run_config: dict) -> str:
+    """Return the dataset domain for a run, defaulting to 'airline' when absent."""
+    return run_config.get("domain") or "airline"
 
 
 def _load_metrics_summary(run_dir: Path) -> dict:
@@ -1119,8 +1126,9 @@ def render_cross_run_comparison(run_dirs: list[Path]):
                 "run_output_dir": str(run_dir.parent),
                 "label": _get_run_label(run_name, run_config),
                 "system_name": system_name,
+                "domain": _domain_from_config(run_config),
                 "run_timestamp": run_timestamp,
-                "records": metrics_summary.get("total_records", 0),
+                "records": records_count,
                 "conversation_failures": simulation.get("failed_records"),
                 "records_with_errors": data_quality.get("records_with_errors"),
                 "metrics_with_errors": data_quality.get("metrics_with_errors") or {},
@@ -1160,6 +1168,7 @@ def render_cross_run_comparison(run_dirs: list[Path]):
                 "run_output_dir": str(run_dir.parent),
                 "label": _get_run_label(run_name, run_config),
                 "system_name": system_name,
+                "domain": _domain_from_config(run_config),
                 "run_timestamp": run_timestamp,
                 "records": records_count,
                 "conversation_failures": simulation.get("failed_records"),
@@ -1268,9 +1277,17 @@ def render_cross_run_comparison(run_dirs: list[Path]):
     other_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) not in {"Accuracy", "Experience"}]
 
     multiple_output_dirs = summary_df["run_output_dir"].nunique() > 1
-    id_cols = ["system_name", "run_timestamp"] + (["run_output_dir"] if multiple_output_dirs else []) + ["records"]
+    multiple_domains = summary_df["domain"].nunique() > 1
+    id_cols = (
+        ["system_name"]
+        + (["domain"] if multiple_domains else [])
+        + ["run_timestamp"]
+        + (["run_output_dir"] if multiple_output_dirs else [])
+        + ["records"]
+    )
     id_rename = {
         "system_name": "System",
+        "domain": "Domain",
         "run_timestamp": "Timestamp",
         "run_output_dir": "Output Dir",
         "records": "# Records",
@@ -2242,7 +2259,7 @@ def render_conversation_trace_tab(metrics: RecordMetrics | None, record_dir: Pat
 
 def _render_sidebar_run_metadata(run_name: str, run_config: dict):
     """Render run metadata in the sidebar."""
-    metadata_parts = [f"**Run:** {run_name}"]
+    metadata_parts = [f"**Run:** {run_name}", f"**Domain:** {_domain_from_config(run_config)}"]
     for label, value in _extract_model_details(run_config).items():
         metadata_parts.append(f"**{label}:** {value}")
     if run_config.get("num_trials"):
