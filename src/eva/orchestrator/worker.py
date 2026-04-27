@@ -109,6 +109,7 @@ class ConversationWorker:
         self._user_simulator = None
         self._conversation_stats: dict[str, Any] = {}
         self._log_file_handler = None
+        self.deferred_audio_task: asyncio.Task | None = None
 
     async def run(self) -> ConversationResult:
         """Execute one complete conversation.
@@ -283,7 +284,7 @@ class ConversationWorker:
             goal=self.record.user_goal,
             server_url=f"ws://localhost:{self.port}/ws",
             output_dir=self.output_dir,
-            user_simulator_context=self.agent.user_simulator_context,
+            agent_id=self.agent.id,
             perturbation_config=self.config.perturbation,
         )
 
@@ -316,7 +317,7 @@ class ConversationWorker:
         """Clean up resources."""
         if self._assistant_server:
             try:
-                await self._assistant_server.stop()
+                self.deferred_audio_task = await self._assistant_server.stop()
             except Exception as e:
                 logger.warning(f"Error stopping assistant server: {e}")
             self._assistant_server = None

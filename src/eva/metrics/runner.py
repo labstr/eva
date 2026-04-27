@@ -15,6 +15,7 @@ from eva.metrics.base import BaseMetric, MetricContext
 from eva.metrics.legacy_aliases import rename_metric_keys
 from eva.metrics.processor import MetricsContextProcessor
 from eva.metrics.registry import MetricRegistry, get_global_registry
+from eva.metrics.utils import direction_for_sub_metric
 from eva.models.config import PipelineType, get_pipeline_type
 from eva.models.record import EvaluationRecord
 from eva.models.results import ConversationResult, MetricScore, PassAtKResult, RecordMetrics
@@ -29,6 +30,16 @@ from eva.utils.pass_at_k import (
 from eva.utils.provenance import capture_metrics_provenance
 
 logger = get_logger(__name__)
+
+
+def _metric_higher_is_better(name: str) -> bool:
+    """Return ``higher_is_better`` for a registered metric, or ``True`` if unknown.
+
+    Direction lives on the metric class (static per metric), so the aggregator
+    reads it from the registry rather than fishing it out of per-record data.
+    """
+    metric_class = get_global_registry().get(name)
+    return True if metric_class is None else metric_class.higher_is_better
 
 
 @dataclass
@@ -274,7 +285,7 @@ class MetricsRunner:
         targeted_ids = {rid for rid, _ in targeted}
 
         # Run targeted records concurrently; LiteLLM limits concurrent API calls.
-        tasks = [self._run_and_save_record(rid, rdir) for rid, rdir in targeted]
+        tasks = [self.run_and_save_record(rid, rdir) for rid, rdir in targeted]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         for (record_id, _), result in zip(targeted, results):
@@ -312,7 +323,7 @@ class MetricsRunner:
             metric_failures=metric_failures,
         )
 
-    async def _run_and_save_record(self, record_id: str, record_dir: Path) -> RecordMetrics | None:
+    async def run_and_save_record(self, record_id: str, record_dir: Path) -> RecordMetrics | None:
         """Run metrics for a record and save results, merging with existing metrics.
 
         Skips computation when possible:
@@ -407,7 +418,7 @@ class MetricsRunner:
         logger.debug(f"Computing metrics for record: {record_id}")
 
         # Load conversation data
-        context = self._load_context(record_id, record_dir)
+        context = await self._load_context(record_id, record_dir)
 
         # Determine which metrics to run for this record
         metrics_to_run = self.metrics
@@ -469,7 +480,7 @@ class MetricsRunner:
 
         return RecordMetrics(record_id=record_id, context=context_dict, metrics=metric_scores)
 
-    def _load_context(self, record_id: str, record_dir: Path) -> MetricContext:
+    async def _load_context(self, record_id: str, record_dir: Path) -> MetricContext:
         """Load all data needed for metric computation."""
         # Strip _trial_N suffix to get base record ID for dataset lookup.
         base_record_id, _ = parse_trial_record_id(record_id)
@@ -481,30 +492,8 @@ class MetricsRunner:
 
         gt = record.ground_truth
 
-        # Load conversation result
+        # Load conversation result and scenario databases in parallel (non-blocking I/O)
         result_path = record_dir / "result.json"
-        result_data = {}
-        if result_path.exists():
-            result_data = json.loads(result_path.read_text())
-
-        # Create ConversationResult object
-        result = ConversationResult(**result_data)
-
-        metrics_context = self._context_cache.get(record_id) or self.metrics_processor.process_record(
-            result, record_dir, pipeline_type=self._pipeline_type
-        )
-
-        # Get agent instructions and tools from config
-        agent_instructions = self._agent_config["instructions"]
-        agent_tools = self._agent_config["tools"]
-        agent_role = self._agent_config["role"]
-
-        if record.agent_override and record.agent_override.instructions:
-            agent_instructions = record.agent_override.instructions
-
-        user_persona = record.user_config["user_persona"]
-
-        # Load scenario database states (REQUIRED for deterministic metrics)
         initial_db_path = record_dir / "initial_scenario_db.json"
         final_db_path = record_dir / "final_scenario_db.json"
 
@@ -519,8 +508,39 @@ class MetricsRunner:
                 "This is required for deterministic task completion metrics."
             )
 
-        initial_scenario_db = json.loads(initial_db_path.read_text())
-        final_scenario_db = json.loads(final_db_path.read_text())
+        async def _read_optional(path: Path) -> str:
+            return await asyncio.to_thread(path.read_text) if path.exists() else "{}"
+
+        result_text, initial_db_text, final_db_text = await asyncio.gather(
+            _read_optional(result_path),
+            asyncio.to_thread(initial_db_path.read_text),
+            asyncio.to_thread(final_db_path.read_text),
+        )
+
+        result_data = json.loads(result_text)
+
+        # Create ConversationResult object
+        result = ConversationResult(**result_data)
+
+        # Use postprocessor to process logs and create enriched context.
+        # Check cache first (populated by process_records() pre-pass); fall back to
+        # processing in a thread to avoid blocking the event loop.
+        metrics_context = self._context_cache.get(record_id) or await asyncio.to_thread(
+            self.metrics_processor.process_record, result, record_dir, pipeline_type=self._pipeline_type
+        )
+
+        # Get agent instructions and tools from config
+        agent_instructions = self._agent_config["instructions"]
+        agent_tools = self._agent_config["tools"]
+        agent_role = self._agent_config["role"]
+
+        if record.agent_override and record.agent_override.instructions:
+            agent_instructions = record.agent_override.instructions
+
+        user_persona = record.user_config["user_persona"]
+
+        initial_scenario_db = json.loads(initial_db_text)
+        final_scenario_db = json.loads(final_db_text)
 
         # Get hashes from result or compute if needed
         initial_scenario_db_hash = getattr(result, "initial_scenario_db_hash", None) or get_dict_hash(
@@ -662,6 +682,7 @@ class MetricsRunner:
                         coverage["not_applicable_turns"] = total_not_applicable_across_records
                     entry["per_turn_coverage"] = coverage
 
+                entry["higher_is_better"] = _metric_higher_is_better(name)
                 metric_aggregates[name] = entry
 
         # Add pass_k aggregates if available
@@ -692,19 +713,26 @@ class MetricsRunner:
                         "count": count,
                     }
 
-        # Generic sub-metric aggregation
+        # Generic sub-metric aggregation.
+        # Sub-keys are collected in first-seen insertion order so each metric controls
+        # its own column ordering (readers get them grouped logically rather than A-Z).
         for name in metric_aggregates:
-            all_sub_keys: set[str] = set()
+            all_sub_keys: list[str] = []
+            seen: set[str] = set()
             for record_metrics in all_metrics.values():
                 ms = record_metrics.metrics.get(name)
                 if ms and ms.sub_metrics:
-                    all_sub_keys.update(ms.sub_metrics.keys())
+                    for k in ms.sub_metrics.keys():
+                        if k not in seen:
+                            all_sub_keys.append(k)
+                            seen.add(k)
 
             if not all_sub_keys:
                 continue
 
+            parent_direction = _metric_higher_is_better(name)
             sub_aggs: dict[str, dict[str, Any]] = {}
-            for sub_key in sorted(all_sub_keys):
+            for sub_key in all_sub_keys:
                 sub_scores: list[float] = []
                 sub_missing = 0
                 for record_metrics in all_metrics.values():
@@ -713,15 +741,15 @@ class MetricsRunner:
                         sub_missing += 1
                         continue
                     sub_ms = (ms.sub_metrics or {}).get(sub_key)
-                    if sub_ms is not None and sub_ms.score is not None:
-                        sub_scores.append(
-                            sub_ms.normalized_score if sub_ms.normalized_score is not None else sub_ms.score
-                        )
-                    else:
+                    if sub_ms is None or sub_ms.score is None:
                         sub_missing += 1
+                        continue
+                    sub_scores.append(sub_ms.normalized_score if sub_ms.normalized_score is not None else sub_ms.score)
 
                 if sub_scores or sub_missing > 0:
-                    sub_aggs[sub_key] = MetricsRunner._aggregate_scores(sub_scores, total_records, 0, sub_missing)
+                    sub_entry = MetricsRunner._aggregate_scores(sub_scores, total_records, 0, sub_missing)
+                    sub_entry["higher_is_better"] = direction_for_sub_metric(sub_key, parent_direction)
+                    sub_aggs[sub_key] = sub_entry
 
             if sub_aggs:
                 metric_aggregates[name]["sub_metrics"] = sub_aggs
