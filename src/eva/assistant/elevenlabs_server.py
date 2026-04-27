@@ -43,7 +43,7 @@ from eva.assistant.audio_bridge import (
     parse_twilio_media_message,
     sync_buffer_to_position,
 )
-from eva.assistant.base_server import AbstractAssistantServer
+from eva.assistant.base_server import INITIAL_MESSAGE, AbstractAssistantServer
 from eva.assistant.elevenlabs_audio_interface import TwilioAudioBridge
 from eva.models.agents import AgentConfig
 from eva.models.config import SpeechToSpeechConfig
@@ -196,7 +196,7 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
 
         logger.info(f"Elevenlabs server started on ws://localhost:{self.port}")
 
-    async def stop(self) -> None:
+    async def _shutdown(self) -> None:
         """Stop the server, save outputs."""
         if not self._running:
             return
@@ -294,7 +294,10 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
         )
 
         conv_config = ConversationInitiationData(
-            dynamic_variables={"prompt": self._system_prompt},
+            dynamic_variables={
+                "system_prompt": self._system_prompt,
+                "initial_message": INITIAL_MESSAGE,
+            },
         )
 
         agent_id = self.s2s_params.get("assistant_agent_id")
@@ -326,10 +329,7 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
                     break
                 await asyncio.sleep(0.1)
             logger.info("ElevenLabs WebSocket connected, sending initial message")
-            # Trigger the initial greeting (same pattern as Gemini server)
-            # await conversation.send_user_message(
-            #     f"Please greet with: {INITIAL_MESSAGE}"
-            # )
+
             self._fw_log.turn_start()
 
             # ----- Concurrent tasks -----
