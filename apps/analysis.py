@@ -1041,6 +1041,101 @@ def _render_eva_scatter_plot(scatter_data: list[dict]):
     st.plotly_chart(fig)
 
 
+def _aggregate_summary_by_system(summary_df: pd.DataFrame) -> pd.DataFrame:
+    """Collapse cross-run summary rows of the same system across domains.
+
+    Numeric metric/composite columns are averaged; record/error counts are
+    summed; ``metrics_with_errors`` dicts are merged (per-metric counts summed);
+    other identity columns take the first value within each system group.
+    """
+    if summary_df.empty or "system_name" not in summary_df.columns:
+        return summary_df
+
+    sum_cols = [c for c in ("records", "conversation_failures", "records_with_errors") if c in summary_df.columns]
+    identity_cols = {
+        "system_name",
+        "domain",
+        "run",
+        "label",
+        "run_output_dir",
+        "run_timestamp",
+        "pipeline_type",
+        "metrics_with_errors",
+    }
+    metric_cols = [
+        c
+        for c in summary_df.columns
+        if c not in identity_cols and c not in sum_cols and pd.api.types.is_numeric_dtype(summary_df[c])
+    ]
+
+    summary_df = summary_df.copy()
+    for c in sum_cols:
+        summary_df[c] = pd.to_numeric(summary_df[c], errors="coerce").fillna(0)
+
+    def _merge_metric_errors(series: pd.Series) -> dict:
+        merged: dict = {}
+        for d in series:
+            if isinstance(d, dict):
+                for k, v in d.items():
+                    try:
+                        merged[k] = merged.get(k, 0) + int(v)
+                    except (TypeError, ValueError):
+                        continue
+        return merged
+
+    agg_map: dict = dict.fromkeys(metric_cols, "mean")
+    for c in sum_cols:
+        agg_map[c] = "sum"
+    if "metrics_with_errors" in summary_df.columns:
+        agg_map["metrics_with_errors"] = _merge_metric_errors
+    if "run_timestamp" in summary_df.columns:
+        agg_map["run_timestamp"] = "max"
+    for c in summary_df.columns:
+        if c == "system_name" or c in agg_map:
+            continue
+        agg_map[c] = "first"
+
+    aggregated = summary_df.groupby("system_name", as_index=False, sort=False).agg(agg_map)
+    if "domain" in aggregated.columns:
+        aggregated["domain"] = "(averaged)"
+    if "run" in aggregated.columns:
+        aggregated["run"] = ""
+    if "label" in aggregated.columns:
+        aggregated["label"] = aggregated["system_name"]
+    return aggregated
+
+
+def _aggregate_scatter_by_system(scatter_data: list[dict], run_to_system: dict[str, str]) -> list[dict]:
+    """Average EVA scatter points across runs sharing the same system."""
+    score_keys = ("pass_at_1", "pass_at_k", "pass_power_k", "mean")
+    by_system: dict[str, list[dict]] = {}
+    for d in scatter_data:
+        sys = run_to_system.get(d.get("run", ""))
+        if not sys:
+            continue
+        by_system.setdefault(sys, []).append(d)
+
+    aggregated: list[dict] = []
+    for sys, points in by_system.items():
+        first = points[0]
+        merged: dict = {
+            "run": "",
+            "label": sys,
+            "short_label": first.get("short_label") or sys,
+            "model_details": first.get("model_details", {}),
+            "pipeline_type": first.get("pipeline_type", _PIPELINE_UNKNOWN),
+        }
+        for key in score_keys:
+            vals = [p[key] for p in points if isinstance(p.get(key), dict) and "eva_a" in p[key] and "eva_x" in p[key]]
+            if vals:
+                merged[key] = {
+                    "eva_a": sum(v["eva_a"] for v in vals) / len(vals),
+                    "eva_x": sum(v["eva_x"] for v in vals) / len(vals),
+                }
+        aggregated.append(merged)
+    return aggregated
+
+
 # ============================================================================
 # Views
 # ============================================================================
@@ -1213,6 +1308,18 @@ def render_cross_run_comparison(run_dirs: list[Path]):
         complete_runs = set(summary_df["run"])
         scatter_data = [d for d in scatter_data if d["run"] in complete_runs]
 
+    avg_across_domains = st.sidebar.toggle(
+        "Average across domains",
+        value=False,
+        key="avg_across_domains",
+        bind="query-params",
+        help="Collapse runs of the same system across domains into a single row (records summed, metrics averaged).",
+    )
+    if avg_across_domains and not summary_df.empty:
+        run_to_system = dict(zip(summary_df["run"], summary_df["system_name"]))
+        summary_df = _aggregate_summary_by_system(summary_df)
+        scatter_data = _aggregate_scatter_by_system(scatter_data, run_to_system)
+
     ordered_metrics = [m for m in metric_names if m in summary_df.columns]
 
     # EVA-A vs EVA-X scatter plot
@@ -1266,7 +1373,7 @@ def render_cross_run_comparison(run_dirs: list[Path]):
     other_metrics = [m for m in ordered_metrics if _METRIC_GROUP.get(m) not in {"Accuracy", "Experience"}]
 
     multiple_output_dirs = summary_df["run_output_dir"].nunique() > 1
-    multiple_domains = summary_df["domain"].nunique() > 1
+    multiple_domains = (not avg_across_domains) and summary_df["domain"].nunique() > 1
     id_cols = (
         ["system_name"]
         + (["domain"] if multiple_domains else [])
@@ -1298,18 +1405,16 @@ def render_cross_run_comparison(run_dirs: list[Path]):
         composite_rename = {c: f"[EVA] {_EVA_COMPOSITE_DISPLAY[c]}" for c in composites}
         cols = id_cols + composites + metrics
         sub_df = summary_df[cols].copy()
-        sub_df.insert(0, "link", link_series)
+        if not avg_across_domains:
+            sub_df.insert(0, "link", link_series)
         sub_df = sub_df.rename(columns={**id_rename, **composite_rename, **col_rename})
         score_cols = [composite_rename[c] for c in composites] + [col_rename[m] for m in metrics]
         styled = sub_df.style.map(_color_cell, subset=score_cols)
         styled = styled.format(dict.fromkeys(score_cols, "{:.3f}"), na_rep="—")
-        st.dataframe(
-            styled,
-            column_config={
-                "link": st.column_config.LinkColumn("Run", display_text="🔍", width=40, pinned=True),
-                "System": st.column_config.Column(pinned=True),
-            },
-        )
+        column_config: dict = {"System": st.column_config.Column(pinned=True)}
+        if not avg_across_domains:
+            column_config["link"] = st.column_config.LinkColumn("Run", display_text="🔍", width=40, pinned=True)
+        st.dataframe(styled, column_config=column_config)
 
     _show_subtable("Accuracy Metrics (EVA-A)", eva_a_composites, accuracy_metrics)
     _show_subtable("Experience Metrics (EVA-X)", eva_x_composites, experience_metrics)
@@ -1351,6 +1456,9 @@ def render_cross_run_comparison(run_dirs: list[Path]):
     st.download_button("Download CSV", csv, file_name="cross_run_comparison.csv", mime="text/csv")
 
     # === Per-Sample Heatmap ===
+    if avg_across_domains:
+        return
+
     st.markdown("---")
     st.markdown("#### Per-Sample Heatmap")
 
