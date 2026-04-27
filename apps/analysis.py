@@ -1101,6 +1101,9 @@ def render_cross_run_comparison(run_dirs: list[Path]):
         metrics_summary = _load_metrics_summary(run_dir)
         eval_summary = _load_evaluation_summary(run_dir)
         simulation = eval_summary.get("simulation") or {}
+        records_count = simulation.get("successful_records")
+        if records_count is None:
+            records_count = (metrics_summary or {}).get("total_records", 0)
 
         # Try metrics_summary.json first, fall back to per-record loading
         if metrics_summary and "per_metric" in metrics_summary:
@@ -1158,7 +1161,7 @@ def render_cross_run_comparison(run_dirs: list[Path]):
                 "label": _get_run_label(run_name, run_config),
                 "system_name": system_name,
                 "run_timestamp": run_timestamp,
-                "records": len(df),
+                "records": records_count,
                 "conversation_failures": simulation.get("failed_records"),
                 "records_with_errors": None,
                 "metrics_with_errors": {},
