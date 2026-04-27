@@ -4,7 +4,7 @@
 # ============================================
 # Stage 1: Builder
 # ============================================
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
@@ -27,7 +27,17 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # ============================================
 # Stage 2: Runtime
 # ============================================
-FROM python:3.11-slim as runtime
+FROM python:3.11-slim AS runtime
+
+# Git provenance baked in at build time
+ARG GIT_COMMIT_SHA
+ARG GIT_BRANCH
+ARG GIT_DIRTY
+ARG GIT_DIFF_HASH
+ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
+ENV GIT_BRANCH=${GIT_BRANCH}
+ENV GIT_DIRTY=${GIT_DIRTY}
+ENV GIT_DIFF_HASH=${GIT_DIFF_HASH}
 
 WORKDIR /app
 
@@ -58,14 +68,12 @@ RUN mkdir -p /app/output && chown eva:eva /app/output
 # Python runtime settings
 ENV PYTHONPATH="/app/src:$PYTHONPATH"
 ENV PYTHONUNBUFFERED=1
-# Optional: set EVA_OUTPUT_FOLDER to organize results into /app/output/<folder_name>/<run_id>/
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import eva; print('ok')" || exit 1
 
 # Switch to non-root user
-USER evabench
+USER eva
 
-# Use docker entrypoint that handles run modes
-ENTRYPOINT ["python", "scripts/docker_entrypoint.py"]
+ENTRYPOINT ["eva"]

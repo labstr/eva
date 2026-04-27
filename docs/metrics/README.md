@@ -68,7 +68,7 @@ Quality control metrics that identify problematic simulations. These evaluate th
 | Metric | Type | Description |
 |--------|------|-------------|
 | [`user_behavioral_fidelity`](user_behavioral_fidelity.md) | Judge | Whether simulated user corrupted agent evaluation (0-1) |
-| [`conversation_finished`](conversation_finished.md) | Deterministic | Whether conversation ended with proper end_call tool (0-1) |
+| [`conversation_valid_end`](conversation_valid_end.md) | Deterministic | Whether conversation ended with proper end_call tool (0-1) |
 | [`user_speech_fidelity`](user_speech_fidelity.md) | Audio (Gemini) | Whether user simulator speech audio matches intended text (1-3) |
 
 ## Metrics Pipeline
@@ -130,7 +130,7 @@ python main.py \
 # Run validation metrics
 python main.py \
     --run-id <existing_run_id> \
-    --metrics user_behavioral_fidelity,conversation_finished,user_speech_fidelity
+    --metrics user_behavioral_fidelity,conversation_valid_end,user_speech_fidelity
 ```
 
 ## Prompts and Customization
@@ -139,7 +139,7 @@ Judge metric prompts are defined in `configs/prompts/judge.yaml` under the `judg
 
 ## Validating the Judges 
 
-LLM-as-judge evaluations are only as useful as the judges themselves. For each judge metric, we constructed a human-annotated validation dataset and measured judge accuracy against human labels. We use these datasets to improve our judge prompts as well as select the optimal LLM judge model for each metric.
+LLM-as-judge evaluations are only as useful as the judges themselves. For each judge metric, we constructed a human-annotated validation dataset and measured judge accuracy against human labels. We use these datasets to improve our judge prompts as well as select the optimal LLM judge model for each metric. See [judge_validation_datasets/](judge_validation_datasets/) for the datasets and detailed judge accuracy results.
 
 ## Related Documentation
 
