@@ -791,9 +791,13 @@ class RunConfig(BaseSettings):
     @classmethod
     def _parse_comma_separated(cls, v: Any) -> list[str] | None:
         """Accept comma-separated strings from env vars."""
+        if isinstance(v, (int, float)):
+            return [str(v)]
         if isinstance(v, str):
             items = [s.strip() for s in v.split(",") if s.strip()]
             return items or None
+        if isinstance(v, list):
+            return [str(i) for i in v] or None
         return v
 
     @field_validator("metrics", mode="after")
