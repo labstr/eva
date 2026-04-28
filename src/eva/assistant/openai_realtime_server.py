@@ -248,7 +248,7 @@ class OpenAIRealtimeAssistantServer(AbstractAssistantServer):
                         "content": [
                             {
                                 "type": "input_text",
-                                "text": f"Say: '{INITIAL_MESSAGE}'",
+                                "text": f"Say: '{self.initial_message}'",
                             }
                         ],
                     }

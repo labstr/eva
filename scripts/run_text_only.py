@@ -221,9 +221,16 @@ async def run_user_turn(
 
     content = getattr(response, "content", "") or (response if isinstance(response, str) else "")
 
-    # Fallback: detect end_call emitted as text instead of structured tool call.
-    if "functions.end_call" in content or ("end_call" in content and content.strip().startswith(("{", "[", "<"))):
-        return "", True
+    # Fallback: detect end_call emitted as plain text instead of a structured tool call.
+    normalized = content.strip()
+    if (
+        "functions.end_call" in normalized
+        or normalized == "end_call"
+        or normalized.endswith(" end_call")
+        or normalized.endswith("\nend_call")
+    ):
+        cleaned = normalized.removesuffix("end_call").strip().rstrip(".,:;!-")
+        return cleaned, True
 
     return content, False
 
@@ -470,6 +477,7 @@ async def run_record(
     llm_model: str,
     output_dir: Path,
     max_turns: int,
+    stop_at_turn: int | None,
     requested_metrics: list[str],
     output_id: str | None = None,
     composites: list[EVACompositeDefinition] | None = None,
@@ -493,7 +501,8 @@ async def run_record(
 
     audit_log = AuditLog()
     agent_llm_client = LiteLLMClient(model=llm_model)
-    user_sim_llm_client = LiteLLMClient(model="gpt-5.1")
+    user_sim_model = os.getenv("EVA_USER_SIM_MODEL") or llm_model
+    user_sim_llm_client = LiteLLMClient(model=user_sim_model)
 
     agentic_system = AgenticSystem(
         current_date_time=record.current_date_time,
@@ -507,7 +516,10 @@ async def run_record(
     user_prompt = build_user_sim_prompt(record)
 
     # ---- Conversation loop ----
-    logger.info(f"Text-only test: record {record.id} | model={llm_model} | max_turns={max_turns}")
+    logger.info(
+        f"Text-only test: record {record.id} | agent_model={llm_model} | "
+        f"user_sim_model={user_sim_model} | max_turns={max_turns} | stop_at_turn={stop_at_turn}"
+    )
     logger.info(f"Metrics: {', '.join(requested_metrics)}")
 
     user_message = record.user_goal["starting_utterance"]
@@ -541,6 +553,10 @@ async def run_record(
                 logger.info(f"  [USER] {user_message} (ending call)")
             else:
                 logger.info("  [USER] (ended call)")
+            break
+        if stop_at_turn is not None and turn_count >= stop_at_turn:
+            end_reason = "stop_at_turn"
+            logger.info(f"Stopping early at turn {turn_count} due to stop_at_turn={stop_at_turn}")
             break
     else:
         end_reason = "max_turns"
@@ -606,6 +622,7 @@ async def run_record(
         agent_role=raw_agent_config.get("role", ""),
         agent_instructions=agent_instructions,
         agent_tools=raw_agent_config.get("tools", []),
+        agent_id=raw_agent_config.get("id", agent.id),
         current_date_time=record.current_date_time,
         num_turns=stats["num_turns"],
         num_tool_calls=stats["num_tool_calls"],
@@ -680,6 +697,8 @@ def _should_retry(result: dict[str, Any]) -> str | None:
     """Return a reason string if the result warrants a retry, else None."""
     if result.get("end_reason") == "max_turns":
         return "user simulator did not call end_call (max_turns reached)"
+    if result.get("end_reason") == "stop_at_turn":
+        return None
     ubf = result.get("metrics", {}).get("user_behavioral_fidelity", {})
     if ubf and ubf.get("normalized_score") == 0.0 and ubf.get("error") is None:
         return "user_behavioral_fidelity scored 1 (worst)"
@@ -707,6 +726,13 @@ async def main() -> None:
     )
     parser.add_argument("--llm-model", help="LLM model name (default: LLM_MODEL env var)")
     parser.add_argument("--max-turns", type=int, default=20, help="Max conversation turns (default: 20)")
+    parser.add_argument(
+        "--stop-at-turn",
+        type=int,
+        default=None,
+        help="Intentionally stop after this many completed turns and still run evaluation "
+        "(default: STOP_AT_TURN or EVA_STOP_AT_TURN env var)",
+    )
     parser.add_argument("--max-attempts", type=int, default=1, help="Max attempts per record (default: 3)")
     parser.add_argument("--num-trials", type=int, default=1, help="Number of trials per record for pass@k (default: 1)")
     parser.add_argument("--output-dir", default="debug_output", help="Output directory (default: debug_output)")
@@ -782,6 +808,14 @@ async def main() -> None:
     if not llm_model:
         sys.exit("Error: --llm-model or EVA_MODEL__LLM env var is required.")
 
+    stop_at_turn = args.stop_at_turn
+    if stop_at_turn is None:
+        stop_at_turn_str = os.getenv("STOP_AT_TURN") or os.getenv("EVA_STOP_AT_TURN")
+        if stop_at_turn_str:
+            stop_at_turn = int(stop_at_turn_str)
+    if stop_at_turn is not None and stop_at_turn <= 0:
+        sys.exit("Error: --stop-at-turn / STOP_AT_TURN must be >= 1.")
+
     # Initialize the LiteLLM Router from EVA_MODEL_LIST
     model_list_json = os.getenv("EVA_MODEL_LIST")
     if not model_list_json:
@@ -828,6 +862,7 @@ async def main() -> None:
                 llm_model=llm_model,
                 output_dir=output_dir,
                 max_turns=args.max_turns,
+                stop_at_turn=stop_at_turn,
                 requested_metrics=requested_metrics,
                 output_id=oid,
                 composites=text_composites,

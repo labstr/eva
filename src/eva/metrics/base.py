@@ -37,6 +37,60 @@ class MetricType(StrEnum):
     AUDIO_JUDGE = "audio_judge"  # LLM judge with audio input
 
 
+def _get_env_param(name: str, cast):
+    """Read an optional env var and cast it, returning None when unset."""
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return None
+    return cast(raw)
+
+
+def _get_text_judge_env_params() -> dict[str, Any]:
+    """Return text-judge parameter overrides from env."""
+    params: dict[str, Any] = {}
+
+    max_tokens = _get_env_param("EVA_JUDGE_MAX_TOKENS", int)
+    if max_tokens is not None:
+        params["max_tokens"] = max_tokens
+
+    temperature = _get_env_param("EVA_JUDGE_TEMPERATURE", float)
+    if temperature is not None:
+        params["temperature"] = temperature
+
+    top_p = _get_env_param("EVA_JUDGE_TOP_P", float)
+    if top_p is not None:
+        params["top_p"] = top_p
+
+    reasoning_effort = os.environ.get("EVA_JUDGE_REASONING_EFFORT")
+    if reasoning_effort:
+        params["reasoning_effort"] = reasoning_effort
+
+    return params
+
+
+def _get_audio_judge_env_params() -> dict[str, Any]:
+    """Return audio-judge parameter overrides from env."""
+    params: dict[str, Any] = {}
+
+    max_tokens = _get_env_param("EVA_AUDIO_JUDGE_MAX_TOKENS", int)
+    if max_tokens is not None:
+        params["max_tokens"] = max_tokens
+
+    temperature = _get_env_param("EVA_AUDIO_JUDGE_TEMPERATURE", float)
+    if temperature is not None:
+        params["temperature"] = temperature
+
+    top_p = _get_env_param("EVA_AUDIO_JUDGE_TOP_P", float)
+    if top_p is not None:
+        params["top_p"] = top_p
+
+    reasoning_effort = os.environ.get("EVA_AUDIO_JUDGE_REASONING_EFFORT")
+    if reasoning_effort:
+        params["reasoning_effort"] = reasoning_effort
+
+    return params
+
+
 class MetricContext:
     """Context provided to metrics for computation.
 
@@ -328,6 +382,7 @@ class TextJudgeMetric(BaseMetric):
 
         # Merge: class defaults < config overrides
         params = {**self.default_params}
+        params.update(_get_text_judge_env_params())
         params.update(self.config.get("judge_params", {}))
 
         self.llm_client = LLMClient(model=model, params=params)
@@ -628,6 +683,7 @@ class AudioJudgeMetric(BaseMetric):
 
         # Merge: class defaults < config overrides
         params = {**self.default_params}
+        params.update(_get_audio_judge_env_params())
         params.update(self.config.get("judge_params", {}))
 
         self.llm_client = LLMClient(model=model, params=params)

@@ -357,7 +357,7 @@ class GeminiLiveAssistantServer(AbstractAssistantServer):
                 # send_client_content with Content turns is not supported by
                 # some Live models (e.g. gemini-3.1-flash-live-preview), but
                 # send_realtime_input(text=...) works universally.
-                await session.send_realtime_input(text=f"Please greet with: {INITIAL_MESSAGE}")
+                await session.send_realtime_input(text=f"Please greet with: {self.initial_message}")
                 self._fw_log.turn_start()
 
                 # ----- Concurrent tasks -----

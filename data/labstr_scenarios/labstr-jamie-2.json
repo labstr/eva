@@ -1,0 +1,35 @@
+{
+  "interview": {
+    "agent_name": "Jami-en",
+    "participant": {
+      "name": "Dr Karim Benali",
+      "persona_summary": "Concise, efficient, slightly skeptical GP in Marseille",
+      "answers": {
+        "Q1": 29,
+        "Q2": "Marseille, France",
+        "Q3": "General practice",
+        "Q4": "Private group practice in an urban neighborhood",
+        "Q5": 110,
+        "Q6": "Roughly 30 percent, mostly follow-up visits",
+        "Q7": "I usually rely on HAS recommendations, Vidal, medical newsletters, and quick exchanges with GP colleagues when I need a second opinion.",
+        "Q8": "I keep an eye on innovation through podcasts, general practice newsletters, and what colleagues share in WhatsApp groups, but I do not actively chase every new tool.",
+        "Q9": "I mostly ask two senior GPs in my group and, for dermatology or pediatrics questions, the local specialists I refer to most often.",
+        "Q10": "I am fairly skeptical because many rep visits feel generic and disconnected from what I actually need in primary care.",
+        "Q11": "Clear comparative data, practical prescribing aids, and patient handouts that save me time during consultations.",
+        "Q12": "I am rarely available during the day; the only realistic options are a very short lunch meeting or an asynchronous digital update.",
+        "Q13": "Ideally it would be under 10 minutes, focused on one clinically relevant topic, with no marketing fluff and a concise digital recap afterward.",
+        "Q14": "I collaborate regularly with community pharmacists, especially around adherence, substitution questions, shortages, and checking whether patients understood treatment changes.",
+        "Q15": "Pharmacists are important because they often catch practical medication issues before I do and they help reinforce adherence with chronic patients.",
+        "Q16": 4,
+        "Q17": "I would only want more collaboration if it is highly practical, transparent about evidence, and mostly digital rather than based on drop-in visits.",
+        "Q18": 7,
+        "Q19": "It should get to the point faster, interrupt less when there is a pause, and make the transitions between topics feel more natural.",
+        "Q20": "For this kind of call, I would expect about 50 euros because it takes time out of clinic."
+      }
+    }
+  },
+  "session": {
+    "interview_started": false,
+    "interview_completed": false
+  }
+}

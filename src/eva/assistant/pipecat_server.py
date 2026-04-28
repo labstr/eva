@@ -285,7 +285,7 @@ class PipecatAssistantServer(AbstractAssistantServer):
             # Create context aggregator with user turn strategies
             messages = []
             if realtime_llm:
-                messages = [{"role": "user", "content": f"Say '{INITIAL_MESSAGE}'"}]
+                messages = [{"role": "user", "content": f"Say '{self.initial_message}'"}]
             context = LLMContext(messages=messages)
             vad_stop_secs = VAD_STOP_SECS
             smart_turn_stop_secs = SMART_TURN_STOP_SECS
@@ -593,7 +593,7 @@ class PipecatAssistantServer(AbstractAssistantServer):
             if isinstance(self.pipeline_config, SpeechToSpeechConfig):
                 await task.queue_frames([LLMRunFrame()])
             else:
-                await task.queue_frames([TTSSpeakFrame(INITIAL_MESSAGE)])
+                await task.queue_frames([TTSSpeakFrame(self.initial_message)])
 
         @transport.event_handler("on_client_disconnected")
         async def on_client_disconnected(transport, client):

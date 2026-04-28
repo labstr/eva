@@ -71,6 +71,7 @@ class AbstractAssistantServer(ABC):
         self.output_dir = Path(output_dir)
         self.port = port
         self.conversation_id = conversation_id
+        self.initial_message = getattr(agent, "first_message", INITIAL_MESSAGE)
 
         # Core components - all implementations must use these
         self.audit_log = AuditLog()

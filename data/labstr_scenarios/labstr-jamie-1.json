@@ -1,0 +1,35 @@
+{
+  "interview": {
+    "agent_name": "Jami-en",
+    "participant": {
+      "name": "Dr Lea Martin",
+      "persona_summary": "Calm, articulate, pragmatic internist in Lyon",
+      "answers": {
+        "Q1": 31,
+        "Q2": "Lyon, France",
+        "Q3": "Internal medicine",
+        "Q4": "Public hospital with one half-day per week in an outpatient clinic",
+        "Q5": 75,
+        "Q6": "About 15 percent",
+        "Q7": "I usually check French society guidelines, UpToDate, and discuss tricky cases with colleagues during the week.",
+        "Q8": "I follow medical innovation through specialty newsletters, congress highlights, LinkedIn posts from physicians, and a couple of hospital innovation webinars each month.",
+        "Q9": "I mainly turn to a senior internist in my department and, for cardio-metabolic topics, a cardiology colleague I trust.",
+        "Q10": "I do not dislike pharma representatives, but I find many visits too promotional and not tailored enough to my real patients.",
+        "Q11": "Short evidence summaries, patient education materials I can reuse, and a digital follow-up with key trial data instead of long slide decks.",
+        "Q12": "Very limited during clinic hours; early lunch slots or brief end-of-day meetings work best.",
+        "Q13": "A focused 10-minute visit with one topic, transparent evidence, practical takeaways, and written follow-up I can review later.",
+        "Q14": "I collaborate fairly often with hospital and community pharmacists, especially for medication reconciliation and adherence questions after discharge.",
+        "Q15": "Pharmacists are useful for checking interactions, helping with adherence, and flagging practical issues patients have with their treatment.",
+        "Q16": 6,
+        "Q17": "I would be open to more collaboration if it becomes more evidence-based, shorter, and integrated with digital tools rather than traditional sales visits.",
+        "Q18": 8,
+        "Q19": "It should sound a bit less scripted at transitions, remember previous answers more explicitly, and avoid questions that feel too close together.",
+        "Q20": "Around 40 euros would feel fair for a 10 to 12 minute professional interview."
+      }
+    }
+  },
+  "session": {
+    "interview_started": false,
+    "interview_completed": false
+  }
+}

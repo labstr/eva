@@ -95,3 +95,6 @@ scripts/extract_and_generate_leaderboard.py
 
 # Website data generation scripts (local only)
 website/scripts/
+
+# Local test files
+local/

@@ -295,7 +295,7 @@ class ElevenLabsAssistantServer(AbstractAssistantServer):
         conv_config = ConversationInitiationData(
             dynamic_variables={
                 "system_prompt": self._system_prompt,
-                "initial_message": INITIAL_MESSAGE,
+                "initial_message": self.initial_message,
             },
         )
 
