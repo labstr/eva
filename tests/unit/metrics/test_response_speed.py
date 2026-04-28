@@ -30,16 +30,17 @@ def _make_trace(tool_call_turn_ids: set[int], all_turn_ids: set[int]) -> list[di
 class TestResponseSpeedMetric:
     @pytest.mark.asyncio
     async def test_no_latencies(self):
-        """Missing latency data returns error."""
+        """Missing latency data is skipped (no error)."""
         metric = ResponseSpeedMetric()
         ctx = make_metric_context()
 
         result = await metric.compute(ctx)
 
         assert result.name == "response_speed"
-        assert result.score == 0.0
+        assert result.score is None
         assert result.normalized_score is None
-        assert result.error is not None
+        assert result.error is None
+        assert result.skipped is True
 
     @pytest.mark.asyncio
     async def test_valid_latencies(self):

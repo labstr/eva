@@ -66,9 +66,9 @@ class ResponseSpeedMetric(CodeMetric):
             if not context.latency_assistant_turns:
                 return MetricScore(
                     name=self.name,
-                    score=0.0,
+                    score=None,
                     normalized_score=None,
-                    error="No response latencies available (missing audio timestamps)",
+                    skipped=True,
                 )
 
             all_latencies = list(context.latency_assistant_turns.values())
