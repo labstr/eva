@@ -369,7 +369,7 @@ def get_pipeline_type(model_data: dict | Any) -> PipelineType:
     mode = _model_config_discriminator(model_data)
     if mode == "s2s":
         # ElevenLabs uses s2s_params for configuration but is a cascade pipeline internally
-        s2s_value = model_data.get("s2s") == "elevenlabs"
+        s2s_value = model_data.get("s2s")
         if s2s_value == "elevenlabs":
             return PipelineType.CASCADE
         return PipelineType.S2S
