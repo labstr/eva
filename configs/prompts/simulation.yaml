@@ -231,6 +231,12 @@ user_simulator:
         - If the agent offers additional services, upgrades, or asks if you need help with anything else beyond your stated goal, always decline.
         - Do not accept offers or suggestions that are outside the scope of your original request, even if they sound helpful.
         - Your ONLY objectives are what is described in the Goal and What You Want sections above. Nothing else.
+    - **Refuse Transfers When Your Escalation Forbids Them:** Read your Escalation Behavior carefully. If it contains language like "Do not ask to speak to a supervisor or live agent" — or otherwise tells you not to be transferred — you MUST refuse when the agent offers a transfer. This rule applies even when:
+        - The agent says they cannot proceed without transferring you.
+        - The agent has reported an error or is stuck.
+        - The transfer sounds helpful or socially expected.
+        - The agent asks "Is it okay if I transfer you now?" — your answer is "No."
+        Briefly decline the transfer (e.g. "No thanks, that won't work for me.") and end the call on the next turn per your failure condition. Do not ask the agent to retry — if they have already offered a transfer, they have signaled they cannot proceed, and that is your failure condition. Cooperation, politeness, and perceived helpfulness do NOT override this instruction — your scenario explicitly forbids the transfer.
     - **Ending the Conversation:** The conversation will go on until you call the end_call tool. Every conversation must end with you calling the end_call tool.
     - Success Case:
         {resolution_condition}
@@ -323,6 +329,12 @@ user_simulator:
         - If the agent offers additional services, upgrades, or asks if you need help with anything else beyond your stated goal, always decline.
         - Do not accept offers or suggestions that are outside the scope of your original request, even if they sound helpful.
         - Your ONLY objectives are what is described in the Goal and What You Want sections above. Nothing else.
+    - **Refuse Transfers When Your Escalation Forbids Them:** Read your Escalation Behavior carefully. If it contains language like "Do not ask to speak to a supervisor or live agent" — or otherwise tells you not to be transferred — you MUST refuse when the agent offers a transfer. This rule applies even when:
+        - The agent says they cannot proceed without transferring you.
+        - The agent has reported an error or is stuck.
+        - The transfer sounds helpful or socially expected.
+        - The agent asks "Is it okay if I transfer you now?" — your answer is "No."
+        Briefly decline the transfer (e.g. "No thanks, that won't work for me.") and end the call on the next turn per your failure condition. Do not ask the agent to retry — if they have already offered a transfer, they have signaled they cannot proceed, and that is your failure condition. Cooperation, politeness, and perceived helpfulness do NOT override this instruction — your scenario explicitly forbids the transfer.
     - **Ending the Conversation:** The conversation will go on until you call the end_call tool. Every conversation must end with you calling the end_call tool.
         - Do NOT end the call until either the success case or failure case is met. 
     - Success Case:
@@ -419,6 +431,12 @@ user_simulator:
         - If the agent offers additional services, upgrades, or asks if you need help with anything else beyond your stated goal, always decline.
         - Do not accept offers or suggestions that are outside the scope of your original request, even if they sound helpful.
         - Your ONLY objectives are what is described in the Goal and What You Want sections above. Nothing else.
+    - **Refuse Transfers When Your Escalation Forbids Them:** Read your Escalation Behavior carefully. If it contains language like "Do not ask to speak to a supervisor or live agent" — or otherwise tells you not to be transferred — you MUST refuse when the agent offers a transfer. This rule applies even when:
+        - The agent says they cannot proceed without transferring you.
+        - The agent has reported an error or is stuck.
+        - The transfer sounds helpful or socially expected.
+        - The agent asks "Is it okay if I transfer you now?" — your answer is "No."
+        Briefly decline the transfer (e.g. "No thanks, that won't work for me.") and end the call on the next turn per your failure condition. Do not ask the agent to retry — if they have already offered a transfer, they have signaled they cannot proceed, and that is your failure condition. Cooperation, politeness, and perceived helpfulness do NOT override this instruction — your scenario explicitly forbids the transfer.
     - **Ending the Conversation:** The conversation will go on until you call the end_call tool. Every conversation must end with you calling the end_call tool.
         - Do NOT end the call until either the success case or failure case is met. 
     - Success Case:
