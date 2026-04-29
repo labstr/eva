@@ -67,7 +67,7 @@ class MetricContext:
         num_tool_calls: int = 0,
         tools_called: list[str] = None,
         conversation_ended_reason: str | None = None,
-        completed: bool = False,
+        completed: bool = True,
         duration_seconds: float = 0.0,
         # Paths to files
         output_dir: str = "",
