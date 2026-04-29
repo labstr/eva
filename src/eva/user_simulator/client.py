@@ -32,6 +32,28 @@ _BEHAVIORS_PATH = Path(__file__).parent.parent.parent.parent / "configs" / "user
 _PERSONA_GENDER = {1: "F", 2: "M"}
 
 
+def _resolve_persona_gender(persona_config: dict) -> str:
+    """Resolve user simulator gender code from persona config.
+
+    Prefer the explicit `gender` field used by custom datasets. Fall back to the
+    legacy hardcoded persona-id map used by EVA's built-in datasets.
+    """
+    raw_gender = str(persona_config.get("gender", "")).strip().lower()
+    if raw_gender in {"f", "female", "woman"}:
+        return "F"
+    if raw_gender in {"m", "male", "man"}:
+        return "M"
+
+    persona_id = persona_config.get("user_persona_id")
+    if persona_id in _PERSONA_GENDER:
+        return _PERSONA_GENDER[persona_id]
+
+    raise KeyError(
+        "Could not resolve persona gender. Expected persona_config['gender'] to be one of "
+        "'female'/'male' (or woman/man), or a legacy user_persona_id present in _PERSONA_GENDER."
+    )
+
+
 @lru_cache(maxsize=1)
 def _load_behavior_prompts() -> dict:
     with open(_BEHAVIORS_PATH) as f:
@@ -202,8 +224,7 @@ class UserSimulator:
             config = ConversationInitiationData(dynamic_variables={"prompt": prompt})
 
             # ElevenLabs user simulator agent ID
-            persona_id = self.persona_config["user_persona_id"]
-            gender = _PERSONA_GENDER[persona_id]
+            gender = _resolve_persona_gender(self.persona_config)
             if self._perturbation_config and self._perturbation_config.accent:
                 key = self._perturbation_config.accent.value.upper()
                 env_var = f"EVA_{key}_ACCENT_USER_{gender}"

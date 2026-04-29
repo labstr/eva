@@ -84,6 +84,15 @@ _stt_url_counter: int = 0
 _audio_llm_url_counter: int = 0
 
 
+def _resolve_env_ref(value: Any) -> Any:
+    """Resolve `os.environ/VAR_NAME` strings to their environment value."""
+    if isinstance(value, str) and value.startswith("os.environ/"):
+        import os
+
+        return os.environ.get(value.split("/", 1)[1], "")
+    return value
+
+
 def create_stt_service(
     model: str | None,
     params: dict[str, Any] | None = None,
@@ -507,7 +516,7 @@ def create_realtime_llm_service(
         logger.info(f"Using Gemini Live LLM: {gemini_model}")
 
         return GeminiLiveLLMService(
-            api_key=params["api_key"],
+            api_key=_resolve_env_ref(params["api_key"]),
             tools=pipecat_tools,
             settings=GeminiLiveLLMService.Settings(
                 model=gemini_model,
@@ -517,8 +526,39 @@ def create_realtime_llm_service(
             ),
         )
 
+    elif model_lower == "aws-nova-sonic":
+        try:
+            from pipecat.services.aws.nova_sonic.llm import AWSNovaSonicLLMService
+        except Exception as e:
+            raise ValueError(
+                "AWS Nova Sonic requested but Pipecat AWS Nova Sonic support is unavailable. "
+                "Install/update pipecat-ai with the aws-nova-sonic extra."
+            ) from e
+
+        logger.info(f"Using AWS Nova Sonic LLM: {params.get('model')}")
+
+        aws_kwargs: dict[str, Any] = {
+            "access_key_id": _resolve_env_ref(params.get("access_key_id") or params.get("aws_access_key_id")),
+            "secret_access_key": _resolve_env_ref(params.get("secret_access_key") or params.get("aws_secret_access_key")),
+            "region": _resolve_env_ref(params.get("region") or params.get("aws_region")),
+            "system_instruction": system_prompt,
+            "settings": AWSNovaSonicLLMService.Settings(
+                model=params["model"],
+                voice=params.get("voice", "matthew"),
+                endpointing_sensitivity=params.get("endpointing_sensitivity"),
+            ),
+        }
+        session_token = _resolve_env_ref(params.get("session_token") or params.get("aws_session_token"))
+        if session_token:
+            aws_kwargs["session_token"] = session_token
+
+        return AWSNovaSonicLLMService(**aws_kwargs)
+
     else:
-        raise ValueError(f"Unknown realtime model: {model}. Available: gpt-realtime, ultravox, gemini-live")
+        raise ValueError(
+            f"Unknown realtime model: {model}. "
+            "Available: gpt-realtime, ultravox, gemini-live, aws-nova-sonic"
+        )
 
 
 def get_openai_session_properties(system_prompt: str, params: dict, pipecat_tools) -> SessionProperties:

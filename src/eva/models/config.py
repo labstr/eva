@@ -707,8 +707,24 @@ class RunConfig(BaseSettings):
             self._validate_service_params("TTS", self.model.tts, required_keys, self.model.tts_params)
             self._validate_service_params("audio_llm", self.model.audio_llm, required_keys, self.model.audio_llm_params)
         elif isinstance(self.model, SpeechToSpeechConfig):
-            # api_key is required, some s2s services don't require model
-            self._validate_service_params("S2S", self.model.s2s, required_keys, self.model.s2s_params)
+            s2s_required_keys = required_keys
+            s2s_provider = (self.model.s2s or "").lower()
+            if s2s_provider == "aws-nova-sonic":
+                s2s_required_keys = ["model", "region"]
+                access_key_present = any(
+                    key in self.model.s2s_params
+                    for key in ("access_key_id", "aws_access_key_id")
+                )
+                secret_key_present = any(
+                    key in self.model.s2s_params
+                    for key in ("secret_access_key", "aws_secret_access_key")
+                )
+                if not access_key_present or not secret_key_present:
+                    raise ValueError(
+                        "AWS Nova Sonic S2S requires access_key_id/aws_access_key_id and "
+                        "secret_access_key/aws_secret_access_key in EVA_MODEL__S2S_PARAMS."
+                    )
+            self._validate_service_params("S2S", self.model.s2s, s2s_required_keys, self.model.s2s_params)
         return self
 
     @model_validator(mode="after")
@@ -727,9 +743,17 @@ class RunConfig(BaseSettings):
         if missing:
             missing_str = " and ".join(f'"{k}"' for k in missing)
             env_var = f"EVA_MODEL__{service}_PARAMS"
+            example = '{"api_key": "your_key", "model": "your_model"}'
+            if service == "S2S" and (provider or "").lower() == "aws-nova-sonic":
+                example = (
+                    '{"access_key_id": "os.environ/AWS_ACCESS_KEY_ID", '
+                    '"secret_access_key": "os.environ/AWS_SECRET_ACCESS_KEY", '
+                    '"region": "os.environ/AWS_REGION", '
+                    '"model": "amazon.nova-2-sonic-v1:0"}'
+                )
             raise ValueError(
                 f"{missing_str} required in {env_var} for {provider} {service}. "
-                f'Example: {env_var}=\'{{"api_key": "your_key", "model": "your_model"}}\''
+                f"Example: {env_var}='{example}'"
             )
 
     @model_validator(mode="before")
