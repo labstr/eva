@@ -67,11 +67,11 @@ class TurnTakingMetric(CodeMetric):
     LATENCY_HARD_EARLY_MS: float = -500
     LATENCY_SWEET_SPOT_LOW_MS: float = 500
     LATENCY_SWEET_SPOT_HIGH_MS: float = 2000
-    LATENCY_HARD_LATE_MS: float = 5000
+    LATENCY_HARD_LATE_MS: float = 3500
 
     # Tool-call turn variants — more lenient on the upper end since tool execution adds inherent latency.
-    LATENCY_SWEET_SPOT_HIGH_MS_TOOL: float = 4000
-    LATENCY_HARD_LATE_MS_TOOL: float = 7000
+    LATENCY_SWEET_SPOT_HIGH_MS_TOOL: float = 3000
+    LATENCY_HARD_LATE_MS_TOOL: float = 5000
 
     # --- Agent interruption sub-scores. Each agent-interrupt sub-dimension (overlap, count) is
     # computed directly in [0, AGENT_INTERRUPT_MAX_SCORE] so even a best-case barge-in lands
@@ -92,8 +92,8 @@ class TurnTakingMetric(CodeMetric):
     # EARLY_THRESHOLD_MS is shared across all turns — early-response behaviour is not
     # affected by whether a tool call occurred.
     EARLY_THRESHOLD_MS: float = 200  # latency < this ⇒ "early"
-    LATE_THRESHOLD_MS: float = 4000  # latency >= this ⇒ "late" (no tool call)
-    LATE_THRESHOLD_MS_TOOL: float = 6000  # latency >= this ⇒ "late" (turn with tool call)
+    LATE_THRESHOLD_MS: float = 3500  # latency >= this ⇒ "late" (no tool call)
+    LATE_THRESHOLD_MS_TOOL: float = 5000  # latency >= this ⇒ "late" (turn with tool call)
 
     @staticmethod
     def _get_turn_ids_with_turn_taking(context: MetricContext) -> list[int]:
