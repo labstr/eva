@@ -60,8 +60,8 @@ class TestLatencyScore:
             # Ramp-down [2000, 3500]: score = (3500 - lat) / (3500 - 2000)
             (2500, 0.6667),  # (3500-2500)/1500
             (3000, 0.3333),  # (3500-3000)/1500
-            (3500, 0.00),    # hard_late boundary
-            (4500, 0.00),    # beyond hard_late
+            (3500, 0.00),  # hard_late boundary
+            (4500, 0.00),  # beyond hard_late
             (8000, 0.00),
         ],
     )
@@ -80,11 +80,11 @@ class TestLatencyScore:
             (3000, 1.00),
             # Ramp 1 → 0 over [3000, 5000] (vs [2000, 3500] without a tool call).
             # score = (5000 - lat) / (5000 - 3000)
-            (3500, 0.75),   # (5000-3500)/2000
-            (4000, 0.50),   # (5000-4000)/2000
-            (4500, 0.25),   # (5000-4500)/2000
-            (5000, 0.00),   # hard_late_tool boundary
-            (6000, 0.00),   # beyond hard_late_tool
+            (3500, 0.75),  # (5000-3500)/2000
+            (4000, 0.50),  # (5000-4000)/2000
+            (4500, 0.25),  # (5000-4500)/2000
+            (5000, 0.00),  # hard_late_tool boundary
+            (6000, 0.00),  # beyond hard_late_tool
             (9000, 0.00),
         ],
     )
