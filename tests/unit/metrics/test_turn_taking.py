@@ -639,19 +639,19 @@ class TestInterruptCountSubMetrics:
         assert "agent_interruption.mean_count_score" not in sub
 
 
-# ---------- Conversation completion zeroing ----------
+# ---------- Missed-turn zeroing ----------
 
 
-class TestConversationCompleted:
-    """Incomplete conversations → overall score zeroed; per-turn detail data preserved."""
+class TestMissedTurnZeroing:
+    """missed_turn=True → overall score zeroed; per-turn detail data preserved."""
 
     @pytest.mark.asyncio
     async def test_incomplete_conversation_zeros_score(self, metric):
-        """conversation_ended_reason='error' → score 0.0, normalized_score 0.0, error message set."""
+        """missed_turn=True (inactivity_timeout, user spoke last) → score 0.0, normalized_score 0.0, error message set."""
         context = make_metric_context(
-            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)]},
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)], 3: [(10.0, 11.0)]},
             audio_timestamps_assistant_turns={1: [(2.0, 3.0)], 2: [(7.0, 8.0)]},
-            conversation_ended_reason="error",
+            conversation_ended_reason="inactivity_timeout",
         )
         result = await metric.compute(context)
         assert result.score == pytest.approx(0.0)
@@ -663,15 +663,15 @@ class TestConversationCompleted:
     async def test_incomplete_conversation_preserves_per_turn_data(self, metric):
         """Even when zeroed, per_turn_score and per_turn_evidence are available for analysis."""
         context = make_metric_context(
-            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)]},
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)], 3: [(10.0, 11.0)]},
             audio_timestamps_assistant_turns={1: [(2.0, 3.0)], 2: [(7.0, 8.0)]},
-            conversation_ended_reason="error",
+            conversation_ended_reason="inactivity_timeout",
         )
         result = await metric.compute(context)
         # Per-turn scores are computed and stored even though the final score is zeroed.
         assert len(result.details["per_turn_score"]) == 2
         assert all(v == pytest.approx(1.0) for v in result.details["per_turn_score"].values())
-        assert result.details["conversation_completed"] is False
+        assert result.details["missed_turn"] is True
 
     @pytest.mark.asyncio
     async def test_completed_conversation_uses_mean_score(self, metric):
@@ -684,15 +684,15 @@ class TestConversationCompleted:
         result = await metric.compute(context)
         assert result.error is None
         assert result.score == pytest.approx(1.0)
-        assert result.details["conversation_completed"] is True
+        assert result.details["missed_turn"] is False
 
     @pytest.mark.asyncio
     async def test_incomplete_conversation_still_emits_sub_metrics(self, metric):
         """Sub-metrics (latency rates, etc.) are populated even when the score is zeroed."""
         context = make_metric_context(
-            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)]},
+            audio_timestamps_user_turns={1: [(0.0, 1.0)], 2: [(5.0, 6.0)], 3: [(10.0, 11.0)]},
             audio_timestamps_assistant_turns={1: [(2.0, 3.0)], 2: [(7.0, 8.0)]},
-            conversation_ended_reason="error",
+            conversation_ended_reason="inactivity_timeout",
         )
         result = await metric.compute(context)
         assert "on_time_rate" in result.sub_metrics
@@ -716,7 +716,7 @@ class TestConversationCompleted:
         )
         result = await metric.compute(context)
         assert result.score == pytest.approx(0.0)
-        assert result.details["conversation_completed"] is False
+        assert result.details["missed_turn"] is True
         assert result.error is not None
 
     @pytest.mark.asyncio
@@ -734,7 +734,7 @@ class TestConversationCompleted:
         result = await metric.compute(context)
         assert result.error is None
         assert result.score > 0.0
-        assert result.details["conversation_completed"] is True
+        assert result.details["missed_turn"] is False
 
 
 # ---------- Dual interrupt ----------
