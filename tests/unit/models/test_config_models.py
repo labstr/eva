@@ -73,13 +73,13 @@ def _config(
         assert env_file is not None, "Please pass `env_file=tmp_path / '.env'` along with `env_file_vars`."
         env_file.write_text("".join(f"{key}='{value}'\n" for key, value in env_file_vars.items()))
 
-    with patch.dict(os.environ, env_vars or {}, clear=True):
+    with patch.dict(os.environ, {"PATH": os.environ["PATH"]} | (env_vars or {}), clear=True):
         return RunConfig(_env_file=env_file, _cli_parse_args=cli_args, **kwargs)
 
 
 def _load_json_into_runconfig(json_str: str) -> RunConfig:
     """Load RunConfig from JSON with isolated environment (no real env vars)."""
-    with patch.dict(os.environ, {}, clear=True):
+    with patch.dict(os.environ, {"PATH": os.environ["PATH"]}, clear=True):
         return RunConfig.model_validate_json(json_str)
 
 
@@ -476,7 +476,8 @@ class TestDefaults:
         assert c.port_pool_size == 150
         assert c.max_rerun_attempts == 3
         assert c.num_trials == 1
-        assert c.metrics is None
+        assert isinstance(c.metrics, list)
+        assert len(c.metrics) > 0
         assert c.debug is False
         assert c.record_ids is None
         assert c.log_level == "INFO"
@@ -490,7 +491,19 @@ class TestDeprecatedEnvVars:
 class TestExpandMetricsAll:
     """Tests for _expand_metrics_all validator that expands 'all' to non-validation metrics."""
 
-    def test_all_excludes_validation_metrics(self):
+    @pytest.mark.parametrize(
+        "env_vars, cli_args",
+        (
+            pytest.param({"EVA_METRICS": "all"}, [], id="EVA_METRICS=all"),
+            pytest.param({"EVA_METRICS": "ALL"}, [], id="EVA_METRICS=ALL"),
+            pytest.param({"EVA_METRICS": "All"}, [], id="EVA_METRICS=All"),
+            pytest.param({}, ["--metrics", "all"], id="--metrics=all"),
+            pytest.param({}, ["--metrics", "ALL"], id="--metrics=ALL"),
+            pytest.param({}, ["--metrics", "All"], id="--metrics=All"),
+            pytest.param({}, [], id="default"),
+        ),
+    )
+    def test_all_excludes_validation_metrics(self, env_vars, cli_args):
         """'all' expands to all registered metrics minus validation metrics."""
         all_metrics = [
             "task_completion",
@@ -506,19 +519,9 @@ class TestExpandMetricsAll:
         mock_registry.list_metrics.return_value = all_metrics
 
         with patch("eva.metrics.registry._global_registry", mock_registry):
-            c = _config(env_vars=_BASE_ENV | {"EVA_METRICS": "all"})
+            c = _config(env_vars=_BASE_ENV | env_vars, cli_args=cli_args)
 
         assert set(c.metrics) == {"task_completion", "conciseness", "stt_wer", "response_speed"}
-
-    def test_all_case_insensitive(self):
-        """'ALL' and 'All' also expand."""
-        mock_registry = MagicMock()
-        mock_registry.list_metrics.return_value = ["stt_wer"]
-
-        with patch("eva.metrics.registry._global_registry", mock_registry):
-            c = _config(env_vars=_BASE_ENV | {"EVA_METRICS": "ALL"})
-
-        assert c.metrics == ["stt_wer"]
 
     def test_explicit_names_not_expanded(self):
         """Comma-separated metric names pass through without registry lookup."""
@@ -529,16 +532,53 @@ class TestExpandMetricsAll:
 class TestCommaSeparatedFields:
     """Comma-separated env vars are parsed into lists."""
 
-    def test_metrics_parsed(self):
-        c = _config(env_vars=_BASE_ENV | {"EVA_METRICS": "task_completion_judge,stt_wer, response_speed"})
+    @pytest.mark.parametrize(
+        "env_vars, cli_args",
+        (
+            pytest.param({"EVA_METRICS": "task_completion_judge,stt_wer, response_speed"}, [], id="EVA_METRICS"),
+            pytest.param({}, ["--metrics", "task_completion_judge,stt_wer, response_speed"], id="single --metrics"),
+            pytest.param(
+                {},
+                ["--metrics", "task_completion_judge", "--metrics", "stt_wer", "--metrics", "response_speed"],
+                id="multiple --metrics",
+            ),
+            pytest.param(
+                {},
+                ["--metrics", "task_completion_judge", "--metrics", "stt_wer, response_speed"],
+                id="mixed --metrics",
+            ),
+        ),
+    )
+    def test_metrics_parsed(self, env_vars, cli_args):
+        c = _config(env_vars=_BASE_ENV | env_vars, cli_args=cli_args)
         assert c.metrics == ["task_completion_judge", "stt_wer", "response_speed"]
 
-    def test_record_ids_parsed(self):
-        c = _config(env_vars=_BASE_ENV | {"EVA_RECORD_IDS": "1.2.1, 1.2.2, 1.3.1"})
+    @pytest.mark.parametrize(
+        "env_vars, cli_args",
+        (
+            pytest.param({"EVA_RECORD_IDS": "1.2.1, 1.2.2, 1.3.1"}, [], id="EVA_RECORD_IDS"),
+            pytest.param({}, ["--record-ids", "1.2.1, 1.2.2, 1.3.1"], id="single --record-ids"),
+            pytest.param(
+                {},
+                ["--record-ids", "1.2.1", "--record-ids", "1.2.2", "--record-ids", "1.3.1"],
+                id="multiple --record-ids",
+            ),
+            pytest.param({}, ["--record-ids", "1.2.1", "--record-ids", "1.2.2, 1.3.1"], id="mixed --record-ids"),
+        ),
+    )
+    def test_record_ids_parsed(self, env_vars, cli_args):
+        c = _config(env_vars=_BASE_ENV | env_vars, cli_args=cli_args)
         assert c.record_ids == ["1.2.1", "1.2.2", "1.3.1"]
 
-    def test_empty_string_becomes_none(self):
-        c = _config(env_vars=_BASE_ENV | {"EVA_METRICS": ""})
+    @pytest.mark.parametrize(
+        "env_vars, cli_args",
+        (
+            pytest.param({"EVA_METRICS": ""}, [], id="EVA_METRICS"),
+            pytest.param({"EVA_METRICS": "[]"}, [], id="EVA_METRICS"),
+        ),
+    )
+    def test_empty_string_becomes_none(self, env_vars, cli_args):
+        c = _config(env_vars=_BASE_ENV | env_vars, cli_args=cli_args)
         assert c.metrics is None
 
     def test_whitespace_only_becomes_none(self):

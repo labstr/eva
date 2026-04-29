@@ -39,6 +39,15 @@ from eva.models.provenance import RunProvenance
 logger = logging.getLogger(__name__)
 
 
+_VALIDATION_METRIC_NAMES = frozenset(("conversation_valid_end", "user_behavioral_fidelity", "user_speech_fidelity"))
+
+
+def _get_all_metrics() -> list[str]:
+    from eva.metrics.registry import get_global_registry
+
+    return [m for m in get_global_registry().list_metrics() if m not in _VALIDATION_METRIC_NAMES]
+
+
 def _param_alias(params: dict[str, Any]) -> str:
     """Return the display alias from a params dict."""
     return params.get("alias") or params["model"]
@@ -494,12 +503,6 @@ class RunConfig(BaseSettings):
         populate_by_name=True,
     )
 
-    _VALIDATION_METRIC_NAMES: ClassVar[set[str]] = {
-        "conversation_valid_end",
-        "user_behavioral_fidelity",
-        "user_speech_fidelity",
-    }
-
     # Maps *_params field names to their provider field for env override logic
     _PARAMS_TO_PROVIDER: ClassVar[dict[str, str]] = {
         "stt_params": "stt",
@@ -593,8 +596,8 @@ class RunConfig(BaseSettings):
     )
 
     metrics: list[str] | None = Field(
-        None,
-        description="Metrics to run with benchmark",
+        default_factory=_get_all_metrics,
+        description="Metrics to run. Skip all metrics with `EVA_METRICS=`.",
     )
 
     # Aggregate-only mode
@@ -729,6 +732,15 @@ class RunConfig(BaseSettings):
                 f'Example: {env_var}=\'{{"api_key": "your_key", "model": "your_model"}}\''
             )
 
+    @model_validator(mode="before")
+    @classmethod
+    def _handle_all_keyword(cls, data: Any):
+        """Catch EVA_METRICS=all for backward compatibility and delegate to the default_factory."""
+        match data:
+            case {"metrics": str() as value, **rest} | {"metrics": [str() as value], **rest} if value.lower() == "all":
+                return rest
+        return data
+
     @field_validator("metrics", "record_ids", mode="before")
     @classmethod
     def _parse_comma_separated(cls, v: Any) -> list[str] | None:
@@ -740,17 +752,6 @@ class RunConfig(BaseSettings):
             return items or None
         if isinstance(v, list):
             return [str(i) for i in v] or None
-        return v
-
-    @field_validator("metrics", mode="after")
-    @classmethod
-    def _expand_metrics_all(cls, v: list[str] | None) -> list[str] | None:
-        """Expand the 'all' keyword to all non-validation metrics."""
-        if v and len(v) == 1 and v[0].lower() == "all":
-            # Lazy import to avoid circular: models.__init__ → config → metrics.registry → metrics.base → models
-            from eva.metrics.registry import get_global_registry
-
-            return [m for m in get_global_registry().list_metrics() if m not in cls._VALIDATION_METRIC_NAMES]
         return v
 
     @classmethod
